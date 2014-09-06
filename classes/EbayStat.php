@@ -98,7 +98,7 @@ class EbayStat
     public static function send()
     {
         $sql = 'SELECT `id_ebay_stat`, `tries`, `version`, `data`, `date_add`
-            FROM `'._DB_PREFIX_.'ebay_stat';
+            FROM `'._DB_PREFIX_.'ebay_stat`';
         $res = Db::getInstance()->executeS($sql);
         
         foreach ($res as $row)
