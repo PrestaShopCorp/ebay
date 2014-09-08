@@ -37,6 +37,9 @@ class EbayStat
     
     function __construct($stats_version, $ebay_profile)
     {
+        if (!$ebay_profile)
+            return;
+        
         $this->stats_version = $stats_version;
         $this->id_ebay_profile = (int)$ebay_profile->id;
         
@@ -74,6 +77,9 @@ class EbayStat
     
     public function save()
     {
+        if (!$this->id_ebay_profile)
+            return;
+        
         $sql = 'SELECT count(*)
             FROM `'._DB_PREFIX_.'ebay_stat`
             WHERE `id_ebay_profile` = '.(int)$this->id_ebay_profile;
@@ -98,7 +104,7 @@ class EbayStat
     public static function send()
     {
         $sql = 'SELECT `id_ebay_stat`, `tries`, `version`, `data`, `date_add`
-            FROM `'._DB_PREFIX_.'ebay_stat';
+            FROM '._DB_PREFIX_.'ebay_stat';
         $res = Db::getInstance()->executeS($sql);
         
         foreach ($res as $row)

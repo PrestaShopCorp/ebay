@@ -25,39 +25,39 @@
 
 {if $categoryList === false || sizeof($categoryList) === 0}
 	<tr>
-		<td colspan="3" class="center">{$noCatFound}</td>
+		<td colspan="3" class="center">{$noCatFound|escape:'htmlall'}</td>
 	</tr>
 {else}
 	{foreach from=$categoryList key=k  item=c}
-		<tr{if $k % 2 !== 0} class="alt_row"{/if} id="category-{$c.id_category}">
-			<td><a id="show-products-switch-{$c.id_category}" showing="0" class="show-products" href="javascript:showProducts({$c.id_category})">&#9654;</a> {$c.name} ({if isset($getCatInStock[$c.id_category])}
-				{$getCatInStock[$c.id_category]}
+		<tr{if $k % 2 !== 0} class="alt_row"{/if} id="category-{$c.id_category|escape:'htmlall'}">
+			<td><a id="show-products-switch-{$c.id_category|escape:'htmlall'}" showing="0" class="show-products" href="javascript:showProducts({$c.id_category|escape:'htmlall'})">&#9654;</a> {$c.name|escape:'htmlall'} ({if isset($getCatInStock[$c.id_category])}
+				{$getCatInStock[$c.id_category]|escape:'htmlall'}
 				{/if})
 			</td>
-			<td id="categoryPath{$c.id_category}">
+			<td id="categoryPath{$c.id_category|escape:'htmlall'}">
 				{if isset($categoryConfigList[$c.id_category]) && isset($categoryConfigList[$c.id_category].var)}
 					{$categoryConfigList[$c.id_category].var}
 				{else}
-					<select name="category[{$c.id_category}]" id="categoryLevel1-{$c.id_category}" rel="{$c.id_category}" style="font-size: 12px; width: 160px;" OnChange="changeCategoryMatch(1, {$c.id_category});" class="ebay_select">
-						<option value="0">{$noCatSelected}</option>
+					<select name="category[{$c.id_category}]|escape:'htmlall'" id="categoryLevel1-{$c.id_category|escape:'htmlall'}" rel="{$c.id_category|escape:'htmlall'}" style="font-size: 12px; width: 160px;" OnChange="changeCategoryMatch(1, {$c.id_category|escape:'htmlall'});" class="ebay_select">
+						<option value="0">{$noCatSelected|escape:'htmlall'}</option>
 						{foreach from=$eBayCategoryList item=ec}
-							<option value="{$ec.id_ebay_category}">{$ec.name}{if $ec.is_multi_sku == 1} *{/if}</option>
+							<option value="{$ec.id_ebay_category|escape:'htmlall'}">{$ec.name|escape:'htmlall'}{if $ec.is_multi_sku == 1} *{/if}</option>
 						{/foreach}
 					</select>
 				{/if}
 			</td>
 			<td>
-				<select name="percent[{$c.id_category}][sign]" class="ebay_select">
+				<select name="percent[{$c.id_category|escape:'htmlall'}][sign]" class="ebay_select">
 					<option{if isset($categoryConfigList[$c.id_category].percent.sign) && $categoryConfigList[$c.id_category].percent.sign == ''} selected{/if}>+</option>
 					<option{if isset($categoryConfigList[$c.id_category].percent.sign) && $categoryConfigList[$c.id_category].percent.sign == '-'} selected{/if}>-</option>
 				</select>
-				<input type="text" size="3" maxlength="3" name="percent[{$c.id_category}][value]" id="percent{$c.id_category}" rel="{$c.id_category}" style="font-size: 12px;" value="{if isset($categoryConfigList[$c.id_category]) && isset($categoryConfigList[$c.id_category].var)}{$categoryConfigList[$c.id_category].percent.value}{/if}" />
-				<select name="percent[{$c.id_category}][type]" class="ebay_select">
+				<input type="text" size="3" maxlength="3" name="percent[{$c.id_category|escape:'htmlall'}][value]" id="percent{$c.id_category|escape:'htmlall'}" rel="{$c.id_category|escape:'htmlall'}" style="font-size: 12px;" value="{if isset($categoryConfigList[$c.id_category]) && isset($categoryConfigList[$c.id_category].var)}{$categoryConfigList[$c.id_category].percent.value|escape:'htmlall'}{/if}" />
+				<select name="percent[{$c.id_category|escape:'htmlall'}][type]" class="ebay_select">
 					<option value="currency"{if isset($categoryConfigList[$c.id_category].percent.type) && $categoryConfigList[$c.id_category].percent.type == ''} selected{/if}>{$currencySign|html_entity_decode:2:"UTF-8"}</option>
 					<option value="percent"{if isset($categoryConfigList[$c.id_category].percent.type) && $categoryConfigList[$c.id_category].percent.type == '%'} selected{/if}>%</option>
 				</select>
 			</td>
-			<td colspan="2" class="show-products" style="text-align:center"><a  id="show-products-switch-string{$c.id_category}" href="javascript:showProducts({$c.id_category})">{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}</a></td>			
+			<td colspan="2" class="show-products" style="text-align:center"><a  id="show-products-switch-string{$c.id_category|escape:'htmlall'}" href="javascript:showProducts({$c.id_category|escape:'htmlall'})">{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}</a></td>			
 		</tr>
 	{/foreach}
 {/if}

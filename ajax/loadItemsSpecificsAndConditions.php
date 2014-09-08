@@ -44,7 +44,7 @@ function loadItemsMap($row)
 /* Fix for limit db sql request in time */
 sleep(1);
 
-$category = new EbayCategory((int)Tools::getValue('ebay_category'));
+$category = new EbayCategory($ebay_profile, (int)Tools::getValue('ebay_category'));
 
 
 if (!$ebay_profile->getConfiguration('EBAY_SPECIFICS_LAST_UPDATE') || ($ebay_profile->getConfiguration('EBAY_SPECIFICS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-3 days')).'.000Z'))

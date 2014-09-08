@@ -27,16 +27,18 @@
 
 class EbayShippingService
 {
-	public static function getAll()
+	public static function getAll($ebay_site_id)
 	{
 		return Db::getInstance()->ExecuteS('SELECT *
-			FROM '._DB_PREFIX_.'ebay_shipping_service');
+			FROM '._DB_PREFIX_.'ebay_shipping_service
+            WHERE `ebay_site_id` = '.(int)$ebay_site_id);
 	}
 
-	public static function getTotal()
+	public static function getTotal($ebay_site_id)
 	{
 		return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
-			FROM '._DB_PREFIX_.'ebay_shipping_service');
+			FROM '._DB_PREFIX_.'ebay_shipping_service
+            WHERE `ebay_site_id` = '.(int)$ebay_site_id);
 	}
 
 	public static function insert($data)

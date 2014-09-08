@@ -28,43 +28,23 @@
 class EbayProductConfiguration
 {
 
-	public static function getByProductIds($product_ids)
+	public static function getByProductIdAndProfile($product_id, $id_ebay_profile)
 	{
-        if (!$product_ids)
-            return array();
+        if (!$product_id)
+            return;
         
-		foreach ($product_ids as &$product_id)
-			$product_id = (int)$product_id;
-		
-		$res = Db::getInstance()->executeS('SELECT `id_product`, `blacklisted`, `extra_images`
+		return Db::getInstance()->getRow('SELECT `id_product`, `blacklisted`, `extra_images`
 			FROM `'._DB_PREFIX_.'ebay_product_configuration`
-			WHERE `id_product` IN ('.implode(',', $product_ids).')');
-
-		$ret = array();
-
-		foreach ($res as $row)
-			$ret[$row['id_product']] = $row;
-
-		return $ret;
+			WHERE `id_product` = '.(int)$product_id.'
+            AND `id_ebay_profile` = '.(int)$id_ebay_profile);
 	}
 
-	public static function getBlacklistedProductIds()
-	{
-		$res = Db::getInstance()->executeS(EbayProductConfiguration::getBlacklistedProductIdsQuery());
-
-		return array_map(array('EbayProductConfiguration', 'getBlacklistedProductIdsMap'), $res);
-	}
-
-	public static function getBlacklistedProductIdsMap($row)
-	{
-		return $row['id_product'];
-	}
-
-	public static function getBlacklistedProductIdsQuery()
+	public static function getBlacklistedProductIdsQuery($id_ebay_profile)
 	{
 		return 'SELECT `id_product`
 			FROM `'._DB_PREFIX_.'ebay_product_configuration`
-			WHERE `blacklisted` = 1';
+			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
+            AND `blacklisted` = 1';
 	}
 
 	public static function insertOrUpdate($product_id, $data)

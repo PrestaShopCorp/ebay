@@ -36,6 +36,8 @@ class EbayProfile extends ObjectModel
 	private $returns_policy;
 	
 	private $configurations;
+    
+    private $token;
 	
 	/**
 	 * @see ObjectModel::$definition
@@ -220,6 +222,87 @@ class EbayProfile extends ObjectModel
 		
 		return $final_carriers;
 	}
+    
+    public function setDefaultConfig($template_content) 
+    {
+		$this->setConfiguration('EBAY_PRODUCT_TEMPLATE', ''); // fix to work around the PrestaShop bug when saving html for a configuration key that doesn't exist yet
+		$this->setConfiguration('EBAY_PRODUCT_TEMPLATE', $template_content, true);
+		$this->setConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE', '{TITLE}');
+		$this->setConfiguration('EBAY_ORDER_LAST_UPDATE', date('Y-m-d\TH:i:s.000\Z'));
+		$this->setConfiguration('EBAY_DELIVERY_TIME', 2);
+		$this->setConfiguration('EBAY_ACTIVATE_LOGS', '0');
+		$this->setConfiguration('EBAY_ACTIVATE_MAILS', '0');
+		$this->setConfiguration('EBAY_LISTING_DURATION', 'GTC');
+		$this->setConfiguration('EBAY_AUTOMATICALLY_RELIST', 'on');
+		$this->setConfiguration('EBAY_LAST_RELIST', date('Y-m-d'));        
+    }
+    
+    public function setPicturesSettings() 
+    {
+		// Default
+		if ($medium = ImageType::getByNameNType('thickbox', 'products')) 
+			$sizeMedium = (int)$medium['id_image_type'];
+		elseif ($medium = ImageType::getByNameNType('thickbox_default', 'products')) 
+			$sizeMedium = (int)$medium['id_image_type'];
+		else 
+			$sizeMedium = 0;
+        
+		// Small
+		if ($small = ImageType::getByNameNType('small', 'products')) 
+			$sizeSmall = (int) $small['id_image_type'];
+		elseif ($small = ImageType::getByNameNType('small_default', 'products')) 
+			$sizeSmall = (int) $small['id_image_type'];
+		else 
+			$sizeSmall = 0;
+        
+		// Large
+		if ($large = ImageType::getByNameNType('large', 'products')) 
+			$sizeBig = (int) $large['id_image_type'];
+		elseif ($large = ImageType::getByNameNType('large_default', 'products')) 
+			$sizeBig = (int) $large['id_image_type'];
+		else 
+			$sizeBig = 0;
+
+		$this->setConfiguration('EBAY_PICTURE_SIZE_DEFAULT', $sizeMedium);
+		$this->setConfiguration('EBAY_PICTURE_SIZE_SMALL', $sizeSmall);
+		$this->setConfiguration('EBAY_PICTURE_SIZE_BIG', $sizeBig);
+		$this->setConfiguration('EBAY_PICTURE_PER_LISTING', 0);
+    }
+    
+	/**
+	  * Get token from the ebay_user_identifier
+	  *
+	  * @return token, null if no token
+	  */
+    public function getToken() 
+    {
+        if ($this->token === null) 
+        {
+    		$sql = 'SELECT `token`
+    			FROM `'._DB_PREFIX_.'ebay_user_identifier_token` euit
+    			WHERE euit.`ebay_user_identifier` = \''.pSQL($this->ebay_user_identifier).'\'';
+            $this->token = Db::getInstance()->getValue($sql);
+        }
+        
+        return $this->token;
+    }
+    
+	/**
+	  * Set token for this ebay_user_identifier
+	  *
+	  * @return null
+	  */
+    public function setToken($token)
+    {
+		$sql = 'REPLACE INTO `'._DB_PREFIX_.'ebay_user_identifier_token` (
+            `ebay_user_identifier`, 
+            `token`
+            )
+			VALUES(
+			\''.pSQL($this->ebay_user_identifier).'\',
+			\''.pSQL($token).'\')';
+		DB::getInstance()->Execute($sql);        
+    }
 	
 	/**
 	  * Is the profile configured
@@ -232,7 +315,7 @@ class EbayProfile extends ObjectModel
 			$this->_loadConfiguration();
 		return (count($this->configurations) > 0);
 	}
-	
+    
 	public static function getOneByIdShop($id_shop)
 	{
 		// check if one profile exists otherwise creates it
@@ -249,18 +332,162 @@ class EbayProfile extends ObjectModel
 			return false;
 		}
 	}
-	
-	public static function getCurrent()
-	{
+    
+    public static function _getIdShop($default_if_null = true) {
 		$id_shop = version_compare(_PS_VERSION_, '1.5', '>') ? Shop::getContextShopID() : Shop::getCurrentShop();
-		if (!$id_shop)
+        
+		if (!$id_shop && $default_if_null)
 			if(Configuration::get('PS_SHOP_DEFAULT'))
 				$id_shop = Configuration::get('PS_SHOP_DEFAULT');
 			else
 				$id_shop = 1;
+            
+        return $id_shop;
+    }
+	
+	/**
+	  * Is the shop has changed, returns the first profile of the shop, returns the current profile otherwise
+	  *
+	  * @return EbayProfile
+	  */    
+	public static function getCurrent($check_current_shop = true)
+	{
+        $id_shop = EbayProfile::_getIdShop(false);
+        if (!$id_shop)
+            $id_shop = 0;
+        
+        $current_profile = Configuration::get('EBAY_CURRENT_PROFILE');
+        if ($current_profile) {
+            $data = explode('_',$current_profile);
+            if ($check_current_shop && $id_shop) {
+                $current_profile_id_shop = (int)$data[1];
+                if (($current_profile_id_shop == $id_shop) || ($current_profile_id_shop == 0)) {
+                    return new EbayProfile((int)$data[0]);
+                }                
+            } else {
+                return new EbayProfile((int)$data[0]);                
+            }
+        }
 
-		return self::getOneByIdShop($id_shop);
-		
-
+        // if shop has changed we switch to the first shop profile
+        $ebay_profile = self::getOneByIdShop($id_shop);
+        
+        if (!$ebay_profile)
+            return null;
+        
+        Configuration::updateValue('EBAY_CURRENT_PROFILE', $ebay_profile->id.'_'.$id_shop, false, 0, 0);
+        
+		return $ebay_profile;
 	}
+    
+    public static function setProfile($id_ebay_profile) {
+        $id_shop = EbayProfile::_getIdShop(false);
+        if (!$id_shop)
+            $id_shop = 0;
+        
+        // check that this profile is for the current shop
+        $shop_profiles = EbayProfile::getProfilesByIdShop($id_shop);
+        if ($id_shop) {
+            $is_shop_profile = false;
+            foreach ($shop_profiles as $profile) {
+                if ($profile['id_ebay_profile'] == $id_ebay_profile) {
+                    $is_shop_profile = true;
+                    break;
+                }
+            }            
+            if (!$is_shop_profile)
+                return false;            
+        }
+        
+        Configuration::updateValue('EBAY_CURRENT_PROFILE', $id_ebay_profile.'_'.$id_shop, false, 0, 0);
+        
+        return true;
+    }
+    
+	public static function getProfilesByIdShop($id_shop = 0)
+	{
+		$sql = 'SELECT ep.`id_ebay_profile`, ep.`ebay_user_identifier`, ep.`ebay_site_id`, ep.`id_lang`, l.`name` AS `language_name`
+				'.(version_compare(_PS_VERSION_, '1.5', '>') ? ',s.`name`' : '').'
+				FROM `'._DB_PREFIX_.'ebay_profile` ep
+                LEFT JOIN `'._DB_PREFIX_.'lang` l ON (ep.`id_lang` = l.`id_lang`)
+                '.(version_compare(_PS_VERSION_, '1.5', '>') ? 'LEFT JOIN `'._DB_PREFIX_.'shop` s ON (ep.`id_shop` = s.`id_shop`)' : '').'
+				'.($id_shop != 0 ? ' WHERE ep.`id_shop` = '.(int)$id_shop : '');
+		return Db::getInstance()->executeS($sql);
+	}
+    
+    public static function getEbayUserIdentifiers() {
+        $sql = 'SELECT DISTINCT(ep.`ebay_user_identifier`) AS `identifier`, euit.`token`
+            FROM `'._DB_PREFIX_.'ebay_profile` ep
+            LEFT JOIN `'._DB_PREFIX_.'ebay_user_identifier_token` euit
+            ON ep.`ebay_user_identifier` = euit.`ebay_user_identifier`';
+        $res = Db::getInstance()->executeS($sql);
+        $identifiers_data = array();
+        foreach ($res as $row)
+            $identifiers_data[] = array(
+                'identifier' => $row['identifier'],
+                'token'      => $row['token']
+            );
+        return $identifiers_data;
+    }
+    
+    public static function getByLangShopSiteAndUsername($id_lang, $id_shop, $ebay_country, $ebay_user_identifier, $template_content) {
+        $ebay_country_spec = EbayCountrySpec::getInstanceByKey($ebay_country);
+        $ebay_site_id = $ebay_country_spec->getSiteID();
+        
+        $sql = 'SELECT `id_ebay_profile` 
+            FROM `'._DB_PREFIX_.'ebay_profile` ep
+            WHERE ep.`id_lang` = '.(int)$id_lang.'
+            AND ep.`id_shop` = '.(int)$id_shop.'
+            AND ep.`ebay_site_id` = '.(int)$ebay_site_id.'
+            AND ep.`ebay_user_identifier` = \''.pSQL($ebay_user_identifier).'\'';
+
+        if ($id_profile = Db::getInstance()->getValue($sql))
+            return new EbayProfile($id_profile);
+        
+        // otherwise create the eBay profile
+        $ebay_profile = new EbayProfile();
+        $ebay_profile->id_lang = $id_lang;
+        $ebay_profile->id_shop = $id_shop;
+        $ebay_profile->ebay_site_id = $ebay_site_id;
+        $ebay_profile->ebay_user_identifier = $ebay_user_identifier;
+
+		$returns_policy_configuration = new EbayReturnsPolicyConfiguration();
+		$returns_policy_configuration->save();		
+		$ebay_profile->id_ebay_returns_policy_configuration = $returns_policy_configuration->id;
+
+        $ebay_profile->save();
+        $ebay_profile->setConfiguration('EBAY_COUNTRY_DEFAULT', $ebay_country);
+        $ebay_profile->setPicturesSettings();
+        $ebay_profile->setDefaultConfig($template_content);
+        
+        return $ebay_profile;
+    }
+
+    public static function deleteById($id_ebay_profile) {
+        $tables = array(
+            'ebay_product',
+            'ebay_category_condition_configuration',
+            'ebay_category_condition',
+            'ebay_category_configuration',
+            'ebay_configuration',
+            'ebay_product_modified',
+            'ebay_shipping',
+            'ebay_shipping_international_zone',
+            'ebay_shipping_zone_excluded',
+            'ebay_profile'
+        );
+        foreach ($tables as $table) {
+            Db::getInstance()->delete(_DB_PREFIX_.$table, '`id_ebay_profile` = '.(int)$id_ebay_profile);
+        }
+        
+        // if the profile deleted is the current one, we reset the EBAY_CURRENT_PROFILE
+        $current_profile = Configuration::get('EBAY_CURRENT_PROFILE');
+        $data = explode('_', $current_profile);
+        if ($data[0] == $id_ebay_profile)
+            Configuration::deleteByName('EBAY_CURRENT_PROFILE');
+        
+        
+        return true;
+    }    
+    
 }

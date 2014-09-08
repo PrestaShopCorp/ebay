@@ -49,6 +49,7 @@ class EbayOrder
 	private $payment_method;
 	private $id_order_seller;
 	private $date_add;
+    private $id_currency;
 
 	private $error_messages = array();
 
@@ -82,6 +83,9 @@ class EbayOrder
 		$this->shippingServiceCost = (string)$order_xml->ShippingServiceSelected->ShippingServiceCost;
 		$this->payment_method = (string)$order_xml->CheckoutStatus->PaymentMethod;
 		$this->id_order_seller = (string)$order_xml->ShippingDetails->SellingManagerSalesRecordNumber;
+        
+        $amount_paid_attr = $order_xml->AmountPaid->attributes();
+        $this->id_currency = Currency::getIdByIsoCode($amount_paid_attr['currencyID']);
 
 		if (count($order_xml->TransactionArray->Transaction))
 			$this->email = (string)$order_xml->TransactionArray->Transaction[0]->Buyer->Email;
@@ -296,7 +300,8 @@ class EbayOrder
 		$cart->id_carrier = $id_carrier;
 		$cart->delivery_option = @serialize(array($this->id_address => $id_carrier.','));
 		$cart->id_lang = $ebay_country->getIdLang();
-		$cart->id_currency = Currency::getIdByIsoCode($ebay_country->getCurrency());
+		//$cart->id_currency = Currency::getIdByIsoCode($ebay_country->getCurrency());
+        $cart->id_currency = $this->id_currency;
 		$cart->recyclable = 0;
 		$cart->gift = 0;
 		$cart->add();

@@ -37,7 +37,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_category` (
 		  `level` tinyint(1) NOT NULL,
 		  `is_multi_sku` tinyint(1),
 		  `name` varchar(255) NOT NULL,
-		  UNIQUE(`id_category_ref`),
+		  UNIQUE(`id_category_ref`, `id_country`),
 		  PRIMARY KEY  (`id_ebay_category`)
 	) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
@@ -45,7 +45,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_category` (
 // Create Configuration Table in Database
 $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_category_configuration` (
 		  `id_ebay_category_configuration` int(16) NOT NULL AUTO_INCREMENT,
-			`id_ebay_profile` INT( 16 ) NOT NULL,
+		  `id_ebay_profile` INT( 16 ) NOT NULL,
 		  `id_country` int(16) NOT NULL,
 		  `id_ebay_category` int(16) NOT NULL,
 		  `id_category` int(16) NOT NULL,
@@ -153,6 +153,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_shipping_service` (
 		  `shippingServiceID` varchar(256) NOT NULL,
 		  `InternationalService` varchar(256) NOT NULL,
 		  `ServiceType` varchar(256) NOT NULL,
+          `ebay_site_id` int(16) NOT NULL,
 		  PRIMARY KEY (`id_shipping_service`)
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 
@@ -180,8 +181,9 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_category_specific` (
 		  `id_attribute_group` int(16) NULL,
 		  `id_feature` int(16) NULL,
 		  `id_ebay_category_specific_value` int(16) NULL,
-			`is_brand` tinyint(1) NULL,			
-		  UNIQUE(`id_category_ref`, `name`),	
+		  `is_brand` tinyint(1) NULL,			
+          `ebay_site_id` int(16) NOT NULL,
+		  UNIQUE(`id_category_ref`, `ebay_site_id`, `name`),
 		  PRIMARY KEY (`id_ebay_category_specific`)
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 
@@ -215,9 +217,10 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_category_condition_con
 $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_product_configuration` (
 			  `id_ebay_product_configuration` int(11) NOT NULL AUTO_INCREMENT,
 				`id_product` int(16),
+                `id_ebay_profile` INT( 16 ) NOT NULL,
 				`blacklisted` tinyint(1) NOT NULL,
 				`extra_images` int(4) NOT NULL,
-				UNIQUE(`id_product`),				
+				UNIQUE(`id_product`, `id_ebay_profile`),
 			  PRIMARY KEY (`id_ebay_product_configuration`)
 				) ENGINE=InnoDB  DEFAULT CHARSET=utf8';
 				
@@ -291,3 +294,9 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_stat` (
     `tries` TINYINT unsigned NOT NULL,
 	PRIMARY KEY  (`id_ebay_stat`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+
+$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_user_identifier_token` (
+    `ebay_user_identifier` varchar(255) NOT NULL,
+    `token` text NOT NULL,
+    PRIMARY KEY (`ebay_user_identifier`)
+	) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';

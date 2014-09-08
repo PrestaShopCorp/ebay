@@ -43,6 +43,31 @@ class EbayShipping
 			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.' 
 			AND international = 0');
 
+		//Check if product can be shipped because of weight or dimension
+		if($id_product)
+		{
+			foreach ($shippings as $key => $value) {
+				$carrier = new Carrier($value['ps_carrier']);
+				$product = new Product($id_product);
+				if($carrier->range_behavior)
+				{
+					if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT
+						&& (!Carrier::checkDeliveryPriceByWeight($carrier->id, $product->weight, $value['id_zone'])))
+						|| ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE
+						&& (!Carrier::checkDeliveryPriceByPrice($carrier->id, $product->weight, $value['id_zone'], Configuration::get('PS_CURRENCY_DEFAULT')))))
+					{
+						unset($shippings[$key]);
+					}
+				}
+
+				if(($carrier->max_width < $product->width && $carrier->max_width != 0) || ($carrier->max_height < $product->height && $carrier->max_height != 0) || ($carrier->max_depth < $product->depth && $carrier->max_depth != 0))
+				{
+						unset($shippings[$key]);
+						continue;
+				}
+			}
+		}
+
 		if ($id_product && version_compare(_PS_VERSION_, '1.5', '>'))
 		{
 			$shippings_product = Db::getInstance()->ExecuteS('SELECT id_carrier_reference as ps_carrier
@@ -72,6 +97,31 @@ class EbayShipping
 			FROM '._DB_PREFIX_.'ebay_shipping 
 			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.' 
 			AND international = 1');
+		
+		//Check if product can be shipped because of weight or dimension
+		if($id_product)
+		{
+			foreach ($shippings as $key => $value) {
+				$carrier = new Carrier($value['ps_carrier']);
+				$product = new Product($id_product);
+				if($carrier->range_behavior)
+				{
+					if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT
+						&& (!Carrier::checkDeliveryPriceByWeight($carrier->id, $product->weight, $value['id_zone'])))
+						|| ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE
+						&& (!Carrier::checkDeliveryPriceByPrice($carrier->id, $product->weight, $value['id_zone'], Configuration::get('PS_CURRENCY_DEFAULT')))))
+					{
+						unset($shippings[$key]);
+					}
+				}
+
+				if(($carrier->max_width < $product->width && $carrier->max_width != 0) || ($carrier->max_height < $product->height && $carrier->max_height != 0) || ($carrier->max_depth < $product->depth && $carrier->max_depth != 0))
+				{
+						unset($shippings[$key]);
+						continue;
+				}
+			}
+		}
 		
 		if ($id_product && version_compare(_PS_VERSION_, '1.5', '>'))
 		{
