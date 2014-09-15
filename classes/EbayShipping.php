@@ -46,7 +46,10 @@ class EbayShipping
 		//Check if product can be shipped because of weight or dimension
 		if($id_product)
 		{
-			foreach ($shippings as $key => $value) {
+			$exclude = array();
+
+			foreach ($shippings as $key => $value) 
+			{
 				$carrier = new Carrier($value['ps_carrier']);
 				$product = new Product($id_product);
 				if($carrier->range_behavior)
@@ -56,15 +59,20 @@ class EbayShipping
 						|| ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE
 						&& (!Carrier::checkDeliveryPriceByPrice($carrier->id, $product->weight, $value['id_zone'], Configuration::get('PS_CURRENCY_DEFAULT')))))
 					{
-						unset($shippings[$key]);
+						$exclude[] = $key;
 					}
 				}
 
 				if(($carrier->max_width < $product->width && $carrier->max_width != 0) || ($carrier->max_height < $product->height && $carrier->max_height != 0) || ($carrier->max_depth < $product->depth && $carrier->max_depth != 0))
 				{
-						unset($shippings[$key]);
+						$exclude[] = $key;
 						continue;
 				}
+			}
+
+			$exclude = array_unique($exclude);
+			foreach ($exclude as $key_to_exclude) {
+				unset($shippings[$key_to_exclude]);
 			}
 		}
 
@@ -101,7 +109,10 @@ class EbayShipping
 		//Check if product can be shipped because of weight or dimension
 		if($id_product)
 		{
-			foreach ($shippings as $key => $value) {
+			$exclude = array();
+
+			foreach ($shippings as $key => $value) 
+			{
 				$carrier = new Carrier($value['ps_carrier']);
 				$product = new Product($id_product);
 				if($carrier->range_behavior)
@@ -111,15 +122,20 @@ class EbayShipping
 						|| ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE
 						&& (!Carrier::checkDeliveryPriceByPrice($carrier->id, $product->weight, $value['id_zone'], Configuration::get('PS_CURRENCY_DEFAULT')))))
 					{
-						unset($shippings[$key]);
+						$exclude[] = $key;
 					}
 				}
 
 				if(($carrier->max_width < $product->width && $carrier->max_width != 0) || ($carrier->max_height < $product->height && $carrier->max_height != 0) || ($carrier->max_depth < $product->depth && $carrier->max_depth != 0))
 				{
-						unset($shippings[$key]);
+						$exclude[] = $key;
 						continue;
 				}
+			}
+
+			$exclude = array_unique($exclude);
+			foreach ($exclude as $key_to_exclude) {
+				unset($shippings[$key_to_exclude]);
 			}
 		}
 		

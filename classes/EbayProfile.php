@@ -352,9 +352,7 @@ class EbayProfile extends ObjectModel
 	  */    
 	public static function getCurrent($check_current_shop = true)
 	{
-        $id_shop = EbayProfile::_getIdShop(false);
-        if (!$id_shop)
-            $id_shop = 0;
+        $id_shop = (int)EbayProfile::_getIdShop(false);
         
         $current_profile = Configuration::get('EBAY_CURRENT_PROFILE');
         if ($current_profile) {
@@ -381,9 +379,7 @@ class EbayProfile extends ObjectModel
 	}
     
     public static function setProfile($id_ebay_profile) {
-        $id_shop = EbayProfile::_getIdShop(false);
-        if (!$id_shop)
-            $id_shop = 0;
+        $id_shop = (int)EbayProfile::_getIdShop(false);
         
         // check that this profile is for the current shop
         $shop_profiles = EbayProfile::getProfilesByIdShop($id_shop);
