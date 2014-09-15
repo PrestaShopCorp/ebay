@@ -59,7 +59,7 @@
 	
 	<fieldset style="margin-top:10px;">
 		<legend>{l s='Account details' mod='ebay'}</legend>
-		<h4>{l s='To list your products on eBay, you need to create' mod='ebay'} <a href="{l s='https://scgi.ebay.co.uk/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2' mod='ebay'}">{l s='a business seller account' mod='ebay'}</a> {l s='and' mod='ebay'} <a href="https://www.paypal.com/">{l s='a PayPal account.' mod='ebay'}</a></h4>
+		<h4>{l s='To list your products on eBay, you need to create' mod='ebay'} <a href="{l s='https://scgi.ebay.co.uk/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2' mod='ebay'}" target="_blank">{l s='a business seller account' mod='ebay'}</a> {l s='and' mod='ebay'} <a href="https://www.paypal.com/"  target="_blank">{l s='a PayPal account.' mod='ebay'}</a></h4>
 		<label>{l s='eBay User ID' mod='ebay'} : </label>
 		<div class="margin-form">
 			<input type="text" size="20" name="ebay_identifier" value="{$ebayIdentifier|escape:'htmlall'}" readonly="readonly" disabled />
@@ -273,7 +273,7 @@
 		<div class="margin-form">
 			
 			<a href="{$url|escape:'urlencode'}&EBAY_SYNC_ORDERS=1">
-				<input type="button" class="button" value="{l s='Sync Orders from eBay' mod='ebay'}" />
+				<span class="button">{l s='Sync Orders from eBay' mod='ebay'}</span>
 			</a>
 	        <br>
 		</div>
@@ -303,8 +303,8 @@
 		<legend>{l s='Ebay Data Usage' mod='ebay'}</legend>
 		<label>{l s='Help us improve the eBay Module by sending anonymous usage stats' mod='ebay'} : </label>
 		<div class="margin-form">
-            <input type="radio" name="stats" value="0" {if isset($stats) && !$stats}checked="checked"{/if}> No thanks&nbsp;&nbsp;
-            <input type="radio" name="stats" value="1" {if !isset($stats) || $stats}checked="checked"{/if}> I agree<br>
+            <input type="radio" name="stats" value="0" {if isset($stats) && !$stats}checked="checked"{/if}> {l s='No thanks' mod='ebay'}&nbsp;&nbsp;
+            <input type="radio" name="stats" value="1" {if !isset($stats) || $stats}checked="checked"{/if}> {l s='I agree' mod='ebay'}<br>
 		</div>
 		<div style="clear:both;"></div>
     </fieldset>

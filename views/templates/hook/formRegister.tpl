@@ -156,12 +156,11 @@
             <div id="ebay-register-right-col">
                 <div id="ebay-register-right-col-content">
                     <div id="ebay-register-div">
-                        <a id="ebay-register-link" href="{l s='https://scgi.ebay.com/ws/eBayISAPI.dll?RegisterEnterInfo' mod='ebay'}" class="ebay-primary button">{l s='Register' mod='ebay'}</a>
+                        <a id="ebay-register-link" href="{l s='https://scgi.ebay.com/ws/eBayISAPI.dll?RegisterEnterInfo' mod='ebay'}" class="ebay-primary primary button" target="_blank">{l s='Register' mod='ebay'}</a>
                 		<strong>{l s='New to eBay?' mod='ebay'}</strong><br />
-                        Get started now, Its fast and easy.
+                        {l s='Get started now, Its fast and easy.' mod='ebay'}
                     </div>
-                    <p id="ebay-register-p">Once you have registered on eBay you will obtain the eBay ID 
-                    required to configure the eBay add-on.</p>
+                    <p id="ebay-register-p">{l s='Once you have registered on eBay you will obtain the eBay ID required to configure the eBay add-on.' mod='ebay'}</p>
                     
                     <!--
             		<br /><br />
