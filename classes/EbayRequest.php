@@ -385,7 +385,7 @@ class EbayRequest
 			'condition_id' => $data['condition'],
 			'price_update' => !isset($data['noPriceUpdate']),
 			'start_price' => $data['price'],
-			'country' => strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
+			'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
 			'country_currency' => $this->ebay_country->getCurrency(),
 			'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
 			'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
@@ -430,7 +430,7 @@ class EbayRequest
 			'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
 			'return_policy' => $this->_getReturnPolicy(),
 			'item_specifics' => $data['item_specifics'],
-            'country' => strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),           
+            'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),           
 		);
 
 		$response = $this->_makeRequest('ReviseFixedPriceItem', $vars);
@@ -467,7 +467,7 @@ class EbayRequest
 
 		// Build the request Xml string
 		$vars = array(
-			'country' => strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
+			'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
 			'country_currency' => $this->ebay_country->getCurrency(),
 			'description' => $data['description'],
 			'condition_id' => $data['condition'],
@@ -523,7 +523,7 @@ class EbayRequest
 
 		$vars = array(
 			'item_id' => $data['itemID'],
-			'country' => strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
+			'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
 			'country_currency' => $this->ebay_country->getCurrency(),
 			'condition_id' => $data['condition'],
 			'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
@@ -855,7 +855,7 @@ class EbayRequest
 		);
 		foreach ($features as $feature)
 		{
-			$tags[] = trim(str_replace(' ', '_', strtoupper('{FEATURE_'.$feature['name'].'}')));
+			$tags[] = trim(str_replace(' ', '_', Tools::strtoupper('{FEATURE_'.$feature['name'].'}')));
 			$hasFeature = array_map(array('EbayRequest', 'getValueOfFeature'), $features_product, $feature);
 			if (isset($hasFeature[0]) &&$hasFeature[0])
 				$values[] = $hasFeature[0];

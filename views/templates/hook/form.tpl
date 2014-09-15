@@ -181,13 +181,13 @@
                     {if $show_seller_tips}
                         <a id="ebay-seller-tips-link" href>{l s='Show seller tips' mod='ebay'}</a>
                     {/if}
-                    <a id="ebay_video_fancybox" href="https://www.youtube.com/watch?v=8u7FZizsZn8?autoplay=1"><img id="ebay-install-pict" src="{$path|escape:'htmlall'}views/img/install.jpg" /></a>
+                    {*<a id="ebay_video_fancybox" href="#">*}<img id="ebay-install-pict" src="{$path|escape:'htmlall'}views/img/install.jpg" />{*</a>*}
                     <p id="ebay-install-title">{l s='Resources' mod='ebay'}</p>
                     <ul id="ebay-install-ul">
-                        <li>{l s='Download the add-on installation guide' mod='ebay'}</li>
-                        <li>{l s='eBay Seller center' mod='ebay'}</li>
-                        <li>{l s='eBay fees for professional sellers' mod='ebay'}</li>
-                        <li>{l s='Contact us' mod='ebay'}</li>
+                        <li><a href="http://202-ecommerce.com/d/eBay-doc_{$documentation_lang}.pdf" target="_blank">{l s='Download the add-on installation guide' mod='ebay'}</a></li>
+                        <li><a href="">{l s='eBay Seller center' mod='ebay'}</a></li>
+                        {*<li><a href="http://pages.ebay.{$site_extension}/help/sell/fees.html" target="_blank">{l s='eBay fees for professional sellers' mod='ebay'}</a></li>*}
+                        <li><a href="{if $site_extension == 'fr'}http://202-ecommerce.com/ebay/{else}http://en.202-ecommerce.com/ebay-en/{/if}"  target="_blank">{l s='Contact us' mod='ebay'}</a></li>
                     </ul>
                 </fieldset>
             </div>
