@@ -25,38 +25,19 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-class EbayShippingService
+class EbayHelpTab extends EbayTab
 {
-	public static function getAll($ebay_site_id)
-	{
-		return Db::getInstance()->ExecuteS('SELECT *
-			FROM '._DB_PREFIX_.'ebay_shipping_service
-            WHERE `ebay_site_id` = '.(int)$ebay_site_id);
-	}
 
-	public static function getTotal($ebay_site_id)
-	{
-		return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
-			FROM '._DB_PREFIX_.'ebay_shipping_service
-            WHERE `ebay_site_id` = '.(int)$ebay_site_id);
-	}
+    function getContent()
+    {
+        $ebay_country = EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'));        
+		$help_file = dirname(__FILE__).'/../../help/help-'.strtolower($ebay_country->getDocumentationLang()).'.html';
 
-	public static function insert($data)
-	{
-		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_service', $data, 'INSERT');
-	}
+		if (!file_exists($help_file))
+			$help_file = dirname(__FILE__).'/../../help/help-en.html';
+
+		return Tools::file_get_contents($help_file);
+    }
     
-	public static function getCarriers($ebay_site_id)
-	{
-		if (EbayShippingService::getTotal($ebay_site_id))
-			return EbayShippingService::getAll($ebay_site_id);
-
-		$ebay = new EbayRequest();
-		$carriers = $ebay->getCarriers();
-
-		foreach ($carriers as $carrier)
-			EbayShippingService::insert(array_map('pSQL', $carrier));
-
-		return $carriers;
-	}
 }
+

@@ -60,6 +60,8 @@
 	<fieldset style="margin-top:10px;">
 		<legend>{l s='Account details' mod='ebay'}</legend>
 		<h4>{l s='To list your products on eBay, you need to create' mod='ebay'} <a href="{l s='https://scgi.ebay.co.uk/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2' mod='ebay'}">{l s='a business seller account' mod='ebay'}</a> {l s='and' mod='ebay'} <a href="https://www.paypal.com/">{l s='a PayPal account.' mod='ebay'}</a></h4>
+        
+        <!--
 		<label>{l s='eBay User ID' mod='ebay'} : </label>
 		<div class="margin-form">
 			<input type="text" size="20" name="ebay_identifier" value="{$ebayIdentifier|escape:'htmlall'}" readonly="readonly" disabled />
@@ -77,6 +79,9 @@
 				{/if}
 			</p>
 		</div>
+        -->
+		<input type="hidden" name="ebay_shop" value="{$ebayShopValue|escape:'htmlall'}" />            
+        
 		<label>{l s='Paypal email address' mod='ebay'} : </label>
 		<div class="margin-form">
 

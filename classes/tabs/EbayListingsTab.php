@@ -25,38 +25,16 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-class EbayShippingService
+class EbayListingsTab extends EbayTab
 {
-	public static function getAll($ebay_site_id)
-	{
-		return Db::getInstance()->ExecuteS('SELECT *
-			FROM '._DB_PREFIX_.'ebay_shipping_service
-            WHERE `ebay_site_id` = '.(int)$ebay_site_id);
-	}
 
-	public static function getTotal($ebay_site_id)
-	{
-		return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
-			FROM '._DB_PREFIX_.'ebay_shipping_service
-            WHERE `ebay_site_id` = '.(int)$ebay_site_id);
-	}
-
-	public static function insert($data)
-	{
-		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_service', $data, 'INSERT');
-	}
+    function getContent()
+    {
+		$template_vars = array(
+			'id_employee' => $this->context->employee->id
+			);
+		return $this->display('ebay_listings.tpl', $template_vars);
+    }
     
-	public static function getCarriers($ebay_site_id)
-	{
-		if (EbayShippingService::getTotal($ebay_site_id))
-			return EbayShippingService::getAll($ebay_site_id);
-
-		$ebay = new EbayRequest();
-		$carriers = $ebay->getCarriers();
-
-		foreach ($carriers as $carrier)
-			EbayShippingService::insert(array_map('pSQL', $carrier));
-
-		return $carriers;
-	}
 }
+

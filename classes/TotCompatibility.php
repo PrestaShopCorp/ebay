@@ -25,38 +25,32 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-class EbayShippingService
+class TotCompatibility
 {
-	public static function getAll($ebay_site_id)
-	{
-		return Db::getInstance()->ExecuteS('SELECT *
-			FROM '._DB_PREFIX_.'ebay_shipping_service
-            WHERE `ebay_site_id` = '.(int)$ebay_site_id);
-	}
-
-	public static function getTotal($ebay_site_id)
-	{
-		return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
-			FROM '._DB_PREFIX_.'ebay_shipping_service
-            WHERE `ebay_site_id` = '.(int)$ebay_site_id);
-	}
-
-	public static function insert($data)
-	{
-		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_service', $data, 'INSERT');
-	}
+    /*
+     * for backward compatibility
+     *
+     *
+     */
     
-	public static function getCarriers($ebay_site_id)
-	{
-		if (EbayShippingService::getTotal($ebay_site_id))
-			return EbayShippingService::getAll($ebay_site_id);
+    public static function getCurrenciesByIdShop($id_shop = 0)
+    {
+        if (version_compare(_PS_VERSION_, '1.5.1', '>='))
+            return Currency::getCurrenciesByIdShop($id_shop);
+        elseif (version_compare(_PS_VERSION_, '1.5', '>')) {
+    		$sql = 'SELECT *
+    				FROM `'._DB_PREFIX_.'currency` c
+    				LEFT JOIN `'._DB_PREFIX_.'currency_shop` cs ON (cs.`id_currency` = c.`id_currency`)
+    				'.($id_shop != 0 ? ' WHERE cs.`id_shop` = '.(int)$id_shop : '').'
+    				GROUP BY c.id_currency
+    				ORDER BY `name` ASC';
 
-		$ebay = new EbayRequest();
-		$carriers = $ebay->getCarriers();
+    		return Db::getInstance()->executeS($sql);
+        } else {
+    		$sql = 'SELECT *
+    				FROM `'._DB_PREFIX_.'currency` c';            
 
-		foreach ($carriers as $carrier)
-			EbayShippingService::insert(array_map('pSQL', $carrier));
-
-		return $carriers;
-	}
+    		return Db::getInstance()->executeS($sql);
+        }
+    }
 }

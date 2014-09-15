@@ -20,43 +20,33 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
+ *  @copyright  2007-2013 PrestaShop SA
  *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-class EbayShippingLocation
+class EbayProductTemplate extends ObjectModel
 {
-	public static function getEbayShippingLocations()
-	{
-		return Db::getInstance()->ExecuteS('SELECT *
-			FROM '._DB_PREFIX_.'ebay_shipping_location');
-	}
+    public static function getContent($ebay, $smarty)
+    {
+		$logo_url = version_compare(_PS_VERSION_, '1.5', '>') ?  (Tools::getShopDomain(true).'/'.__PS_BASE_URI__.'/'._PS_IMG_.Configuration::get('PS_LOGO').'?'.Configuration::get('PS_IMG_UPDATE_TIME')) : (Tools::getShopDomain(true).'/'.__PS_BASE_URI__.'/img/logo.jpg');
 
-	public static function getTotal()
-	{
-		return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
-			FROM '._DB_PREFIX_.'ebay_delivery_time_options');
-	}
+		$smarty->assign(array(
+			'shop_logo' => $logo_url,
+			'shop_name' => Configuration::get('PS_SHOP_NAME'),
+			'module_url' => $this->_getModuleUrl(),
+		));
 
-	public static function insert($data)
-	{
-		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_location', $data, 'INSERT');
-	}
+		return $ebay->display(dirname(__FILE__).'/../ebay.php', 'ebay/ebay.tpl');
+        
+    }
     
-	public static function getInternationalShippingLocations()
+	/**
+	 * Returns the module url
+	 *
+   **/
+    protected function _getModuleUrl()
 	{
-		if (EbayShippingLocation::getTotal())
-			return EbayShippingLocation::getEbayShippingLocations();
-
-		$ebay = new EbayRequest();
-		$locations = $ebay->getInternationalShippingLocations();
-
-		foreach ($locations as $location)
-			EbayShippingLocation::insert(array_map('pSQL', $location));
-
-		return $locations;
-	}
-
-    
+		return Tools::getShopDomain(true).__PS_BASE_URI__.'modules/ebay/';
+	}    
 }

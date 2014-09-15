@@ -25,38 +25,27 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-class EbayShippingService
+class EbayOrderHistoryTab extends EbayTab
 {
-	public static function getAll($ebay_site_id)
-	{
-		return Db::getInstance()->ExecuteS('SELECT *
-			FROM '._DB_PREFIX_.'ebay_shipping_service
-            WHERE `ebay_site_id` = '.(int)$ebay_site_id);
-	}
 
-	public static function getTotal($ebay_site_id)
-	{
-		return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
-			FROM '._DB_PREFIX_.'ebay_shipping_service
-            WHERE `ebay_site_id` = '.(int)$ebay_site_id);
-	}
+    function getContent()
+    {
+		// Check if the module is configured
+		if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))
+			return '<p><b>'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab').'</b></p><br />';
 
-	public static function insert($data)
-	{
-		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_service', $data, 'INSERT');
-	}
+		$dateLastImport = '-';
+
+		if (file_exists(dirname(__FILE__).'/../../log/orders.php'))
+			include(dirname(__FILE__).'/../../log/orders.php');
+
+		$template_vars = array(
+			'date_last_import' => $dateLastImport,
+			'orders' => isset($orders) ? $orders : array()
+		);
+
+		return $this->display('ordersHistory.tpl', $template_vars);
+    }
     
-	public static function getCarriers($ebay_site_id)
-	{
-		if (EbayShippingService::getTotal($ebay_site_id))
-			return EbayShippingService::getAll($ebay_site_id);
-
-		$ebay = new EbayRequest();
-		$carriers = $ebay->getCarriers();
-
-		foreach ($carriers as $carrier)
-			EbayShippingService::insert(array_map('pSQL', $carrier));
-
-		return $carriers;
-	}
 }
+

@@ -48,4 +48,20 @@ class EbayDeliveryTimeOptions
 
 		Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_delivery_time_options', $to_insert, 'INSERT');
 	}
+    
+	public static function getDeliveryTimeOptions()
+	{
+		if (EbayDeliveryTimeOptions::getTotal())
+			return EbayDeliveryTimeOptions::getAll();
+
+		$ebay = new EbayRequest();
+		$delivery_time_options = $ebay->getDeliveryTimeOptions();
+
+		foreach ($delivery_time_options as $delivery_time_option)
+			EbayDeliveryTimeOptions::insert(array_map('pSQL', $delivery_time_option));
+
+		return $delivery_time_options;
+	}
+
+    
 }
