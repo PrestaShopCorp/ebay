@@ -25,7 +25,7 @@
 
 <h2>{l s='Here is a record of your eBays orders' mod='ebay'} :</h2>
 <p>
-	<b>{$date_last_import}</b>
+	<b>{$date_last_import|escape:'htmlall'}</b>
 </p>
 <br />
 <br />
@@ -42,17 +42,17 @@
 		</style>
 		<p>
 		<b>{l s='Order Ref eBay' mod='ebay'} :</b> 
-		{if $order.id_order_ref}{$order.id_order_ref}{/if}<br />
+		{if $order.id_order_ref}{$order.id_order_ref|escape:'htmlall'}{/if}<br />
 		<b>{l s='Id Order Seller' mod='ebay'} :</b> 
-		{if $order.id_order_seller}{$order.id_order_seller}{/if}<br />
+		{if $order.id_order_seller}{$order.id_order_seller|escape:'htmlall'}{/if}<br />
 		<b>{l s='Amount' mod='ebay'} :</b> 
-		{if $order.amount}{$order.amount}{/if}<br />
+		{if $order.amount}{$order.amount|escape:'htmlall'}{/if}<br />
 		<b>{l s='Status' mod='ebay'} :</b> 
-		{if $order.status}{$order.status}{/if}<br />
+		{if $order.status}{$order.status|escape:'htmlall'}{/if}<br />
 		<b>{l s='Date' mod='ebay'} :</b>
-		{if $order.date}{$order.date}{/if}<br />
+		{if $order.date}{$order.date|escape:'htmlall'}{/if}<br />
 		<b>{l s='E-mail' mod='ebay'} :</b>
-		{if $order.email}{$order.email}{/if}<br />
+		{if $order.email}{$order.email|escape:'htmlall'}{/if}<br />
 		<b>{l s='Products' mod='ebay'} :</b><br />
 		{if $order.products && ($order.products|count > 0)}
 			<table border="0" cellpadding="4" cellspacing="0">
@@ -72,10 +72,10 @@
 				</tr>
 				{foreach from=$order.products item="product"}
 					<tr>
-						<td class="orderImportTd2">{$product.id_product}</td>
-						<td class="orderImportTd2">{$product.id_product}</td>
-						<td class="orderImportTd2">{$product.quantity}</td>
-						<td class="orderImportTd3">{$product.price}</td>
+						<td class="orderImportTd2">{$product.id_product|escape:'htmlall'}</td>
+						<td class="orderImportTd2">{$product.id_product|escape:'htmlall'}</td>
+						<td class="orderImportTd2">{$product.quantity|escape:'htmlall'}</td>
+						<td class="orderImportTd3">{$product.price|escape:'htmlall'}</td>
 					</tr>
 				{/foreach}
 			</table>
@@ -84,7 +84,7 @@
 			<b>{l s='Status Import' mod='ebay'} :</b> KO<br />
 			<b>{l s='Failure details' mod='ebay'} :</b><br />
 			{foreach from=$order.error_messages item="error"}
-				{$error}t<br />
+				{$error|escape:'htmlall'}<br />
 			{/foreach}
 		{else}
 			<b>{l s='Status Import' mod='ebay'} :</b> OK

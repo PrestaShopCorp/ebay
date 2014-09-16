@@ -53,4 +53,11 @@ $sql .= ')
 $sql .= $is_one_five ? ' product_shop.`id_shop` = 1 AND ' : '';
 $sql .= ' p.`id_category_default` = '.(int)Tools::getValue('category');
 
-echo Tools::jsonEncode(Db::getInstance()->ExecuteS($sql));
+$res = Db::getInstance()->ExecuteS($sql);
+foreach ($res as &$row) {
+    $row['name'] = Tools::safeOutput($row['name']);
+    $row['blacklisted'] = Tools::safeOutput($row['blacklisted']);
+    $row['extra_images'] = Tools::safeOutput($row['extra_images']);
+}
+
+echo Tools::jsonEncode($res);

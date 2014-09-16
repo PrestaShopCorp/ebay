@@ -40,7 +40,8 @@ function upgrade_module_1_6($module)
 	Configuration::updateValue('EBAY_ACTIVATE_LOGS', '0');
 	Configuration::updateValue('EBAY_ACTIVATE_MAILS', '0');
 	Configuration::updateValue('EBAY_PICTURE_PER_LISTING', 0);
-	ebay::installPicturesSettings($module);
+    if ($module->ebay_profile)
+        $module->ebay_profile->setPicturesSettings();
 	$module->setConfiguration('EBAY_VERSION', $module->version);
 
 	return true;

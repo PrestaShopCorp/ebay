@@ -26,7 +26,7 @@
 <p class="center">
 	<b>{l s='Your categories have been configured' mod='ebay'}</b>
 </p>
-<form action="index.php?{if $isOneDotFive}controller={$controller}{else}tab={$tab}{/if}&configure={$configure}&token={$token}&tab_module={$tab_module}&module_name={$module_name}&id_tab=2&section=category" method="post" class="form">
+<form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall'}{else}tab={$tab|escape:'htmlall'}{/if}&configure={$configure|escape:'htmlall'}&token={$token|escape:'htmlall'}&tab_module={$tab_module|escape:'htmlall'}&module_name={$module_name|escape:'htmlall'}&id_tab=2&section=category" method="post" class="form">
 	<p class="center">
 		<input class="primary button" name="submitSave" type="submit" value="{l s='View Categories' mod='ebay'}" />
 	</p>
@@ -35,7 +35,7 @@
 <script type="text/javascript">
 	// <![CDATA[
 	$(document).ready(function(){
-		var form_categories = parseInt("{$form_categories}");
+		var form_categories = parseInt("{$form_categories|escape:'htmlall'}");
 		if (form_categories >= 1)
 			$("#menuTab2").addClass('success');
 		

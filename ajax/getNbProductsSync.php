@@ -35,7 +35,7 @@ if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get(
 $id_ebay_profile = (int)Tools::getValue('profile');
 $ebay_profile = new EbayProfile($id_ebay_profile);
 
-Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_category_configuration', array('sync' => (int)Tools::getValue('action')), 'UPDATE', '`id_category` = '.(int)Tools::getValue('id_category'));
+Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_category_configuration', array('sync' => (int)Tools::getValue('action')), 'UPDATE', '`id_category` = '.(int)Tools::getValue('id_category').' AND `id_ebay_profile` = '.(int)$ebay_profile->id);
 
 if (version_compare(_PS_VERSION_, '1.5', '>'))
 {
@@ -54,8 +54,9 @@ if (version_compare(_PS_VERSION_, '1.5', '>'))
 			SELECT `id_category`
 			FROM `'._DB_PREFIX_.'ebay_category_configuration`
 			WHERE `id_ebay_category` > 0
-			AND `sync` = 1)
-		AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery().')
+			AND `sync` = 1
+            AND `id_ebay_profile` = '.(int)$ebay_profile->id.')
+		AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($ebay_profile->id).')
 		GROUP BY p.id_product) TableRequete';
     $nb_products = Db::getInstance()->getValue($sql);
 }
@@ -73,8 +74,9 @@ else
 			SELECT `id_category`
 			FROM `'._DB_PREFIX_.'ebay_category_configuration`
 			WHERE `id_ebay_category` > 0
-			AND `sync` = 1)
-		AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery().')';
+			AND `sync` = 1
+            AND `id_ebay_profile` = '.(int)$ebay_profile->id.')
+		AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($ebay_profile->id).')';
     $nb_products = Db::getInstance()->getValue($sql);
 }
 

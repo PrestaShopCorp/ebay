@@ -25,16 +25,12 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-class Cart extends CartCore
-{
-	public static function __set_state($attributes)
-	{
-		$cart = new Cart();
+include(dirname(__FILE__).'/../../../config/config.inc.php');
 
-		foreach ($attributes as $name => $attribute)
-			$cart->{$name} = $attribute;
+if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+	die('ERROR: Invalid Token');
 
-		return $cart;
-	}
+include(dirname(__FILE__).'/../classes/EbayProfile.php');
 
-}
+
+echo EbayProfile::deleteById((int)Tools::getValue('profile'));

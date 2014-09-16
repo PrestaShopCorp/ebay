@@ -57,13 +57,18 @@ class EbayRequest
 		/** Backward compatibility */
 		require(dirname(__FILE__).'/../backward_compatibility/backward.php');
 
+		$this->itemConditionError = false;
+		$this->debug = (boolean)Configuration::get('EBAY_ACTIVATE_LOGS');
+
         if ($id_ebay_profile)
             $this->ebay_profile = new EbayProfile($id_ebay_profile);
         else
             $this->ebay_profile = EbayProfile::getCurrent();
-		$this->ebay_country = EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'), $this->dev);
-		$this->itemConditionError = false;
-		$this->debug = (boolean)Configuration::get('EBAY_ACTIVATE_LOGS');
+
+        if ($this->ebay_profile)
+            $this->ebay_country = EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'), $this->dev);
+        else
+            $this->ebay_country = EbayCountrySpec::getInstanceByKey('gb');            
 
 		/**
 		 * Sandbox params
@@ -333,6 +338,7 @@ class EbayRequest
 				'shippingServiceID' => strip_tags($carrier->ShippingServiceID->asXML()),
 				'ServiceType' => strip_tags($carrier->ServiceType->asXML()),
 				'InternationalService' => (isset($carrier->InternationalService) ? strip_tags($carrier->InternationalService->asXML()) : false),
+                'ebay_site_id' => (int)$this->ebay_profile->ebay_site_id
 			);
 
 		return $carriers;
@@ -379,7 +385,7 @@ class EbayRequest
 			'condition_id' => $data['condition'],
 			'price_update' => !isset($data['noPriceUpdate']),
 			'start_price' => $data['price'],
-			'country' => $this->ebay_country->getIsoCode(),
+			'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
 			'country_currency' => $this->ebay_country->getCurrency(),
 			'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
 			'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
@@ -424,6 +430,7 @@ class EbayRequest
 			'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
 			'return_policy' => $this->_getReturnPolicy(),
 			'item_specifics' => $data['item_specifics'],
+            'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),           
 		);
 
 		$response = $this->_makeRequest('ReviseFixedPriceItem', $vars);
@@ -460,7 +467,7 @@ class EbayRequest
 
 		// Build the request Xml string
 		$vars = array(
-			'country' => $this->ebay_country->getIsoCode(),
+			'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
 			'country_currency' => $this->ebay_country->getCurrency(),
 			'description' => $data['description'],
 			'condition_id' => $data['condition'],
@@ -516,7 +523,7 @@ class EbayRequest
 
 		$vars = array(
 			'item_id' => $data['itemID'],
-			'country' => $this->ebay_country->getIsoCode(),
+			'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
 			'country_currency' => $this->ebay_country->getCurrency(),
 			'condition_id' => $data['condition'],
 			'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
@@ -736,7 +743,7 @@ class EbayRequest
 	private function _makeRequest($api_call, $vars, $shoppingEndPoint = false)
 	{
 		$vars = array_merge($vars, array(
-			'ebay_auth_token' => Configuration::get('EBAY_API_TOKEN', null, 0, 0),
+			'ebay_auth_token' => ($this->ebay_profile ? $this->ebay_profile->getToken() : ''),
 			'error_language' => $this->ebay_country->getLanguage(),
 		));
 
@@ -848,7 +855,7 @@ class EbayRequest
 		);
 		foreach ($features as $feature)
 		{
-			$tags[] = trim(str_replace(' ', '_', strtoupper('{FEATURE_'.$feature['name'].'}')));
+			$tags[] = trim(str_replace(' ', '_', Tools::strtoupper('{FEATURE_'.$feature['name'].'}')));
 			$hasFeature = array_map(array('EbayRequest', 'getValueOfFeature'), $features_product, $feature);
 			if (isset($hasFeature[0]) &&$hasFeature[0])
 				$values[] = $hasFeature[0];
@@ -861,6 +868,9 @@ class EbayRequest
 
 	public static function getValueOfFeature($val, $feature)
 	{
+        if (!isset($feature['id_feature']))
+            return false;
+        
 		return ((int)$val['id_feature'] == (int)$feature['id_feature'] ? $val['value'] : false);
 	}
 

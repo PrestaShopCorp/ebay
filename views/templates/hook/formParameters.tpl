@@ -27,7 +27,7 @@
 	{literal}
 	<script>
 		$(document).ready(function() {
-			win = window.redirect('{$redirect_url}');
+			win = window.redirect('{/literal}{$redirect_url|escape:'urlencode'}{literal}');
 		});
 	</script>
 	{/literal}
@@ -55,23 +55,23 @@
 	</fieldset>	
 	{/if}
 	
-<form action="{$url}" method="post" class="form" id="configForm1">
+<form action="{$url|escape:'urlencode'}" method="post" class="form" id="configForm1">
 	
 	<fieldset style="margin-top:10px;">
 		<legend>{l s='Account details' mod='ebay'}</legend>
 		<h4>{l s='To list your products on eBay, you need to create' mod='ebay'} <a href="{l s='https://scgi.ebay.co.uk/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2' mod='ebay'}">{l s='a business seller account' mod='ebay'}</a> {l s='and' mod='ebay'} <a href="https://www.paypal.com/">{l s='a PayPal account.' mod='ebay'}</a></h4>
 		<label>{l s='eBay User ID' mod='ebay'} : </label>
 		<div class="margin-form">
-			<input type="text" size="20" name="ebay_identifier" value="{$ebayIdentifier}" disabled />
+			<input type="text" size="20" name="ebay_identifier" value="{$ebayIdentifier|escape:'htmlall'}" readonly="readonly" disabled />
 		</div>
 		<label>{l s='eBay Shop' mod='ebay'} : </label>
 		<div class="margin-form">
-			<input type="text" size="20" name="ebay_shop" value="{$ebayShopValue}" data-dialoghelp="http://sellercentre.ebay.co.uk/ebay-shop" data-inlinehelp="{l s='An eBay shop subscription isn’t required but you may benefit. Find out if an eBay Shop is right for you.' mod='ebay'}"/> 
+			<input type="text" size="20" name="ebay_shop" value="{$ebayShopValue|escape:'htmlall'}" data-dialoghelp="http://sellercentre.ebay.co.uk/ebay-shop" data-inlinehelp="{l s='An eBay shop subscription isn’t required but you may benefit. Find out if an eBay Shop is right for you.' mod='ebay'}"/> 
 			<p>
 				{if $ebayShop!== false}
-					<a href="http://stores.{if $ebayCountry->getSiteSubdomain()}{$ebayCountry->getSiteSubdomain()}.{/if}ebay.{$ebayCountry->getSiteExtension()}/{$ebayShop}" target="_blank">{l s='Your shop on eBay' mod='ebay'}</a>
+					<a href="http://stores.{if $ebayCountry->getSiteSubdomain()}{$ebayCountry->getSiteSubdomain()|escape:'htmlall'}.{/if}ebay.{$ebayCountry->getSiteExtension()|escape:'htmlall'}/{$ebayShop|escape:'htmlall'}" target="_blank">{l s='Your shop on eBay' mod='ebay'}</a>
 				{else} 
-					<a href="{$createShopUrl}" style="color:#7F7F7F;">
+					<a href="{$createShopUrl|escape:'urlencode'}" style="color:#7F7F7F;">
 						{l s='Open your shop' mod='ebay'}
 					</a>
 				{/if}
@@ -80,21 +80,31 @@
 		<label>{l s='Paypal email address' mod='ebay'} : </label>
 		<div class="margin-form">
 
-			<input type="text" size="20" name="ebay_paypal_email" value="{$ebay_paypal_email}"/>
+			<input type="text" size="20" name="ebay_paypal_email" value="{$ebay_paypal_email|escape:'htmlall'}"/>
 			<p>{l s='You have to set your PayPal e-mail account, it\'s the only payment available with this module' mod='ebay'}</p>
 		</div>
 		<label>{l s='Item location' mod='ebay'} : </label>
 		<div class="margin-form">
-			<input type="text" size="20" name="ebay_shop_postalcode" value="{$shopPostalCode}"/>
+			<input type="text" size="20" name="ebay_shop_postalcode" value="{$shopPostalCode|escape:'htmlall'}"/>
 			<p>{l s='Your shop\'s postal code' mod='ebay'}</p>
 		</div>
+		<label>{l s='Item Country' mod='ebay'} : </label>
+		<div class="margin-form">
+			<select name="ebay_shop_country" class="ebay_select">
+                <option value=""></option>
+			{foreach from=$ebay_shop_countries item=ebay_shop_country}
+				<option value="{$ebay_shop_country.iso_code|escape:'htmlall'}" {if $current_ebay_shop_country == $ebay_shop_country.iso_code} selected="selected"{/if}>{$ebay_shop_country.site_name|escape:'htmlall'}</option>
+			{/foreach}							   
+			</select>            
+			<p>{l s='Your shop\'s country' mod='ebay'}</p>
+		</div>        
 
 		<div class="show regenerate_token_click" style="display:block;text-align:center;cursor:pointer">
 			<span data-inlinehelp="{l s='Use only if you get a message saying that your authentication is expired.' mod='ebay'}">{l s='Click here to generate a new authentication token.' mod='ebay'}</span>
 		</div>
 		<div class="hide regenerate_token_button" style="display:none;">
 			<label>{l s='Regenerate Token' mod='ebay'} :</label>
-			<a href="{$url}&action=regenerate_token">
+			<a href="{$url|escape:'urlencode'}&action=regenerate_token">
 				<input type="button" id="token-btn" class="button" value="{l s='Regenerate Token' mod='ebay'}" />
 			</a>
 		</div>
@@ -106,7 +116,7 @@
 		<div class="margin-form">
 			<select name="ebay_returns_accepted_option" data-dialoghelp="#returnsAccepted" data-inlinehelp="{l s='eBay business sellers must accept returns under the Distance Selling Regulations.' mod='ebay'}" class="ebay_select">
 			{foreach from=$policies item=policy}
-				<option value="{$policy.value}" {if $returnsConditionAccepted == $policy.value} selected="selected"{/if}>{$policy.description}</option>
+				<option value="{$policy.value|escape:'htmlall'}" {if $returnsConditionAccepted == $policy.value} selected="selected"{/if}>{$policy.description|escape:'htmlall'}</option>
 			{/foreach}							   
 			</select>
 		</div>
@@ -116,7 +126,7 @@
 			<select name="returnswithin" data-inlinehelp="{l s='eBay business sellers must offer a minimum of 14 days for buyers to return their items.' mod='ebay'}" class="ebay_select">
 					{if isset($within_values) && $within_values && sizeof($within_values)}
 						{foreach from=$within_values item='within_value'}
-							<option value="{$within_value.value}"{if isset($within) && $within == $within_value.value} selected{/if}>{$within_value.description}</option>
+							<option value="{$within_value.value|escape:'htmlall'}"{if isset($within) && $within == $within_value.value} selected{/if}>{$within_value.description|escape:'htmlall'}</option>
 						{/foreach}
 					{/if}
 			</select>
@@ -127,7 +137,7 @@
 			<select name="returnswhopays" class="ebay_select">
 				{if isset($whopays_values) && $whopays_values && sizeof($whopays_values)}
 					{foreach from=$whopays_values item='whopays_value'}
-						<option value="{$whopays_value.value}"{if isset($whopays) && $whopays == $whopays_value.value} selected{/if}>{$whopays_value.description}</option>
+						<option value="{$whopays_value.value|escape:'htmlall'}"{if isset($whopays) && $whopays == $whopays_value.value} selected{/if}>{$whopays_value.description|escape:'htmlall'}</option>
 					{/foreach}
 				{/if}
 			</select>
@@ -149,7 +159,7 @@
 
 			<select name="listingdurations" data-dialoghelp="http://pages.ebay.com/help/sell/duration.html" data-inlinehelp="{l s='The listing duration is the length of time that your listing is active on eBay.co.uk. You can have it last 1, 3, 5, 7, 10, 30 days or Good \'Til Cancelled. Good \'Til Cancelled listings renew automatically every 30 days unless all of the items sell, you end the listing, or the listing breaches an eBay policy. Good \'Til Cancelled is the default setting here to save you time relisting your items.' mod='ebay'}" class="ebay_select">
 				{foreach from=$listingDurations item=listing key=key}
-					<option value="{$key}" {if $ebayListingDuration == $key}selected="selected" {/if}>{$listing|escape:'htmlall':'UTF-8'}</option>
+					<option value="{$key|escape:'htmlall'}" {if $ebayListingDuration == $key}selected="selected" {/if}>{$listing|escape:'htmlall':'UTF-8'}</option>
 				{/foreach}
 			</select>
 		</div>
@@ -168,7 +178,7 @@
 			<select name="sizedefault" data-inlinehelp="{l s='This will be the main photo and will appear on the search result and item pages.' mod='ebay'}" class="ebay_select">
 				{if isset($sizes) && $sizes && sizeof($sizes)}
 					{foreach from=$sizes item='size'}
-						<option value="{$size.id_image_type}"{if $size.id_image_type == $sizedefault} selected{/if}>{$size.name}</option>
+						<option value="{$size.id_image_type|escape:'htmlall'}"{if $size.id_image_type == $sizedefault} selected{/if}>{$size.name|escape:'htmlall'}</option>
 					{/foreach}
 				{/if}
 			</select>
@@ -182,7 +192,7 @@
 			<select name="sizebig" data-inlinehelp="{l s='This photo will appear as default photo in your listing\'s description.' mod='ebay'}" class="ebay_select">
 				{if isset($sizes) && $sizes && sizeof($sizes)}
 					{foreach from=$sizes item='size'}
-						<option value="{$size.id_image_type}"{if $size.id_image_type == $sizebig} selected{/if}>{$size.name}</option>
+						<option value="{$size.id_image_type|escape:'htmlall'}"{if $size.id_image_type == $sizebig} selected{/if}>{$size.name|escape:'htmlall'}</option>
 					{/foreach}
 				{/if}
 			</select>
@@ -196,14 +206,41 @@
 			<select name="sizesmall" data-inlinehelp="{l s='This photo will appear as thumbnail in your listing\'s description.' mod='ebay'}" class="ebay_select">
 				{if isset($sizes) && $sizes && sizeof($sizes)}
 					{foreach from=$sizes item='size'}
-						<option value="{$size.id_image_type}"{if $size.id_image_type == $sizesmall} selected{/if}>{$size.name}</option>
+						<option value="{$size.id_image_type|escape:'htmlall'}"{if $size.id_image_type == $sizesmall} selected{/if}>{$size.name|escape:'htmlall'}</option>
 					{/foreach}
 				{/if}
 			</select>
 		</div>
 		<div style="clear:both;"></div>
 
+		<label>
+			{l s='Number of additional pictures (0 will send one picture)' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<input type="text" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall'}">
+		</div>
+		<div style="clear:both;"></div>
+
 	</fieldset>
+    
+	<fieldset style="margin-top:10px;">
+		<legend><span>{l s='Currency' mod='ebay'}</span></legend>
+
+		<label>
+			{l s='Currency' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<select name="currency" data-inlinehelp="{l s='This currency will be used for your products sold on eBay' mod='ebay'}" class="ebay_select">
+				{if isset($currencies) && $currencies && sizeof($currencies)}
+					{foreach from=$currencies item='currency'}
+						<option value="{$currency.id_currency|escape:'htmlall'}"{if $currency.id_currency == $current_currency} selected{/if}>{$currency.name|escape:'htmlall'}</option>
+					{/foreach}
+				{/if}
+			</select>
+		</div>
+		<div class="clear both"></div>
+
+	</fieldset>    
 
 	<fieldset style="margin-top:10px;">
 		<legend>{l s='Others' mod='ebay'}</legend>
@@ -235,7 +272,7 @@
 		</label>
 		<div class="margin-form">
 			
-			<a href="{$url}&EBAY_SYNC_ORDERS=1">
+			<a href="{$url|escape:'urlencode'}&EBAY_SYNC_ORDERS=1">
 				<input type="button" class="button" value="{l s='Sync Orders from eBay' mod='ebay'}" />
 			</a>
 	        <br>
@@ -246,7 +283,7 @@
         <div class="margin-form">
 			<input type="radio" size="20" name="sync_orders_mode" class="sync_orders_mode" value="save" {if $sync_orders_by_cron == false}checked="checked"{/if}/> {l s='every 30 minutes on page load' mod='ebay'}
 			<input type="radio" size="20" name="sync_orders_mode" class="sync_orders_mode" value="cron" {if $sync_orders_by_cron == true}checked="checked"{/if}/> {l s='by CRON task' mod='ebay'}<br>
-	        <p><a id="sync_orders_by_cron_url" href="{$sync_orders_by_cron_url}" target="_blank" style="{if $sync_orders_by_cron == false};display:none{/if}">{$sync_orders_by_cron_path}</a></p>
+	        <p><a id="sync_orders_by_cron_url" href="{$sync_orders_by_cron_url|escape:'urlencode'}" target="_blank" style="{if $sync_orders_by_cron == false};display:none{/if}">{$sync_orders_by_cron_path|escape:'urlencode'}</a></p>
         	
         </div>
 		<label>
@@ -255,7 +292,7 @@
         <div class="margin-form">
 			<input type="radio" size="20" name="sync_products_mode" class="sync_products_mode" value="save" {if $sync_products_by_cron == false}checked="checked"{/if}/> {l s='on save' mod='ebay'}
 			<input type="radio" size="20" name="sync_products_mode" class="sync_products_mode" value="cron" {if $sync_products_by_cron == true}checked="checked"{/if}/> {l s='by CRON task' mod='ebay'}<br>
-	        <p><a id="sync_products_by_cron_url" href="{$sync_products_by_cron_url}" target="_blank" style="{if $sync_products_by_cron == false};display:none{/if}">{$sync_products_by_cron_path}</a></p>
+	        <p><a id="sync_products_by_cron_url" href="{$sync_products_by_cron_url|escape:'urlencode'}" target="_blank" style="{if $sync_products_by_cron == false};display:none{/if}">{$sync_products_by_cron_path|escape:'urlencode'}</a></p>
         	
         </div>
 		<div class="clear both"></div>
@@ -290,7 +327,7 @@
 			});
 			
 			$('#token-btn').click(function() {
-					window.open(module_dir + 'ebay/pages/getSession.php?token={/literal}{$ebay_token}{literal}');			
+					window.open(module_dir + 'ebay/pages/getSession.php?token={/literal}{$ebay_token|escape:'urlencode'}{literal}');			
 			});
             
             $('.sync_products_mode').change(function() {

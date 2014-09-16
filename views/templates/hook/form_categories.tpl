@@ -26,7 +26,7 @@
 <div>
 	{if isset($alerts) && !empty($alerts)}
 	<div class="warning big">
-		{$alerts}
+		{$alerts|escape:'htmlall'}
 	</div>
 	{/if}
 	<p>
@@ -36,7 +36,7 @@
 		{l s='The button below will automatically map your categories with eBay categories. We recommend you check that you’re happy with the category chosen and amend if necessary.' mod='ebay'}
 	</p>
 	{if $form_categories == 0}
-		<form action="index.php?{if $isOneDotFive}controller={$controller}{else}tab={$tab}{/if}&configure={$configure}&token={$token}&tab_module={$tab_module}&module_name={$module_name}&id_tab=2&section=category&action=suggestCategories" method="post" class="form" id="configForm2SuggestedCategories">
+		<form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall'}{else}tab={$tab|escape:'htmlall'}{/if}&configure={$configure|escape:'htmlall'}&token={$token|escape:'htmlall'}&tab_module={$tab_module|escape:'htmlall'}&module_name={$module_name|escape:'htmlall'}&id_tab=2&section=category&action=suggestCategories" method="post" class="form" id="configForm2SuggestedCategories">
 			<input class="button" name="submitSave" type="submit" value="{l s='Suggest eBay categories' mod='ebay'}" data-inlinehelp="{l s='Automatically map your Prestashop categories with the correct eBay category. ' mod='ebay'}" />
 		</form>
 	{/if}
@@ -68,7 +68,7 @@
 	</ul>
 {/if}
 
-<form action="index.php?{if $isOneDotFive}controller={$controller}{else}tab={$tab}{/if}&configure={$configure}&token={$token}&tab_module={$tab_module}&module_name={$module_name}&id_tab=2&section=category" method="post" class="form" id="configForm2">	<table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
+<form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall'}{else}tab={$tab|escape:'htmlall'}{/if}&configure={$configure|escape:'htmlall'}&token={$token|escape:'htmlall'}&tab_module={$tab_module|escape:'htmlall'}&module_name={$module_name|escape:'htmlall'}&id_tab=2&section=category" method="post" class="form" id="configForm2">	<table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
 		<thead>
 			<tr class="nodrag nodrop">
 				<th style="width:110px;">
@@ -93,7 +93,7 @@
 		<tbody>
 			<tr id="removeRow">
 				<td class="center" colspan="3">
-					<img src="{$_path}views/img/loading-small.gif" alt="" />
+					<img src="{$_path|escape:'htmlall'}views/img/loading-small.gif" alt="" />
 				</td>
 			</tr>
 		</tbody>
@@ -120,12 +120,12 @@
 		
 	var $selects = false;
 	
-	var module_dir = '{$_module_dir_}';
-	var ebay_token = '{$configs.EBAY_SECURITY_TOKEN}';
-	var module_time = '{$date}';
-	var module_path = '{$_path}';
-	var id_lang = '{$id_lang}';
-	var id_ebay_profile = '{$id_ebay_profile}';
+	var module_dir = '{$_module_dir_|escape:'htmlall'}';
+	var ebay_token = '{$configs.EBAY_SECURITY_TOKEN|escape:'htmlall'}';
+	var module_time = '{$date|escape:'htmlall'}';
+	var module_path = '{$_path|escape:'htmlall'}';
+	var id_lang = '{$id_lang|escape:'htmlall'}';
+	var id_ebay_profile = '{$id_ebay_profile|escape:'htmlall'}';
 	var ebay_l = {ldelim}
 		'thank you for waiting': "{l s='Thank you for waiting while creating suggestions' mod='ebay'}",
 		'no category selected' : "{l s='No category selected' mod='ebay'}",
@@ -141,7 +141,7 @@
 		$("#menuTab2Sheet").bind("keypress", "input[id][name^='percent']", function(){
 			/*$('#menuTab2Sheet .warning.big.tips').fadeIn();*/
 		})
-		var form_categories = parseInt("{$form_categories}");
+		var form_categories = parseInt("{$form_categories|escape:'htmlall'}");
 		if (form_categories >= 1)
 			$("#menuTab2").addClass('success');
 		else
@@ -194,4 +194,4 @@
 	//]]>
 	
 </script>
-<script type="text/javascript" src="{$_module_dir_}ebay/views/js/categories.js?date={$date}"></script>
+<script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/views/js/categories.js?date={$date|escape:'htmlall'}"></script>

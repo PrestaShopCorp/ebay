@@ -22,7 +22,7 @@
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-<link rel="stylesheet" type="text/css" href="{$module_url}views/css/ebay.css" />
+<link rel="stylesheet" type="text/css" href="{$module_url|escape:'htmlall'}views/css/ebay.css" />
 <table border="0" cellpadding="0" cellspacing="0" class="ProductPrestashop">
 <tbody>
 	<tr class="headerProductPrestashop">
