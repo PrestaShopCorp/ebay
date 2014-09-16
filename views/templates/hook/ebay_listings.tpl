@@ -5,14 +5,14 @@
 </div>
 <script type="text/javascript">
 	// <![CDATA[
-	var content_ebay_listings = $("#ebayListings");
+	var content_ebay_listings = $("#ebayListings button");
 	content_ebay_listings.bind('click', 'button', function(){
 		$.ajax({
 			url: module_dir+'ebay/ajax/getEbayListings.php',
-			data: "token="+ebay_token+"&id_employee={$id_employee}",
+			data: "token="+ebay_token+"&id_employee={$id_employee|escape:'htmlall'}",
 			success: function(data)
 			{
-				content_ebay_listings.fadeOut(400, function(){
+				$('#ebayListings').fadeOut(400, function(){
 					$(this).html(data).fadeIn();
 				})
 			}

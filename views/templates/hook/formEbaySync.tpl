@@ -27,8 +27,8 @@
 
 <style> 
 	{literal}
-	#button_ebay_sync1{background-image:url({/literal}{$path}{literal}views/img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:500px;height:191px;cursor:pointer;padding-bottom:100px;font-weight:bold;font-size:25px;}
-			#button_ebay_sync2{background-image:url({/literal}{$path}{literal}views/img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:500px;height:191px;cursor:pointer;padding-bottom:100px;font-weight:bold;font-size:15px;}
+	#button_ebay_sync1{background-image:url({/literal}{$path|escape:'urlencode'}{literal}views/img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:500px;height:191px;cursor:pointer;padding-bottom:100px;font-weight:bold;font-size:25px;}
+			#button_ebay_sync2{background-image:url({/literal}{$path|escape:'urlencode'}{literal}views/img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:500px;height:191px;cursor:pointer;padding-bottom:100px;font-weight:bold;font-size:15px;}
 	.informations{
 		padding-bottom: 3px;margin-top: 8px;
 	}
@@ -40,9 +40,9 @@
 	{/literal}
 </style>
 <script>
-	var nbProducts = {$nb_products};
-	var nbProductsModeA = {$nb_products_mode_a};
-	var nbProductsModeB = {$nb_products_mode_b};
+	var nbProducts = {$nb_products|escape:'htmlall'};
+	var nbProductsModeA = {$nb_products_mode_a|escape:'htmlall'};
+	var nbProductsModeB = {$nb_products_mode_b|escape:'htmlall'};
 	{literal}
 	$(document).ready(function() {
 		$(".categorySync").click(function() {
@@ -55,7 +55,7 @@
 				params = params + "&action=0";
 
 			$.ajax({
-				url: "{/literal}{$nb_products_sync_url}{literal}" + params,
+				url: "{/literal}{$nb_products_sync_url|escape:'urlencode'}{literal}" + params,
 				success: function(data) {
 					
 					nbProducts = data;
@@ -116,7 +116,7 @@
 	{
 		counter++;
 		$.ajax({
-			url: '{/literal}{$sync_products_url}{literal}' + counter,
+			url: '{/literal}{$sync_products_url|escape:'urlencode'}{literal}' + counter,
 			success: function(data)
 			{
 				tab = data.split("|");
@@ -131,7 +131,7 @@
 	{/literal}
 </script>
 <div id="resultSync" style="text-align: center; font-weight: bold; font-size: 14px;"></div>
-<form action="{$action_url}" method="post" class="form" id="configForm4">
+<form action="{$action_url|escape:'urlencode'}" method="post" class="form" id="configForm4">
 	<fieldset style="border: 0">
 		<div class="warning big">
 			<b data-dialoghelp="http://pages.ebay.com/help/sell/listing-variations.html" data-inlinehelp="{l s='Find out more about multi-variation listings.' mod='ebay'}">{l s='Note: If some of your categories don’t support multi-variation listings, all variations will appear as separate listings.' mod='ebay'}</b>
@@ -170,7 +170,7 @@
 						<tr><td colspan="2">{l s='No category found.' mod='ebay'}</td></tr>
 					{else}
 						{foreach from=$categories item=category}
-							<tr class="{$category.row_class}"><td><input type="checkbox" class="categorySync" name="category[]" value="{$category.value}" {$category.checked} /><td>{$category.name}</td></tr>
+							<tr class="{$category.row_class|escape:'htmlall'}"><td><input type="checkbox" class="categorySync" name="category[]" value="{$category.value|escape:'htmlall'}" {$category.checked|escape:'htmlall'} /><td>{$category.name|escape:'htmlall'}</td></tr>
 						{/foreach}
 					{/if}
 				</tbody>
@@ -199,7 +199,7 @@
 			{/if}
 		</div><br />
 		<div>
-			<input type="submit" name="btnSubmitSyncAndPublish" class="primary button" value="{l s='Save and list' mod='ebay'} {$nb_products} {l s='products' mod='ebay'}" id="save_and_publish"/>
+			<input type="submit" name="btnSubmitSyncAndPublish" class="primary button" value="{l s='Save and list' mod='ebay'} {$nb_products|escape:'htmlall'} {l s='products' mod='ebay'}" id="save_and_publish"/>
 			<input type="submit" name="btnSubmitSync" class="button" value="{l s='Save' mod='ebay'}" />
 		</div>
 	</fieldset>

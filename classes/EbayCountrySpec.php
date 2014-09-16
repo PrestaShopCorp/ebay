@@ -358,4 +358,36 @@ class EbayCountrySpec
 
 		return $default_country;
 	}
+    
+    public static function getSiteNameBySiteId($site_id) {
+        foreach(self::$country_data as $country)
+            if ($country['site_id'] == $site_id)
+                return $country['site_name'];
+        
+        return null;
+    }
+    
+    public static function getSiteExtensionBySiteId($site_id) {
+        foreach(self::$country_data as $country)
+            if ($country['site_id'] == $site_id)
+                return $country['site_extension'];
+        
+        return null;
+    }
+    
+    public static function getIsoCodeBySiteId($site_id) {
+        foreach(self::$country_data as $country)
+            if ($country['site_id'] == $site_id)
+                return $country['iso_code'];
+        
+        return null;
+    }        
+
+    public static function getSiteIdByIsoCode($iso_code) {
+    	foreach(self::$country_data as $country)
+            if ($country['iso_code'] == $iso_code)
+                return $country['site_id'];
+        
+        return null;
+    }
 }

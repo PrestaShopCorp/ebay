@@ -47,7 +47,8 @@ $category_list = array_slice($category_list, $limit, $offset);
 
 $ebay_category_list = Db::getInstance()->executeS('SELECT *
 	FROM `'._DB_PREFIX_.'ebay_category`
-	WHERE `id_category_ref` = `id_category_ref_parent`');
+	WHERE `id_category_ref` = `id_category_ref_parent`
+    AND `id_country` = '.(int)$ebay_profile->ebay_site_id);
 
 if (version_compare(_PS_VERSION_, '1.5', '>'))
 {
@@ -84,6 +85,7 @@ $sql = '
 	LEFT OUTER JOIN `'._DB_PREFIX_.'ebay_category_configuration` AS ecc
 	ON ec.`id_ebay_category` = ecc.`id_ebay_category`
     AND ecc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
+    WHERE ec.`id_country` = '.(int)$ebay_profile->ebay_site_id.'
 	ORDER BY `level`';
 
 foreach (Db::getInstance()->executeS($sql) as $category)
@@ -118,8 +120,7 @@ foreach ($category_config_list as &$category) {
 }
 
 $smarty =  Context::getContext()->smarty;
-$id_currency = Context::getContext()->cookie->id_currency;
-$currency = new Currency((int) $id_currency);
+$currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
 
 /* Smarty datas */

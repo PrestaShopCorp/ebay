@@ -8,4 +8,4 @@ if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get(
 	die('ERROR: Invalid Token');
 
 $ebay = new eBay();
-$ebay->ajaxPreviewTemplate(Tools::getValue('message'), (int)Tools::getValue('id_lang'));
+$ebay->ajaxPreviewTemplate(Tools::safeOutput(Tools::getValue('message')), (int)Tools::getValue('id_lang'));

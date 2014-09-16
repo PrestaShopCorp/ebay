@@ -53,15 +53,7 @@ function upgrade_module_1_7($module)
 
 	// handle default returns policy	
 	if (!($id_returns_policy_configuration = EbayReturnsPolicyConfiguration::getDefaultObjectId()))
-	{
-		$returns_policy_configuration = new EbayReturnsPolicyConfiguration();
-		$returns_policy_configuration->ebay_returns_within = Configuration::get('EBAY_RETURNS_WITHIN');
-		$returns_policy_configuration->ebay_returns_who_pays = Configuration::get('EBAY_RETURNS_WHO_PAYS');
-		$returns_policy_configuration->ebay_returns_description = Configuration::get('EBAY_RETURNS_DESCRIPTION');
-		$returns_policy_configuration->ebay_returns_accepted_option = Configuration::get('EBAY_RETURNS_ACCEPTED_OPTION');     
-		$returns_policy_configuration->save();		
-		$id_returns_policy_configuration = $returns_policy_configuration->id;
-	}
+		$id_returns_policy_configuration = EbayReturnsPolicyConfiguration::createPreviousDefaultConfiguration();
 
 	// handle default profile
 	if(version_compare(_PS_VERSION_, '1.5', '<'))
@@ -82,15 +74,7 @@ function upgrade_module_1_7($module)
 		if ($id_shop_default == $id_shop)
 			$profile->id_ebay_returns_policy_configuration = $id_returns_policy_configuration;
         else
-        {
-    		$returns_policy_configuration = new EbayReturnsPolicyConfiguration();
-            $returns_policy_configuration->ebay_returns_within = Configuration::get('EBAY_RETURNS_WITHIN');
-            $returns_policy_configuration->ebay_returns_who_pays = Configuration::get('EBAY_RETURNS_WHO_PAYS');
-            $returns_policy_configuration->ebay_returns_description = Configuration::get('EBAY_RETURNS_DESCRIPTION');
-            $returns_policy_configuration->ebay_returns_accepted_option = Configuration::get('EBAY_RETURNS_ACCEPTED_OPTION');            
-    		$returns_policy_configuration->save();		
-    		$profile->id_ebay_returns_policy_configuration = $returns_policy_configuration->id;            
-        }
+    		$profile->id_ebay_returns_policy_configuration = EbayReturnsPolicyConfiguration::createPreviousDefaultConfiguration();
 		$profile->save();
 		
 		if ($id_shop_default == $id_shop)

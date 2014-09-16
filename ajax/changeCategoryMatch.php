@@ -31,6 +31,9 @@ include('../ebay.php');
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
 	die('ERROR: Invalid Token');
 
+$id_ebay_profile = (int)Tools::getValue('profile');
+$ebay_profile = new EbayProfile($id_ebay_profile);
+
 $levelExists = array();
 
 for ($level = 0; $level <= 5; $level++)
@@ -41,11 +44,13 @@ for ($level = 0; $level <= 5; $level++)
 			$ebay_category_list_level = Db::getInstance()->executeS('SELECT *
 				FROM `'._DB_PREFIX_.'ebay_category`
 				WHERE `level` = 1
-				AND `id_category_ref` = `id_category_ref_parent`');
+				AND `id_category_ref` = `id_category_ref_parent`
+                AND `id_country` = '.(int)$ebay_profile->ebay_site_id);
 		else
 			$ebay_category_list_level = Db::getInstance()->executeS('SELECT *
 				FROM `'._DB_PREFIX_.'ebay_category`
 				WHERE `level` = '.(int)($level + 1).'
+                AND `id_country` = '.(int)$ebay_profile->ebay_site_id.'
 				AND `id_category_ref_parent`
 				IN (
 					SELECT `id_category_ref`

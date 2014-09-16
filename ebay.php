@@ -95,7 +95,7 @@ class Ebay extends Module
 	{
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.7.2';
+		$this->version = '1.8';
 		$this->stats_version = '1.0';
 
 		$this->author = 'PrestaShop';
@@ -156,12 +156,24 @@ class Ebay extends Module
 			if (Configuration::get('EBAY_VERSION') != $this->version)
 				$this->_upgrade();
 
+		    //if (!empty($_POST) && Tools::getValue('ebay_profile'))
+            if (!empty($_POST)) {
+                
+                 // called after adding a profile
+                if ((Tools::getValue('action') == 'logged') && Tools::isSubmit('ebayRegisterButton'))
+                    $this->_postProcessAddProfile();
+                elseif (Tools::getValue('ebay_profile'))
+                    $this->_postProcessConfig();
+            }
+
 			if(class_exists('EbayCountrySpec'))
 			{
-				if ($id_ebay_profile)
-					$this->ebay_profile = new EbayProfile($id_ebay_profile);
-				else
-					$this->ebay_profile = EbayProfile::getCurrent();
+                if (!$this->ebay_profile) {
+    				if ($id_ebay_profile)
+    					$this->ebay_profile = new EbayProfile($id_ebay_profile);
+    				else
+    					$this->ebay_profile = EbayProfile::getCurrent();                    
+                }
 
 				if ($this->ebay_profile) 
 				{
@@ -182,10 +194,7 @@ class Ebay extends Module
 			}
 
 
-			// Generate warnings
-			if (!Configuration::get('EBAY_API_TOKEN', null, 0, 0))
-				$this->warning = $this->l('You must register your module on eBay.');
-
+			
 
 			// Warning uninstall
 			$this->confirmUninstall = $this->l('Are you sure you want to uninistall this module? All configuration settings will be lost');
@@ -240,13 +249,13 @@ class Ebay extends Module
 		if (!$this->registerHook($hook_update_quantity))
 			return false;
 
-		$this->createDefaultProfilesAndReturnsPolicies();
+		//$this->createDefaultProfilesAndReturnsPolicies();
 		$this->ebay_profile =  EbayProfile::getCurrent();
 		
 		$this->setConfiguration('EBAY_INSTALL_DATE', date('Y-m-d\TH:i:s.000\Z'));
 		// Picture size
-		self::installPicturesSettings($this);
-
+        if ($this->ebay_profile)
+            $this->ebay_profile->setPicturesSettings();
 
 		// Init
 		$this->setConfiguration('EBAY_VERSION', $this->version);
@@ -300,41 +309,10 @@ class Ebay extends Module
 		}
 	}
 	
-	public function createDefaultProfilesAndReturnsPolicies()
-	{
-		$id_shops = version_compare(_PS_VERSION_, '1.5', '>') ? Shop::getShops(false, null, true) : array(Shop::getCurrentShop());
-		
-		foreach($id_shops as $id_shop)
-		{
-			if (!($profile = EbayProfile::getOneByIdShop($id_shop)))
-			{
-				$profile = new EbayProfile();
-				$profile->id_shop = $id_shop;
-			}
-
-			$returns_policy_configuration = new EbayReturnsPolicyConfiguration();
-			$returns_policy_configuration->save();
-						
-			$profile->id_ebay_returns_policy_configuration = $returns_policy_configuration->id;
-			$profile->save();
-			
-			$profile->setConfiguration('EBAY_PRODUCT_TEMPLATE', ''); // fix to work around the PrestaShop bug when saving html for a configuration key that doesn't exist yet
-			$profile->setConfiguration('EBAY_PRODUCT_TEMPLATE', $this->_getProductTemplateContent(), true);
-			$profile->setConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE', '{TITLE}');
-			$profile->setConfiguration('EBAY_ORDER_LAST_UPDATE', date('Y-m-d\TH:i:s.000\Z'));
-			$profile->setConfiguration('EBAY_DELIVERY_TIME', 2);
-			$profile->setConfiguration('EBAY_ACTIVATE_LOGS', '0');
-			$profile->setConfiguration('EBAY_ACTIVATE_MAILS', '0');
-			$profile->setConfiguration('EBAY_LISTING_DURATION', 'GTC');
-			$profile->setConfiguration('EBAY_AUTOMATICALLY_RELIST', 'on');
-			$profile->setConfiguration('EBAY_LAST_RELIST', date('Y-m-d'));
-		}		
-	}
-
 	public function emptyEverything()
 	{
 		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'configuration WHERE name LIKE  "%EBAY%"');
-		Db::getInstance()->Execute('DROP TABLE 
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS
 		 `'._DB_PREFIX_.'ebay_category`,
 		 `'._DB_PREFIX_.'ebay_category_condition`,
 		 `'._DB_PREFIX_.'ebay_category_condition_configuration`,
@@ -361,10 +339,14 @@ class Ebay extends Module
 		 `'._DB_PREFIX_.'ebay_shipping_zone_excluded`,
 		 `'._DB_PREFIX_.'ebay_stat`,
 		 `'._DB_PREFIX_.'ebay_sync_history`,
-		 `'._DB_PREFIX_.'ebay_sync_history_product`;
+		 `'._DB_PREFIX_.'ebay_sync_history_product`,
+		 `'._DB_PREFIX_.'ebay_user_identifier_token`;
 		 ');
+
+		$this->uninstall();
 	}
 
+    /*
 	public static function installPicturesSettings($module) 
 	{
 
@@ -413,6 +395,7 @@ class Ebay extends Module
 		$module->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_BIG', $sizeBig);
 		$module->ebay_profile->setConfiguration('EBAY_PICTURE_PER_LISTING', 0);
 	}
+    */
 
 	/**
 	* Returns product template
@@ -454,8 +437,6 @@ class Ebay extends Module
 		foreach ($sql as $s)
 			if (!Db::getInstance()->execute($s))
 				return false;
-
-		Configuration::deleteByName('EBAY_API_TOKEN');
 
 		// Uninstall Module
 		if (!parent::uninstall()
@@ -517,6 +498,14 @@ class Ebay extends Module
 				upgrade_module_1_7($this);
 			}
 		}
+        
+		if (version_compare($version, '1.8', '<')) {
+			if (version_compare(_PS_VERSION_, '1.5', '<'))
+			{
+				include_once(dirname(__FILE__).'/upgrade/Upgrade-1.8.php');
+				upgrade_module_1_8($this);
+			}
+		}        
 	}
 
 	/**
@@ -1047,7 +1036,7 @@ class Ebay extends Module
 	public function getContent()
 	{
 		// if multishop, change context Shop to be default
-		if (!Configuration::get('EBAY_CATEGORY_MULTI_SKU_UPDATE'))
+		if ($this->ebay_profile && !Configuration::get('EBAY_CATEGORY_MULTI_SKU_UPDATE'))
 		{
 			$ebay = new EbayRequest();
 			EbayCategory::updateCategoryTable($ebay->getCategoriesSkuCompliancy());
@@ -1063,7 +1052,6 @@ class Ebay extends Module
 			elseif (!ini_get('allow_url_fopen'))
 				return $this->html.$this->displayError($this->l('You must enable allow_url_fopen option on your server if you want to use this module.'));
 		}
-
 
 		// If isset Post Var, post process else display form
 		if (!empty($_POST) && (Tools::isSubmit('submitSave') || Tools::isSubmit('btnSubmitSyncAndPublish') || Tools::isSubmit('btnSubmitSync')))
@@ -1104,7 +1092,7 @@ class Ebay extends Module
 			'shop' => urlencode(Configuration::get('PS_SHOP_NAME')),
 			'registered' => in_array('registration', $alerts) ? 'no' : 'yes',
 			'url' => urlencode($_SERVER['HTTP_HOST']),
-			'iso_country' => Tools::strtolower($this->ebay_country->getIsoCode()),
+			'iso_country' => ($this->ebay_country ? Tools::strtolower($this->ebay_country->getIsoCode()) : ''),
 			'iso_lang' => Tools::strtolower($this->context->language->iso_code),
 			'id_lang' => (int)$this->context->language->id,
 			'email' => urlencode(Configuration::get('PS_SHOP_EMAIL')),
@@ -1115,16 +1103,46 @@ class Ebay extends Module
 		$prestashop_content = @Tools::file_get_contents($url, false, $stream_context);
 		if (!Validate::isCleanHtml($prestashop_content))
 			$prestashop_content = '';
+        
+        $ebay_send_stats = Configuration::get('EBAY_SEND_STATS');
+        
+        // profiles data
+        $id_shop = version_compare(_PS_VERSION_, '1.5', '>') ? Shop::getContextShopID() : Shop::getCurrentShop();
+        $profiles = EbayProfile::getProfilesByIdShop($id_shop);
+        $id_ebay_profiles = array();
+        foreach($profiles as &$profile) {
+            $profile['site_name'] = EbayCountrySpec::getSiteNameBySiteId($profile['ebay_site_id']);
+            $id_ebay_profiles[] = $profile['id_ebay_profile'];
+        }
+        
+        $nb_products = EbayProduct::getNbProductsByIdEbayProfiles($id_ebay_profiles);
+        foreach ($profiles as &$profile) {
+            $profile['nb_products'] = (isset($nb_products[$profile['id_ebay_profile']]) ? $nb_products[$profile['id_ebay_profile']] : 0);
+        }
+        
+        $add_profile = (Tools::getValue('action') == 'addProfile');
+        
+		$url_vars = array(
+			'id_tab' => '1',
+			'section' => 'parameters',
+            'action' => 'addProfile'
+		);
+		if (version_compare(_PS_VERSION_, '1.5', '>'))
+			$url_vars['controller'] = Tools::getValue('controller');
+		else
+			$url_vars['tab'] = Tools::getValue('tab');
 
+        $add_profile_url = $this->_getUrl($url_vars);
+        
 		$this->smarty->assign(array(
-			'img_stats' => $this->ebay_country->getImgStats(),
+			'img_stats' => ($this->ebay_country ? $this->ebay_country->getImgStats() : ''),
 			'alert' => $alerts,
 			'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
 			'prestashop_content' => $prestashop_content,
 			'path' => $this->_path,
 			'multishop' => (version_compare(_PS_VERSION_, '1.5', '>') && Shop::isFeatureActive()),
-			'site_extension' => $this->ebay_country->getSiteExtension(),
-			'documentation_lang' => $this->ebay_country->getDocumentationLang(),
+			'site_extension' => ($this->ebay_country ? $this->ebay_country->getSiteExtension() : ''),
+			'documentation_lang' => ($this->ebay_country ? $this->ebay_country->getDocumentationLang() : ''),
 			'is_version_one_dot_five' => version_compare(_PS_VERSION_, '1.5', '>'),
 			'is_version_one_dot_five_dot_one' => (version_compare(_PS_VERSION_, '1.5.1', '>=') && version_compare(_PS_VERSION_, '1.5.2', '<')),
 			'css_file' => $this->_path . 'views/css/ebay_back.css',
@@ -1134,12 +1152,20 @@ class Ebay extends Module
 			'ebayjquery' => $this->_path . 'views/js/jquery-1.7.2.min.js',
 			'fancybox' => $this->_path . 'views/js/jquery.fancybox.min.js',
 			'fancyboxCss' => $this->_path . 'views/css/jquery.fancybox.css',
-			'parametersValidator' => EbayValidatorTab::getParametersTabConfiguration($this->ebay_profile->id),
-			'categoryValidator' => EbayValidatorTab::getCategoryTabConfiguration($this->ebay_profile->id),
-			'itemSpecificValidator' => EbayValidatorTab::getitemSpecificsTabConfiguration($this->ebay_profile->id),
-			'shippingValidator' => EbayValidatorTab::getShippingTabConfiguration($this->ebay_profile->id),
-			'synchronisationValidator' => EbayValidatorTab::getSynchronisationTabConfiguration($this->ebay_profile->id),
-			'templateValidator' => EbayValidatorTab::getTemplateTabConfiguration($this->ebay_profile->id),
+			'parametersValidator' => ($this->ebay_profile ? EbayValidatorTab::getParametersTabConfiguration($this->ebay_profile->id) : ''),
+			'categoryValidator' => ($this->ebay_profile ? EbayValidatorTab::getCategoryTabConfiguration($this->ebay_profile->id) : ''),
+			'itemSpecificValidator' => ($this->ebay_profile ? EbayValidatorTab::getitemSpecificsTabConfiguration($this->ebay_profile->id) : ''),
+			'shippingValidator' => ($this->ebay_profile ?  EbayValidatorTab::getShippingTabConfiguration($this->ebay_profile->id) : ''),
+			'synchronisationValidator' => ($this->ebay_profile ? EbayValidatorTab::getSynchronisationTabConfiguration($this->ebay_profile->id) : ''),
+			'templateValidator' => ($this->ebay_profile ? EbayValidatorTab::getTemplateTabConfiguration($this->ebay_profile->id) : ''),
+            'show_welcome' => ( ($ebay_send_stats !== false) && (!count($id_ebay_profiles))),
+            'show_seller_tips' => ( ($ebay_send_stats !== false) && $this->ebay_profile && $this->ebay_profile->getToken() ),
+            'current_profile' => $this->ebay_profile,
+            'current_profile_site_extension' => ($this->ebay_profile ? EbayCountrySpec::getSiteExtensionBySiteId($this->ebay_profile->ebay_site_id) : ''),
+            'profiles' => $profiles,
+            'add_profile' => $add_profile,
+            'add_profile_url' => $add_profile_url,
+            'delete_profile_url' => _MODULE_DIR_.'ebay/ajax/deleteProfile.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis'))
 		));
 		
 		// test if multishop Screen and all shops
@@ -1148,12 +1174,10 @@ class Ebay extends Module
 		else
 			$is_all_shops = false;
 		
-		if (Configuration::get('EBAY_SEND_STATS') === false)
+		if ($ebay_send_stats === false)
 			$template = $this->_displayFormStats();
-		elseif (!Configuration::get('EBAY_API_TOKEN', null, 0, 0))
+        elseif (!($this->ebay_profile && $this->ebay_profile->getToken()) || $add_profile || Tools::isSubmit('ebayRegisterButton'))
 			$template = $this->_displayFormRegister();
-		elseif($is_all_shops) 
-			$template = $this->_displayMultishopsList();
 		else
 			$template = $this->_displayFormConfig();			
 		return $this->display(__FILE__, 'views/templates/hook/form.tpl').$template;
@@ -1235,17 +1259,20 @@ class Ebay extends Module
 
 		$logged = (!empty($this->context->cookie->eBaySession) && Tools::getValue('action') == 'logged');
 		$smarty_vars['logged'] = $logged;
-
+        
+        $id_shop = version_compare(_PS_VERSION_, '1.5', '>') ? Shop::getContextShopID() : Shop::getCurrentShop();   
 		if ($logged)
 		{
-			if ($ebay_username = Tools::getValue('eBayUsername'))
+			if ($ebay_username = Tools::getValue('eBayUsernamesList'))
 			{
+                if ($ebay_username == -1)
+                    $ebay_username = Tools::getValue('eBayUsername');
+
 				$this->context->cookie->eBayUsername = $ebay_username;
-				Configuration::updateValue('EBAY_API_USERNAME', $ebay_username, false, 0, 0);
-//				$this->setConfiguration('EBAY_IDENTIFIER', $ebay_username);
-				$this->ebay_profile->ebay_user_identifier = $ebay_username;
-				$this->ebay_profile->save();
-				$this->ebay_profile->setConfiguration('EBAY_COUNTRY_DEFAULT', Tools::getValue('ebay_country'));
+                
+                $this->ebay_profile = EbayProfile::getByLangShopSiteAndUsername((int)Tools::getValue('ebay_language'), $id_shop, Tools::getValue('ebay_country'), $ebay_username, $this->_getProductTemplateContent());
+                EbayProfile::setProfile($this->ebay_profile->id);
+                
 			}
 
 			$smarty_vars['check_token_tpl'] = $this->_displayCheckToken();
@@ -1259,13 +1286,24 @@ class Ebay extends Module
 				Configuration::updateValue('EBAY_API_SESSION', $session_id, false, 0, 0);
 				$this->context->cookie->write();
 			}
+            
+            if(isset($this->ebay_profile->id_shop))
+            	$ebay_profiles = EbayProfile::getProfilesByIdShop($this->ebay_profile->id_shop);
+            else 
+            	$ebay_profiles = array();
+            
+            foreach ($ebay_profiles as &$profile)
+                $profile['site_extension'] = EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
 
 			$smarty_vars = array_merge($smarty_vars, array(
-				'action_url' => Tools::safeOutput($_SERVER['REQUEST_URI']).'&action=logged',
+				'action_url' => $_SERVER['REQUEST_URI'].'&action=logged',
 				'ebay_username' => $this->context->cookie->eBayUsername,
 				'window_open_url' => '?SignIn&runame='.$ebay->runame.'&SessID='.$this->context->cookie->eBaySession,
 				'ebay_countries' => EbayCountrySpec::getCountries($ebay->getDev()),
-				'default_country' => EbayCountrySpec::getKeyForEbayCountry()
+				'default_country' => EbayCountrySpec::getKeyForEbayCountry(),
+                'ebay_user_identifiers' => EbayProfile::getEbayUserIdentifiers(),
+                'ebay_profiles' => $ebay_profiles,
+                'languages' => Language::getLanguages(true, ($this->ebay_profile ? $this->ebay_profile->id_shop : $id_shop)) 
 			));
 
 		}
@@ -1289,9 +1327,9 @@ class Ebay extends Module
 		);
 
 		if (version_compare(_PS_VERSION_, '1.5', '>'))
-			$url_vars['controller'] = Tools::safeOutput(Tools::getValue('controller'));
+			$url_vars['controller'] = Tools::getValue('controller');
 		else
-			$url_vars['tab'] = Tools::safeOutput(Tools::getValue('tab'));
+			$url_vars['tab'] = Tools::getValue('tab');
 
 		$url = _MODULE_DIR_.'ebay/ajax/checkToken.php?'.http_build_query(
 			array(
@@ -1302,7 +1340,7 @@ class Ebay extends Module
 		$smarty_vars = array(
 			'window_location_href' => $this->_getUrl($url_vars),
 			'url' => $url,
-			'request_uri' => Tools::safeOutput($_SERVER['REQUEST_URI'])
+			'request_uri' => $_SERVER['REQUEST_URI']
 		);
 
 		$this->smarty->assign($smarty_vars);
@@ -1310,29 +1348,6 @@ class Ebay extends Module
 		return $this->display(__FILE__, 'views/templates/hook/checkToken.tpl');
 
 	}
-
-	/**
-	 * When no shop selected in multishops mode, display the shops list
-	 *
-	 **/
-	private function _displayMultishopsList()
-	{
-		$url_base = $_SERVER['REQUEST_URI'].(($_SERVER['QUERY_STRING']) ? '&' : '?').'setShopContext=s-';
-		$shops = Shop::getShops(false);
-		foreach ($shops as $i => $shop)
-		{
-			$profile = EbayProfile::getOneByIdShop($shop['id_shop']);
-			$shops[$i]['nb_products_synchronized'] = EbayProduct::getNbProducts($profile->id);
-		}
-		
-		$smarty_vars = array(
-			'shops' 	 => $shops,
-			'url_base' => $url_base
-		);
-		$this->smarty->assign($smarty_vars);			
-		return $this->display(__FILE__, 'views/templates/hook/shopsList.tpl');		
-	}
-
 
 	/**
 	 * Form Config Methods
@@ -1350,7 +1365,7 @@ class Ebay extends Module
 			'form_ebay_sync' => $this->_displayFormEbaySync(),
 			'orders_history' => $this->_displayOrdersHistory(),
 			'help' => $this->_displayHelp(),
-			'id_tab' => Tools::safeOutput(Tools::getValue('id_tab')),
+			'id_tab' => Tools::getValue('id_tab'),
 			'ebay_listings' => $this->_displayEbayListings()
 		);
 
@@ -1362,7 +1377,7 @@ class Ebay extends Module
 	private function _displayFormParameters()
 	{
 		// Loading config currency
-		$config_currency = new Currency((int)Configuration::get('PS_CURRENCY_DEFAULT'));
+		$config_currency = new Currency((int)$this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
 		$url_vars = array(
 			'id_tab' => '1',
@@ -1370,14 +1385,14 @@ class Ebay extends Module
 		);
 
 		if (version_compare(_PS_VERSION_, '1.5', '>'))
-			$url_vars['controller'] = Tools::safeOutput(Tools::getValue('controller'));
+			$url_vars['controller'] = Tools::getValue('controller');
 		else
-			$url_vars['tab'] = Tools::safeOutput(Tools::getValue('tab'));
+			$url_vars['tab'] = Tools::getValue('tab');
 
 		$url = $this->_getUrl($url_vars);
-		$ebay_identifier = Tools::safeOutput(Tools::getValue('ebay_identifier', $this->ebay_profile->ebay_user_identifier)).'" '.((Tools::getValue('ebay_identifier', $this->ebay_profile->ebay_user_identifier) != '') ? ' readonly="readonly"' : '');
+		$ebay_identifier = Tools::getValue('ebay_identifier', $this->ebay_profile->ebay_user_identifier).'';
 		$ebayShop = $this->ebay_profile->getConfiguration('EBAY_SHOP') ? $this->ebay_profile->getConfiguration('EBAY_SHOP') : $this->StoreName;
-		$ebayShopValue = Tools::safeOutput(Tools::getValue('ebay_shop', $ebayShop));
+		$ebayShopValue = Tools::getValue('ebay_shop', $ebayShop);
 		$createShopUrl = 'http://cgi3.ebay.'.$this->ebay_country->getSiteExtension().'/ws/eBayISAPI.dll?CreateProductSubscription&&productId=3&guest=1';
 
 		$ebay = new EbayRequest();
@@ -1391,15 +1406,15 @@ class Ebay extends Module
 		$sync_orders_by_cron_url = $this->_getModuleUrl().'synchronizeOrders_CRON.php';
 		$returnsConditionAccepted = Tools::getValue('ebay_returns_accepted_option', Configuration::get('EBAY_RETURNS_ACCEPTED_OPTION'));
 		
-		$ebay_paypal_email = Tools::safeOutput(Tools::getValue('ebay_paypal_email', $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')));
-		$shopPostalCode = Tools::safeOutput(Tools::getValue('ebay_shop_postalcode', $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE')));
+		$ebay_paypal_email = Tools::getValue('ebay_paypal_email', $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'));
+		$shopPostalCode = Tools::getValue('ebay_shop_postalcode', $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'));
+		$shopCountry = Tools::getValue('ebay_shop_country', $this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY'));        
 		$ebayListingDuration = $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') ? $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') : 'GTC';
-		$sizedefault = (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_DEFAULT');
+		$sizedefault = $this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_DEFAULT');
 		$sizeBig = (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_BIG');
 		$sizesmall = (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_SMALL');
 		$picture_per_listing = (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING');
-		$user_profile = $ebay->getUserProfile(Configuration::get('EBAY_API_USERNAME'));
-
+		$user_profile = $ebay->getUserProfile($this->ebay_profile->ebay_user_identifier);
 
 		$smarty_vars = array(
 			'url' => $url,
@@ -1408,15 +1423,15 @@ class Ebay extends Module
 			'ebayIdentifier' => $ebay_identifier,
 			'configCurrencysign' => $config_currency->sign,
 			'policies' => $this->_getReturnsPolicies(),
-			'catLoaded' => !Configuration::get('EBAY_CATEGORY_LOADED'),
+			'catLoaded' => !Configuration::get('EBAY_CATEGORY_LOADED_'.$this->ebay_profile->ebay_site_id),
 			'createShopUrl' => $createShopUrl,
 			'ebayCountry' => EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT')),
 			'ebayReturns' => preg_replace('#<br\s*?/?>#i', "\n", $this->ebay_profile->getReturnsPolicyConfiguration()->ebay_returns_description),
 			'ebayShopValue' => $ebayShopValue,
-			'shopPostalCode' => Tools::safeOutput(Tools::getValue('ebay_shop_postalcode', $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'))),
+			'shopPostalCode' => Tools::getValue('ebay_shop_postalcode', $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE')),
 			'listingDurations' => $this->_getListingDurations(),
 			'ebayShop' => $this->ebay_profile->getConfiguration('EBAY_SHOP'),
-			'ebay_paypal_email' => Tools::safeOutput(Tools::getValue('ebay_paypal_email', $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))),
+			'ebay_paypal_email' => Tools::getValue('ebay_paypal_email', $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')),
 			'returnsConditionAccepted' => Tools::getValue('ebay_returns_accepted_option', $returns_policy_configuration->ebay_returns_accepted_option),
 			'automaticallyRelist' => $this->ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST'),
 			'ebay_paypal_email' => $ebay_paypal_email,
@@ -1424,7 +1439,7 @@ class Ebay extends Module
 			'ebayListingDuration' => $ebayListingDuration,
 			'automaticallyRelist' => Configuration::get('EBAY_AUTOMATICALLY_RELIST'),
 			'sizes' => ImageType::getImagesTypes('products'),
-			'sizedefault' => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_DEFAULT'),
+			'sizedefault' => $sizedefault,
 			'sizebig' => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_BIG'),
 			'sizesmall' => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_SMALL'),
 			'sync_products_by_cron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON'),
@@ -1444,7 +1459,11 @@ class Ebay extends Module
 			'activate_mails' => Configuration::get('EBAY_ACTIVATE_MAILS'),
 			'picture_per_listing' => $picture_per_listing,
 			'hasEbayBoutique' => isset($user_profile['StoreUrl']) && !empty($user_profile['StoreUrl']) ? true : false,
-			'stats' => Configuration::get('EBAY_SEND_STATS')
+			'stats' => Configuration::get('EBAY_SEND_STATS'),
+            'currencies' => self::_getCurrenciesByIdShop($this->ebay_profile->id_shop),
+            'current_currency' => (int)$this->ebay_profile->getConfiguration('EBAY_CURRENCY'),
+            'ebay_shop_countries' => EbayCountrySpec::getCountries(false),
+            'current_ebay_shop_country' => $shopCountry
 		);
 
 		if (Tools::getValue('relogin'))
@@ -1458,7 +1477,7 @@ class Ebay extends Module
 		}
 		else
 			$smarty_vars['relogin'] = false;
-
+        
 		if (Tools::getValue('action') == 'regenerate_token')
 			$smarty_vars['check_token_tpl'] = $this->_displayCheckToken();
 
@@ -1491,6 +1510,30 @@ class Ebay extends Module
 			'GTC' => $this->l('Good \'Till Canceled')
 		);
 	}
+    
+    private function _postProcessAddProfile()
+    {
+        $ebay_username = Tools::getValue('eBayUsernamesList');
+        if (!$ebay_username || ($ebay_username == -1))
+            $ebay_username = Tools::getValue('eBayUsername');
+
+        if ($ebay_username)
+        {
+        	$this->context->cookie->eBayUsername = $ebay_username;
+
+                $id_shop = version_compare(_PS_VERSION_, '1.5', '>') ? Shop::getContextShopID() : Shop::getCurrentShop();
+                
+                $this->ebay_profile = EbayProfile::getByLangShopSiteAndUsername((int)Tools::getValue('ebay_language'), $id_shop, Tools::getValue('ebay_country'), $ebay_username, $this->_getProductTemplateContent());
+                EbayProfile::setProfile($this->ebay_profile->id);
+        }
+    }
+
+	private function _postProcessConfig()
+	{
+        if ($id_ebay_profile = (int)Tools::getValue('ebay_profile'))
+            if (!EbayProfile::setProfile($id_ebay_profile))
+                $this->html .= $this->displayError($this->l('Profile cannot be changed'));   
+	}
 
 	private function _postProcessStats()
 	{
@@ -1507,11 +1550,16 @@ class Ebay extends Module
 		$picture_per_listing = (int)Tools::getValue('picture_per_listing');
 		if ($picture_per_listing < 0)
 			$picture_per_listing = 0;
+        
+        // we retrieve the potential currencies to make sure the selected currency exists in this shop
+        $currencies = self::_getCurrenciesByIdShop($this->ebay_profile->id_shop);
+        $currencies_ids = array_map(function($a) { return $a['id_currency']; }, $currencies);
 
 		if ($this->ebay_profile->setConfiguration('EBAY_PAYPAL_EMAIL', pSQL(Tools::getValue('ebay_paypal_email')))
 //			&& ($this->ebay_profile->ebay_user_identifier = pSQL(Tools::getValue('ebay_identifier')))
 			&& $this->ebay_profile->setConfiguration('EBAY_SHOP', pSQL(Tools::getValue('ebay_shop')))
 			&& $this->ebay_profile->setConfiguration('EBAY_SHOP_POSTALCODE', pSQL(Tools::getValue('ebay_shop_postalcode')))
+			&& $this->ebay_profile->setConfiguration('EBAY_SHOP_COUNTRY', pSQL(Tools::getValue('ebay_shop_country')))                
 			&& $this->ebay_profile->setConfiguration('EBAY_LISTING_DURATION', Tools::getValue('listingdurations'))
 			&& $this->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_DEFAULT', (int)Tools::getValue('sizedefault'))
 			&& $this->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_SMALL', (int)Tools::getValue('sizesmall'))
@@ -1530,6 +1578,8 @@ class Ebay extends Module
 			&& $this->setConfiguration('EBAY_ACTIVATE_LOGS', Tools::getValue('activate_logs') ? 1 : 0)
 			&& $this->setConfiguration('EBAY_ACTIVATE_MAILS', Tools::getValue('activate_mails') ? 1 : 0)
 			&& $this->ebay_profile->setConfiguration('EBAY_PICTURE_PER_LISTING', $picture_per_listing)
+            && in_array((int)Tools::getValue('currency'), $currencies_ids)
+            && $this->ebay_profile->setConfiguration('EBAY_CURRENCY', (int)Tools::getValue('currency'))
 		){
 			if(Tools::getValue('activate_logs') == 0)
 				if(file_exists(dirname(__FILE__).'/log/request.txt'))
@@ -1579,7 +1629,7 @@ class Ebay extends Module
 		$is_one_dot_five = version_compare(_PS_VERSION_, '1.5', '>');
 
 		// Load prestashop ebay's configuration
-		$configs = Configuration::getMultiple(array('EBAY_CATEGORY_LOADED', 'EBAY_SECURITY_TOKEN'));
+		$configs = Configuration::getMultiple(array('EBAY_CATEGORY_LOADED_'.$this->ebay_profile->ebay_site_id, 'EBAY_SECURITY_TOKEN'));
 
 		// Check if the module is configured
 		if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))
@@ -1599,19 +1649,20 @@ class Ebay extends Module
 				'token' => Tools::getValue('token'),
 				'tab_module' => Tools::getValue('tab_module'),
 				'module_name' => Tools::getValue('module_name'),
-				'form_categories' => EbaySynchronizer::getNbSynchronizableEbayCategorie()
+				'form_categories' => EbaySynchronizer::getNbSynchronizableEbayCategorie($this->ebay_profile->id)
 			));
 
 			return $this->display(dirname(__FILE__), '/views/templates/hook/pre_form_categories.tpl');
 		}
 
 		// Display eBay Categories
-		if (!isset($configs['EBAY_CATEGORY_LOADED']) || !$configs['EBAY_CATEGORY_LOADED'] || !EbayCategory::areCategoryLoaded())
+        $ebay_site_id = $this->ebay_profile->ebay_site_id;
+		if (!isset($configs['EBAY_CATEGORY_LOADED_'.$ebay_site_id]) || !$configs['EBAY_CATEGORY_LOADED_'.$ebay_site_id] || !EbayCategory::areCategoryLoaded($ebay_site_id))
 		{
 			$ebay = new EbayRequest();
-			EbayCategory::insertCategories($ebay->getCategories(), $ebay->getCategoriesSkuCompliancy());
-			$this->setConfiguration('EBAY_CATEGORY_LOADED', 1);
-			$this->setConfiguration('EBAY_CATEGORY_LOADED_DATE', date('Y-m-d H:i:s'));
+			EbayCategory::insertCategories($ebay_site_id, $ebay->getCategories(), $ebay->getCategoriesSkuCompliancy());
+			$this->setConfiguration('EBAY_CATEGORY_LOADED_'.$ebay_site_id, 1);
+			$this->setConfiguration('EBAY_CATEGORY_LOADED_'.$ebay_site_id.'_DATE', date('Y-m-d H:i:s')); // THIS LINE MIGHT BE REMOVED
 		}
 		
 		// Smarty
@@ -1632,7 +1683,7 @@ class Ebay extends Module
 			'tab_module' => Tools::getValue('tab_module'),
 			'module_name' => Tools::getValue('module_name'),
 			'date' => pSQL(date('Ymdhis')),
-			'form_categories' => EbaySynchronizer::getNbSynchronizableEbayCategorie(),
+			'form_categories' => EbaySynchronizer::getNbSynchronizableEbayCategorie($this->ebay_profile->id),
 			'nb_categorie' => count(Category::getCategories($this->context->cookie->id_lang, true, false))
 		);
 
@@ -1647,7 +1698,7 @@ class Ebay extends Module
 
 		// Smarty
 		$template_vars = array(
-			'id_tab' => Tools::safeOutput(Tools::getValue('id_tab')),
+			'id_tab' => Tools::getValue('id_tab'),
 			'controller' => Tools::getValue('controller'),
 			'tab' => Tools::getValue('tab'),
 			'configure' => Tools::getValue('configure'),
@@ -1756,7 +1807,8 @@ class Ebay extends Module
 
 			foreach ($product_ids as $product_id)
 				EbayProductConfiguration::insertOrUpdate($product_id, array(
-					'extra_images' => $all_nb_extra_images ? $all_nb_extra_images : 0
+					'extra_images' => $all_nb_extra_images ? $all_nb_extra_images : 0,
+                    'id_ebay_profile' => $this->ebay_profile->id
 				));
 		}
 
@@ -1775,9 +1827,10 @@ class Ebay extends Module
 
 			foreach ($showed_product_ids as $product_id)
 				EbayProductConfiguration::insertOrUpdate($product_id, array(
+                    'id_ebay_profile' => $this->ebay_profile->id,
 					'blacklisted' => in_array($product_id, $to_synchronize_product_ids) ? 0 : 1,
 					//'extra_images' => $extra_images[$product_id] ? $extra_images[$product_id] : 0
-					'extra_images' => 0
+					'extra_images' => 0,
 				));
 		}
 
@@ -1920,7 +1973,7 @@ class Ebay extends Module
 	private function _displayFormShipping()
 	{	
 		$configKeys = array(
-			'EBAY_CATEGORY_LOADED',
+//			'EBAY_CATEGORY_LOADED_'.$this->ebay_profile->ebay_site_id,
 			'EBAY_SECURITY_TOKEN',
 			'PS_LANG_DEFAULT'
 		);
@@ -1958,9 +2011,9 @@ class Ebay extends Module
 		);
 
 		if (version_compare(_PS_VERSION_, '1.5', '>'))
-			$url_vars['controller'] = Tools::safeOutput(Tools::getValue('controller'));
+			$url_vars['controller'] = Tools::getValue('controller');
 		else
-			$url_vars['tab'] = Tools::safeOutput(Tools::getValue('tab'));
+			$url_vars['tab'] = Tools::getValue('tab');
 
 		$zones = Zone::getZones(true);
 		foreach ($zones as &$zone)
@@ -2009,9 +2062,9 @@ class Ebay extends Module
 		);
 
 		if (version_compare(_PS_VERSION_, '1.5', '>'))
-			$url_vars['controller'] = Tools::safeOutput(Tools::getValue('controller'));
+			$url_vars['controller'] = Tools::getValue('controller');
 		else
-			$url_vars['tab'] = Tools::safeOutput(Tools::getValue('tab'));
+			$url_vars['tab'] = Tools::getValue('tab');
 
 		$action_url = $this->_getUrl($url_vars);
 		$forbiddenJs = array('textarea', 'script', 'onmousedown', 'onmousemove', 'onmmouseup', 'onmouseover', 'onmouseout', 'onload', 'onunload', 'onfocus', 'onblur', 'onchange', 'onsubmit', 'ondblclick', 'onclick', 'onkeydown', 'onkeyup', 'onkeypress', 'onmouseenter', 'onmouseleave', 'onerror');
@@ -2102,9 +2155,10 @@ class Ebay extends Module
 							SELECT  `id_category`
 							FROM  `'._DB_PREFIX_.'ebay_category_configuration`
 							WHERE  `id_ebay_category` > 0
+                            AND `id_ebay_profile` = '.(int)$this->ebay_profile->id.'
 						)
 						'.$this->addSqlRestrictionOnLang('s').'
-						AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery().')
+						AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($this->ebay_profile->id).')
 						GROUP BY p.id_product
 				)TableReponse';
 			$nb_products_mode_a = Db::getInstance()->getValue($sql);
@@ -2125,9 +2179,11 @@ class Ebay extends Module
 						IN (
 							SELECT  `id_category`
 							FROM  `'._DB_PREFIX_.'ebay_category_configuration`
-							WHERE  `id_ebay_category` > 0 AND `sync` = 1
+							WHERE  `id_ebay_category` > 0 
+                            AND `sync` = 1
+                            AND `id_ebay_profile` = '.(int)$this->ebay_profile->id.'
 						)'.$this->addSqlRestrictionOnLang('s').'
-						AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery().')
+						AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($this->ebay_profile->id).')
 						GROUP BY p.id_product
 				)TableReponse';
 			$nb_products_mode_b = Db::getInstance()->getValue($sql);
@@ -2146,8 +2202,9 @@ class Ebay extends Module
 				AND p.`id_category_default` IN (
 					SELECT `id_category`
 					FROM `'._DB_PREFIX_.'ebay_category_configuration`
-					WHERE `id_ebay_category` > 0)
-				AND p.`id_product` NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery().')';
+					WHERE `id_ebay_category` > 0
+                    AND `id_ebay_profile` = '.(int)$this->ebay_profile->id.')
+				AND p.`id_product` NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($this->ebay_profile->id).')';
 			$nb_products_mode_a = Db::getInstance()->getValue($sql);
 
 			$sql = 'SELECT COUNT(`id_product`) as nb
@@ -2162,8 +2219,9 @@ class Ebay extends Module
 					SELECT `id_category`
 					FROM `'._DB_PREFIX_.'ebay_category_configuration`
 					WHERE `id_ebay_category` > 0
-					AND `sync` = 1)
-				AND p.`id_product` NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery().')';
+					AND `sync` = 1
+                    AND `id_ebay_profile` = '.(int)$this->ebay_profile->id.')
+				AND p.`id_product` NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($this->ebay_profile->id).')';
 			$nb_products_mode_b = Db::getInstance()->getValue($sql);
 		}
 
@@ -2177,9 +2235,9 @@ class Ebay extends Module
 		);
 
 		if (version_compare(_PS_VERSION_, '1.5', '>'))
-			$url_vars['controller'] = Tools::safeOutput(Tools::getValue('controller'));
+			$url_vars['controller'] = Tools::getValue('controller');
 		else
-			$url_vars['tab'] = Tools::safeOutput(Tools::getValue('tab'));
+			$url_vars['tab'] = Tools::getValue('tab');
 
 		$action_url = $this->_getUrl($url_vars);
 
@@ -2248,7 +2306,7 @@ class Ebay extends Module
 		if (file_exists(dirname(__FILE__).'/log/syncError.php'))
 			@unlink(dirname(__FILE__).'/log/syncError.php');
 
-		$this->setConfiguration('EBAY_SYNC_MODE', Tools::safeOutput(Tools::getValue('ebay_sync_mode')));
+		$this->setConfiguration('EBAY_SYNC_MODE', Tools::getValue('ebay_sync_mode'));
 
 		if (Tools::getValue('ebay_sync_products_mode') == 'A')
 			$this->ebay_profile->setConfiguration('EBAY_SYNC_PRODUCTS_MODE', 'A');
@@ -2408,8 +2466,8 @@ class Ebay extends Module
 
 	private function _getCarriers()
 	{
-		if (EbayShippingService::getTotal())
-			return EbayShippingService::getAll();
+		if (EbayShippingService::getTotal($this->ebay_profile->ebay_site_id))
+			return EbayShippingService::getAll($this->ebay_profile->ebay_site_id);
 
 		$ebay = new EbayRequest();
 		$carriers = $ebay->getCarriers();
@@ -2512,7 +2570,7 @@ class Ebay extends Module
 	{
 		$alerts = array();
 
-		if (!Configuration::get('EBAY_API_TOKEN', null, 0, 0))
+		if ($this->ebay_profile && !$this->ebay_profile->getToken())
 			$alerts[] = 'registration';
 
 		if (!ini_get('allow_url_fopen'))
@@ -2520,9 +2578,13 @@ class Ebay extends Module
 
 		if (!extension_loaded('curl'))
 			$alerts[] = 'curl';
-
+        
+        if (!$this->ebay_profile)
+            return $alerts;
+        
 		$ebay = new EbayRequest();
-		$user_profile = $ebay->getUserProfile(Configuration::get('EBAY_API_USERNAME', null, 0, 0));
+		//$user_profile = $ebay->getUserProfile(Configuration::get('EBAY_API_USERNAME', null, 0, 0));
+        $user_profile = $ebay->getUserProfile($this->ebay_profile->ebay_user_identifier);
 
 		$this->StoreName = $user_profile['StoreName'];
 
@@ -2544,7 +2606,7 @@ class Ebay extends Module
 
 		foreach (Db::getInstance()->ExecuteS($sql_get_cat_non_multi_sku) as $cat)
 		{
-			if ($cat['is_multi_sku'] != 1 && EbayCategory::getInheritedIsMultiSku($cat['id_category_ref']) != 1)
+			if ($cat['is_multi_sku'] != 1 && EbayCategory::getInheritedIsMultiSku($cat['id_category_ref'], $this->ebay_profile->ebay_site_id) != 1)
 			{
 				$catProblem = 0;
 				$category = new Category($cat['id_category']);
@@ -2603,10 +2665,10 @@ class Ebay extends Module
 	private function _getUrl($extra_vars = array())
 	{
 		$url_vars = array(
-			'configure' => Tools::safeOutput(Tools::getValue('configure')),
-			'token' => Tools::safeOutput(Tools::getValue('token')),
-			'tab_module' => Tools::safeOutput(Tools::getValue('tab_module')),
-			'module_name' => Tools::safeOutput(Tools::getValue('module_name')),
+			'configure' => Tools::getValue('configure'),
+			'token' => Tools::getValue('token'),
+			'tab_module' => Tools::getValue('tab_module'),
+			'module_name' => Tools::getValue('module_name'),
 		);
 
 		return 'index.php?'.http_build_query(array_merge($url_vars, $extra_vars));
@@ -2675,7 +2737,7 @@ class Ebay extends Module
 
 		// pictures product
 		$product = new Product($product['id_product'], false, $id_lang);
-		$pictures = EbaySynchronizer::_getPictures($product, $this->ebay_profile, $id_lang, $this->context, array(), array());
+		$pictures = EbaySynchronizer::_getPictures($product, $this->ebay_profile, $id_lang, $this->context, array());
 		$data['large_pictures'] = $pictures['large'];
 		$data['medium_pictures'] = $pictures['medium'];
 
@@ -2693,8 +2755,7 @@ class Ebay extends Module
 	private function _displayEbayListings()
 	{
 		$this->smarty->assign(array(
-			'id_employee' => $this->context->employee->id,
-			'ebay_listings' => EbaySynchronizer::getNbSynchronizableProducts($this->ebay_profile)
+			'id_employee' => $this->context->employee->id
 			));
 		return $this->display(__FILE__, 'views/templates/hook/ebay_listings.tpl');
 	}
@@ -2707,7 +2768,7 @@ class Ebay extends Module
 		$link = $this->context->link;
 		$id_lang = $this->context->language->id;
 		$products_ebay_listings = array();
-		$products = EbayProduct::getProductsWithoutBlacklisted($id_lang);
+		$products = EbayProduct::getProductsWithoutBlacklisted($id_lang, $this->ebay_profile->id);
 		$data = array(
 			'id_lang' => $id_lang,
 			'titleTemplate' => $this->ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE')
@@ -2730,7 +2791,7 @@ class Ebay extends Module
 
 				$data['reference'] = $combinaison['reference'];
 				$data['ean13'] = $combinaison['ean13'];
-				$variation_specifics = EbaySynchronizer::_getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $id_lang);
+				$variation_specifics = EbaySynchronizer::_getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $id_lang, $this->ebay_profile->ebay_site_id);
 				foreach ($variation_specifics as $variation_specific)
 					$data['name'] .= ' '.$variation_specific;
 
@@ -2811,5 +2872,31 @@ class Ebay extends Module
 			exit;
 		}
 	}
-}
+    
+    /*
+     * for backward compatibility
+     *
+     *
+     */
+    
+    private function _getCurrenciesByIdShop($id_shop = 0)
+    {
+        if (version_compare(_PS_VERSION_, '1.5.1', '>='))
+            return Currency::getCurrenciesByIdShop($id_shop);
+        elseif (version_compare(_PS_VERSION_, '1.5', '>')) {
+    		$sql = 'SELECT *
+    				FROM `'._DB_PREFIX_.'currency` c
+    				LEFT JOIN `'._DB_PREFIX_.'currency_shop` cs ON (cs.`id_currency` = c.`id_currency`)
+    				'.($id_shop != 0 ? ' WHERE cs.`id_shop` = '.(int)$id_shop : '').'
+    				GROUP BY c.id_currency
+    				ORDER BY `name` ASC';
 
+    		return Db::getInstance()->executeS($sql);
+        } else {
+    		$sql = 'SELECT *
+    				FROM `'._DB_PREFIX_.'currency` c';            
+
+    		return Db::getInstance()->executeS($sql);
+        }
+    }
+}

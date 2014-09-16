@@ -104,6 +104,9 @@ class EbayCategoryConfiguration
 	 **/
 	public static function getEbayCategories($id_ebay_profile)
 	{
+        $ebay_profile = new EbayProfile($id_ebay_profile);
+        $ebay_site_id = $ebay_profile->ebay_site_id;
+            
 		$sql = 'SELECT
 			DISTINCT(ec1.`id_category_ref`) as id,
 			CONCAT(
@@ -119,11 +122,13 @@ class EbayCategoryConfiguration
 			LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec2
 			ON ec1.`id_category_ref_parent` = ec2.`id_category_ref`
 			AND ec1.`id_category_ref_parent` <> \'1\'
-			and ec1.level <> 1
+			AND ec1.level <> 1
+            AND ec2.`id_country` = '.(int)$ebay_site_id.'
 			LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec3
 			ON ec2.`id_category_ref_parent` = ec3.`id_category_ref`
 			AND ec2.`id_category_ref_parent` <> \'1\'
-			and ec2.level <> 1
+			AND ec2.level <> 1
+            AND ec3.`id_country` = '.(int)$ebay_site_id.'            
 			WHERE e.`id_ebay_profile` = '.(int)$id_ebay_profile.'
 			AND ec1.`id_category_ref` is not null';
 			

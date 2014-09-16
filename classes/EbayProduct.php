@@ -27,14 +27,18 @@
 
 class EbayProduct
 {
-	public static function getIdProductRefByIdProduct($id_product, $id_attribute = null)
+	public static function getIdProductRef($id_product, $ebay_identifier, $ebay_site_id, $id_attribute = null)
 	{
 		$query = 'SELECT `id_product_ref`
-			FROM `'._DB_PREFIX_.'ebay_product`
-			WHERE `id_product` = '.(int)$id_product;
+			FROM `'._DB_PREFIX_.'ebay_product` ep
+            INNER JOIN `'._DB_PREFIX_.'ebay_profile` ep1
+            ON ep.`id_ebay_profile` = ep1.`id_ebay_profile`
+            AND ep1.`ebay_user_identifier` = \''.pSQL($ebay_identifier).'\'
+            AND ep1.`ebay_site_id` = '.(int)$ebay_site_id.'
+			WHERE ep.`id_product` = '.(int)$id_product;
 		
 		if ($id_attribute)
-			$query .= ' AND `id_attribute` = '.(int)$id_attribute;
+			$query .= ' AND ep.`id_attribute` = '.(int)$id_attribute;
 
 		return Db::getInstance()->getValue($query);
 	}
@@ -56,12 +60,15 @@ class EbayProduct
 
         $nb_shop_products = count($id_shop_products);
         
-        $sql2 = 'SELECT count(*)
-            FROM `'._DB_PREFIX_.'ebay_product`
-            WHERE `id_product` IN ('.implode(',', $id_shop_products).')';
-        $nb_synchronized_products = Db::getInstance()->getValue($sql2);
-        
-        return number_format($nb_synchronized_products / $nb_shop_products * 100.0, 2);
+        if ($nb_shop_products)
+        {
+            $sql2 = 'SELECT count(*)
+                FROM `'._DB_PREFIX_.'ebay_product`
+                WHERE `id_product` IN ('.implode(',', $id_shop_products).')';
+            $nb_synchronized_products = Db::getInstance()->getValue($sql2);            
+            return number_format($nb_synchronized_products / $nb_shop_products * 100.0, 2);
+        } else
+            return '-';
     }
 
     public static function getProductsIdFromTable($a)
@@ -75,6 +82,22 @@ class EbayProduct
 			FROM `'._DB_PREFIX_.'ebay_product`
 			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile);
 	}
+    
+	public static function getNbProductsByIdEbayProfiles($id_ebay_profiles = array())
+	{
+        $query = 'SELECT `id_ebay_profile`, count(*) AS `nb`
+			FROM `'._DB_PREFIX_.'ebay_product`';
+        if ($id_ebay_profiles)
+            $query .= ' WHERE `id_ebay_profile` IN ('.implode(',', $id_ebay_profiles).')
+                GROUP BY `id_ebay_profile`';
+        
+		$res = Db::getInstance()->executeS($query);
+        
+        $ret = array();
+        foreach ($res as $row)
+            $ret[$row['id_ebay_profile']] = $row['nb'];
+        return $ret;
+	}    
 
 	public static function getProducts($not_update_for_days, $limit)
 	{
@@ -109,7 +132,7 @@ class EbayProduct
 			WHERE `id_product_ref` = \''.pSQL($id_product_ref).'\'');
 	}
 
-	public static function getProductsWithoutBlacklisted($id_lang)
+	public static function getProductsWithoutBlacklisted($id_lang, $id_ebay_profile)
 	{ 
 		return Db::getInstance()->ExecuteS('
 			SELECT ep.`id_product`, ep.`id_attribute`, ep.`id_product_ref`,
@@ -120,14 +143,25 @@ class EbayProduct
 			LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.`id_product` = ep.`id_product`)
 			LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
 			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = '.(int)$id_lang.')
-			WHERE epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL
+			WHERE ep.`id_ebay_profile` = '.(int)$id_ebay_profile.'
+            AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)
 			');
 
 	}
 
 	public static function getEbayUrl($reference, $mode_dev = false)
 	{
-		return 'http://cgi'.($mode_dev ? '.sandbox' : '').'.ebay.fr/ws/eBayISAPI.dll?ViewItem&item='.$reference.'&ssPageName=STRK:MESELX:IT&_trksid=p3984.m1555.l2649#ht_632wt_902';
+        $ebay_site_id = Db::getInstance()->getValue('SELECT ep.`ebay_site_id`
+            FROM `'._DB_PREFIX_.'ebay_profile` ep
+            INNER JOIN `'._DB_PREFIX_.'ebay_product` ep1
+            ON ep.`id_ebay_profile` = ep1.`id_ebay_profile`
+            AND ep1.`id_product_ref` = \''.pSQL($reference).'\'');
+        if (!$ebay_site_id)
+            return '';
+        
+        $site_extension = EbayCountrySpec::getSiteExtensionBySiteId($ebay_site_id);
+        
+		return 'http://cgi'.($mode_dev ? '.sandbox' : '').'.ebay.'.$site_extension.'/ws/eBayISAPI.dll?ViewItem&item='.$reference.'&ssPageName=STRK:MESELX:IT&_trksid=p3984.m1555.l2649#ht_632wt_902';
 	}
     
 }

@@ -28,7 +28,7 @@
 class EbayReturnsPolicyConfiguration extends ObjectModel
 {
 	const DEFAULT_RETURNS_WITHIN = 'Days_14';
-	const DEFAULT_RETURNS_WHO_PAYS = 'Buyer';
+	const DEFAULT_RETURNS_WHO_PAYS = 'Seller';
 	const DEFAULT_RETURNS_DESCRIPTION = '';
 	const DEFAULT_RETURNS_ACCEPTED_OPTION = 'ReturnsAccepted';
 	
@@ -90,17 +90,6 @@ class EbayReturnsPolicyConfiguration extends ObjectModel
 		return parent::__construct($id_ebay_returns_policy_configuration, $id_lang, $id_shop);
 	}	
 		
-	/*
-	public function setDefaults()
-	{
-		// we set the default values
-		$this->ebay_returns_within = self::DEFAULT_RETURNS_WITHIN;
-		$this->ebay_returns_who_pays = self::DEFAULT_RETURNS_WHO_PAYS;
-		$this->ebay_returns_description = self::DEFAULT_RETURNS_DESCRIPTION;
-		$this->ebay_returns_accepted_option = self::DEFAULT_RETURNS_ACCEPTED_OPTION;		
-	}
-	*/
-	
 	public static function getDefaultObjectId()
 	{
 		$sql = 'SELECT `id_ebay_returns_policy_configuration`
@@ -112,4 +101,15 @@ class EbayReturnsPolicyConfiguration extends ObjectModel
 		if ($row = Db::getInstance()->getRow($sql))
 			return $row['id_ebay_returns_policy_configuration'];
 	}
+    
+    // for upgrade to eBay module version 1.7
+    public static function createPreviousDefaultConfiguration() {
+		$returns_policy_configuration = new EbayReturnsPolicyConfiguration();
+		$returns_policy_configuration->ebay_returns_within = Configuration::get('EBAY_RETURNS_WITHIN');
+		$returns_policy_configuration->ebay_returns_who_pays = Configuration::get('EBAY_RETURNS_WHO_PAYS');
+		$returns_policy_configuration->ebay_returns_description = Configuration::get('EBAY_RETURNS_DESCRIPTION');
+		$returns_policy_configuration->ebay_returns_accepted_option = Configuration::get('EBAY_RETURNS_ACCEPTED_OPTION');     
+		$returns_policy_configuration->save();
+        return $returns_policy_configuration->id;        
+    }
 }
