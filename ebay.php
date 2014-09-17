@@ -1358,7 +1358,11 @@ class Ebay extends Module
 				$this->context->cookie->write();
 			}
             
-            $ebay_profiles = EbayProfile::getProfilesByIdShop($this->ebay_profile->id_shop);
+            if(isset($this->ebay_profile->id_shop))
+            	$ebay_profiles = EbayProfile::getProfilesByIdShop($this->ebay_profile->id_shop);
+            else 
+            	$ebay_profiles = array();
+            
             foreach ($ebay_profiles as &$profile)
                 $profile['site_extension'] = EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
 
