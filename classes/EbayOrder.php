@@ -769,6 +769,15 @@ class EbayOrder
 			dirname(__FILE__).'/../views/templates/mails/'
 		);
 	}
+    
+    public static function getIdOrderRefByIdOrder($id_order)
+    {
+        return Db::getInstance()->getValue('SELECT eo.`id_order_ref` 
+            FROM `'._DB_PREFIX_.'ebay_order` eo
+            INNER JOIN `'._DB_PREFIX_.'ebay_order_order` eoo
+            ON eo.`id_ebay_order` = eoo.`id_ebay_order`
+            WHERE eoo.`id_order` = '.(int)$id_order);
+    }
 
 	public static function insert($data)
 	{

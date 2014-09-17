@@ -75,6 +75,17 @@ class EbayFormParametersTab extends EbayTab
 		$user_profile = $ebay_request->getUserProfile($this->ebay_profile->ebay_user_identifier);
         
         $is_multishop = (version_compare(_PS_VERSION_, '1.5', '>') && Shop::isFeatureActive());
+        
+        $order_states = OrderState::getOrderStates($this->ebay_profile->id_lang);
+        $current_order_state = $this->ebay_profile->getConfiguration('EBAY_SHIPPED_ORDER_STATE');
+        if ($current_order_state === null) {
+            foreach ($order_states as $order_state) {
+                if ($order_state['template'] === 'shipped') { // NDRArbuz: is this the best way to find it with no doubt?
+                    $current_order_state = $order_state['id_order_state'];
+                    break;
+                }
+            }
+        }
 
 		$smarty_vars = array(
 			'url' => $url,
@@ -123,7 +134,10 @@ class EbayFormParametersTab extends EbayTab
             'currencies' => TotCompatibility::getCurrenciesByIdShop($this->ebay_profile->id_shop),
             'current_currency' => (int)$this->ebay_profile->getConfiguration('EBAY_CURRENCY'),
             'ebay_shop_countries' => EbayCountrySpec::getCountries(false),
-            'current_ebay_shop_country' => $shopCountry
+            'current_ebay_shop_country' => $shopCountry,
+            'send_tracking_code' => (bool)$this->ebay_profile->getConfiguration('EBAY_SEND_TRACKING_CODE'),
+            'order_states' => $order_states,
+            'current_order_state' => $current_order_state,
 		);
 
 		if (Tools::getValue('relogin'))
@@ -179,6 +193,8 @@ class EbayFormParametersTab extends EbayTab
 			&& $this->ebay_profile->setConfiguration('EBAY_PICTURE_PER_LISTING', $picture_per_listing)
             && in_array((int)Tools::getValue('currency'), $currencies_ids)
             && $this->ebay_profile->setConfiguration('EBAY_CURRENCY', (int)Tools::getValue('currency'))
+            && $this->ebay_profile->setConfiguration('EBAY_SEND_TRACKING_CODE', (int)Tools::getValue('send_tracking_code'))
+            && $this->ebay_profile->setConfiguration('EBAY_SHIPPED_ORDER_STATE', (int)Tools::getValue('shipped_order_state'))                
 		){
 			if(Tools::getValue('activate_logs') == 0)
 				if(file_exists(dirname(__FILE__).'/../../log/request.txt'))

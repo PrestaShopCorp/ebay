@@ -45,7 +45,7 @@ class EbayRequest
 	private $loginUrl;
 	private $compatibility_level;
 	private $debug;
-	private $dev = false;
+	private $dev = true;
 	private $ebay_country;
 
 	private $smarty_data;
@@ -586,7 +586,59 @@ class EbayRequest
 
 		return isset($response->OrderArray->Order) ? $response->OrderArray->Order : array();
 	}
+    
+	/**
+	 * Set order status to "shipped"
+	 *
+	 **/    
+	public function orderHasShipped($id_order_ref)
+	{
+		if (!$id_order_ref)
+			return false;
 
+		// Set Api Call
+		$this->apiCall = 'CompleteSale';
+
+		$vars = array(
+		    'id_order_ref' => $id_order_ref,
+		);
+
+		$response = $this->_makeRequest('CompleteSale', $vars);
+
+		if ($response === false)
+			return false;
+        
+		return $this->_checkForErrors($response);
+	}
+    
+	/**
+	 * Set order status to "shipped"
+	 *
+	 **/
+	public function updateOrderTracking($id_order_ref, $tracking_number, $carrier_name)
+	{
+		// Check data
+		if (!$id_order_ref)
+			return false;
+
+		// Set Api Call
+		$this->apiCall = 'CompleteSale';
+
+		$vars = array(
+		    'id_order_ref' => $id_order_ref,
+            'tracking_number' => $tracking_number,
+            'carrier_name' => $carrier_name,
+		);
+        print_r($vars);
+
+		$response = $this->_makeRequest('CompleteSale', $vars);
+
+		if ($response === false)
+			return false;
+        
+		return $this->_checkForErrors($response);
+	}
+    
 	/**
 	 * Add / Update / End Product Methods
 	 *

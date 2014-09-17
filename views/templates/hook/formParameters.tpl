@@ -313,6 +313,32 @@
 		</div>
 		<div style="clear:both;"></div>
     </fieldset>
+    
+    <fieldset style="margin-top:10px;">
+ 		<legend>{l s='Order Synchronization from PrestaShop to eBay' mod='ebay'}</legend>
+		<label>
+			{l s='Send tracking code' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<input type="checkbox" name="send_tracking_code" value="1"{if $send_tracking_code} checked="checked"{/if}>
+		</div>
+        
+		<label>
+			{l s='Status used to indicate product has been shipped' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<select name="shipped_order_state" class="ebay_select">
+                <option value=""></option>
+				{if isset($order_states) && $order_states && sizeof($order_states)}
+					{foreach from=$order_states item='order_state'}
+						<option value="{$order_state.id_order_state|escape:'htmlall'}"{if $order_state.id_order_state == $current_order_state} selected{/if}>{$order_state.name|escape:'htmlall'}</option>
+					{/foreach}
+				{/if}
+			</select>
+		</div>        
+        
+ 		<div style="clear:both;"></div>
+     </fieldset>
         
 	<div class="margin-form" id="buttonEbayParameters" style="margin-top:5px;">
 		<a href="#categoriesProgression" {if $catLoaded}id="displayFancybox"{/if}>

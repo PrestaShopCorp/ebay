@@ -258,11 +258,19 @@ class Ebay extends Module
 			return false;
 
 		$hook_update_quantity = version_compare(_PS_VERSION_, '1.5', '>') ? 'actionUpdateQuantity' : 'updateQuantity';
-
 		if (!$this->registerHook($hook_update_quantity))
 			return false;
 
-		//$this->createDefaultProfilesAndReturnsPolicies();
+		$hook_update_order_status = version_compare(_PS_VERSION_, '1.5', '>') ? 'actionOrderStatusUpdate' : 'updateOrderStatus';
+		if (!$this->registerHook($hook_update_order_status))
+			return false;
+        
+        /*
+		$hook_admin_order = version_compare(_PS_VERSION_, '1.5', '>') ? 'displayAdminOrder' : 'adminOrder';
+		if (!$this->registerHook($hook_admin_order))
+			return false;        
+        */
+
 		$this->ebay_profile =  EbayProfile::getCurrent();
 		
 		$this->setConfiguration('EBAY_INSTALL_DATE', date('Y-m-d\TH:i:s.000\Z'));
@@ -388,6 +396,8 @@ class Ebay extends Module
 			|| !$this->unregisterHook('updateProduct')
 			|| !$this->unregisterHook('actionUpdateQuantity')
 			|| !$this->unregisterHook('updateQuantity')
+			|| !$this->unregisterHook('actionOrderStatusUpdate')
+			|| !$this->unregisterHook('updateOrderStatus')
 			|| !$this->unregisterHook('updateProductAttribute')
 			|| !$this->unregisterHook('deleteProduct')
 			|| !$this->unregisterHook('newOrder')
@@ -932,6 +942,85 @@ class Ebay extends Module
 		}
 	}
 
+	/*
+	 * for PrestaShop 1.4
+	 *
+	 */
+	public function hookUpdateOrderStatus($params)
+	{
+        print_r($params);
+	}
+
+	public function hookActionOrderStatusUpdate($params)
+	{
+        $new_order_status = $params['newOrderStatus'];
+        $id_order_state = $new_order_status->id;
+
+        if (!$id_order_state)
+            return;
+
+        if ($this->ebay_profile->getConfiguration('EBAY_SHIPPED_ORDER_STATE') == $id_order_state)
+            $this->_orderHasShipped((int)$params['id_order'], (int)$params['cart']->id_carrier);
+	}
+    
+    private function _orderHasShipped($id_order)
+    {
+        $id_order_ref = EbayOrder::getIdOrderRefByIdOrder($id_order);
+        
+		$ebay_request = new EbayRequest();
+        $ebay_request->orderHasShipped($id_order_ref);
+    }
+    
+	/*
+	 * for PrestaShop 1.4
+	 *
+	 */
+    /*
+	public function hookAdminOrder($params)
+	{
+        if (Tools::getValue('tracking_number'))
+            die('POST');
+        print_r($_REQUEST);
+	}
+
+	public function hookDisplayAdminOrder($params)
+	{
+        if (Tools::getValue('tracking_number'))
+            die('POST');
+        print_r($_REQUEST);
+	}    
+    */
+    
+    /*
+    private function _updateOrderTracking($id_order, $id_carrier)
+    {
+        // send tracking code if required
+        if (!$this->ebay_profile->getConfiguration('EBAY_SEND_TRACKING_CODE'))
+            return;        
+        
+        if (version_compare(_PS_VERSION_, '1.5.0.4', '>=')) {
+			$tracking_number = Db::getInstance()->getValue('
+				SELECT `tracking_number`
+				FROM `'._DB_PREFIX_.'order_carrier`
+				WHERE `id_order` = '.(int)$order_invoice->id_order);
+        } else {
+            $order = new Order($id_order);
+            $tracking_number = $order->shipping_number;            
+        }
+        
+        if (!$tracking_number)
+            return;
+        
+        $id_order_ref = EbayOrder::getIdOrderRefByIdOrder($id_order);
+        
+        $carrier = new Carrier($id_carrier, $this->ebay_profile->id_lang);
+		$ebay_request = new EbayRequest();
+        if($ebay_request->updateOrderTracking($id_order_ref, $tracking_number, $carrier->name)) {
+            
+        }
+    }
+    */
+    
 	public function hookUpdateProductAttributeEbay()
 	{
 		if (Tools::getValue('submitProductAttribute')
@@ -966,13 +1055,54 @@ class Ebay extends Module
 			EbayStat::send();
 			Configuration::updateValue('EBAY_STATS_LAST_UPDATE', date('Y-m-d\TH:i:s.000\Z'), false, 0, 0);
 		}   
+        
+        // update tracking number of eBay if required
+        if (($id_order = (int)Tools::getValue('id_order'))
+            && 
+            ($tracking_number = Tools::getValue('tracking_number'))
+            &&
+            ($id_order_ref = EbayOrder::getIdOrderRefByIdOrder($id_order)))
+        {
+            
+            // find eBayProfile for this order
+            // as a security, we retrieve several potential id_ebay_profiles and try all of them on the API
+            $id_ebay_profiles = Db::getInstance()->ExecuteS('SELECT DISTINCT(ep.`id_ebay_profile`)
+                FROM `'._DB_PREFIX_.'ebay_product` ep
+                INNER JOIN `'._DB_PREFIX_.'order_detail` od
+                ON od.`product_id` = ep.`id_product`
+                AND od.`product_attribute_id` = ep.`id_attribute`
+                AND od.`id_order` = '.(int)$id_order.' 
+                INNER JOIN `'._DB_PREFIX_.'ebay_order_order` eoo
+                ON od.`id_order` = eoo.`id_order`
+                INNER JOIN `'._DB_PREFIX_.'ebay_profile` epr
+                ON eoo.`id_shop` = epr.`id_shop`
+                AND ep.`id_ebay_profile` = epr.`id_ebay_profile`');
+            
+            $order = new Order($id_order);
+                        
+            foreach ($id_ebay_profiles as $data)
+            {
+                $id_ebay_profile = (int)$data['id_ebay_profile'];
+                $ebay_profile = new EbayProfile($id_ebay_profile);
+                
+                if (!$ebay_profile->getConfiguration('EBAY_SEND_TRACKING_CODE'))
+                    continue;
+                
+                $carrier = new Carrier($order->id_carrier, $ebay_profile->id_lang);
+                
+                $ebay_request = new EbayRequest($id_ebay_profile);
+                if ($ebay_request->updateOrderTracking($id_order_ref, $tracking_number, $carrier->name))
+                    break;
+            }
+
+        }
 		
 		if (!((version_compare(_PS_VERSION_, '1.5.1', '>=')
 			&& version_compare(_PS_VERSION_, '1.5.2', '<'))
 			&& !Shop::isFeatureActive()))
 			$this->hookHeader($params);
 	}
-	
+    
 	/**
 	* Main Form Method
 	*
