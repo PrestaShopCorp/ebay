@@ -163,7 +163,7 @@ class EbaySynchronizer
 			'id_product' => $product->id,
 			'reference' => $product->reference,
 			'name' => str_replace('&', '&amp;', $product->name),
-			'description' => $product->description,
+			'description' => TotFormat::formatDescription($product->description),
 			'description_short' => $product->description_short,
 			'manufacturer_name' => $product->manufacturer_name,
 			'ean13' => $product->ean13,
@@ -522,7 +522,7 @@ class EbaySynchronizer
 		foreach ($product->getFrontFeatures((int)$id_lang) as $feature)
 			$features_html .= '<b>'.$feature['name'].'</b> : '.$feature['value'].'<br/>';
 
-		return str_replace(
+		return TotFormat::formatDescription(str_replace(
 			array(
 				'{DESCRIPTION_SHORT}',
 				'{DESCRIPTION}',
@@ -542,7 +542,7 @@ class EbaySynchronizer
 				$product->name
 			),
 			$ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE')
-		);
+		));
 	}
 
 	public static function endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $ebay_item_id, $product_id = null)
@@ -589,7 +589,7 @@ class EbaySynchronizer
 
 	private static function _fillDescription($description, $medium_pictures, $large_pictures, $product_price = '', $product_price_discount = '')
 	{
-		return str_replace(
+		return TotFormat::formatDescription(str_replace(
 			array('{MAIN_IMAGE}', '{MEDIUM_IMAGE_1}', '{MEDIUM_IMAGE_2}', '{MEDIUM_IMAGE_3}', '{PRODUCT_PRICE}', '{PRODUCT_PRICE_DISCOUNT}'),
 			array(
 				(isset($large_pictures[0]) ? '<img src="'.Tools::safeOutput($large_pictures[0]).'" class="bodyMainImageProductPrestashop" />' : ''),
@@ -599,7 +599,7 @@ class EbaySynchronizer
 				$product_price,
 				$product_price_discount
 			), $description
-		);
+		));
 	}
 
 	private static function _insertEbayProduct($id_product, $id_ebay_profile, $ebay_item_id, $date, $id_attribute = 0)
