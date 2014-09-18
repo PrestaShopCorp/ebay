@@ -38,7 +38,7 @@
 					<PhotoDisplay>PicturePack</PhotoDisplay>
 				{/if}
 				{foreach from=$pictures item=picture}
-					<PictureURL>{$picture}</PictureURL>
+					<!--<PictureURL>{$picture}</PictureURL>-->  <PictureURL>http://cdn.ipetitions.com/user-images/petitions/beban/qLliuDdqTV2DrpQStaGS_dog.jpg</PictureURL>
 				{/foreach}
 			</PictureDetails>
 		{/if}
@@ -77,6 +77,14 @@
 		<ShippingDetails>{$shipping_details}</ShippingDetails>
 		{$buyer_requirements_details}
 		<Site>{$site}</Site>
+        
+        {if isset($price_original)}
+            <DiscountPriceInfo>
+                <OriginalRetailPrice>{$price_original}</OriginalRetailPrice>
+                <SoldOffeBay>true</SoldOffeBay>
+            </DiscountPriceInfo>
+        {/if}
+
 	</Item>
 	<RequesterCredentials>
 		<eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>

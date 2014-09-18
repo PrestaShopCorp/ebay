@@ -48,6 +48,14 @@
 					</NameValueList>
 				{/foreach}				
 			</VariationSpecifics>
+            
+            {if isset($variation.price_original)}
+                <DiscountPriceInfo>
+                    <OriginalRetailPrice>{$variation.price_original}</OriginalRetailPrice>
+                    <SoldOffeBay>true</SoldOffeBay>
+                </DiscountPriceInfo>
+            {/if}
+                    
 		</Variation>
 	{/foreach}
 	<Pictures>
@@ -58,7 +66,9 @@
 			{/if}
 			<VariationSpecificPictureSet>
 				<VariationSpecificValue>{$picture.value}</VariationSpecificValue>
+                <!--
 				<PictureURL>{$picture.url}</PictureURL>
+                -->   <PictureURL>http://cdn.ipetitions.com/user-images/petitions/beban/qLliuDdqTV2DrpQStaGS_dog.jpg</PictureURL>
 			</VariationSpecificPictureSet>
 		{/foreach}
 	{/foreach}

@@ -398,6 +398,9 @@ class EbayRequest
 			'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
 			'site' => $this->ebay_country->getSiteName(),
 		);
+        
+        if ($data['price_original'] > $data['price'])
+            $vars['price_original'] = $data['price_original'];
 
 		$response = $this->_makeRequest('AddFixedPriceItem', $vars);
 
@@ -432,6 +435,9 @@ class EbayRequest
 			'item_specifics' => $data['item_specifics'],
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),           
 		);
+        
+        if (isset($data['price_original']) && ($data['price_original'] > $data['price']))
+            $vars['price_original'] = $data['price_original'];        
 
 		$response = $this->_makeRequest('ReviseFixedPriceItem', $vars);
 
