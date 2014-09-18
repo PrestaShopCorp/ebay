@@ -37,10 +37,7 @@ class EbayFormCategoryTab extends EbayTab
 
 		// Check if the module is configured
 		if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))
-		{
-			$this->smarty->assign('error_form_category', 'true');
-			return $this->display('error_paypal_email.tpl');
-		}
+			return $this->display('error_paypal_email.tpl', array('error_form_category', 'true'));
 
 		// Load categories only if necessary
 		if (EbayCategoryConfiguration::getTotalCategoryConfigurations($this->ebay_profile->id) && Tools::getValue('section') != 'category')
