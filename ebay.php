@@ -95,7 +95,7 @@ class Ebay extends Module
 	{
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.8';
+		$this->version = '1.8.1';
 		$this->stats_version = '1.0';
 
 		$this->author = 'PrestaShop';
@@ -619,11 +619,11 @@ class Ebay extends Module
 			|| Tools::getValue('EBAY_SYNC_ORDERS') == 1)
 		{
 			$current_date = date('Y-m-d\TH:i:s').'.000Z';
+			// we set the new last update date after retrieving the last orders
+			$this->ebay_profile->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date);
 
 			$orders = $this->_getEbayLastOrders($current_date);
 
-			// we set the new last update date after retrieving the last orders
-			$this->ebay_profile->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date);
 
 			if ($orders)
 				$this->importOrders($orders);
@@ -1544,6 +1544,11 @@ class Ebay extends Module
 	}
 
 
+	private function getCurrencies($currency)
+	{
+		return $currency['id_currency'];
+	}
+
 	private function _postProcessParameters()
 	{
 		// Saving new configurations
@@ -1553,7 +1558,7 @@ class Ebay extends Module
         
         // we retrieve the potential currencies to make sure the selected currency exists in this shop
         $currencies = self::_getCurrenciesByIdShop($this->ebay_profile->id_shop);
-        $currencies_ids = array_map(function($a) { return $a['id_currency']; }, $currencies);
+        $currencies_ids = array_map(array($this, 'getCurrencies'), $currencies);
 
 		if ($this->ebay_profile->setConfiguration('EBAY_PAYPAL_EMAIL', pSQL(Tools::getValue('ebay_paypal_email')))
 //			&& ($this->ebay_profile->ebay_user_identifier = pSQL(Tools::getValue('ebay_identifier')))
