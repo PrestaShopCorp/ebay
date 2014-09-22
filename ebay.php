@@ -1544,6 +1544,11 @@ class Ebay extends Module
 	}
 
 
+	private function getCurrencies($currency)
+	{
+		return $currency['id_currency'];
+	}
+
 	private function _postProcessParameters()
 	{
 		// Saving new configurations
@@ -1553,7 +1558,7 @@ class Ebay extends Module
         
         // we retrieve the potential currencies to make sure the selected currency exists in this shop
         $currencies = self::_getCurrenciesByIdShop($this->ebay_profile->id_shop);
-        $currencies_ids = array_map(function($a) { return $a['id_currency']; }, $currencies);
+        $currencies_ids = array_map(array($this, 'getCurrencies'), $currencies);
 
 		if ($this->ebay_profile->setConfiguration('EBAY_PAYPAL_EMAIL', pSQL(Tools::getValue('ebay_paypal_email')))
 //			&& ($this->ebay_profile->ebay_user_identifier = pSQL(Tools::getValue('ebay_identifier')))
