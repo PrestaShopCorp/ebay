@@ -277,6 +277,7 @@
 			</a>
 	        <br>
 		</div>
+		<div class="clear both"></div>
 		<label>
 			{l s='Sync Orders' mod='ebay'}
 		</label>
