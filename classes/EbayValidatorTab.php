@@ -122,7 +122,7 @@ class EbayValidatorTab{
 			return array(
 				'indicator' => 'wrong', 
 				'indicatorBig' => 'wrong',
-				'message' => $ebay->l('You need to configure your mandatory items specifics ')
+				'message' => $ebay->l('You need to configure your mandatory items specifics ', 'ebayvalidatortab')
 			);
 		}
 
@@ -132,7 +132,7 @@ class EbayValidatorTab{
 			return array(
 				'indicator' => 'success', 
 				'indicatorBig' => 'mind',
-				'message' => $ebay->l('You could gain visibility by configuring optional items specifics ')
+				'message' => $ebay->l('You could gain visibility by configuring optional items specifics ', 'ebayvalidatortab')
 			);
 		}
 
