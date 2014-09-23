@@ -35,9 +35,7 @@
 		{l s='To list your products on eBay, you need to map your Prestashop category with an eBay category.' mod='ebay'} <br />
 		{l s='The button below will automatically map your categories with eBay categories. We recommend you check that you’re happy with the category chosen and amend if necessary.' mod='ebay'}
 	</p>
-	{if $form_store_categories == 0}
 
-	{/if}
 	<!---------------------------->
 	<p>
 		<b>{l s='List on eBay' mod='ebay'}</b>
