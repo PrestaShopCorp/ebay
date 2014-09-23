@@ -41,7 +41,6 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_category` (
 		  PRIMARY KEY  (`id_ebay_category`)
 	) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
-
 // Create Configuration Table in Database
 $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_category_configuration` (
 		  `id_ebay_category_configuration` int(16) NOT NULL AUTO_INCREMENT,
@@ -300,3 +299,22 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_user_identifier_token`
     `token` text NOT NULL,
     PRIMARY KEY (`ebay_user_identifier`)
 	) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+    
+$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_store_category` (
+    `id_ebay_store_category` int(16) NOT NULL AUTO_INCREMENT,
+	  `ebay_category_id` int(16) NOT NULL,
+	  `name` varchar(255) NOT NULL,
+	  `order` int(16) NOT NULL,
+	  `ebay_parent_category_id` int(16) NOT NULL,
+	  UNIQUE(`ebay_category_id`),
+	  PRIMARY KEY  (`id_ebay_store_category`)
+) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+    
+$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_store_category_configuration` (
+    `id_ebay_store_category_configuration` int(16) NOT NULL AUTO_INCREMENT,
+	`id_ebay_profile` int(16) NOT NULL,
+    `ebay_category_id` int(16) NOT NULL,
+    `id_category` varchar(255) NOT NULL,
+	UNIQUE(`id_ebay_profile`, `ebay_category_id`),
+	PRIMARY KEY  (`id_ebay_store_category_configuration`)
+) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';

@@ -54,6 +54,10 @@ class EbayFormParametersTab extends EbayTab
 		$createShopUrl = 'http://cgi3.ebay.'.$ebay_country->getSiteExtension().'/ws/eBayISAPI.dll?CreateProductSubscription&&productId=3&guest=1';
 
 		$ebay_request = new EbayRequest();
+        
+        // Raph test
+        $ebay_request->getStoreCategories();
+        
 		$ebay_sign_in_url = $ebay_request->getLoginUrl().'?SignIn&runame='.$ebay_request->runame.'&SessID='.$this->context->cookie->eBaySession;
 		
 		$returns_policy_configuration = $this->ebay_profile->getReturnsPolicyConfiguration();

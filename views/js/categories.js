@@ -102,6 +102,57 @@ function toggleSyncProduct(obj)
 }
 
 $(document).ready(function() {
+  
+	var form_categories = parseInt("{$form_categories|escape:'htmlall'}");
+	if (form_categories >= 1)
+		$("#menuTab2").addClass('success');
+	else
+		$("#menuTab2").addClass('wrong');
+
+	$("#pagination").children('li').click(function(){
+		var p = $(this).html();
+		var li = $("#pagination").children('li.current');
+		if ($(this).attr('class') == 'prev')
+		{
+			var liprev = li.prev();
+			if (!liprev.hasClass('prev'))
+			{
+				liprev.trigger('click');
+			}
+			return false;
+		}
+		if ($(this).attr('class') == 'next')
+		{
+			var linext = li.next();
+			if (!linext.hasClass('next'))
+			{
+				linext.trigger('click');
+			}
+			return false;
+		}
+		$("#pagination").children('li').removeClass('current');
+		$(this).addClass('current');
+		$("#textPagination").children('span').html(p);
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: module_dir + "ebay/ajax/saveCategories.php?token=" + ebay_token + "&profile=" + id_ebay_profile,
+			data: $('#configForm2').serialize()+"&ajax=true",
+			success : function(data)
+			{
+				if (data.valid)
+				{
+					$.ajax({
+						url: module_dir + "ebay/ajax/loadTableCategories.php?token=" + ebay_token + "&p=" + p + "&profile=" + id_ebay_profile + "&id_lang=" + id_lang + "&ch_cat_str=" + ebay_l["no category selected"] + "&ch_no_cat_str=" + ebay_l["no category found"] + "&not_logged_str=" + ebay_l["You are not logged in"] + "&unselect_product=" + ebay_l["Unselect products"]  ,
+						success : function(data) {
+							$("form#configForm2 table tbody #removeRow").remove(); $("form#configForm2 table tbody").html(data);
+						}
+					});
+				}
+			}
+		});
+	})  
+  
 	$.ajax({
 		url: module_dir + "ebay/ajax/loadTableCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&ch_cat_str=' + ebay_l['no category selected'] + '&ch_no_cat_str=' + ebay_l['no category found'] + '&not_logged_str=' + ebay_l['You are not logged in'] + '&unselect_product=' + ebay_l['Unselect products'],
 		success : function(data) { $("form#configForm2 table tbody #removeRow").remove(); $("form#configForm2 table tbody").html(data); }

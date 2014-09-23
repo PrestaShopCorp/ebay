@@ -352,6 +352,8 @@ class EbaySynchronizer
 			if (((count($pictures) == 0) && ($nb_pictures == 1)) || self::_hasVariationProducts($variations)) // no extra picture, we don't upload the image
 			{
 				$pictures[] = $pictures_default;
+                $pictures_medium[] = EbaySynchronizer::_getPictureLink($product->id, $image['id_image'], $context->link, $small->name);
+                				$pictures_large[] = EbaySynchronizer::_getPictureLink($product->id, $image['id_image'], $context->link, $large->name);                
 				break;
 			}
 			elseif (count($pictures) < $nb_pictures) // we upload every image if there are extra pictures

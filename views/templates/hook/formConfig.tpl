@@ -31,6 +31,7 @@
 	<li id="menuTab4" class="menuTabButton {$templateValidator.indicator|escape:'htmlall'}">5. {l s='Template manager' mod='ebay'}</li>
 	<li id="menuTab5" class="menuTabButton ">6. {l s='List products' mod='ebay'}</li>
 	<li id="menuTab9" class="menuTabButton">7. {l s='eBay listings' mod='ebay'}</li>
+	<li id="menuTab10" class="menuTabButton">10. {l s='Store Categories' mod='ebay'}</li>
 	<li id="menuTab7" class="menuTabButton">9. {l s='Help' mod='ebay'}</li>
 	<li id="menuTab6" class="menuTabButton">8. {l s='Order history' mod='ebay'}</li>
 </ul>
@@ -42,6 +43,7 @@
 	<div id="menuTab4Sheet" class="tabItem">{if isset($templateValidator.message)}<div class="ebay_{$templateValidator.indicatorBig|escape:'htmlall'} big">{$templateValidator.message|escape:'htmlall'}</div>{/if}{$form_template_manager}</div>
 	<div id="menuTab5Sheet" class="tabItem">{if isset($listingValidator.message)}<div class="ebay_{$listingValidator.indicatorBig|escape:'htmlall'} big">{$listingValidator.message|escape:'htmlall'}</div>{/if}{$form_ebay_sync}</div>
 	<div id="menuTab9Sheet" class="tabItem">{$ebay_listings}</div>
+	<div id="menuTab10Sheet" class="tabItem">{$form_store_category}</div>
 	<div id="menuTab7Sheet" class="tabItem">{$help}</div>
 	<div id="menuTab6Sheet" class="tabItem">{$orders_history}</div>
 </div>

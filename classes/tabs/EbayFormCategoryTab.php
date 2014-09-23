@@ -91,6 +91,95 @@ class EbayFormCategoryTab extends EbayTab
 		return $this->display('form_categories.tpl', $template_vars);
     }
     
+    public function postProcess()
+    {
+        
+		// Insert and update categories
+		if (($percents = Tools::getValue('percent')) && ($ebay_categories = Tools::getValue('category')))
+		{
+				
+			$id_ebay_profile = Tools::getValue('profile') ? Tools::getValue('profile') : $this->ebay_profile->id; 
+			foreach ($percents as $id_category => $percent)
+			{
+				$data = array();
+				$date = date('Y-m-d H:i:s');
+				if ($percent['value'] != '') {
+					$percent_sign_type = explode(':', $percent['sign']);
+					$percentValue = ($percent_sign_type[0] == '-' ? $percent_sign_type[0] : '') . $percent['value'] . ($percent['type'] == 'percent' ? '%' : '');
+				} 
+				else 
+					$percentValue = null;
+                
+				if (isset($ebay_categories[$id_category]))
+					$data = array(
+						'id_ebay_profile' => (int)$id_ebay_profile,
+						'id_country' => 8,
+						'id_ebay_category' => (int)$ebay_categories[$id_category],
+						'id_category' => (int)$id_category,
+						'percent' => pSQL($percentValue),
+						'date_upd' => pSQL($date),
+						'sync' => 0
+					);
+					
+
+				if (EbayCategoryConfiguration::getIdByCategoryId($id_ebay_profile, $id_category))
+				{
+					if ($data)
+						EbayCategoryConfiguration::updateByIdProfileAndIdCategory($id_ebay_profile, $id_category, $data);
+					else
+						EbayCategoryConfiguration::deleteByIdCategory($id_ebay_profile, $id_category);
+				}
+				elseif ($data)
+				{
+					$data['date_add'] = $date;
+					EbayCategoryConfiguration::add($data);
+				}
+			}
+
+			// make sur the ItemSpecifics and Condition data are refresh when we load the dedicated config screen the next time
+			$this->ebay_profile->deleteConfigurationByName('EBAY_SPECIFICS_LAST_UPDATE');
+		}
+
+
+		// update extra_images for all products
+		if (($all_nb_extra_images = Tools::getValue('all-extra-images-value', -1)) != -1)
+		{
+			$product_ids = EbayCategoryConfiguration::getAllProductIds($this->ebay_profile->id);
+
+			foreach ($product_ids as $product_id)
+				EbayProductConfiguration::insertOrUpdate($product_id, array(
+					'extra_images' => $all_nb_extra_images ? $all_nb_extra_images : 0,
+                    'id_ebay_profile' => $this->ebay_profile->id
+				));
+		}
+
+		// update products configuration
+		if (is_array(Tools::getValue('showed_products')))
+		{
+			$showed_product_ids = array_keys(Tools::getValue('showed_products'));
+
+			if (Tools::getValue('to_synchronize'))
+				$to_synchronize_product_ids = array_keys(Tools::getValue('to_synchronize'));
+			else
+				$to_synchronize_product_ids = array();
+
+			// TODO remove extra_images
+			$extra_images = Tools::getValue('extra_images');
+
+			foreach ($showed_product_ids as $product_id)
+				EbayProductConfiguration::insertOrUpdate($product_id, array(
+                    'id_ebay_profile' => $this->ebay_profile->id,
+					'blacklisted' => in_array($product_id, $to_synchronize_product_ids) ? 0 : 1,
+					'extra_images' => 0,
+				));
+		}
+
+		if (Tools::getValue('ajax'))
+			die('{"valid" : true}');
+
+		return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));        
+    }
+    
 	/*
      *
      * Get alert to see if some multi variation product on PrestaShop were added to a non multi sku categorie on ebay

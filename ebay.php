@@ -61,6 +61,8 @@ $classes_to_load = array(
     
     'totCompatibility',
     'EbayProductTemplate',
+    'EbayStoreCategory',
+    'EbayStoreCategoryConfiguration',
     'tabs/EbayTab',
     'tabs/EbayFormParametersTab',
     'tabs/EbayFormCategoryTab',
@@ -71,6 +73,7 @@ $classes_to_load = array(
     'tabs/EbayOrderHistoryTab',
     'tabs/EbayHelpTab',
     'tabs/EbayListingsTab',
+    'tabs/EbayFormStoreCategoryTab'
 );
 
 foreach ($classes_to_load as $classname)
@@ -108,7 +111,7 @@ class Ebay extends Module
 	{
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.8';
+		$this->version = '1.9';
 		$this->stats_version = '1.0';
 
 		$this->author = 'PrestaShop';
@@ -265,12 +268,6 @@ class Ebay extends Module
 		if (!$this->registerHook($hook_update_order_status))
 			return false;
         
-        /*
-		$hook_admin_order = version_compare(_PS_VERSION_, '1.5', '>') ? 'displayAdminOrder' : 'adminOrder';
-		if (!$this->registerHook($hook_admin_order))
-			return false;        
-        */
-
 		$this->ebay_profile =  EbayProfile::getCurrent();
 		
 		$this->setConfiguration('EBAY_INSTALL_DATE', date('Y-m-d\TH:i:s.000\Z'));
@@ -459,7 +456,15 @@ class Ebay extends Module
 				include_once(dirname(__FILE__).'/upgrade/Upgrade-1.8.php');
 				upgrade_module_1_8($this);
 			}
-		}        
+		}
+        
+		if (version_compare($version, '1.9', '<')) {
+			if (version_compare(_PS_VERSION_, '1.5', '<'))
+			{
+				include_once(dirname(__FILE__).'/upgrade/Upgrade-1.9.php');
+				upgrade_module_1_9($this);
+			}
+		}                
 	}
 
 	/**
@@ -574,12 +579,10 @@ class Ebay extends Module
 		{
 			$current_date = date('Y-m-d\TH:i:s').'.000Z';
 
-			$orders = $this->_getEbayLastOrders($current_date);
-
 			// we set the new last update date after retrieving the last orders
 			$this->ebay_profile->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date);
 
-			if ($orders)
+			if ($orders = $this->_getEbayLastOrders($current_date))
 				$this->importOrders($orders);
 		}
 
@@ -971,56 +974,6 @@ class Ebay extends Module
         $ebay_request->orderHasShipped($id_order_ref);
     }
     
-	/*
-	 * for PrestaShop 1.4
-	 *
-	 */
-    /*
-	public function hookAdminOrder($params)
-	{
-        if (Tools::getValue('tracking_number'))
-            die('POST');
-        print_r($_REQUEST);
-	}
-
-	public function hookDisplayAdminOrder($params)
-	{
-        if (Tools::getValue('tracking_number'))
-            die('POST');
-        print_r($_REQUEST);
-	}    
-    */
-    
-    /*
-    private function _updateOrderTracking($id_order, $id_carrier)
-    {
-        // send tracking code if required
-        if (!$this->ebay_profile->getConfiguration('EBAY_SEND_TRACKING_CODE'))
-            return;        
-        
-        if (version_compare(_PS_VERSION_, '1.5.0.4', '>=')) {
-			$tracking_number = Db::getInstance()->getValue('
-				SELECT `tracking_number`
-				FROM `'._DB_PREFIX_.'order_carrier`
-				WHERE `id_order` = '.(int)$order_invoice->id_order);
-        } else {
-            $order = new Order($id_order);
-            $tracking_number = $order->shipping_number;            
-        }
-        
-        if (!$tracking_number)
-            return;
-        
-        $id_order_ref = EbayOrder::getIdOrderRefByIdOrder($id_order);
-        
-        $carrier = new Carrier($id_carrier, $this->ebay_profile->id_lang);
-		$ebay_request = new EbayRequest();
-        if($ebay_request->updateOrderTracking($id_order_ref, $tracking_number, $carrier->name)) {
-            
-        }
-    }
-    */
-    
 	public function hookUpdateProductAttributeEbay()
 	{
 		if (Tools::getValue('submitProductAttribute')
@@ -1115,6 +1068,13 @@ class Ebay extends Module
 			$ebay = new EbayRequest();
 			EbayCategory::updateCategoryTable($ebay->getCategoriesSkuCompliancy());
 		}
+        
+		// if multishop, change context Shop to be default
+		if ($this->ebay_profile && !Configuration::get('EBAY_STORE_CATEGORY_UPDATE'))
+		{
+			$ebay = new EbayRequest();
+			EbayStoreCategory::updateStoreCategoryTable($ebay->getStoreCategories());
+		}        
 
 		// Checking Extension
 		if (!extension_loaded('curl') || !ini_get('allow_url_fopen'))
@@ -1289,6 +1249,8 @@ class Ebay extends Module
 			$this->_postProcessTemplateManager();
 		elseif (Tools::getValue('section') == 'sync')
 			$this->_postProcessEbaySync();
+		elseif (Tools::getValue('section') == 'store_category')
+			$this->_postProcessStoreCategory();
 	}
 	
 	/**
@@ -1435,7 +1397,7 @@ class Ebay extends Module
         $form_ebay_order_history_tab = new EbayOrderHistoryTab($this, $this->smarty, $this->context);
         $help_tab = new EbayHelpTab($this, $this->smarty, $this->context);        
         $listings_tab = new EbayListingsTab($this, $this->smarty, $this->context);
-        
+        $form_store_category_tab = new EbayFormStoreCategoryTab($this, $this->smarty, $this->context, $this->_path);
         
 		$smarty_vars = array(
 			'class_general' => version_compare(_PS_VERSION_, '1.5', '>') ? 'uncinq' : 'unquatre',
@@ -1448,11 +1410,13 @@ class Ebay extends Module
 			'orders_history' => $form_ebay_order_history_tab->getContent(),
 			'help' => $help_tab->getContent(),
 			'ebay_listings' => $listings_tab->getContent(),
+            'form_store_category' => $form_store_category_tab->getContent(),
+            
             'id_tab' => Tools::getValue('id_tab')
 		);
 
 		$this->smarty->assign($smarty_vars);
-
+        
 		return $this->display(__FILE__, 'views/templates/hook/formConfig.tpl');	
 	}
 
@@ -1542,94 +1506,16 @@ class Ebay extends Module
 
 	public function _postProcessCategory()
 	{
-		// Insert and update categories
-		if (($percents = Tools::getValue('percent')) && ($ebay_categories = Tools::getValue('category')))
-		{
-				
-			$id_ebay_profile = Tools::getValue('profile') ? Tools::getValue('profile') : $this->ebay_profile->id; 
-			foreach ($percents as $id_category => $percent)
-			{
-				$data = array();
-				$date = date('Y-m-d H:i:s');
-				if ($percent['value'] != '') {
-					$percent_sign_type = explode(':', $percent['sign']);
-					$percentValue = ($percent_sign_type[0] == '-' ? $percent_sign_type[0] : '') . $percent['value'] . ($percent['type'] == 'percent' ? '%' : '');
-				} 
-				else 
-				{
-					$percentValue = null;
-				}
-				if (isset($ebay_categories[$id_category]))
-					$data = array(
-						'id_ebay_profile' => (int)$id_ebay_profile,
-						'id_country' => 8,
-						'id_ebay_category' => (int)$ebay_categories[$id_category],
-						'id_category' => (int)$id_category,
-						'percent' => pSQL($percentValue),
-						'date_upd' => pSQL($date),
-						'sync' => 0
-					);
-					
-
-				if (EbayCategoryConfiguration::getIdByCategoryId($id_ebay_profile, $id_category))
-				{
-					if ($data)
-						EbayCategoryConfiguration::updateByIdProfileAndIdCategory($id_ebay_profile, $id_category, $data);
-					else
-						EbayCategoryConfiguration::deleteByIdCategory($id_ebay_profile, $id_category);
-				}
-				elseif ($data)
-				{
-					$data['date_add'] = $date;
-					EbayCategoryConfiguration::add($data);
-				}
-			}
-
-			// make sur the ItemSpecifics and Condition data are refresh when we load the dedicated config screen the next time
-			$this->ebay_profile->deleteConfigurationByName('EBAY_SPECIFICS_LAST_UPDATE');
-		}
-
-
-		// update extra_images for all products
-		if (($all_nb_extra_images = Tools::getValue('all-extra-images-value', -1)) != -1)
-		{
-			$product_ids = EbayCategoryConfiguration::getAllProductIds($this->ebay_profile->id);
-
-			foreach ($product_ids as $product_id)
-				EbayProductConfiguration::insertOrUpdate($product_id, array(
-					'extra_images' => $all_nb_extra_images ? $all_nb_extra_images : 0,
-                    'id_ebay_profile' => $this->ebay_profile->id
-				));
-		}
-
-		// update products configuration
-		if (is_array(Tools::getValue('showed_products')))
-		{
-			$showed_product_ids = array_keys(Tools::getValue('showed_products'));
-
-			if (Tools::getValue('to_synchronize'))
-				$to_synchronize_product_ids = array_keys(Tools::getValue('to_synchronize'));
-			else
-				$to_synchronize_product_ids = array();
-
-			// TODO remove extra_images
-			$extra_images = Tools::getValue('extra_images');
-
-			foreach ($showed_product_ids as $product_id)
-				EbayProductConfiguration::insertOrUpdate($product_id, array(
-                    'id_ebay_profile' => $this->ebay_profile->id,
-					'blacklisted' => in_array($product_id, $to_synchronize_product_ids) ? 0 : 1,
-					'extra_images' => 0,
-				));
-		}
-
-		if (Tools::getValue('ajax'))
-		{
-			die('{"valid" : true}');
-		}
-
-		$this->html .= $this->displayConfirmation($this->l('Settings updated'));
+        $tab = new EbayFormCategoryTab($this, $this->smarty, $this->context);
+        $this->html .= $tab->postProcess();
 	}
+
+	public function _postProcessStoreCategory()
+	{
+        $tab = new EbayFormStoreCategoryTab($this, $this->smarty, $this->context);
+        $this->html .= $tab->postProcess();
+	}
+
 
 	private function _postProcessSpecifics() 
 	{

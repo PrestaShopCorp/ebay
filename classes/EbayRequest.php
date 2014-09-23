@@ -596,6 +596,25 @@ class EbayRequest
 	/**
 	 * Set order status to "shipped"
 	 *
+	 **/
+	public function getStoreCategories()
+	{
+
+		// Set Api Call
+		$this->apiCall = 'GetStore';
+
+		$response = $this->_makeRequest('GetStore');
+
+		if ($response === false)
+			return false;
+        
+        return $response->Store->CustomCategories->CustomCategory;
+        
+	}    
+    
+	/**
+	 * Set order status to "shipped"
+	 *
 	 **/    
 	public function orderHasShipped($id_order_ref)
 	{
@@ -635,7 +654,6 @@ class EbayRequest
             'tracking_number' => $tracking_number,
             'carrier_name' => $carrier_name,
 		);
-        print_r($vars);
 
 		$response = $this->_makeRequest('CompleteSale', $vars);
 
@@ -798,7 +816,7 @@ class EbayRequest
 		return $headers;
 	}
 
-	private function _makeRequest($api_call, $vars, $shoppingEndPoint = false)
+	private function _makeRequest($api_call, $vars = array(), $shoppingEndPoint = false)
 	{
 		$vars = array_merge($vars, array(
 			'ebay_auth_token' => ($this->ebay_profile ? $this->ebay_profile->getToken() : ''),
