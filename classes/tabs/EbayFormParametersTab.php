@@ -142,6 +142,7 @@ class EbayFormParametersTab extends EbayTab
             'send_tracking_code' => (bool)$this->ebay_profile->getConfiguration('EBAY_SEND_TRACKING_CODE'),
             'order_states' => $order_states,
             'current_order_state' => $current_order_state,
+            'immediate_payment' => (bool)$this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
 		);
 
 		if (Tools::getValue('relogin'))
@@ -198,7 +199,8 @@ class EbayFormParametersTab extends EbayTab
             && in_array((int)Tools::getValue('currency'), $currencies_ids)
             && $this->ebay_profile->setConfiguration('EBAY_CURRENCY', (int)Tools::getValue('currency'))
             && $this->ebay_profile->setConfiguration('EBAY_SEND_TRACKING_CODE', (int)Tools::getValue('send_tracking_code'))
-            && $this->ebay_profile->setConfiguration('EBAY_SHIPPED_ORDER_STATE', (int)Tools::getValue('shipped_order_state'))                
+            && $this->ebay_profile->setConfiguration('EBAY_SHIPPED_ORDER_STATE', (int)Tools::getValue('shipped_order_state'))
+            && $this->ebay_profile->setConfiguration('EBAY_IMMEDIATE_PAYMENT', (int)Tools::getValue('immediate_payment'))                                
 		){
 			if(Tools::getValue('activate_logs') == 0)
 				if(file_exists(dirname(__FILE__).'/../../log/request.txt'))

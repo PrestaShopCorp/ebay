@@ -397,6 +397,7 @@ class EbayRequest
 			'shipping_details' => $this->_getShippingDetails($data),
 			'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
 			'site' => $this->ebay_country->getSiteName(),
+            'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT')
 		);
         
         if ($data['price_original'] > $data['price'])
@@ -433,7 +434,8 @@ class EbayRequest
 			'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
 			'return_policy' => $this->_getReturnPolicy(),
 			'item_specifics' => $data['item_specifics'],
-            'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),           
+            'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
+            'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT')            
 		);
         
         if (isset($data['price_original']) && ($data['price_original'] > $data['price']))
@@ -491,6 +493,7 @@ class EbayRequest
 			'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
 			'site' => $this->ebay_country->getSiteName(),
 			'item_specifics' => $data['item_specifics'],
+            'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT')            
 		);
 
 		// Send the request and get response
@@ -550,6 +553,7 @@ class EbayRequest
 			'site' => $this->ebay_country->getSiteName(),
 			'variations' => $this->_getVariations($data),
 			'item_specifics' => $data['item_specifics'],
+            'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT')            
 		);
 
 		$response = $this->_makeRequest('ReviseFixedPriceItem', $vars);

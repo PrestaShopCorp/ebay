@@ -30,6 +30,9 @@
 		{if isset($sku)}
 			<SKU>{$sku}</SKU>
 		{/if}
+		{if isset($autopay)}
+			<AutoPay>{$autopay}</AutoPay>
+		{/if}        
 		<Title>{$title}</Title>
 		{if count($pictures)}
 			<PictureDetails>

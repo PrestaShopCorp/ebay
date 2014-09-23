@@ -339,6 +339,18 @@
         
  		<div style="clear:both;"></div>
      </fieldset>
+     
+    <fieldset style="margin-top:10px;">
+ 		<legend>{l s='Immediate Payment' mod='ebay'}</legend>
+		<label>
+			{l s='Immediate Payment' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<input type="checkbox" name="immediate_payment" value="1"{if $immediate_payment} checked="checked"{/if}>
+		</div>
+        
+ 		<div style="clear:both;"></div>
+     </fieldset>     
         
 	<div class="margin-form" id="buttonEbayParameters" style="margin-top:5px;">
 		<a href="#categoriesProgression" {if $catLoaded}id="displayFancybox"{/if}>

@@ -31,6 +31,9 @@
 		{if isset($country)}
 			<Country>{$country}</Country>
 		{/if}
+		{if isset($autopay)}
+			<AutoPay>{$autopay}</AutoPay>
+		{/if}        
 		{if isset($country_currency)}
 			<Currency>{$country_currency}</Currency>
 		{/if}
