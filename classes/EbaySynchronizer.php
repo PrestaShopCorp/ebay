@@ -35,7 +35,7 @@ class EbaySynchronizer
 		return $product['id_product'];
 	}
 
-	public static function syncProducts($products, $context, $id_lang, $log_type = false)
+	public static function syncProducts($products, $context, $id_lang, $request_context = null, $log_type = false)
 	{
         if (!$products)
             return;
@@ -75,7 +75,7 @@ class EbaySynchronizer
 
 			$variations = EbaySynchronizer::_loadVariations($product, $ebay_profile, $context, $ebay_category);
             
-            $ebay = new EbayRequest((int)$p['id_ebay_profile']);
+            $ebay = new EbayRequest((int)$p['id_ebay_profile'], $request_context);
 
 			if (!$product->active || ($product_configuration && $product_configuration['blacklisted']))
 			{ // try to stop sale on eBay

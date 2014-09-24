@@ -51,8 +51,10 @@ class EbayRequest
 	private $smarty_data;
 	
 	private $ebay_profile;
+    
+    private $context;
 
-	public function __construct($id_ebay_profile = null)
+	public function __construct($id_ebay_profile = null, $context = null)
 	{
 		/** Backward compatibility */
 		require(dirname(__FILE__).'/../backward_compatibility/backward.php');
@@ -69,6 +71,9 @@ class EbayRequest
             $this->ebay_country = EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'), $this->dev);
         else
             $this->ebay_country = EbayCountrySpec::getInstanceByKey('gb');            
+
+        if ($context)
+            $this->context = $context;
 
 		/**
 		 * Sandbox params
@@ -405,9 +410,11 @@ class EbayRequest
 
 		$response = $this->_makeRequest('AddFixedPriceItem', $vars);
 
+        $this->_logApiCall('addFixedPriceItem', $vars, $response, $data['id_product']);
+
 		if ($response === false)
 			return false;
-
+        
 		return $this->_checkForErrors($response);
 	}
 
@@ -443,6 +450,8 @@ class EbayRequest
 
 		$response = $this->_makeRequest('ReviseFixedPriceItem', $vars);
 
+        $this->_logApiCall('reviseFixedPriceItem', $vars, $response, $data['id_product']);
+
 		if ($response === false)
 			return false;
 
@@ -460,6 +469,8 @@ class EbayRequest
 			$response_vars['sku'] = 'prestashop-'.$id_product;
 
 		$response = $this->_makeRequest('EndFixedPriceItem', $response_vars);
+        
+        $this->_logApiCall('endFixedPriceItem', $response_vars, $response, $id_product);
 
 		if ($response === false)
 			return false;
@@ -498,6 +509,8 @@ class EbayRequest
 
 		// Send the request and get response
 		$response = $this->_makeRequest('AddFixedPriceItem', $vars);
+        
+        $this->_logApiCall('addFixedPriceItemMultiSku', $vars, $response);        
 
 		if ($response === false)
 			return false;
@@ -911,6 +924,25 @@ class EbayRequest
 
 		return empty($this->error);
 	}
+    
+    private function _logApiCall($type, $data_sent, $response, $id_product = null, $id_order = null) {
+        $log = new EbayApiLog();
+        
+        $log->id_ebay_profile = $this->ebay_profile->id;
+        $log->type = $type;
+        $log->context = $this->context;
+
+        $log->data_sent = json_encode($data_sent);
+        $log->response = json_encode($response);
+        
+        if ($id_product)
+            $log->id_product = (int)$id_product;
+
+        if ($id_order)
+            $log->id_order = (int)$id_order;
+        
+        return $log->save();
+    }
 
 	public function getDev() {
 		return $this->dev;

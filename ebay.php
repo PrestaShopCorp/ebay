@@ -55,6 +55,7 @@ $classes_to_load = array(
 	'EbayConfiguration',
 	'EbayProductModified',
 	'EbayLog',
+	'EbayApiLog',
 	'EbayStat',
 	'TotFormat',
 	'EbayValidatorTab',
@@ -73,7 +74,8 @@ $classes_to_load = array(
     'tabs/EbayOrderHistoryTab',
     'tabs/EbayHelpTab',
     'tabs/EbayListingsTab',
-    'tabs/EbayFormStoreCategoryTab'
+    'tabs/EbayFormStoreCategoryTab',
+    'tabs/EbayApiLogsTab'    
 );
 
 foreach ($classes_to_load as $classname)
@@ -507,7 +509,7 @@ class Ebay extends Module
 				foreach($products as $product)
 					EbayProductModified::addProduct($this->ebay_profile->id, $product['id_product']);
 			else
-				EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_country->getIdLang());		    
+				EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_country->getIdLang(), 'hookNewOrder');    
 		}
 	}
 
@@ -546,7 +548,7 @@ class Ebay extends Module
 				foreach($products as $product)
 					EbayProductModified::addProduct($this->ebay_profile->id, $product['id_product']);
 			else
-				EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_country->getIdLang());                
+				EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_country->getIdLang(), 'hookAddProduct');                
 		}
 	}
 
@@ -595,7 +597,7 @@ class Ebay extends Module
 	
 	public function cronProductsSync()
 	{
-		EbaySynchronizer::syncProducts(EbayProductModified::getAll(), Context::getContext(), $this->ebay_country->getIdLang(), 'CRON_PRODUCT');
+		EbaySynchronizer::syncProducts(EbayProductModified::getAll(), Context::getContext(), $this->ebay_country->getIdLang(), 'CRON', 'CRON_PRODUCT');
 		EbayProductModified::truncate();
 	}
 	
@@ -921,7 +923,7 @@ class Ebay extends Module
 				foreach($products as $product)
 					EbayProductModified::addProduct($product['id_ebay_profile'], $product['id_product']);
 			else
-				EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_country->getIdLang());                
+				EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_country->getIdLang(), 'hookUpdateProduct');                
 		}
 
 	}
@@ -1398,6 +1400,7 @@ class Ebay extends Module
         $help_tab = new EbayHelpTab($this, $this->smarty, $this->context);        
         $listings_tab = new EbayListingsTab($this, $this->smarty, $this->context);
         $form_store_category_tab = new EbayFormStoreCategoryTab($this, $this->smarty, $this->context, $this->_path);
+        $api_logs = new EbayApiLogsTab($this, $this->smarty, $this->context, $this->_path);
         
 		$smarty_vars = array(
 			'class_general' => version_compare(_PS_VERSION_, '1.5', '>') ? 'uncinq' : 'unquatre',
@@ -1411,6 +1414,7 @@ class Ebay extends Module
 			'help' => $help_tab->getContent(),
 			'ebay_listings' => $listings_tab->getContent(),
             'form_store_category' => $form_store_category_tab->getContent(),
+            'api_logs' => $api_logs->getContent(),
             
             'id_tab' => Tools::getValue('id_tab')
 		);
@@ -1684,7 +1688,7 @@ class Ebay extends Module
 		if (count($products))
 		{
 			$this->ebay_profile->setConfiguration('EBAY_SYNC_LAST_PRODUCT', (int)$products[0]['id_product']);
-			EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_country->getIdLang());
+			EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_country->getIdLang(), 'SYNC_FROM_MODULE_BACK');
 
 			// we cheat a bit to display a consistent number of products done
 			$nb_products_done = min($nb_products - $nb_products_less + 1, $nb_products);

@@ -43,3 +43,16 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_store_category_configu
 	UNIQUE(`id_ebay_profile`, `ebay_category_id`),
 	PRIMARY KEY  (`id_ebay_store_category_configuration`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+
+$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_api_log` (
+	`id_ebay_api_log` int(16) NOT NULL AUTO_INCREMENT,
+	`id_ebay_profile` int(16) NOT NULL,
+	`type` varchar(40) NOT NULL,
+	`context` varchar(40) NOT NULL,
+	`data_sent` text NOT NULL,
+	`response` text NOT NULL,
+	`id_product` int(16),
+	`id_order` int(16),
+    `date_add` datetime NOT NULL,
+	PRIMARY KEY  (`id_ebay_api_log`)
+) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
