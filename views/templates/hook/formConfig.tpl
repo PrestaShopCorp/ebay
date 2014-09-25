@@ -33,6 +33,7 @@
 	<li id="menuTab9" class="menuTabButton">7. {l s='eBay listings' mod='ebay'}</li>
 	<li id="menuTab10" class="menuTabButton">10. {l s='Store Categories' mod='ebay'}</li>
 	<li id="menuTab11" class="menuTabButton">11. {l s='API Logs' mod='ebay'}</li>
+	<li id="menuTab12" class="menuTabButton">12. {l s='Order Logs' mod='ebay'}</li>
 	<li id="menuTab7" class="menuTabButton">9. {l s='Help' mod='ebay'}</li>
 	<li id="menuTab6" class="menuTabButton">8. {l s='Order history' mod='ebay'}</li>
 </ul>
@@ -46,6 +47,7 @@
 	<div id="menuTab9Sheet" class="tabItem">{$ebay_listings}</div>
 	<div id="menuTab10Sheet" class="tabItem">{$form_store_category}</div>
 	<div id="menuTab11Sheet" class="tabItem">{$api_logs}</div>
+	<div id="menuTab11Sheet" class="tabItem">{$order_logs}</div>
 	<div id="menuTab7Sheet" class="tabItem">{$help}</div>
 	<div id="menuTab6Sheet" class="tabItem">{$orders_history}</div>
 </div>

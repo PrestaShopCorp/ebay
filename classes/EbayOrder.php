@@ -155,7 +155,10 @@ class EbayOrder
 			$customer->firstname = $format->formatName($this->firstname);
 			$customer->active = 1;
 			$customer->id_shop = (int)$ebay_profile->id_shop;
-			$customer->add();
+			$res = $customer->add();
+            
+            $this->_writeLog($ebay_profile->id, 'add_customer', $res);
+            
 			$id_customer = $customer->id;
 		}
 
@@ -193,13 +196,18 @@ class EbayOrder
 		$address->phone = $format->formatPhoneNumber($this->phone);
 		$address->active = 1;
 
-		if ($id_address > 0 && Validate::isLoadedObject($address))
-			$address->update();
+		if ($id_address > 0 && Validate::isLoadedObject($address)) {
+			$res = $address->update();
+            $is_update = true;
+		}
 		else
 		{
-			$address->add();
+			$res = $address->add();
 			$id_address = $address->id;
+            $is_update = false;
 		}
+
+        $this->_writeLog($ebay_profile->id, 'add_address', $res, null, $is_update);
 
 		$this->id_address = $id_address;
 
@@ -304,7 +312,9 @@ class EbayOrder
         $cart->id_currency = $this->id_currency;
 		$cart->recyclable = 0;
 		$cart->gift = 0;
-		$cart->add();
+		$res = $cart->add();
+        
+        $this->_writeLog($ebay_profile->id, 'add_cart', $res, null);
 		
 		$this->carts[$ebay_profile->id_shop] = $cart;
 
@@ -378,7 +388,7 @@ class EbayOrder
 		return (boolean)$cart_nb_products;
 	}
 
-	public function validate($id_shop)
+	public function validate($id_shop, $id_ebay_profile = null)
 	{
 		$customer = new Customer($this->id_customers[$id_shop]);
 		$paiement = new EbayPayment();
@@ -397,6 +407,8 @@ class EbayOrder
 		);
 		
 		$this->id_orders[$id_shop] = $paiement->currentOrder;
+        
+        $this->_writeLog($id_ebay_profile, 'validate_order', true, (string)$paiement);
 
 		// Fix on date
 		Db::getInstance()->autoExecute(_DB_PREFIX_.'orders', array('date_add' => pSQL($this->date_add)), 'UPDATE', '`id_order` = '.(int)$this->id_orders[$id_shop]);
@@ -545,7 +557,7 @@ class EbayOrder
 		return DB::getInstance()->getValue($sql);
 	}
 
-	public function add()
+	public function add($id_ebay_profile = null)
 	{
 		$id_ebay_order = EbayOrder::insert(array(
 			'id_order_ref' => pSQL($this->id_order_ref),
@@ -556,19 +568,20 @@ class EbayOrder
 			foreach ($this->id_orders as $id_shop => $id_order)
 			{
 				if (version_compare(_PS_VERSION_, '1.5', '>'))
-					Db::getInstance()->insert('ebay_order_order', array(
+					$res = Db::getInstance()->insert('ebay_order_order', array(
 						'id_ebay_order' => (int)$id_ebay_order,
 						'id_order'      => (int)$id_order,
 						'id_shop'       => (int)$id_shop
 					));
 				else
-					Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_order_order', array(
+					$res = Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_order_order', array(
 						'id_ebay_order' => (int)$id_ebay_order,
 						'id_order'      => (int)$id_order,
 						'id_shop'       => (int)$id_shop
 					), 'INSERT');
 
 			}
+            $this->_writeLog($id_ebay_profile, 'add_orders', $res);
 		}
 	}
 
@@ -769,6 +782,24 @@ class EbayOrder
 			dirname(__FILE__).'/../views/templates/mails/'
 		);
 	}
+    
+    private function _writeLog($id_ebay_profile, $type, $success, $response = nul, $is_update = false)
+    {
+        $log = new EbayOrderLog();
+        $log->id_ebay_profile = (int)$id_ebay_profile;
+        $log->id_ebay_order = (int)$this->id;
+        $log->id_orders = implode(';', $id_orders);
+        $log->type = (bool)$type;
+        $log->success = (bool)$success;
+        
+        if ($response)
+            $log->response = $response;
+        
+        if ($is_update)
+            $log->date_update = date('Y-m-d H:i:s');
+        
+        $log->save();
+    }
     
     public static function getIdOrderRefByIdOrder($id_order)
     {

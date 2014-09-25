@@ -56,10 +56,10 @@ $classes_to_load = array(
 	'EbayProductModified',
 	'EbayLog',
 	'EbayApiLog',
+	'EbayOrderLog',
 	'EbayStat',
 	'TotFormat',
 	'EbayValidatorTab',
-    
     'totCompatibility',
     'EbayProductTemplate',
     'EbayStoreCategory',
@@ -75,7 +75,8 @@ $classes_to_load = array(
     'tabs/EbayHelpTab',
     'tabs/EbayListingsTab',
     'tabs/EbayFormStoreCategoryTab',
-    'tabs/EbayApiLogsTab'    
+    'tabs/EbayApiLogsTab',
+    'tabs/EbayOrderLogsTab'
 );
 
 foreach ($classes_to_load as $classname)
@@ -766,7 +767,7 @@ class Ebay extends Module
 					$has_disabled_carrier = false;
 
 				// Validate order
-				$id_order = $order->validate($ebay_profile->id_shop);
+				$id_order = $order->validate($ebay_profile->id_shop, $this->ebay_profile->id);
 				// we now disable the carrier if required
 				if ($has_disabled_carrier)
 				{
@@ -779,7 +780,7 @@ class Ebay extends Module
 
 			}
 			
-			$order->add();
+			$order->add($this->ebay_profile->id);
 
 			if (!version_compare(_PS_VERSION_, '1.5', '>'))
 				foreach ($order->getProducts() as $product)
@@ -1401,6 +1402,7 @@ class Ebay extends Module
         $listings_tab = new EbayListingsTab($this, $this->smarty, $this->context);
         $form_store_category_tab = new EbayFormStoreCategoryTab($this, $this->smarty, $this->context, $this->_path);
         $api_logs = new EbayApiLogsTab($this, $this->smarty, $this->context, $this->_path);
+        $order_logs = new EbayOrderLogsTab($this, $this->smarty, $this->context, $this->_path);
         
 		$smarty_vars = array(
 			'class_general' => version_compare(_PS_VERSION_, '1.5', '>') ? 'uncinq' : 'unquatre',
@@ -1415,7 +1417,7 @@ class Ebay extends Module
 			'ebay_listings' => $listings_tab->getContent(),
             'form_store_category' => $form_store_category_tab->getContent(),
             'api_logs' => $api_logs->getContent(),
-            
+            'order_logs' => $order_logs->getContent(),
             'id_tab' => Tools::getValue('id_tab')
 		);
 

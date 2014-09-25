@@ -332,3 +332,16 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_api_log` (
 	PRIMARY KEY  (`id_ebay_api_log`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
+$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_order_log` (
+	`id_ebay_order_log` int(16) NOT NULL AUTO_INCREMENT,
+	`id_ebay_profile` int(16) NOT NULL,
+    `id_ebay_order` int(16) NOT NULL,
+    `id_orders` varchar(255),
+    `type` varchar(40) NOT NULL,
+	`success` tinyint(1) NOT NULL,
+	`data` text,
+    `date_add` datetime NOT NULL,
+    `date_update` datetime,
+	PRIMARY KEY  (`id_ebay_order_log`)
+) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+
