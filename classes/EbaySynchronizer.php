@@ -24,6 +24,8 @@
  *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
+/* Mods by Rob 2014-09-15 ported forwards 2014-09-27*/
+
 
 class EbaySynchronizer
 {
@@ -39,7 +41,7 @@ class EbaySynchronizer
 	{
         if (!$products)
             return;
-        
+
 		$date = date('Y-m-d H:i:s');
 
 		// Get errors back
@@ -55,11 +57,11 @@ class EbaySynchronizer
 
 		if(method_exists('Cache', 'clean'))
 			 Cache::clean('StockAvailable::getQuantityAvailableByProduct_*');
-		
+
 		foreach ($products as $p)
 		{
 			$product = new Product((int)$p['id_product'], true, $id_lang);
-            
+
             $product_configuration = EbayProductConfiguration::getByProductIdAndProfile($p['id_product'], $p['id_ebay_profile']);
 
 			// make sure that product exists in the db and has a default category
@@ -71,10 +73,10 @@ class EbaySynchronizer
             $ebay_profile = new EbayProfile((int)$p['id_ebay_profile']);
 
 			$ebay_category = EbaySynchronizer::_getEbayCategory($product->id_category_default, $ebay_profile);
-			    
+
 
 			$variations = EbaySynchronizer::_loadVariations($product, $ebay_profile, $context, $ebay_category);
-            
+
             $ebay = new EbayRequest((int)$p['id_ebay_profile']);
 
 			if (!$product->active || ($product_configuration && $product_configuration['blacklisted']))
@@ -137,16 +139,22 @@ class EbaySynchronizer
 
 			$data['description'] = EbaySynchronizer::_getEbayDescription($product, $ebay_profile, $id_lang);
 
+			// Rob2014
+			if ($ebay_profile->getConfiguration('EBAY_MUNGE_FOR_FREE_SHIPPING')) {
+				EbaySynchronizer::_mungeForFreeShipping($data);
+			}
+
+
 			// Export to eBay
 			$ebay = EbaySynchronizer::_exportProductToEbay($product, $data, $p['id_ebay_profile'], $ebay_category, $ebay, $date, $context, $id_lang);
 
 			if (!empty($ebay->error)) // Check for errors
             {
-				$tab_error = EbaySynchronizer::_updateTabError($ebay->error, $data['name']);                
+				$tab_error = EbaySynchronizer::_updateTabError($ebay->error, $data['name']);
                 if ($log_type)
                     EbayLog::write('Error: '.$ebay->error, $log_type);
             } elseif ($log_type)
-                EbayLog::write('Success', $log_type);                
+                EbayLog::write('Success', $log_type);
 		}
 
 		if (count($tab_error))
@@ -156,6 +164,62 @@ class EbaySynchronizer
 			file_put_contents(dirname(__FILE__).'/../log/syncError.php', '<?php $all_error = '.var_export($tab_error, true).'; '.($ebay->itemConditionError ? '$itemConditionError = true; ' : '$itemConditionError = false;').' ?>');
 		}
 	}
+
+	/* Rob 2015-09-15
+	   Adjust pricing to create "free" shipping option.
+	   Rob2014 Ported to 1.8.1
+	*/
+	public static function _mungeForFreeShipping(&$data) {
+
+		if (!isset($data['shipping']) || !isset($data['price']))
+			return;
+
+		// find lowest shipping price
+		$lowest = 0;
+		foreach ($data['shipping']['nationalShip'] as $carrier) {
+			if (!$lowest || $carrier['serviceCosts'] < $lowest) {
+				$lowest = $carrier['serviceCosts'];
+			}
+		}
+		foreach ($data['shipping']['internationalShip'] as $carrier) {
+			if (!$lowest || $carrier['serviceCosts'] < $lowest) {
+				$lowest = $carrier['serviceCosts'];
+			}
+		}
+
+		// zero means already is a shipping at zero cost option, or no carriers are defined.
+		if ($lowest == 0 ) {
+			return;
+		}
+
+
+		// add shipping into item price
+		if (count($data['variations']))
+		{
+			foreach ($data['variations'] as &$variation) {
+				$variation['price'] += $lowest;
+			}
+		}
+		// else?
+		$data['price'] += $lowest;
+
+
+		// reduce all shipping prices by the same amount.
+		foreach ($data['shipping']['nationalShip'] as &$carrier) {
+			$carrier['serviceCosts'] -= $lowest;
+			if ($carrier['serviceAdditionalCosts'] > $lowest) {
+				$carrier['serviceAdditionalCosts'] -= $lowest;
+			}
+		}
+		foreach ($data['shipping']['internationalShip'] as &$carrier) {
+			$carrier['serviceCosts'] -= $lowest;
+			if ($carrier['serviceAdditionalCosts'] > $lowest) {
+				$carrier['serviceAdditionalCosts'] -= $lowest;
+			}
+		}
+
+	}
+
 
 	private static function _getProductData($product, $ebay_profile)
 	{
@@ -177,9 +241,9 @@ class EbaySynchronizer
 	 **/
 	private static function _exportProductToEbay($product, $data, $id_ebay_profile, $ebay_category, $ebay, $date, $context, $id_lang)
 	{
-        
+
         $ebay_profile = new EbayProfile($id_ebay_profile);
-        
+
 		if (count($data['variations']))
 		{
 			// the product is multivariation
@@ -511,7 +575,7 @@ class EbaySynchronizer
 			$price += $percent;
 
 		$price = round($price, 2);
-		    
+
 		return array($price, $price_original);
 	}
 
@@ -670,12 +734,14 @@ class EbaySynchronizer
 
 		foreach (EbayShipping::getNationalShippings($ebay_profile->id, $product->id) as $carrier)
 		{
-			$national_ship[$carrier['ebay_carrier']] = array(
-				'servicePriority' => $service_priority,
-				'serviceAdditionalCosts' => $carrier['extra_fee'],
-				'serviceCosts' => EbaySynchronizer::_getShippingPriceForProduct($product, $carrier['id_zone'], $carrier['ps_carrier'])
-			);
-
+			if (($price = EbaySynchronizer::_getShippingPriceForProduct($product, $carrier['id_zone'], $carrier['ps_carrier'])) !== false)	//Rob2014
+			{
+				$national_ship[$carrier['ebay_carrier']] = array(
+					'servicePriority' => $service_priority,
+					'serviceAdditionalCosts' => $carrier['extra_fee'],
+					'serviceCosts' => $price
+				);
+			}
 			$service_priority++;
 		}
 
@@ -684,13 +750,15 @@ class EbaySynchronizer
 
 		foreach (EbayShipping::getInternationalShippings($ebay_profile->id, $product->id) as $carrier)
 		{
-			$international_ship[$carrier['ebay_carrier']] = array(
-				'servicePriority' => $service_priority,
-				'serviceAdditionalCosts' => $carrier['extra_fee'],
-				'serviceCosts' => EbaySynchronizer::_getShippingPriceForProduct($product, $carrier['id_zone'], $carrier['ps_carrier']),
-				'locationsToShip' => EbayShippingInternationalZone::getIdEbayZonesByIdEbayShipping($ebay_profile->id, $carrier['id_ebay_shipping'])
-			);
-
+			if (($price = EbaySynchronizer::_getShippingPriceForProduct($product, $carrier['id_zone'], $carrier['ps_carrier'])) !== false)  	//Rob2014
+			{
+				$international_ship[$carrier['ebay_carrier']] = array(
+					'servicePriority' => $service_priority,
+					'serviceAdditionalCosts' => $carrier['extra_fee'],
+					'serviceCosts' => $price,
+					'locationsToShip' => EbayShippingInternationalZone::getIdEbayZonesByIdEbayShipping($ebay_profile->id, $carrier['id_ebay_shipping'])
+				);
+			}
 			$service_priority++;
 		}
 
@@ -714,7 +782,7 @@ class EbaySynchronizer
 	{
 		$carrier = new Carrier($carrier_id);
 
-		if ($carrier->shipping_method == 0) 
+		if ($carrier->shipping_method == 0)
 		{ // Default
 
 			if (Configuration::get('PS_SHIPPING_METHOD') == 1) // Shipping by weight
@@ -734,8 +802,10 @@ class EbaySynchronizer
 		else
 		{
 			// return 0 if is an other shipping method
-			return 0;
+			return false; //Rob2014
 		}
+		if ($price === false)	//Rob2014
+			return false;
 
 		if ($carrier->shipping_handling) //Add shipping handling fee
 				$price += Configuration::get('PS_SHIPPING_HANDLING');
@@ -754,11 +824,11 @@ class EbaySynchronizer
 				SELECT COUNT( * ) FROM (
 					SELECT COUNT(p.id_product) AS nb
 						FROM  `'._DB_PREFIX_.'product` AS p
-						INNER JOIN  `'._DB_PREFIX_.'stock_available` AS s 
+						INNER JOIN  `'._DB_PREFIX_.'stock_available` AS s
                         ON p.id_product = s.id_product';
             if (version_compare(_PS_VERSION_, '1.5', '>'))
-                $sql .= ' INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps 
-                        ON p.id_product = ps.id_product 
+                $sql .= ' INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
+                        ON p.id_product = ps.id_product
                         AND ps.id_shop = '.(int)$ebay_profile->id_shop;
             $sql .= ' WHERE s.`quantity` > 0
 						AND  p.`id_category_default`
@@ -784,7 +854,7 @@ class EbaySynchronizer
 				FROM `'._DB_PREFIX_.'product` AS p';
             if (version_compare(_PS_VERSION_, '1.5', '>'))
 				$sql .= ' INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
-                ON p.id_product = ps.id_product 
+                ON p.id_product = ps.id_product
                 AND ps.id_shop = '.(int)$ebay_profile->id_shop;
             $sql .= ' WHERE p.`quantity` > 0
 				AND p.`id_category_default` IN (
@@ -792,7 +862,7 @@ class EbaySynchronizer
 					FROM `'._DB_PREFIX_.'ebay_category_configuration`
 					WHERE `id_category` > 0
 					AND `id_ebay_category` > 0
-                    AND `id_ebay_profile` = '.(int)$ebay_profile->id.                    
+                    AND `id_ebay_profile` = '.(int)$ebay_profile->id.
 					($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') != 'A' ? ' AND `sync` = 1' : '').'
 				)
 				AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($ebay_profile->id).')';
@@ -809,11 +879,11 @@ class EbaySynchronizer
 			$sql = '
 				SELECT p.`id_product`, '.(int)$ebay_profile->id.' AS `id_ebay_profile`
 				FROM  `'._DB_PREFIX_.'product` AS p
-                INNER JOIN  `'._DB_PREFIX_.'stock_available` AS s 
+                INNER JOIN  `'._DB_PREFIX_.'stock_available` AS s
                 ON p.id_product = s.id_product';
             if (version_compare(_PS_VERSION_, '1.5', '>'))
                 $sql .= ' INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
-                ON p.id_product = ps.id_product 
+                ON p.id_product = ps.id_product
                 AND ps.id_shop = '.(int)$ebay_profile->id_shop;
             $sql .= ' WHERE s.`quantity` > 0
 				AND  p.`id_category_default`
@@ -838,7 +908,7 @@ class EbaySynchronizer
 				FROM `'._DB_PREFIX_.'product` AS p';
             if (version_compare(_PS_VERSION_, '1.5', '>'))
                 $sql .= ' INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
-                ON p.id_product = ps.id_product 
+                ON p.id_product = ps.id_product
                 AND ps.id_shop = '.(int)$ebay_profile->id_shop;
             $sql .= ' WHERE p.`quantity` > 0
 				AND p.`id_category_default` IN (
@@ -846,7 +916,7 @@ class EbaySynchronizer
 					FROM `'._DB_PREFIX_.'ebay_category_configuration`
 					WHERE `id_category` > 0
 					AND `id_ebay_category` > 0
-					AND `id_ebay_profile` = '.(int)$ebay_profile->id.                    
+					AND `id_ebay_profile` = '.(int)$ebay_profile->id.
 					($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') != 'A' ? ' AND `sync` = 1' : '').'
 				)
 				'.($option == 1 ? EbaySynchronizer::_addSqlCheckProductInexistence('p') : '').'
@@ -866,14 +936,14 @@ class EbaySynchronizer
 				SELECT COUNT(id_supplier) FROM(
 					SELECT id_supplier
 						FROM  `'._DB_PREFIX_.'product` AS p
-                        INNER JOIN  `'._DB_PREFIX_.'stock_available` AS s 
+                        INNER JOIN  `'._DB_PREFIX_.'stock_available` AS s
                         ON p.id_product = s.id_product';
             if (version_compare(_PS_VERSION_, '1.5', '>'))
-                $sql .= ' 
+                $sql .= '
         				INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
-                        ON p.id_product = ps.id_product 
+                        ON p.id_product = ps.id_product
                         AND ps.id_shop = '.(int)$ebay_profile->id_shop;
-            $sql .= '   
+            $sql .= '
 						WHERE s.`quantity` >0
 						AND  p.`active` =1
 						AND  p.`id_category_default`
@@ -897,10 +967,10 @@ class EbaySynchronizer
 			$sql = '
 				SELECT COUNT(`id_product`)
 				FROM `'._DB_PREFIX_.'product` AS p';
-            if (version_compare(_PS_VERSION_, '1.5', '>'))    
+            if (version_compare(_PS_VERSION_, '1.5', '>'))
                 $sql .= '
     				INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
-                    ON p.id_product = ps.id_product 
+                    ON p.id_product = ps.id_product
                     AND ps.id_shop = '.(int)$ebay_profile->id_shop;
             $sql .= '
 				WHERE p.`quantity` > 0
@@ -910,7 +980,7 @@ class EbaySynchronizer
 					FROM `'._DB_PREFIX_.'ebay_category_configuration`
 					WHERE `id_category` > 0
 					AND `id_ebay_category` > 0
-                    AND `id_ebay_profile` = '.(int)$ebay_profile->id.                    
+                    AND `id_ebay_profile` = '.(int)$ebay_profile->id.
 					($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') != 'A' ? ' AND `sync` = 1' : '').'
 				)
 				'.(Tools::getValue('option') == 1 ? EbaySynchronizer::_addSqlCheckProductInexistence('p') : '').'
@@ -1030,7 +1100,7 @@ class EbaySynchronizer
 		if($ebay_category !== false)
 			$sql .= '  AND (ecs.id_category_ref = '.(int)$ebay_category->getIdCategoryRef().' OR ecs.id_category_ref IS NULL)';
 
-	
+
 		$attributes_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql);
 		$variation_specifics_pairs = array();
 
@@ -1069,7 +1139,7 @@ class EbaySynchronizer
 				$covers[] = $image;
 				unset($images[$key]);
 			}
-			
+
 		return array_merge($covers, $images);
 	}
 

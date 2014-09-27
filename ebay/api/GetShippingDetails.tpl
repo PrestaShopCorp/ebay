@@ -24,10 +24,10 @@
 *}
 {foreach from=$excluded_zones item=zone}
 	<ExcludeShipToLocation>{$zone.location}</ExcludeShipToLocation>
-{/foreach} 
+{/foreach}
 
 {foreach from=$national_services key=service_name item=service}
-	{if $service.serviceCosts !== fase}
+	{if $service.serviceCosts !== false}
 		<ShippingServiceOptions>
 			<ShippingServicePriority>{$service.servicePriority}</ShippingServicePriority>
 			<ShippingService>{$service_name}</ShippingService>

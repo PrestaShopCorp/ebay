@@ -32,23 +32,26 @@ class EbayShipping
 	{
 		return Db::getInstance()->getValue('SELECT `ps_carrier`
 			FROM `'._DB_PREFIX_.'ebay_shipping`
-			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.' 
+			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
 			AND `ebay_carrier` = \''.pSQL($ebay_carrier).'\'');
 	}
 
 	public static function getNationalShippings($id_ebay_profile, $id_product = null)
 	{
 		$shippings = Db::getInstance()->ExecuteS('SELECT *
-			FROM '._DB_PREFIX_.'ebay_shipping 
-			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.' 
-			AND international = 0');
+			FROM '._DB_PREFIX_.'ebay_shipping es
+			LEFT JOIN '._DB_PREFIX_.'carrier c ON c.id_carrier = es.ps_carrier
+			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
+			AND international = 0
+			ORDER BY c.position DESC');  //Rob2014 - get carriers descending order so best is processed last.
+										// since mapping multiple ps carriers to single ebay carrier is possible.
 
 		//Check if product can be shipped because of weight or dimension
 		if($id_product)
 		{
 			$exclude = array();
 
-			foreach ($shippings as $key => $value) 
+			foreach ($shippings as $key => $value)
 			{
 				$carrier = new Carrier($value['ps_carrier']);
 				$product = new Product($id_product);
@@ -102,16 +105,19 @@ class EbayShipping
 	public static function getInternationalShippings($id_ebay_profile, $id_product = null)
 	{
 		$shippings = Db::getInstance()->ExecuteS('SELECT *
-			FROM '._DB_PREFIX_.'ebay_shipping 
-			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.' 
-			AND international = 1');
-		
+			FROM '._DB_PREFIX_.'ebay_shipping
+			LEFT JOIN '._DB_PREFIX_.'carrier c ON c.id_carrier = es.ps_carrier
+			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
+			AND international = 1
+			ORDER BY c.position DESC');  //Rob2014 - get carriers descending order so best is processed last.
+										// since mapping multiple ps carriers to single ebay carrier is possible.
+
 		//Check if product can be shipped because of weight or dimension
 		if($id_product)
 		{
 			$exclude = array();
 
-			foreach ($shippings as $key => $value) 
+			foreach ($shippings as $key => $value)
 			{
 				$carrier = new Carrier($value['ps_carrier']);
 				$product = new Product($id_product);
@@ -138,7 +144,7 @@ class EbayShipping
 				unset($shippings[$key_to_exclude]);
 			}
 		}
-		
+
 		if ($id_product && version_compare(_PS_VERSION_, '1.5', '>'))
 		{
 			$shippings_product = Db::getInstance()->ExecuteS('SELECT id_carrier_reference as ps_carrier
@@ -156,7 +162,7 @@ class EbayShipping
 	public static function getNbNationalShippings($id_ebay_profile)
 	{
 		return Db::getInstance()->getValue('SELECT count(*)
-			FROM '._DB_PREFIX_.'ebay_shipping 
+			FROM '._DB_PREFIX_.'ebay_shipping
             WHERE `international` = 0
             AND `id_ebay_profile` = '.(int)$id_ebay_profile);
 	}
@@ -164,7 +170,7 @@ class EbayShipping
 	public static function getNbInternationalShippings($id_ebay_profile)
 	{
 		return Db::getInstance()->getValue('SELECT count(*)
-			FROM '._DB_PREFIX_.'ebay_shipping 
+			FROM '._DB_PREFIX_.'ebay_shipping
             WHERE international = 1
             AND `id_ebay_profile` = '.(int)$id_ebay_profile);
 	}
@@ -172,9 +178,9 @@ class EbayShipping
 	public static function insert($id_ebay_profile, $ebay_carrier, $ps_carrier, $extra_fee, $id_zone, $international = false)
 	{
 		$sql = 'INSERT INTO `'._DB_PREFIX_.'ebay_shipping` (
-            `id_ebay_profile`, 
-            `ebay_carrier`, 
-            `ps_carrier`, 
+            `id_ebay_profile`,
+            `ebay_carrier`,
+            `ps_carrier`,
             `extra_fee`,
             `international`,
             `id_zone`
@@ -184,7 +190,7 @@ class EbayShipping
 			\''.pSQL($ebay_carrier).'\',
 			\''.(int)$ps_carrier.'\',
 			\''.(float)$extra_fee.'\',
-			\''.(int)$international.'\', 
+			\''.(int)$international.'\',
 			\''.(int)$id_zone.'\')';
 
 		DB::getInstance()->Execute($sql);
