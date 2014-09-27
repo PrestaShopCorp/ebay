@@ -1930,6 +1930,9 @@ class Ebay extends Module
 
 		//Update global information about shipping (delivery time, ...)
 		$this->ebay_profile->setConfiguration('EBAY_DELIVERY_TIME', Tools::getValue('deliveryTime'));
+
+		$this->ebay_profile->setConfiguration('EBAY_MUNGE_FOR_FREE_SHIPPING', Tools::getValue('freeShipping'));
+
 		//Update Shipping Method for National Shipping (Delete And Insert)
 		EbayShipping::truncate($this->ebay_profile->id);
 
@@ -1991,6 +1994,7 @@ class Ebay extends Module
 
 		$profile_configs = $this->ebay_profile->getMultiple(array(
 			'EBAY_DELIVERY_TIME',
+			'EBAY_MUNGE_FOR_FREE_SHIPPING',
 			'EBAY_ZONE_NATIONAL',
 			'EBAY_ZONE_INTERNATIONAL',
 		));
@@ -2036,6 +2040,7 @@ class Ebay extends Module
 			'existingNationalCarrier' => EbayShipping::getNationalShippings($this->ebay_profile->id),
 			'existingInternationalCarrier' => $this->_getExistingInternationalCarrier(),
 			'deliveryTime' => $profile_configs['EBAY_DELIVERY_TIME'],
+			'freeShipping' => $profile_configs['EBAY_MUNGE_FOR_FREE_SHIPPING'],
 			'prestashopZone' => Zone::getZones(),
 			'excludeShippingLocation' => $this->_cacheEbayExcludedLocation(),
 			'internationalShippingLocations' => $this->_getInternationalShippingLocations(),
