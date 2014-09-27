@@ -105,7 +105,7 @@ class EbayShipping
 	public static function getInternationalShippings($id_ebay_profile, $id_product = null)
 	{
 		$shippings = Db::getInstance()->ExecuteS('SELECT *
-			FROM '._DB_PREFIX_.'ebay_shipping
+			FROM '._DB_PREFIX_.'ebay_shipping es
 			LEFT JOIN '._DB_PREFIX_.'carrier c ON c.id_carrier = es.ps_carrier
 			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
 			AND international = 1

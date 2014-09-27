@@ -737,7 +737,7 @@ class EbaySynchronizer
 			if (($price = EbaySynchronizer::_getShippingPriceForProduct($product, $carrier['id_zone'], $carrier['ps_carrier'])) !== false)	//Rob2014
 			{
 				$national_ship[$carrier['ebay_carrier']] = array(
-					'servicePriority' => $service_priority,
+					'servicePriority' => $carrier['position'], //$service_priority,
 					'serviceAdditionalCosts' => $carrier['extra_fee'],
 					'serviceCosts' => $price
 				);
@@ -753,7 +753,7 @@ class EbaySynchronizer
 			if (($price = EbaySynchronizer::_getShippingPriceForProduct($product, $carrier['id_zone'], $carrier['ps_carrier'])) !== false)  	//Rob2014
 			{
 				$international_ship[$carrier['ebay_carrier']] = array(
-					'servicePriority' => $service_priority,
+					'servicePriority' => $carrier['position'], //$service_priority,
 					'serviceAdditionalCosts' => $carrier['extra_fee'],
 					'serviceCosts' => $price,
 					'locationsToShip' => EbayShippingInternationalZone::getIdEbayZonesByIdEbayShipping($ebay_profile->id, $carrier['id_ebay_shipping'])

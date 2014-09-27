@@ -388,7 +388,7 @@
 			{foreach from=$internationalCarrier.shippingLocation item=shippingLocation}
 				zone.push('{$shippingLocation.id_ebay_zone|escape:'htmlall'}');
 			{/foreach}
-			addInternationalShippingFee('{$internationalCarrier.ebay_carrier|escape:'htmlall'}', {$internationalCarrier.ps_carrier|escape:'htmlall'}, {$internationalCarrier.extra_fee|escape:'htmlall'}, zone, zoneExcluded);
+			addInternationalShippingFee('{$internationalCarrier.ebay_carrier|escape:'htmlall'}', {0+$internationalCarrier.ps_carrier|escape:'htmlall'}, {0+$internationalCarrier.extra_fee|escape:'htmlall'}, zone, zoneExcluded);
 		{/foreach}
 
 		
@@ -406,7 +406,7 @@
 			{foreach from=$internationalCarrier.shippingLocation item=shippingLocation}
 				zone.push('{$shippingLocation.id_ebay_zone|escape:'htmlall'}');
 			{/foreach}
-			addShipping('internationalShipping', {$internationalCarrier.ps_carrier|escape:'htmlall'}, '{$internationalCarrier.ebay_carrier|escape:'htmlall'}', {$internationalCarrier.extra_fee|escape:'htmlall'}, {$i}, {$internationalCarrier.id_zone|escape:'htmlall'}, zone);
+			addShipping('internationalShipping', {0+$internationalCarrier.ps_carrier|escape:'htmlall'}, '{$internationalCarrier.ebay_carrier|escape:'htmlall'}', {0+$internationalCarrier.extra_fee|escape:'htmlall'}, {$i}, {0+$internationalCarrier.id_zone|escape:'htmlall'}, zone);
 		{foreachelse}
 			addShipping('internationalShipping');
 		{/foreach}
