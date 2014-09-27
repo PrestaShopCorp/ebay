@@ -30,8 +30,12 @@ class EbayApiLogsTab extends EbayTab
 
     function getContent()
     {
+		// Load prestashop ebay's configuration
+		$configs = Configuration::getMultiple(array('EBAY_SECURITY_TOKEN'));        
+        
 		return $this->display('api_logs.tpl', array(
-		    'nb_logs' => EbayApiLog::count()
+		    'nb_logs' => EbayApiLog::count(),
+            'configs' => $configs
 		));
     }
     

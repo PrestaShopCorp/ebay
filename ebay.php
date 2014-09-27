@@ -66,6 +66,7 @@ $classes_to_load = array(
     'EbayStoreCategoryConfiguration',
     'tabs/EbayTab',
     'tabs/EbayFormParametersTab',
+    'tabs/EbayFormAdvancedParametersTab',
     'tabs/EbayFormCategoryTab',
     'tabs/EbayFormItemsSpecificsTab',
     'tabs/EbayFormShippingTab',
@@ -1171,6 +1172,32 @@ class Ebay extends Module
 
         $add_profile_url = $this->_getUrl($url_vars);
         
+        // main tab
+        $id_tab = Tools::getValue('id_tab', 1);
+        if (in_array($id_tab, array(5))) {
+            $main_tab = 'sync';
+        } elseif (in_array($id_tab, array(9, 6, 11, 12))) {
+            $main_tab = 'visu';
+        } elseif (in_array($id_tab, array(13))) {
+            $main_tab = 'advanced-settings';
+        } else {
+            $main_tab = 'settings';            
+        }
+        
+        
+        // check domain
+        if (version_compare(_PS_VERSION_, '1.5', '>')) {
+            
+            $shop = new Shop($this->ebay_profile->id_shop);
+            $wrong_domain = ($_SERVER['HTTP_HOST'] != $shop->domain && $_SERVER['HTTP_HOST'] != $shop->domain_ssl && Tools::getValue('ajax') == false);
+
+        } else
+    		$wrong_domain = ($_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN') && $_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN_SSL'));
+        
+        if ($wrong_domain)
+            $this->displayWarning($this->l('You are currently connected to the Prestashop Back Office using a different URL <a>than set up</a>, this module will not work properly. Please login in using URL_Back_Office'));      
+
+    
 		$this->smarty->assign(array(
 			'img_stats' => ($this->ebay_country ? $this->ebay_country->getImgStats() : ''),
 			'alert' => $alerts,
@@ -1182,13 +1209,14 @@ class Ebay extends Module
 			'documentation_lang' => ($this->ebay_country ? $this->ebay_country->getDocumentationLang() : ''),
 			'is_version_one_dot_five' => version_compare(_PS_VERSION_, '1.5', '>'),
 			'is_version_one_dot_five_dot_one' => (version_compare(_PS_VERSION_, '1.5.1', '>=') && version_compare(_PS_VERSION_, '1.5.2', '<')),
-			'css_file' => $this->_path . 'views/css/ebay_back.css',
-			'tooltip' => $this->_path . 'views/js/jquery.tooltipster.min.js',
-			'tips202' => $this->_path . 'views/js/202tips.js',
-			'noConflicts' => $this->_path . 'views/js/jquery.noConflict.php?version=1.7.2',
-			'ebayjquery' => $this->_path . 'views/js/jquery-1.7.2.min.js',
-			'fancybox' => $this->_path . 'views/js/jquery.fancybox.min.js',
-			'fancyboxCss' => $this->_path . 'views/css/jquery.fancybox.css',
+			'css_file' => $this->_path.'views/css/ebay_back.css',
+            'font_awesome_css_file' => $this->_path.'views/css/font-awesome/css/font-awesome.min.css',
+			'tooltip' => $this->_path.'views/js/jquery.tooltipster.min.js',
+			'tips202' => $this->_path.'views/js/202tips.js',
+			'noConflicts' => $this->_path.'views/js/jquery.noConflict.php?version=1.7.2',
+			'ebayjquery' => $this->_path.'views/js/jquery-1.7.2.min.js',
+			'fancybox' => $this->_path.'views/js/jquery.fancybox.min.js',
+			'fancyboxCss' => $this->_path.'views/css/jquery.fancybox.css',
 			'parametersValidator' => ($this->ebay_profile ? EbayValidatorTab::getParametersTabConfiguration($this->ebay_profile->id) : ''),
 			'categoryValidator' => ($this->ebay_profile ? EbayValidatorTab::getCategoryTabConfiguration($this->ebay_profile->id) : ''),
 			'itemSpecificValidator' => ($this->ebay_profile ? EbayValidatorTab::getitemSpecificsTabConfiguration($this->ebay_profile->id) : ''),
@@ -1202,7 +1230,8 @@ class Ebay extends Module
             'profiles' => $profiles,
             'add_profile' => $add_profile,
             'add_profile_url' => $add_profile_url,
-            'delete_profile_url' => _MODULE_DIR_.'ebay/ajax/deleteProfile.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis'))
+            'delete_profile_url' => _MODULE_DIR_.'ebay/ajax/deleteProfile.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')),
+            'main_tab' => $main_tab
 		));
 		
 		// test if multishop Screen and all shops
@@ -1392,6 +1421,7 @@ class Ebay extends Module
 	private function _displayFormConfig()
 	{
         $form_parameters_tab = new EbayFormParametersTab($this, $this->smarty, $this->context);
+        $form_advanced_parameters_tab = new EbayFormAdvancedParametersTab($this, $this->smarty, $this->context);
         $form_category_tab = new EbayFormCategoryTab($this, $this->smarty, $this->context, $this->_path);
         $form_items_specifics_tab = new EbayFormItemsSpecificsTab($this, $this->smarty, $this->context, $this->_path);
         $form_shipping_tab = new EbayFormShippingTab($this, $this->smarty, $this->context);
@@ -1400,13 +1430,17 @@ class Ebay extends Module
         $form_ebay_order_history_tab = new EbayOrderHistoryTab($this, $this->smarty, $this->context);
         $help_tab = new EbayHelpTab($this, $this->smarty, $this->context);        
         $listings_tab = new EbayListingsTab($this, $this->smarty, $this->context);
-        $form_store_category_tab = new EbayFormStoreCategoryTab($this, $this->smarty, $this->context, $this->_path);
+        
+        if ($has_store_categories = EbayStoreCategory::hasStoreCategories())
+            $form_store_category_tab = new EbayFormStoreCategoryTab($this, $this->smarty, $this->context, $this->_path);
+        
         $api_logs = new EbayApiLogsTab($this, $this->smarty, $this->context, $this->_path);
         $order_logs = new EbayOrderLogsTab($this, $this->smarty, $this->context, $this->_path);
         
 		$smarty_vars = array(
 			'class_general' => version_compare(_PS_VERSION_, '1.5', '>') ? 'uncinq' : 'unquatre',
 			'form_parameters' => $form_parameters_tab->getContent(),
+			'form_advanced_parameters' => $form_advanced_parameters_tab->getContent(),
 			'form_category' => $form_category_tab->getContent(),
 			'form_items_specifics' => $form_items_specifics_tab->getContent(),
 			'form_shipping' => $form_shipping_tab->getContent(),
@@ -1415,7 +1449,10 @@ class Ebay extends Module
 			'orders_history' => $form_ebay_order_history_tab->getContent(),
 			'help' => $help_tab->getContent(),
 			'ebay_listings' => $listings_tab->getContent(),
-            'form_store_category' => $form_store_category_tab->getContent(),
+
+            'has_store_categories' => $has_store_categories,
+            'form_store_category' => $has_store_categories ? $form_store_category_tab->getContent() : null,
+            
             'api_logs' => $api_logs->getContent(),
             'order_logs' => $order_logs->getContent(),
             'id_tab' => Tools::getValue('id_tab')
@@ -1961,6 +1998,14 @@ class Ebay extends Module
 
 		echo $this->display(__FILE__, 'views/templates/hook/ebay_listings_ajax.tpl');
 	}
+    
+    public function displayWarning($msg)
+    {
+        if (method_exists($this, 'adminDisplayWarning'))
+            return $this->adminDisplayWarning($msg);
+        else
+            return $this->context->tab->displayWarning($msg);
+    }
 
 	public function _getAttributeCombinationsById($product, $id_attribute, $id_lang)
 	{

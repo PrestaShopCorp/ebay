@@ -363,19 +363,19 @@ textarea + .tooltip {
 }
 
 
-#menuTab li.success
+.menuTab li.success
 {
 	background : url('../img/success.png') no-repeat 2px 4px #EFEFEF;
 	padding-left: 20px;
 }
 
-#menuTab li.wrong
+.menuTab li.wrong
 {
 	background : url('../img/error.png') no-repeat 2px 4px #EFEFEF;
 	padding-left: 20px;
 }
 
-#menuTab li.mind
+.menuTab li.mind
 {
 	background : url('../img/warning.png') no-repeat 2px 4px #EFEFEF;
 	padding-left: 20px;
@@ -755,3 +755,37 @@ a.ebay-primary {
 .nobootstrap {
   min-width: 0 !important;
 }
+
+#ebay_main_menu {
+  float: right;
+}
+
+#ebay_main_menu li {
+  float: left;
+  padding: 0 5px 0 5px;
+  border: 1px solid black;
+  padding: 5px;
+  margin-left: 10px;
+  border-radius: 5px;
+  font-weight: normal;
+}
+
+.main-menu-a.selected {
+  text-decoration: underline;
+}
+
+/* from formConfig.tpl */
+
+.menuTab { float: left; padding: 0; margin: 0; text-align: left; width: 100% }
+.menuTab li { text-align: left; float: left; display: inline; padding: 5px; padding-right: 10px; background-color: #EFEFEF; font-weight: bold; cursor: pointer; border-left: 1px solid #EFEFEF; border-right: 1px solid #EFEFEF; border-top: 1px solid #EFEFEF; }
+.menuTab li.menuTabButton.selected { background-color: #FFF6D3; border-left: 1px solid #CCCCCC; border-right: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; }
+#tabList { clear: left; }
+.tabItem { display: none; }
+.tabItem.selected { display: block; background-color: #FFFFF0; border: 1px solid #CCCCCC; padding: 10px; padding-top: 20px; }
+.menuTab #menuTab7, .menuTab #menuTab6 { float:left;background-color:#DFDFDF; border-left: 1px solid #CFCFCF; border-right: 1px solid #CFCFCF; border-top: 1px solid #CFCFCF; }
+.menuTab #menuTab7.menuTabButton.selected, .menuTab #menuTab6.menuTabButton.selected { background-color: #FFF6D3; border-left: 1px solid #DFDFDF; border-right: 1px solid #DFDFDF; border-top: 1px solid #DFDFDF; }
+
+.ebay_hidden {
+  display: none;
+}
+

@@ -79,6 +79,19 @@ class EbayStoreCategory extends ObjectModel
         }
         return parent::__construct($id, $id_lang, $id_shop);     
     }
+    
+    /**
+     * return true if there are store categories in the ebay_store_category table
+     * there is always one at list ('Other') so we need to test > 1 to make sure
+     *
+     **/
+    public static function hasStoreCategories()
+    {
+        $nb_categories = Db::getInstance()->getValue('SELECT COUNT(*) FROM `'._DB_PREFIX_.'ebay_store_category`
+            WHERE `order` = 0');
+        return ($nb_categories > 1);
+        
+    }
 	
 	public static function updateStoreCategoryTable($store_categories)
 	{
