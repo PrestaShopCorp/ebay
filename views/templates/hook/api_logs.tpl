@@ -59,6 +59,7 @@
 
 <script type="text/javascript">
 var ebay_token = '{$configs.EBAY_SECURITY_TOKEN|escape:'htmlall'}';
+var load_api_logs = {if $id_tab == 11}true{else}false{/if};
 var ebay_l = {ldelim}
 	'No logs available' : "{l s='No logs available' mod='ebay'}",
     'You are not logged in': "{l s='You are not logged in' mod='ebay'}",

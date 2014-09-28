@@ -74,6 +74,11 @@ $(document).ready(function() {
     
 	});  
   
-  loadApiLogsData(1);
+  $('#menuTab11').click(function() {
+  	loadApiLogsData(1);
+  });
+  
+  if (load_api_logs)
+    loadApiLogsData(1);
     
 });

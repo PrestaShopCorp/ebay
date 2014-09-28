@@ -74,6 +74,11 @@ $(document).ready(function() {
     
 	});  
   
-  loadOrderLogsData(1);
+  $('#menuTab12').click(function() {
+  	loadOrderLogsData(1);
+  });
+  
+  if (load_order_logs)
+    loadOrderLogsData(1);
     
 });
