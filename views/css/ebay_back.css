@@ -758,6 +758,7 @@ a.ebay-primary {
 
 #ebay_main_menu {
   float: right;
+  list-style: none;
 }
 
 #ebay_main_menu li {
