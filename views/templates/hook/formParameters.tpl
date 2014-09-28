@@ -59,7 +59,8 @@
     
 	<fieldset style="margin-top:10px;">
 		<legend>{l s='Account details' mod='ebay'}</legend>
-		<h4>{l s='To list your products on eBay, you need to create' mod='ebay'} <a href="{l s='https://scgi.ebay.co.uk/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2' mod='ebay'}">{l s='a business seller account' mod='ebay'}</a> {l s='and' mod='ebay'} <a href="https://www.paypal.com/">{l s='a PayPal account.' mod='ebay'}</a></h4>
+<<<<<<< HEAD
+		<h4>{l s='To list your products on eBay, you need to create' mod='ebay'} <a href="{l s='https://scgi.ebay.co.uk/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2' mod='ebay'}" target="_blank">{l s='a business seller account' mod='ebay'}</a> {l s='and' mod='ebay'} <a href="https://www.paypal.com/">{l s='a PayPal account.' mod='ebay'}</a></h4>
         
 		<input type="hidden" name="ebay_shop" value="{$ebayShopValue|escape:'htmlall'}" />            
         
@@ -227,7 +228,56 @@
 	</fieldset>
     *}
     
+<<<<<<< HEAD
 
+=======
+	<fieldset style="margin-top:10px;">
+		<legend>{l s='Sync' mod='ebay'}</legend>
+		
+		<label>
+			{l s='Manually Sync Orders' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			
+			<a href="{$url|escape:'urlencode'}&EBAY_SYNC_ORDERS=1">
+				<span class="button">{l s='Sync Orders from eBay' mod='ebay'}</span>
+			</a>
+	        <br>
+		</div>
+		<div class="clear both"></div>
+		<label>
+			{l s='Sync Orders' mod='ebay'}
+		</label>
+        <div class="margin-form">
+			<input type="radio" size="20" name="sync_orders_mode" class="sync_orders_mode" value="save" {if $sync_orders_by_cron == false}checked="checked"{/if}/> {l s='every 30 minutes on page load' mod='ebay'}
+			<input type="radio" size="20" name="sync_orders_mode" class="sync_orders_mode" value="cron" {if $sync_orders_by_cron == true}checked="checked"{/if}/> {l s='by CRON task' mod='ebay'}<br>
+	        <p><a id="sync_orders_by_cron_url" href="{$sync_orders_by_cron_url|escape:'urlencode'}" target="_blank" style="{if $sync_orders_by_cron == false};display:none{/if}">{$sync_orders_by_cron_path|escape:'urlencode'}</a></p>
+        	
+        </div>
+		<label>
+			{l s='Sync Products' mod='ebay'}
+		</label>
+        <div class="margin-form">
+			<input type="radio" size="20" name="sync_products_mode" class="sync_products_mode" value="save" {if $sync_products_by_cron == false}checked="checked"{/if}/> {l s='on save' mod='ebay'}
+			<input type="radio" size="20" name="sync_products_mode" class="sync_products_mode" value="cron" {if $sync_products_by_cron == true}checked="checked"{/if}/> {l s='by CRON task' mod='ebay'}<br>
+	        <p><a id="sync_products_by_cron_url" href="{$sync_products_by_cron_url|escape:'urlencode'}" target="_blank" style="{if $sync_products_by_cron == false};display:none{/if}">{$sync_products_by_cron_path|escape:'urlencode'}</a></p>
+        	
+        </div>
+		<div class="clear both"></div>
+        
+	</fieldset>
+
+   <fieldset style="margin-top:10px;">
+		<legend>{l s='Ebay Data Usage' mod='ebay'}</legend>
+		<label>{l s='Help us improve the eBay Module by sending anonymous usage stats' mod='ebay'} : </label>
+		<div class="margin-form">
+            <input type="radio" name="stats" value="0" {if isset($stats) && !$stats}checked="checked"{/if}> {l s='No thanks' mod='ebay'}&nbsp;&nbsp;
+            <input type="radio" name="stats" value="1" {if !isset($stats) || $stats}checked="checked"{/if}> {l s='I agree' mod='ebay'}<br>
+		</div>
+		<div style="clear:both;"></div>
+    </fieldset>
+        
+>>>>>>> 8b6a7cc517891639a72573ee690e382739410c90
 	<div class="margin-form" id="buttonEbayParameters" style="margin-top:5px;">
 		<a href="#categoriesProgression" {if $catLoaded}id="displayFancybox"{/if}>
 			<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />

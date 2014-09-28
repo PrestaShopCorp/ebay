@@ -166,9 +166,9 @@
                             <br><br>
                             <a href="{$add_profile_url|escape:'urlencode'}"><img src="../img/admin/add.gif">{l s='Add a New Profile' mod='ebay'}</a>
                         {else}
-                            <legend>Status of your eBay Add-on</legend>
-                            <p id="ebay-no-profile">You don't have any profile setup yet!</p>
-                            Your module is up to date
+                            <legend>{l s='Status of your eBay Add-on' mod='ebay'}</legend>
+                            <p id="ebay-no-profile">{l s='You don\'t have any profile setup yet' mod='ebay'}</p>
+                            {l s='Your module is up to date' mod='module'}
                         {/if}
                     {/if}
                 </fieldset>
@@ -182,7 +182,7 @@
                     {if $show_seller_tips}
                         <a id="ebay-seller-tips-link" href>{l s='Show seller tips' mod='ebay'}</a>
                     {/if}
-                    {*<a id="ebay_video_fancybox" href="#">*}<img id="ebay-install-pict" src="{$path|escape:'htmlall'}views/img/install.jpg" />{*</a>*}
+                    {*<a id="ebay_video_fancybox" href="#"><img id="ebay-install-pict" src="{$path|escape:'htmlall'}views/img/install.jpg" /></a>*}
                     <p id="ebay-install-title">{l s='Resources' mod='ebay'}</p>
                     <ul id="ebay-install-ul">
                         <li><a href="http://202-ecommerce.com/d/eBay-doc_{$documentation_lang}.pdf" target="_blank">{l s='Download the add-on installation guide' mod='ebay'}</a></li>
