@@ -231,6 +231,8 @@ class EbaySynchronizer
 			'description_short' => $product->description_short,
 			'manufacturer_name' => $product->manufacturer_name,
 			'ean13' => $product->ean13,
+			'upc' => $product->upc,
+			'mpn' => $product->supplier_reference,
 			'titleTemplate' => $ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE'),
 		);
 	}
@@ -594,7 +596,10 @@ class EbaySynchronizer
 				'{EBAY_IDENTIFIER}',
 				'{EBAY_SHOP}',
 				'{SLOGAN}',
-				'{PRODUCT_NAME}'
+				'{PRODUCT_NAME}',
+			'{BRAND}',
+			'{MPN}'
+
 			),
 			array(
 				$product->description_short,
@@ -603,7 +608,9 @@ class EbaySynchronizer
 				$ebay_profile->ebay_user_identifier,
 				$ebay_profile->getConfiguration('EBAY_SHOP'),
 				'',
-				$product->name
+				$product->name,
+				$product->manufacturer_name,
+				$product->supplier_reference
 			),
 			$ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE')
 		);
@@ -1159,7 +1166,9 @@ class EbaySynchronizer
 				'{EBAY_IDENTIFIER}',
 				'{EBAY_SHOP}',
 				'{SLOGAN}',
-				'{PRODUCT_NAME}'
+				'{PRODUCT_NAME}',
+				'{BRAND}',
+				'{MPN}'
 				),
 			array(
 				(isset($data['large_pictures'][0]) ? '<img src="'.Tools::safeOutput($data['large_pictures'][0]).'" class="bodyMainImageProductPrestashop" />' : ''),
@@ -1174,7 +1183,9 @@ class EbaySynchronizer
 				Configuration::get('EBAY_IDENTIFIER'),
 				Configuration::get('EBAY_SHOP'),
 				Configuration::get('PS_SHOP_NAME'),
-				$data['name']
+				$data['name'],
+				$data['manufacturer_name'],
+				$data['mpn']
 			), $description
 		);
 	}
