@@ -991,7 +991,7 @@ class Ebay extends Module
 	 */
 	public function hookUpdateOrderStatus($params)
 	{
-        print_r($params);
+        $this->hookActionOrderStatusUpdate($params);
 	}
 
 	public function hookActionOrderStatusUpdate($params)
@@ -1009,6 +1009,9 @@ class Ebay extends Module
     private function _orderHasShipped($id_order)
     {
         $id_order_ref = EbayOrder::getIdOrderRefByIdOrder($id_order);
+
+        if (!$id_order_ref)
+            return;
         
 		$ebay_request = new EbayRequest();
         $ebay_request->orderHasShipped($id_order_ref);

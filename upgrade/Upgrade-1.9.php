@@ -39,5 +39,9 @@ function upgrade_module_1_9($module)
     if (!Configuration::get('EBAY_LOGS_DAYS'))
         Configuration::updateValue('EBAY_LOGS_DAYS', 30, false, 0, 0);
     
+	$hook_update_order_status = version_compare(_PS_VERSION_, '1.5', '>') ? 'actionOrderStatusUpdate' : 'updateOrderStatus';
+	if (!$module->registerHook($hook_update_order_status))
+		return false;    
+    
     return true;
 }
