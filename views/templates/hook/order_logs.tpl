@@ -25,7 +25,7 @@
 
 {if $nb_logs > 0}
 	<p id="textStoresPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nb_logs / 20)|round:"0" + 1) mod='ebay'}</p>
-	<ul id="api_logs_pagination">
+	<ul id="order_logs_pagination">
 		<li class="prev"><</li>
 		{for $i=0 to ($nb_logs / 20)|round:"0"}
 			<li{if $i == 0} class="current"{/if}>{$i + 1}</li>
@@ -34,18 +34,18 @@
 	</ul>
 {/if}
 
-<table id="api_logs_table" class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
+<table id="order_logs_table" class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
 		<thead>
 			<tr class="nodrag nodrop">
 				<th>{l s='Id' mod='ebay'}</th>
 				<th>{l s='Profile' mod='ebay'}</th>
+				<th>{l s='eBay Order' mod='ebay'}</th>
+				<th>{l s='PS Orders' mod='ebay'}</th>
 				<th>{l s='Type' mod='ebay'}</th>
-				<th>{l s='Context' mod='ebay'}</th>
-				<th>{l s='Data Sent' mod='ebay'}</th>
-				<th>{l s='Response' mod='ebay'}</th>
-				<th>{l s='Id Product' mod='ebay'}</th>
-				<th>{l s='Id Order' mod='ebay'}</th>
+				<th>{l s='Success' mod='ebay'}</th>
+				<th>{l s='Data' mod='ebay'}</th>
 				<th>{l s='Date' mod='ebay'}</th>
+				<th>{l s='Update' mod='ebay'}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -59,7 +59,7 @@
 
 <script type="text/javascript">
 var ebay_token = '{$configs.EBAY_SECURITY_TOKEN|escape:'htmlall'}';
-var ebay_l = {ldelim}
+var order_logs_ebay_l = {ldelim}
 	'No logs available' : "{l s='No logs available' mod='ebay'}",
     'You are not logged in': "{l s='You are not logged in' mod='ebay'}",
     'show': "{l s='show'}"

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * 2007-2014 PrestaShop
  *
@@ -24,20 +25,26 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-function upgrade_module_1_9($module)
+class EbayOrdersSyncTab extends EbayTab
 {
-    include(dirname(__FILE__).'/sql/sql-upgrade-1-9.php');
 
-    if (!empty($sql) && is_array($sql))
-        foreach ($sql as $request)
-            if (!Db::getInstance()->execute($request))
-                return false;
+    function getContent()
+    {
+        
+		$url_vars = array(
+			'id_tab' => '14',
+			'section' => 'parameters'
+		);
+
+		if (version_compare(_PS_VERSION_, '1.5', '>'))
+			$url_vars['controller'] = Tools::getValue('controller');
+		else
+			$url_vars['tab'] = Tools::getValue('tab');
+
+		$url = $this->_getUrl($url_vars);        
+        
+		return $this->display('orders_sync.tpl', array('url' => $url));
+    }
     
-    if (!Configuration::get('EBAY_ORDERS_DAYS_BACKWARD'))
-        Configuration::updateValue('EBAY_ORDERS_DAYS_BACKWARD', 30, false, 0, 0);
-    
-    if (!Configuration::get('EBAY_LOGS_DAYS'))
-        Configuration::updateValue('EBAY_LOGS_DAYS', 30, false, 0, 0);
-    
-    return true;
 }
+

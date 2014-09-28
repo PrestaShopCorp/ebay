@@ -83,20 +83,30 @@ class EbayStoreCategory extends ObjectModel
     /**
      * return true if there are store categories in the ebay_store_category table
      * there is always one at list ('Other') so we need to test > 1 to make sure
+     * we also need to take categories with no child categories only
      *
      **/
     public static function hasStoreCategories()
     {
-        $nb_categories = Db::getInstance()->getValue('SELECT COUNT(*) FROM `'._DB_PREFIX_.'ebay_store_category`
-            WHERE `order` = 0');
-        return ($nb_categories > 1);
+        $store_categories = Db::getInstance()->executeS('SELECT * 
+            FROM `'._DB_PREFIX_.'ebay_store_category`');
+        
+        $store_categories = self::_filterCategories($store_categories);
+        
+        return (count($store_categories) > 1);
         
     }
 	
 	public static function updateStoreCategoryTable($store_categories)
 	{
+        // clean table before inserts
+		Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_store_category`');
+        
         foreach ($store_categories as $custom_cat)
             EbayStoreCategory::_writeStoreCategory($custom_cat);
+        
+        // make sure that all referenced categories still exists
+        EbayStoreCategoryConfiguration::checkExistingCategories();
 
 		Configuration::updateValue('EBAY_STORE_CATEGORY_UPDATE', 1, false, 0, 0);
 	}  
@@ -121,13 +131,45 @@ class EbayStoreCategory extends ObjectModel
     
     public static function getCategoriesWithConfiguration($id_ebay_profile)
     {
-        $query = 'SELECT esc.`ebay_category_id`, esc.`name`, escc.`id_category`, esc.`ebay_parent_category_id`
+        $categories = Db::getInstance()->executeS('SELECT esc.`ebay_category_id`, esc.`name`, escc.`id_category`, esc.`ebay_parent_category_id`
             FROM `'._DB_PREFIX_.'ebay_store_category` esc
             LEFT JOIN `'._DB_PREFIX_.'ebay_store_category_configuration` escc
             ON esc.`ebay_category_id` = escc.`ebay_category_id`
             AND escc.`id_ebay_profile` = '.(int)$id_ebay_profile.'
-            ORDER BY `ebay_parent_category_id` ASC, `order` ASC';
-        return Db::getInstance()->executeS($query);        
+            ORDER BY `ebay_parent_category_id` ASC, `order` ASC');
+            
+        $categories = self::_filterCategories($categories);
+        
+        return $categories;
     }
+    
+    /*
+     *
+     * don't keep subcategories and categories with subcategories
+     *
+     **/
+    private static function _filterCategories($store_categories)
+    {
+        $blacklist_ids = array();        
+        foreach ($store_categories as $cat) {
+        
+            if ($cat['ebay_parent_category_id']) {
+                $blacklist_ids[] = $cat['ebay_parent_category_id'];
+                $blacklist_ids[] = $cat['ebay_category_id'];
+            }
+        
+        }
+    
+        $final_categories = array();
+        foreach ($store_categories as $cat) {
+            if (!in_array($cat['ebay_category_id'], $blacklist_ids))
+                $final_categories[] = $cat;
+        }
+        
+        return $final_categories;
+
+    }
+    
+
     
 }

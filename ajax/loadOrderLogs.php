@@ -46,7 +46,7 @@ $smarty =  Context::getContext()->smarty;
 
 /* Smarty datas */
 $template_vars = array(
-    'logs' => EbayApiLog::get($offset, $nb_results),
+    'logs' => EbayOrderLog::get($offset, $nb_results),
 	'p' => $page,
 	'noLogFound' => Tools::getValue('no_logs_str'),
     'showStr' =>  Tools::getValue('show_str'),

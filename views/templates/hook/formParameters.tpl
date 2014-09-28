@@ -237,35 +237,6 @@
 
 	<div id="ebayreturnshide" style="display:none;">{$ebayReturns|escape:'htmlall':'UTF-8'}</div>
 
-	{literal}
-		<script>
-			$(document).ready(function() {
-				setTimeout(function(){					
-					$('#ebay_returns_description').val($('#ebayreturnshide').html());
-				}, 1000);
-			});
-			
-			$('#token-btn').click(function() {
-					window.open(module_dir + 'ebay/pages/getSession.php?token={/literal}{$ebay_token|escape:'urlencode'}{literal}');			
-			});
-            
-            $('.sync_products_mode').change(function() {
-                if ($(this).val() == 'cron') {
-                    $('#sync_products_by_cron_url').show();
-                } else {
-                    $('#sync_products_by_cron_url').hide();
-                }
-            });
-
-            $('.sync_orders_mode').change(function() {
-                if ($(this).val() == 'cron') {
-                    $('#sync_orders_by_cron_url').show();
-                } else {
-                    $('#sync_orders_by_cron_url').hide();
-                }
-            });
-		</script>
-	{/literal}
 </form>
 
 {if $catLoaded}

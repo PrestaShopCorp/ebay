@@ -33,58 +33,6 @@ class EbayFormStoreCategoryTab extends EbayTab
 
 		$configs = Configuration::getMultiple(array('EBAY_CATEGORY_LOADED_'.$this->ebay_profile->ebay_site_id, 'EBAY_SECURITY_TOKEN'));
         
-        /*
-		$is_one_dot_five = version_compare(_PS_VERSION_, '1.5', '>');
-
-		// Load prestashop ebay's configuration
-
-
-		// Check if the module is configured
-		if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))
-			return $this->display('error_paypal_email.tpl', array('error_form_category', 'true'));
-
-		// Load categories only if necessary
-		if (EbayCategoryConfiguration::getTotalCategoryConfigurations($this->ebay_profile->id) && Tools::getValue('section') != 'category')
-		{
-			$template_vars = array(
-				'isOneDotFive' => $is_one_dot_five,
-				'controller' => Tools::getValue('controller'),
-				'tab' => Tools::getValue('tab'),
-				'configure' => Tools::getValue('configure'),
-				'token' => Tools::getValue('token'),
-				'tab_module' => Tools::getValue('tab_module'),
-				'module_name' => Tools::getValue('module_name'),
-				'form_categories' => EbaySynchronizer::getNbSynchronizableEbayCategorie($this->ebay_profile->id)
-			);
-
-			return $this->display('pre_form_categories.tpl', $template_vars);
-		}
-
-		// Display eBay Categories
-        $ebay_site_id = $this->ebay_profile->ebay_site_id;
-		if (!isset($configs['EBAY_CATEGORY_LOADED_'.$ebay_site_id]) || !$configs['EBAY_CATEGORY_LOADED_'.$ebay_site_id] || !EbayCategory::areCategoryLoaded($ebay_site_id))
-		{
-			$ebay_request = new EbayRequest();
-			EbayCategory::insertCategories($ebay_site_id, $ebay_request->getCategories(), $ebay_request->getCategoriesSkuCompliancy());
-			$this->setConfiguration('EBAY_CATEGORY_LOADED_'.$ebay_site_id, 1);
-			$this->setConfiguration('EBAY_CATEGORY_LOADED_'.$ebay_site_id.'_DATE', date('Y-m-d H:i:s')); // THIS LINE MIGHT BE REMOVED
-		}
-		
-		// Smarty
-		$template_vars = array(
-			'alerts' => $this->_getAlertCategories(),
-			'tabHelp' => '&id_tab=7',
-			'id_lang' => $this->context->cookie->id_lang,
-			'id_ebay_profile' => $this->ebay_profile->id,
-			'_module_dir_' => _MODULE_DIR_,
-			'isOneDotFive' => $is_one_dot_five,
-			'request_uri' => $_SERVER['REQUEST_URI'],
-
-			'date' => pSQL(date('Ymdhis')),
-			'nb_categorie' => count(Category::getCategories($this->context->cookie->id_lang, true, false))
-		);
-        */
-        
         $template_vars = array(
 			'configs' => $configs,            
 			'_path' => $this->path,            
@@ -95,7 +43,9 @@ class EbayFormStoreCategoryTab extends EbayTab
 			'module_name' => Tools::getValue('module_name'),
 			'tab' => Tools::getValue('tab'),            
 //            'form_store_categories' => $categories,
-			'nb_categorie' => count(Category::getCategories($this->context->cookie->id_lang, true, false))
+			'nb_categorie' => count(Category::getCategories($this->context->cookie->id_lang, true, false)),
+            'has_store_categories' => EbayStoreCategory::hasStoreCategories(),
+            'ebay_store_url' => EbayCountrySpec::getProUrlBySiteId($this->ebay_profile->ebay_site_id)
         );
 
 		return $this->display('form_store_categories.tpl', $template_vars);

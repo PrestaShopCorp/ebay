@@ -53,11 +53,14 @@ class EbayOrder
 
 	private $error_messages = array();
 
+    private $write_logs;    
+
 	/* PS variables */
 	private $id_customers;
 	private $id_address;
 	private $id_orders;
 	private $carts;
+    
 
 	public function __construct(SimpleXMLElement $order_xml = null)
 	{
@@ -105,6 +108,8 @@ class EbayOrder
 
 		if ($order_xml->TransactionArray->Transaction)
 			$this->product_list = $this->_getProductsFromTransactions($order_xml->TransactionArray->Transaction);
+        
+        $this->write_logs = (bool)Configuration::get('EBAY_ACTIVATE_LOGS');
 	}
 
 	public function isCompleted()
@@ -785,6 +790,9 @@ class EbayOrder
     
     private function _writeLog($id_ebay_profile, $type, $success, $response = nul, $is_update = false)
     {
+        if (!$this->write_logs)
+            return;
+        
         $log = new EbayOrderLog();
         $log->id_ebay_profile = (int)$id_ebay_profile;
         $log->id_ebay_order = (int)$this->id;

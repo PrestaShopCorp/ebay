@@ -85,5 +85,25 @@ class EbayFormTemplateManagerTab extends EbayTab
 		
 		return $this->display('formTemplateManager.tpl', $smarty_vars);
     }
+    
+    
+    function postProcess()
+    {
+		$ebay_product_template = Tools::getValue('ebay_product_template');
+		$ebay_product_template_title = Tools::getValue('ebay_product_template_title');
+		if (empty($ebay_product_template_title))
+			$ebay_product_template_title = '{TITLE}';
+
+		// work around for the tinyMCE bug deleting the css line
+		$css_line = '<link rel="stylesheet" type="text/css" href="'.$this->_getModuleUrl().'views/css/ebay.css" />';
+		$ebay_product_template = $css_line.$ebay_product_template;
+
+			// Saving new configurations
+		if ($this->ebay_profile->setConfiguration('EBAY_PRODUCT_TEMPLATE', $ebay_product_template, true) && $this->ebay_profile->setConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE', $ebay_product_template_title))
+			return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));
+		else
+			return $this->ebay->displayError($this->ebay->l('Settings failed'));    
+    
+    }
       
 }

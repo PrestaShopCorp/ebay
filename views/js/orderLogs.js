@@ -23,24 +23,23 @@
 *	International Registered Trademark & Property of PrestaShop SA
 */
 
-function loadData(page)
+function loadOrderLogsData(page)
 {
 	$.ajax({
-		url: module_dir + "ebay/ajax/loadOrderLogs.php?token=" + ebay_token + "&p=" + page + "&no_logs_str=" + ebay_l['No logs available'] + "&not_logged_str=" + ebay_l['You are not logged in'] + '&show_str=' + ebay_l['show'],
+		url: module_dir + "ebay/ajax/loadOrderLogs.php?token=" + ebay_token + "&p=" + page + "&no_logs_str=" + order_logs_ebay_l['No logs available'] + "&not_logged_str=" + order_logs_ebay_l['You are not logged in'] + '&show_str=' + order_logs_ebay_l['show'],
 		success : function(data) {
-      
-			$("#api_logs_table tbody #removeRow").remove();
-      $("#api_logs_table tbody").html(data);
+			$("#order_logs_table tbody #removeRow").remove();
+      $("#order_logs_table tbody").html(data);
 		}
 	});
 }
 
 $(document).ready(function() {
   
-	$("#api_logs_pagination").children('li').click(function() {
+	$("#order_logs_pagination").children('li').click(function() {
     
 		var p = $(this).html();
-		var li = $("#api_logs_pagination").children('li.current');
+		var li = $("#order_logs_pagination").children('li.current');
     
 		if ($(this).attr('class') == 'prev')
 		{
@@ -65,16 +64,16 @@ $(document).ready(function() {
       
 		}
     
-		$("#api_logs_pagination").children('li').removeClass('current');
+		$("#order_logs_pagination").children('li').removeClass('current');
 
 		$(this).addClass('current');
     
 		$("#textStoresPagination").children('span').html(p);
     
-    loadData(p);
+    loadOrderLogsData(p);
     
 	});  
   
-  loadData(1);
+  loadOrderLogsData(1);
     
 });

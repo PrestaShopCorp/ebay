@@ -83,10 +83,18 @@
     
 	<fieldset style="margin-top:10px;">
         
-		<legend>{l s='Others' mod='ebay'}</legend>
+		<legend>{l s='Logs' mod='ebay'}</legend>
+        
+		<label>
+			{l s='API Logs' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<input type="checkbox" name="api_logs" value="1"{if $api_logs} checked="checked"{/if}>
+		</div>        
+        
 		{if !$is_writable && $activate_logs}<p class="warning">{l s='The log file is not writable' mod='ebay'}</p>{/if}
 		<label>
-			{l s='Activate Logs' mod='ebay'}
+			{l s='Applicative Logs' mod='ebay'}
 		</label>
 		<div class="margin-form">
 			<input type="checkbox" name="activate_logs" value="1"{if $activate_logs} checked="checked"{/if}>
@@ -103,6 +111,11 @@
 			<div class="clear both"></div>
 		{/if}
         
+		<label>{l s='Logs Conservation Duration' mod='ebay'} : </label>
+		<div class="margin-form">
+            <input type="text" name="logs_conservation_duration" value="{$logs_conservation_duration|escape:'htmlall'}">
+		</div>        
+        
 	</fieldset>
     
     
@@ -110,16 +123,6 @@
         
 		<legend>{l s='Sync' mod='ebay'}</legend>
 		
-		<label>
-			{l s='Manually Sync Orders' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			
-			<a href="{$url|escape:'urlencode'}&EBAY_SYNC_ORDERS=1">
-				<input type="button" class="button" value="{l s='Sync Orders from eBay' mod='ebay'}" />
-			</a>
-	        <br>
-		</div>
 		<label>
 			{l s='Sync Orders' mod='ebay'}
 		</label>
@@ -139,8 +142,20 @@
         	
         </div>
 		<div class="clear both"></div>
-        
+
 	</fieldset>   
+    
+    
+   <fieldset style="margin-top:10px;">
+       
+		<legend>{l s='Orders Collection Duration' mod='ebay'}</legend>
+		<label>{l s='Since when fetch orders (in days, change if you receive more than 100 orders per fortnight)' mod='ebay'} : </label>
+		<div class="margin-form">
+            <input type="text" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall'}">
+		</div>
+		<div style="clear:both;"></div>
+        
+    </fieldset>
     
     
    <fieldset style="margin-top:10px;">
@@ -153,7 +168,43 @@
 		</div>
 		<div style="clear:both;"></div>
         
-    </fieldset>     
+    </fieldset>
     
+	<div class="margin-form" id="buttonEbayParameters" style="margin-top:5px;">
+		<a href="#categoriesProgression">
+			<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />
+			<input class="primary button" type="submit" id="save_ebay_advanced_parameters" value="{l s='Save and continue' mod='ebay'}" />
+		</a>
+	</div>        
+    
+	{literal}
+		<script>
+			$(document).ready(function() {
+				setTimeout(function(){					
+					$('#ebay_returns_description').val($('#ebayreturnshide').html());
+				}, 1000);
+			});
+			
+			$('#token-btn').click(function() {
+					window.open(module_dir + 'ebay/pages/getSession.php?token={/literal}{$ebay_token|escape:'urlencode'}{literal}');			
+			});
+            
+            $('.sync_products_mode').change(function() {
+                if ($(this).val() == 'cron') {
+                    $('#sync_products_by_cron_url').show();
+                } else {
+                    $('#sync_products_by_cron_url').hide();
+                }
+            });
+
+            $('.sync_orders_mode').change(function() {
+                if ($(this).val() == 'cron') {
+                    $('#sync_orders_by_cron_url').show();
+                } else {
+                    $('#sync_orders_by_cron_url').hide();
+                }
+            });
+		</script>
+	{/literal}    
     
 </form>

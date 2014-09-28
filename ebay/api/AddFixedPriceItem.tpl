@@ -87,6 +87,13 @@
                 <SoldOffeBay>true</SoldOffeBay>
             </DiscountPriceInfo>
         {/if}
+        
+        {if isset($ebay_store_category_id)}
+            <Storefront>
+                  <StoreCategoryID>{$ebay_store_category_id}</StoreCategoryID>
+                  <!--<StoreCategoryName> string </StoreCategoryName>-->
+            </Storefront>
+        {/if}
 
 	</Item>
 	<RequesterCredentials>

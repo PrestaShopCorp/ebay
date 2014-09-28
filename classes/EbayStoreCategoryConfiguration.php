@@ -42,4 +42,21 @@ class EbayStoreCategoryConfiguration
         
         Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_store_category_configuration', $data, 'INSERT');
     }
+    
+    public static function getEbayStoreCategoryIdByIdProfileAndIdCategory($id_ebay_profile, $id_category)
+    {
+        return Db::getInstance()->getValue('SELECT `ebay_category_id`
+            FROM `'._DB_PREFIX_.'ebay_store_category_configuration`
+            WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
+            AND `id_category` = '.(int)$id_category);
+    }
+    
+    public static function checkExistingCategories()
+    {
+        return Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_store_category_configuration`
+            WHERE `ebay_category_id` NOT IN (
+                SELECT `ebay_category_id` 
+                FROM `'._DB_PREFIX_.'ebay_store_category`)');
+    }
+    
 }

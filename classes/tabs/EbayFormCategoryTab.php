@@ -188,43 +188,17 @@ class EbayFormCategoryTab extends EbayTab
 	private function _getAlertCategories()
 	{
 		$alert = '';
-		$cat_with_problem = array();
-
-		$sql_get_cat_non_multi_sku = 'SELECT * FROM '._DB_PREFIX_.'ebay_category_configuration AS ecc
-			INNER JOIN '._DB_PREFIX_.'ebay_category AS ec ON ecc.id_ebay_category = ec.id_ebay_category
-			WHERE ecc.id_ebay_profile = '.(int)$this->ebay_profile->id;
-
-		foreach (Db::getInstance()->ExecuteS($sql_get_cat_non_multi_sku) as $cat)
-		{
-			if ($cat['is_multi_sku'] != 1 && EbayCategory::getInheritedIsMultiSku($cat['id_category_ref'], $this->ebay_profile->ebay_site_id) != 1)
-			{
-				$catProblem = 0;
-				$category = new Category($cat['id_category']);
-                $ebay_country = EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'));
-				$products = $category->getProductsWs($ebay_country->getIdLang(), 0, 300);
-
-				foreach ($products as $product_ar)
-				{
-					$product = new Product($product_ar['id']);
-					$combinations = version_compare(_PS_VERSION_, '1.5', '>') ? $product->getAttributeCombinations($this->context->cookie->id_lang) : $product->getAttributeCombinaisons($this->context->cookie->id_lang);
-
-					if (count($combinations) > 0 && !$catProblem)
-					{
-						$cat_with_problem[] = $cat['name'];
-						$catProblem = 1;
-					}
-				}
-			}
-		}
+        
+        $cat_with_problem = EbayCategoryConfiguration::getMultiVarToNonMultiSku($this->ebay_profile, $this->context);
 
 		$var = implode(', ', $cat_with_problem);
 
 		if (count($cat_with_problem) > 0)
 		{
-			if (count($cat_with_problem == 1)) // RAPH: pb here in the test. Potential typo
-				$alert = '<b>'.$this->ebay->l('You have chosen eBay category : ').' "'.$var.'" '.$this->ebay->l(' which does not support multivariation products. Each variation of a product will generate a new product in eBay').'</b>';
+			if (count($cat_with_problem) == 1)
+				$alert = $this->ebay->l('You have chosen eBay category : ').' "'.$var.'" '.$this->ebay->l(' which does not support multivariation products. Each variation of a product will generate a new product in eBay');
 			else
-				$alert = '<b>'.$this->ebay->l('You have chosen eBay categories : ').' "'.$var.'"" '.$this->ebay->l(' which do not support multivariation products. Each variation of a product will generate a new product in eBay').'</b>';
+				$alert = $this->ebay->l('You have chosen eBay categories : ').' "'.$var.'"" '.$this->ebay->l(' which do not support multivariation products. Each variation of a product will generate a new product in eBay');
 		}
 
 		return $alert;

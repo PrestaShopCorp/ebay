@@ -96,6 +96,9 @@ class EbaySynchronizer
 			// Load basic price
 			list($price, $price_original) = EbaySynchronizer::_getPrices($product->id, $ebay_category->getPercent());
 			$conditions = $ebay_category->getConditionsValues($p['id_ebay_profile']);
+            
+            $ebay_store_category_id = (int)EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory($ebay_profile->id, $product->id_category_default);
+            
 
 			// Generate array and try insert in database
 			$data = array(
@@ -110,6 +113,7 @@ class EbaySynchronizer
 					'shipping' => EbaySynchronizer::_getShippingDetailsForProduct($product, $ebay_profile),
 					'id_lang' => $id_lang,
 					'real_id_product' => (int)$p['id_product'],
+                    'ebay_store_category_id' => $ebay_store_category_id
 			);
 
 			$data = array_merge($data, EbaySynchronizer::_getProductData($product, $ebay_profile));
@@ -133,7 +137,8 @@ class EbaySynchronizer
 			{
 				$data['price_original'] = round($price_original, 2);
 				$data['price_percent'] = round($clean_percent);
-			}
+			} elseif ($price_original > $price)
+                $data['price_original'] = round($price_original, 2);			    
 
 			$data['description'] = EbaySynchronizer::_getEbayDescription($product, $ebay_profile, $id_lang);
 
@@ -435,7 +440,8 @@ class EbaySynchronizer
 			{
 				$variation['price_original'] = round($price_original, 2);
 				$variation['price_percent'] = round($ebay_category->getPercent());
-			}
+			} else if ($price_original > $price)
+                $variation['price_original'] = round($price_original, 2);                
 
 			$variation_key = $combinaison['id_product'].'-'.$combinaison['id_product_attribute'].'_'.$ebay_profile->id;
 			$variations[$variation_key] = $variation;

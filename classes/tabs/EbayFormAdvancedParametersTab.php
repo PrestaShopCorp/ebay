@@ -33,8 +33,8 @@ class EbayFormAdvancedParametersTab extends EbayTab
         
         // make url
 		$url_vars = array(
-			'id_tab' => '1',
-			'section' => 'parameters'
+			'id_tab' => '13',
+			'section' => 'advanced_parameters'
 		);
 		if (version_compare(_PS_VERSION_, '1.5', '>'))
 			$url_vars['controller'] = Tools::getValue('controller');
@@ -54,9 +54,11 @@ class EbayFormAdvancedParametersTab extends EbayTab
             'picture_per_listing' => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING'),
             
             // logs
+            'api_logs' => Configuration::get('EBAY_API_LOGS'),
 			'activate_logs' => Configuration::get('EBAY_ACTIVATE_LOGS'),
 			'is_writable' => is_writable(_PS_MODULE_DIR_.'ebay/log/request.txt'),
 			'log_file_exists' => file_exists(_PS_MODULE_DIR_.'ebay/log/request.txt'),
+            'logs_conservation_duration' => Configuration::get('EBAY_LOGS_DAYS'),            
             
             // CRON sync
 			'sync_products_by_cron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON'),
@@ -65,6 +67,9 @@ class EbayFormAdvancedParametersTab extends EbayTab
 			'sync_orders_by_cron' => Configuration::get('EBAY_SYNC_ORDERS_BY_CRON'),
 			'sync_orders_by_cron_url' => $this->_getModuleUrl().'synchronizeOrders_CRON.php',
 			'sync_orders_by_cron_path' => dirname(__FILE__).'/synchronizeOrders_CRON.php',
+            
+            // number of days to collect the oders for backward
+            'orders_days_backward' => Configuration::get('EBAY_ORDERS_DAYS_BACKWARD'),
             
             // send stats to eBay
             'stats' => Configuration::get('EBAY_SEND_STATS')
@@ -76,7 +81,28 @@ class EbayFormAdvancedParametersTab extends EbayTab
     
     function postProcess()
     {
-
+		// Saving new configurations
+		$picture_per_listing = (int)Tools::getValue('picture_per_listing');
+		if ($picture_per_listing < 0)
+			$picture_per_listing = 0;
+        
+        if ($this->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_DEFAULT', (int)Tools::getValue('sizedefault'))
+			&& $this->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_SMALL', (int)Tools::getValue('sizesmall'))
+			&& $this->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_BIG', (int)Tools::getValue('sizebig'))
+            && $this->ebay_profile->setConfiguration('EBAY_PICTURE_PER_LISTING', $picture_per_listing)
+    		&& $this->ebay->setConfiguration('EBAY_API_LOGS', Tools::getValue('api_logs') ? 1 : 0)
+    		&& $this->ebay->setConfiguration('EBAY_ACTIVATE_LOGS', Tools::getValue('activate_logs') ? 1 : 0)
+    		&& Configuration::updateValue('EBAY_SEND_STATS', Tools::getValue('stats') ? 1 : 0, false, 0, 0)
+    		&& Configuration::updateValue('EBAY_ORDERS_DAYS_BACKWARD', (int)Tools::getValue('orders_days_backward'), false, 0, 0)
+    		&& Configuration::updateValue('EBAY_LOGS_DAYS', (int)Tools::getValue('logs_conservation_duration'), false, 0, 0)
+                
+        ) {
+			if(Tools::getValue('activate_logs') == 0)
+				if(file_exists(dirname(__FILE__).'/../../log/request.txt'))
+					unlink(dirname(__FILE__).'/../../log/request.txt');
+			return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));                        
+        } else
+			return $this->ebay->displayError($this->ebay->l('Settings failed'));            
     }
     
 }

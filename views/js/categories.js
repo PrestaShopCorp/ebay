@@ -26,7 +26,7 @@
 function loadCategoryMatch(id_category) {
 	$.ajax({
 		async: false,
-		url: module_dir + 'ebay/ajax/loadCategoryMatch.php?token=' + ebay_token + '&id_category=' + id_category + '&time=' + module_time + '&ch_cat_str=' + ebay_l['no category selected'] + "&profile=" + id_ebay_profile,
+		url: module_dir + 'ebay/ajax/loadCategoryMatch.php?token=' + ebay_token + '&id_category=' + id_category + '&time=' + module_time + '&ch_cat_str=' + categories_ebay_l['no category selected'] + "&profile=" + id_ebay_profile,
 		success: function(data) { $("#categoryPath" + id_category).html(); }
 	});
 }
@@ -40,7 +40,7 @@ function changeCategoryMatch(level, id_category) {
 	if (level > 4) levelParams += "&level5=" + $("#categoryLevel5-" + id_category).val();
 
 	$.ajax({
-		url: module_dir + 'ebay/ajax/changeCategoryMatch.php?token=' + ebay_token + '&id_category=' + id_category + '&time=' + module_time + '&level=' + level + levelParams + '&ch_cat_str=' + ebay_l['no category selected'] + '&profile=' + id_ebay_profile,
+		url: module_dir + 'ebay/ajax/changeCategoryMatch.php?token=' + ebay_token + '&id_category=' + id_category + '&time=' + module_time + '&level=' + level + levelParams + '&ch_cat_str=' + categories_ebay_l['no category selected'] + '&profile=' + id_ebay_profile,
 		success: function(data) { $("#categoryPath" + id_category).html(data); }
 	});
 }
@@ -56,13 +56,13 @@ function showProducts(id_category) {
 		$('.product-row[category=' + id_category +']').hide();
 		elem.attr('showing', 0);
 		elem.html('&#9654;');
-		elem_string.html(ebay_l['Unselect products']);
+		elem_string.html(categories_ebay_l['Unselect products']);
 	} 
 	else 
 	{
 		elem.attr('showing', 1);
 		elem.html('&#9660;');
-		elem_string.html(ebay_l['Unselect products clicked']);
+		elem_string.html(categories_ebay_l['Unselect products clicked']);
 
 		if (loadedCategories[id_category])
 			$('.product-row[category=' + id_category +']').show();
@@ -143,7 +143,7 @@ $(document).ready(function() {
 				if (data.valid)
 				{
 					$.ajax({
-						url: module_dir + "ebay/ajax/loadTableCategories.php?token=" + ebay_token + "&p=" + p + "&profile=" + id_ebay_profile + "&id_lang=" + id_lang + "&ch_cat_str=" + ebay_l["no category selected"] + "&ch_no_cat_str=" + ebay_l["no category found"] + "&not_logged_str=" + ebay_l["You are not logged in"] + "&unselect_product=" + ebay_l["Unselect products"]  ,
+						url: module_dir + "ebay/ajax/loadTableCategories.php?token=" + ebay_token + "&p=" + p + "&profile=" + id_ebay_profile + "&id_lang=" + id_lang + "&ch_cat_str=" + categories_ebay_l["no category selected"] + "&ch_no_cat_str=" + categories_ebay_l["no category found"] + "&not_logged_str=" + categories_ebay_l["You are not logged in"] + "&unselect_product=" + categories_ebay_l["Unselect products"]  ,
 						success : function(data) {
 							$("form#configForm2 table tbody #removeRow").remove(); $("form#configForm2 table tbody").html(data);
 						}
@@ -154,15 +154,15 @@ $(document).ready(function() {
 	})  
   
 	$.ajax({
-		url: module_dir + "ebay/ajax/loadTableCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&ch_cat_str=' + ebay_l['no category selected'] + '&ch_no_cat_str=' + ebay_l['no category found'] + '&not_logged_str=' + ebay_l['You are not logged in'] + '&unselect_product=' + ebay_l['Unselect products'],
+		url: module_dir + "ebay/ajax/loadTableCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&ch_cat_str=' + categories_ebay_l['no category selected'] + '&ch_no_cat_str=' + categories_ebay_l['no category found'] + '&not_logged_str=' + categories_ebay_l['You are not logged in'] + '&unselect_product=' + categories_ebay_l['Unselect products'],
 		success : function(data) { $("form#configForm2 table tbody #removeRow").remove(); $("form#configForm2 table tbody").html(data); }
 	});
 	
 	$("#configForm2SuggestedCategories input[type=submit]").click(function(){
-		$('<div class="center"><img src="' + module_path + 'views/img/loading-small.gif" alt="" />' + ebay_l['thank you for waiting'] + '</div>').insertAfter($(this));
+		$('<div class="center"><img src="' + module_path + 'views/img/loading-small.gif" alt="" />' + categories_ebay_l['thank you for waiting'] + '</div>').insertAfter($(this));
 		$(this).fadeOut();
 		$.ajax({
-			url: module_dir + "ebay/ajax/suggestCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&not_logged_str=' + ebay_l['You are not logged in'] + '&settings_updated_str=' + ebay_l['Settings updated'],
+			url: module_dir + "ebay/ajax/suggestCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&not_logged_str=' + categories_ebay_l['You are not logged in'] + '&settings_updated_str=' + categories_ebay_l['Settings updated'],
 			success : function(data) { window.location.href = window.location.href + "&conf=6"; }
 		});
 		return false;

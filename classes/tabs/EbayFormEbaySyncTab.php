@@ -31,8 +31,9 @@ class EbayFormEbaySyncTab extends EbayTab
     function getContent()
     {
 		// Check if the module is configured
-		if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))			
+		if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))
 			return '<p class="error"><b>'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab').'</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
+        
 		if (!EbayCategoryConfiguration::getTotalCategoryConfigurations($this->ebay_profile->id))
 			return '<p class="error"><b>'.$this->ebay->l('Please configure the \'Category settings\' tab before using this tab').'</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
 
@@ -174,6 +175,7 @@ class EbayFormEbaySyncTab extends EbayTab
 		$sync_products_url = _MODULE_DIR_.'ebay/ajax/eBaySyncProduct.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&option=\'+option+\'&profile='.$this->ebay_profile->id.'&time='.pSQL(date('Ymdhis'));
 
 		$smarty_vars = array(
+            'category_alerts' => $this->_getAlertCategories(),
 			'path' => $this->path,
 			'nb_products' => $nb_products ? $nb_products : 0,
 			'nb_products_mode_a' => $nb_products_mode_a ? $nb_products_mode_a : 0,
@@ -193,6 +195,61 @@ class EbayFormEbaySyncTab extends EbayTab
 		return $this->display('formEbaySync.tpl', $smarty_vars);
         
     }
+    
+    function postProcess()
+    {
+        
+		// Update Sync Option
+		$this->ebay_profile->setConfiguration('EBAY_SYNC_OPTION_RESYNC', (Tools::getValue('ebay_sync_option_resync') == 1 ? 1 : 0));
+
+		// Empty error result
+		$this->ebay_profile->setConfiguration('EBAY_SYNC_LAST_PRODUCT', 0);
+
+		if (file_exists(dirname(__FILE__).'/../../log/syncError.php'))
+			@unlink(dirname(__FILE__).'/../../log/syncError.php');
+
+		$this->setConfiguration('EBAY_SYNC_MODE', Tools::getValue('ebay_sync_mode'));
+
+		if (Tools::getValue('ebay_sync_products_mode') == 'A')
+			$this->ebay_profile->setConfiguration('EBAY_SYNC_PRODUCTS_MODE', 'A');
+		else
+		{
+			$this->ebay_profile->setConfiguration('EBAY_SYNC_PRODUCTS_MODE', 'B');
+
+			// Select the sync Categories and Retrieve product list for eBay (which have matched and sync categories)
+			if (Tools::getValue('category'))
+			{
+				EbayCategoryConfiguration::updateByIdProfile($this->ebay_profile->id, array('sync' => 0));
+				foreach (Tools::getValue('category') as $id_category)
+					EbayCategoryConfiguration::updateByIdProfileAndIdCategory((int)$this->ebay_profile->id, $id_category, array('id_ebay_profile' => $this->ebay_profile->id, 'sync' => 1));
+			}
+		}
+        
+    }
+    
+	/*
+     *
+     * Get alert to see if some multi variation product on PrestaShop were added to a non multi sku categorie on ebay
+     *
+     */
+	private function _getAlertCategories()
+	{
+		$alert = '';
+        
+        $cat_with_problem = EbayCategoryConfiguration::getMultiVarToNonMultiSku($this->ebay_profile, $this->context);
+
+		$var = implode(', ', $cat_with_problem);
+
+		if (count($cat_with_problem) > 0)
+		{
+			if (count($cat_with_problem) == 1)
+				$alert = $this->ebay->l('You have chosen eBay category : ').' "'.$var.'" '.$this->ebay->l(' which does not support multivariation products. Each variation of a product will generate a new product in eBay');
+			else
+				$alert = $this->ebay->l('You have chosen eBay categories : ').' "'.$var.'"" '.$this->ebay->l(' which do not support multivariation products. Each variation of a product will generate a new product in eBay');
+		}
+
+		return $alert;
+	}    
     
 }
 

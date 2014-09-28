@@ -110,15 +110,11 @@ class EbayOrderLog extends ObjectModel
             FROM `'._DB_PREFIX_.'ebay_order_log`');
     }    
 	
-    /*
-	public static function write($text, $type)
-	{
-        $ebay_log = new EbayLog();
-        $ebay_log->text = $text;
-        $ebay_log->type = $type;
+    public static function cleanOlderThan($nb_days)
+    {
+        $date = date('Y-m-d\TH:i:s', strtotime('-1 day'));
         
-        return $ebay_log->save();
-	}
-    */
-
+		Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_order_log`
+			WHERE `date_add` < \''.pSQL($date).'\'');
+    }
 }

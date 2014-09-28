@@ -31,9 +31,7 @@
     
 	<li id="menuTab8" class="menuTabButton {$itemSpecificValidator.indicator|escape:'htmlall'}">3. {l s='Item specifics' mod='ebay'}</li>
     
-    {if $has_store_categories}
-        <li id="menuTab10" class="menuTabButton">4. {l s='Store Categories' mod='ebay'}</li>
-    {/if}
+    <li id="menuTab10" class="menuTabButton">4. {l s='Store Categories' mod='ebay'}</li>
     
 	<li id="menuTab3" class="menuTabButton {$shippingValidator.indicator|escape:'htmlall'}">5. {l s='Dispatch and Shipping' mod='ebay'}</li>
     
@@ -45,6 +43,8 @@
 <ul id="sync-menu" class="menuTab ebay_hidden">
     
 	<li id="menuTab5" class="menuTabButton ">1. {l s='List products' mod='ebay'}</li>
+	
+    <li id="menuTab14" class="menuTabButton ">2. {l s='Orders Synchronization' mod='ebay'}</li>
 
 </ul>
 
@@ -66,13 +66,6 @@
     <li id="menuTab13" class="menuTabButton">1. {l s='Advanced Settings' mod='ebay'}</li>    
 </ul>
 
-<!--
-
-	<li id="menuTab7" class="menuTabButton">9. {l s='Help' mod='ebay'}</li>
-</ul>
--->
-
-
 <div id="tabList" class="{$class_general|escape:'htmlall'}">
 	<div id="menuTab1Sheet" class="tabItem selected">{if isset($parametersValidator.message)}<div class="ebay_{$parametersValidator.indicatorBig|escape:'htmlall'} big">{$parametersValidator.message|escape:'htmlall'}</div>{/if}{$form_parameters}</div>
 	<div id="menuTab13Sheet" class="tabItem selected">{if isset($parametersValidator.message)}<div class="ebay_{$parametersValidator.indicatorBig|escape:'htmlall'} big">{$parametersValidator.message|escape:'htmlall'}</div>{/if}{$form_advanced_parameters}</div>
@@ -82,16 +75,15 @@
 	<div id="menuTab4Sheet" class="tabItem">{if isset($templateValidator.message)}<div class="ebay_{$templateValidator.indicatorBig|escape:'htmlall'} big">{$templateValidator.message|escape:'htmlall'}</div>{/if}{$form_template_manager}</div>
 	<div id="menuTab5Sheet" class="tabItem">{if isset($listingValidator.message)}<div class="ebay_{$listingValidator.indicatorBig|escape:'htmlall'} big">{$listingValidator.message|escape:'htmlall'}</div>{/if}{$form_ebay_sync}</div>
 	<div id="menuTab9Sheet" class="tabItem">{$ebay_listings}</div>
-    {if $has_store_categories}
-        <div id="menuTab10Sheet" class="tabItem">{$form_store_category}</div>
-    {/if}
+    <div id="menuTab10Sheet" class="tabItem">{$form_store_category}</div>
 	<div id="menuTab11Sheet" class="tabItem">{$api_logs}</div>
-	<div id="menuTab11Sheet" class="tabItem">{$order_logs}</div>
-	<div id="menuTab7Sheet" class="tabItem">{$help}</div>
+	<div id="menuTab12Sheet" class="tabItem">{$order_logs}</div>
 	<div id="menuTab6Sheet" class="tabItem">{$orders_history}</div>
+	<div id="menuTab14Sheet" class="tabItem">{$orders_sync}</div>
 </div>
 <br clear="left" />
 <br />
+{*
 <script>
 	{literal}
 	$(".menuTabButton").click(function () {
@@ -110,6 +102,7 @@
 		$("#menuTab{$id_tab|escape:'htmlall'}Sheet").addClass("selected");
 	</script>
 {/if}
+*}
 
 
 <div id="helpertexts" style="display:none;">

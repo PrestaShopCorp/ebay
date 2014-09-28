@@ -59,6 +59,39 @@ class EbayFormItemsSpecificsTab extends EbayTab
 		return $this->display('formItemsSpecifics.tpl', $template_vars);
     }
     
+    function postProcess()
+    {
+		// Save specifics
+		if(Tools::getValue('specific'))
+		{
+			foreach (Tools::getValue('specific') as $specific_id => $data)
+			{
+				if ($data)
+					list($data_type, $value) = explode('-', $data);
+				else
+					$data_type = null;
+
+				$field_names = EbayCategorySpecific::getPrefixToFieldNames();
+				$data = array_combine(array_values($field_names), array(null, null, null, null));
+
+				if ($data_type)
+					$data[$field_names[$data_type]] = pSQL($value);
+
+				if (version_compare(_PS_VERSION_, '1.5', '>'))
+					Db::getInstance()->update('ebay_category_specific', $data, 'id_ebay_category_specific = '.(int)$specific_id);
+				else
+					Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_category_specific', $data, 'UPDATE', 'id_ebay_category_specific = '.(int)$specific_id);
+			}
+		}
+
+		// save conditions
+		foreach (Tools::getValue('condition') as $category_id => $condition)
+			foreach ($condition as $type => $condition_ref)
+				EbayCategoryConditionConfiguration::replace(array('id_ebay_profile' => $this->ebay_profile->id, 'id_condition_ref' => $condition_ref, 'id_category_ref' => $category_id, 'condition_type' => $type));
+
+		return $this->ebay->displayConfirmation($this->l('Settings updated'));       
+    }    
+    
 	/*
 	 * Method to call the translation tool properly on every version to translate the PrestaShop conditions
 	 *

@@ -171,11 +171,7 @@ class EbayFormParametersTab extends EbayTab
     
     function postProcess()
     {
-		// Saving new configurations
-		$picture_per_listing = (int)Tools::getValue('picture_per_listing');
-		if ($picture_per_listing < 0)
-			$picture_per_listing = 0;
-        
+
         // we retrieve the potential currencies to make sure the selected currency exists in this shop
         $currencies = TotCompatibility::getCurrenciesByIdShop($this->ebay_profile->id_shop);
         $currencies_ids = array_map(function($a) { return $a['id_currency']; }, $currencies);
@@ -185,9 +181,6 @@ class EbayFormParametersTab extends EbayTab
 			&& $this->ebay_profile->setConfiguration('EBAY_SHOP_POSTALCODE', pSQL(Tools::getValue('ebay_shop_postalcode')))
 			&& $this->ebay_profile->setConfiguration('EBAY_SHOP_COUNTRY', pSQL(Tools::getValue('ebay_shop_country')))
 			&& $this->ebay_profile->setConfiguration('EBAY_LISTING_DURATION', Tools::getValue('listingdurations'))
-			&& $this->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_DEFAULT', (int)Tools::getValue('sizedefault'))
-			&& $this->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_SMALL', (int)Tools::getValue('sizesmall'))
-			&& $this->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_BIG', (int)Tools::getValue('sizebig'))
 			&& $this->ebay_profile->setConfiguration('EBAY_AUTOMATICALLY_RELIST', Tools::getValue('automaticallyrelist'))
 			&& $this->ebay_profile->setReturnsPolicyConfiguration(
 				pSQL(Tools::getValue('returnswithin')),
@@ -197,20 +190,14 @@ class EbayFormParametersTab extends EbayTab
 			)
 			&& Configuration::updateValue('EBAY_SYNC_PRODUCTS_BY_CRON', ('cron' === Tools::getValue('sync_products_mode')))
 			&& Configuration::updateValue('EBAY_SYNC_ORDERS_BY_CRON', ('cron' === Tools::getValue('sync_orders_mode')))
-			&& Configuration::updateValue('EBAY_SEND_STATS', Tools::getValue('stats') ? 1 : 0, false, 0, 0)
 //			&& $this->ebay_profile->setConfiguration('EBAY_IDENTIFIER', pSQL(Tools::getValue('ebay_identifier')))
-			&& $this->ebay->setConfiguration('EBAY_ACTIVATE_LOGS', Tools::getValue('activate_logs') ? 1 : 0)
 			&& $this->ebay->setConfiguration('EBAY_ACTIVATE_MAILS', Tools::getValue('activate_mails') ? 1 : 0)
-			&& $this->ebay_profile->setConfiguration('EBAY_PICTURE_PER_LISTING', $picture_per_listing)
             && in_array((int)Tools::getValue('currency'), $currencies_ids)
             && $this->ebay_profile->setConfiguration('EBAY_CURRENCY', (int)Tools::getValue('currency'))
             && $this->ebay_profile->setConfiguration('EBAY_SEND_TRACKING_CODE', (int)Tools::getValue('send_tracking_code'))
             && $this->ebay_profile->setConfiguration('EBAY_SHIPPED_ORDER_STATE', (int)Tools::getValue('shipped_order_state'))
             && $this->ebay_profile->setConfiguration('EBAY_IMMEDIATE_PAYMENT', (int)Tools::getValue('immediate_payment'))                                
 		){
-			if(Tools::getValue('activate_logs') == 0)
-				if(file_exists(dirname(__FILE__).'/../../log/request.txt'))
-					unlink(dirname(__FILE__).'/../../log/request.txt');
 			return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));
 		}
 		else

@@ -68,26 +68,6 @@ $category_list = array_slice($category_list, $limit, $offset);
 
 $ebay_store_category_list = EbayStoreCategory::getCategoriesWithConfiguration($ebay_profile->id);
 
-$final_categories = array();
-foreach ($ebay_store_category_list as $cat) {
-    
-    if ($cat['ebay_parent_category_id']) {
-        
-        $parent_key = 'c'.$cat['ebay_parent_category_id'];
-        
-        $level = $final_categories[$parent_key]['level'] + 1;
-        $cat['level'] = $level;
-        $cat['name'] = str_pad($cat['name'], strlen($cat['name'])+$level, '- ', STR_PAD_LEFT);
-        
-        $final_categories = array_insert_after($parent_key, $final_categories, 'c'.$cat['ebay_category_id'], $cat);
-    } else {
-        
-        $cat['level'] = 0;
-        $final_categories['c'.$cat['ebay_category_id']] = $cat;        
-
-    }
-}
-
 $smarty =  Context::getContext()->smarty;
 
 /* Smarty datas */
@@ -95,7 +75,7 @@ $template_vars = array(
 	'tabHelp' => '&id_tab=7',
 	'_path' => $ebay->getPath(),
 	'categoryList' => $category_list,
-	'eBayStoreCategoryList' => $final_categories,
+	'eBayStoreCategoryList' => $ebay_store_category_list,
 	'request_uri' => $_SERVER['REQUEST_URI'],
 	'noCatSelected' => Tools::getValue('ch_cat_str'),
 	'noCatFound' => Tools::getValue('ch_no_cat_str'),

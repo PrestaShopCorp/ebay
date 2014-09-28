@@ -53,6 +53,8 @@ class EbayRequest
 	private $ebay_profile;
     
     private $context;
+    
+    private $write_api_logs;
 
 	public function __construct($id_ebay_profile = null, $context = null)
 	{
@@ -99,6 +101,8 @@ class EbayRequest
 			$this->runame = 'Prestashop-Prestash-70a5-4-pepwa';
 			$this->loginURL = $this->ebay_country->getSiteSignin();
 		}
+        
+        $this->write_api_logs = Configuration::get('EBAY_API_LOGS');
 
 	}
 
@@ -402,11 +406,14 @@ class EbayRequest
 			'shipping_details' => $this->_getShippingDetails($data),
 			'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
 			'site' => $this->ebay_country->getSiteName(),
-            'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT')
+            'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
 		);
         
-        if ($data['price_original'] > $data['price'])
+        if (isset($data['price_original']) && ($data['price_original'] > $data['price']))
             $vars['price_original'] = $data['price_original'];
+        
+        if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id'])
+            $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
 
 		$response = $this->_makeRequest('AddFixedPriceItem', $vars);
 
@@ -506,6 +513,9 @@ class EbayRequest
 			'item_specifics' => $data['item_specifics'],
             'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT')            
 		);
+        
+        if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id'])
+            $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];        
 
 		// Send the request and get response
 		$response = $this->_makeRequest('AddFixedPriceItem', $vars);
@@ -568,6 +578,9 @@ class EbayRequest
 			'item_specifics' => $data['item_specifics'],
             'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT')            
 		);
+        
+        if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id'])
+            $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];        
 
 		$response = $this->_makeRequest('ReviseFixedPriceItem', $vars);
 
@@ -926,6 +939,10 @@ class EbayRequest
 	}
     
     private function _logApiCall($type, $data_sent, $response, $id_product = null, $id_order = null) {
+        
+        if (!$this->write_api_logs)
+            return;
+        
         $log = new EbayApiLog();
         
         $log->id_ebay_profile = $this->ebay_profile->id;

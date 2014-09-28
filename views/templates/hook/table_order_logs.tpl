@@ -33,15 +33,15 @@
 
 	{foreach from=$logs key=k  item=log}
 		<tr{if $k % 2 !== 0} class="alt_row"{/if}>
-			<td>{$log['id_ebay_api_log']|escape:'htmlall'}</td>
+			<td>{$log['id_ebay_order_log']|escape:'htmlall'}</td>
 			<td>{$log['id_ebay_profile']|escape:'htmlall'}</td>
+			<td>{$log['id_ebay_order']|escape:'htmlall'}</td>
+			<td>{$log['id_orders']|escape:'htmlall'}</td>
 			<td>{$log['type']|escape:'htmlall'}</td>
-			<td>{$log['context']|escape:'htmlall'}</td>
-			<td><a class="show_link" href data-content="{$log['data_sent']|escape:'htmlall'}">{$showStr}</a></td>
-			<td><a class="show_link" href data-content="{$log['response']|escape:'htmlall'}">{$showStr}</a></td>
-			<td>{if $log['id_product']}{$log['id_product']|escape:'htmlall'}{/if}</td>
-			<td>{if $log['id_order']}{$log['id_order']|escape:'htmlall'}{/if}</td>
+			<td>{if $log['success']}true{else}false{/if}</td>
+			<td><a class="show_link" href data-content="{$log['data']|escape:'htmlall'}">{$showStr}</a></td>
 			<td>{$log['date_add']|escape:'htmlall'}</td>
+			<td>{$log['date_update']|escape:'htmlall'}</td>            
 		</tr>
 	{/foreach}
     

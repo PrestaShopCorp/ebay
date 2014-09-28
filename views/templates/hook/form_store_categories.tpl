@@ -29,19 +29,25 @@
 		{$alerts|escape:'htmlall'}
 	</div>
 	{/if}
-	<p>
-		<b>{l s='Select a category' mod='ebay'}</b>
-		<br />
-		{l s='To list your products on eBay, you need to map your Prestashop category with an eBay category.' mod='ebay'} <br />
-		{l s='The button below will automatically map your categories with eBay categories. We recommend you check that you’re happy with the category chosen and amend if necessary.' mod='ebay'}
-	</p>
+    
+    {if $has_store_categories}
+    	<p>
+    		<b>{l s='Select a category' mod='ebay'}</b>
+    		<br />
+    		{l s='To list your products on eBay, please map your Prestashop categories with your eBay shop categories.' mod='ebay'} <br />
+    		{l s='This mapping has no effect on “Categories and pricing” tab.' mod='ebay'}
+            <br />
+            {l s='If you do not map any category below, products will all appear in an “Other” category in your eBay shop.' mod='ebay'}   
+    	</p>
+    {else}
+    	<p
+    		<b>{l s='Your eBay account has no eBay shop registered.' mod='ebay'} </b>
+            
+    		<a href="{$ebay_store_url}" target="_blank">{l s='An eBay shop subscription isn\’t required but you may benefit. Find out if an eBay Shop is right for you.' mod='ebay'}</a>
+    	</p>    
+    {/if}
+    
 
-	<!---------------------------->
-	<p>
-		<b>{l s='List on eBay' mod='ebay'}</b>
-		<br />
-		{l s='Choose which of your items you want to list on eBay by ticking the box.' mod='ebay'}
-	</p>
 </div>
 <br />
 
@@ -56,7 +62,7 @@
 	</ul>
 {/if}
 
-<form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall'}{else}tab={$tab|escape:'htmlall'}{/if}&configure={$configure|escape:'htmlall'}&token={$token|escape:'htmlall'}&tab_module={$tab_module|escape:'htmlall'}&module_name={$module_name|escape:'htmlall'}&id_tab=2&section=store_category" method="post" class="form" id="configFormStoreCategories"><table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
+<form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall'}{else}tab={$tab|escape:'htmlall'}{/if}&configure={$configure|escape:'htmlall'}&token={$token|escape:'htmlall'}&tab_module={$tab_module|escape:'htmlall'}&module_name={$module_name|escape:'htmlall'}&id_tab=10&section=store_category" method="post" class="form" id="configFormStoreCategories"><table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
 		<thead>
 			<tr class="nodrag nodrop">
 				<th style="width:110px;">
@@ -79,16 +85,7 @@
 		<input class="primary button" name="submitSave" type="submit" value="{l s='Save and continue' mod='ebay'}" />
 	</div>
 </form>
-{*
-<br>
-<div style="display:none" class="warning big tips">{l s='TIP. You can improve your conversion by XYZ...' mod='ebay'}</div>
-<p><b>{l s='Warning: Only default product categories are used for the configuration' mod='ebay'}</b></p><br />
 
-<p align="left">
-	* {l s='In most eBay categories, you can list variations of your products together in one listing called a multi-variation listing, for example a red t-shirt size small, medium and large. In those few categories that don’t support multi-variation listings, a listing will be added for every variation of your product.' mod='ebay'}<br />
-	<a href="{l s='http://sellerupdate.ebay.fr/autumn2012/improvements-multi-variation-listings' mod='ebay'}" target="_blank">{l s='Click here for more informations on multi-variation listings' mod='ebay'}</a>
-</p><br /><br />
-*}
 <script type="text/javascript">
 		
 	var $selects = false;
@@ -99,11 +96,11 @@
 	var module_path = '{$_path|escape:'htmlall'}';
 	var id_lang = '{$id_lang|escape:'htmlall'}';
 	var id_ebay_profile = '{$id_ebay_profile|escape:'htmlall'}';
-	var ebay_l = {ldelim}
+	var store_categories_ebay_l = {
 		'no category selected' : "{l s='No category selected' mod='ebay'}",
 		'No category found'		 : "{l s='No category found' mod='ebay'}",
 		'You are not logged in': "{l s='You are not logged in' mod='ebay'}",
 		'Settings updated'		 : "{l s='Settings updated' mod='ebay'}",
-	{rdelim};
+	};
 </script>
 <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/views/js/storeCategories.js?date={$date|escape:'htmlall'}"></script>
