@@ -41,3 +41,10 @@
         </div>
         
 	</fieldset>
+    <br>
+    <p>
+        {l s='Orders are automatically retrieved from eBay every 30 minutes. You can immediately retrieve them by clicking the button below.' mod='ebay'}
+    </p>
+    <p>
+        {l s='If you wish to retrieve orders using a cron task, please go to the “Advanced parameters” tab.' mod='ebay'}
+    </p>
