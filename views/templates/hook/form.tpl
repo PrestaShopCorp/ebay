@@ -262,7 +262,7 @@
             </div>
             <div class="ebay-boxes-2-col-cell right ebay_gray_title_box">
                 <ul id="ebay_main_menu">
-                    <li><i class="fa fa-cog"></i> <a id="settings-menu-link" class="main-menu-a selected" href data-sub="settings">{l s='Settings' mod='ebay'}</a></li>
+                    <li class="selected"><i class="fa fa-cog"></i> <a id="settings-menu-link" class="main-menu-a" href data-sub="settings">{l s='Settings' mod='ebay'}</a></li>
                     <li><i class="fa fa-paper-plane-o"></i> <a id="sync-menu-link" class="main-menu-a" href data-sub="sync">{l s='Synchronization' mod='ebay'}</a></li>
                     <li><i class="fa fa-eye"></i> <a id="visu-menu-link" class="main-menu-a" href data-sub="visu">{l s='Visualization' mod='ebay'}</a></li>
                     <li><i class="fa fa-wrench"></i> <a id="advanced-settings-menu-link" class="main-menu-a" href data-sub="advanced-settings">{l s='Advanced Settings' mod='ebay'}</a></li>

@@ -208,7 +208,7 @@ class EbayFormEbaySyncTab extends EbayTab
 		if (file_exists(dirname(__FILE__).'/../../log/syncError.php'))
 			@unlink(dirname(__FILE__).'/../../log/syncError.php');
 
-		$this->setConfiguration('EBAY_SYNC_MODE', Tools::getValue('ebay_sync_mode'));
+		$this->ebay_profile->setConfiguration('EBAY_SYNC_MODE', Tools::getValue('ebay_sync_mode'));
 
 		if (Tools::getValue('ebay_sync_products_mode') == 'A')
 			$this->ebay_profile->setConfiguration('EBAY_SYNC_PRODUCTS_MODE', 'A');

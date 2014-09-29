@@ -774,10 +774,11 @@ a.ebay-primary {
   margin-left: 10px;
   border-radius: 5px;
   font-weight: normal;
+  opacity:0.5;
 }
 
-.main-menu-a.selected {
-  text-decoration: underline;
+#ebay_main_menu li.selected {
+ opacity:1;
 }
 
 /* from formConfig.tpl */

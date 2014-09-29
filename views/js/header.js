@@ -49,8 +49,8 @@ $(document).ready(function() {
     
     function selectMainTab(menu_name) {
         
-        $('.main-menu-a').removeClass('selected');
-        $('#' + menu_name + '-menu-link').addClass('selected');
+        $('.main-menu-a').parent().removeClass('selected');
+        $('#' + menu_name + '-menu-link').parent().addClass('selected');
         
         $('.menuTab').hide();
         var menu = $('#' + menu_name + '-menu');
