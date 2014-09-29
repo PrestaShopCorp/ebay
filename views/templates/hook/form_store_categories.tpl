@@ -40,11 +40,13 @@
             {l s='If you do not map any category below, products will all appear in an “Other” category in your eBay shop.' mod='ebay'}   
     	</p>
     {else}
-    	<p
-    		<b>{l s='Your eBay account has no eBay shop registered.' mod='ebay'} </b>
+        <div class="ebay_mind big">
+        	<p>
+        		<b>{l s='Your eBay account has no eBay shop registered.' mod='ebay'} </b>
             
-    		<a href="{$ebay_store_url}" target="_blank">{l s='An eBay shop subscription isn\’t required but you may benefit. Find out if an eBay Shop is right for you.' mod='ebay'}</a>
-    	</p>    
+        		<a href="{$ebay_store_url}" target="_blank">{l s="An eBay shop subscription isn’t required but you may benefit. Find out if an eBay Shop is right for you." mod='ebay'}</a>
+        	</p>
+        </div>
     {/if}
     
 
