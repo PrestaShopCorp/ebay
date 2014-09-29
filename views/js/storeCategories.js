@@ -75,5 +75,5 @@ $(document).ready(function() {
 		url: module_dir + "ebay/ajax/loadTableStoreCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&ch_cat_str=' + store_categories_ebay_l['no category selected'] + '&ch_no_cat_str=' + store_categories_ebay_l['no category found'] + '&not_logged_str=' + store_categories_ebay_l['You are not logged in'] + '&unselect_product=' + store_categories_ebay_l['Unselect products'],
 		success : function(data) { $("form#configFormStoreCategories table tbody #removeRow").remove(); $("form#configFormStoreCategories table tbody").html(data); }
 	});
-	
+  
 });

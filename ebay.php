@@ -1114,7 +1114,7 @@ class Ebay extends Module
 			EbayCategory::updateCategoryTable($ebay->getCategoriesSkuCompliancy());
 		}
         
-		if ($this->ebay_profile && !Configuration::get('EBAY_STORE_CATEGORY_UPDATE'))
+		if ($this->ebay_profile && (!Configuration::get('EBAY_STORE_CATEGORY_UPDATE') || Tools::getValue('refresh_store_cat')))
 		{
 			$ebay = new EbayRequest();
 			EbayStoreCategory::updateStoreCategoryTable($ebay->getStoreCategories());

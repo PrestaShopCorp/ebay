@@ -91,8 +91,12 @@
 	</table>
 	<div style="margin-top: 5px;">
 		<input class="primary button" name="submitSave" type="submit" value="{l s='Save and continue' mod='ebay'}" />
+        </form>
+        <form method="post" style="float: left" action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall'}{else}tab={$tab|escape:'htmlall'}{/if}&configure={$configure|escape:'htmlall'}&token={$token|escape:'htmlall'}&tab_module={$tab_module|escape:'htmlall'}&module_name={$module_name|escape:'htmlall'}&id_tab=10&section=store_category">
+            <input type="hidden" name="refresh_store_cat" value="1" />
+            <input class="button" type="submit" value="{l s='Reload store categories' mod='ebay'}" />
+        </form>
 	</div>
-</form>
 
 <script type="text/javascript">
 		
