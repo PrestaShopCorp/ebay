@@ -25,12 +25,6 @@
 
 $(document).ready(function() {
   
-	var form_store_categories = parseInt("{$form_store_categories|escape:'htmlall'}");
-	if (form_store_categories >= 1)
-		$("#menuTab10").addClass('success');
-	else
-		$("#menuTab10").addClass('wrong');
-
 	$("#stores_pagination").children('li').click(function() {
 		var p = $(this).html();
 		var li = $("#stores_pagination").children('li.current');

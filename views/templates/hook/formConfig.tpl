@@ -31,7 +31,7 @@
     
 	<li id="menuTab8" class="menuTabButton {$itemSpecificValidator.indicator|escape:'htmlall'}">3. {l s='Item specifics' mod='ebay'}</li>
     
-    <li id="menuTab10" class="menuTabButton">4. {l s='Store Categories' mod='ebay'}</li>
+    <li id="menuTab10" class="menuTabButton success">4. {l s='Store Categories' mod='ebay'}</li>
     
 	<li id="menuTab3" class="menuTabButton {$shippingValidator.indicator|escape:'htmlall'}">5. {l s='Dispatch and Shipping' mod='ebay'}</li>
     
