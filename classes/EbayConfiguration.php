@@ -95,7 +95,7 @@ class EbayConfiguration
         }
 
         $sql .= '"';
-        var_dump($sql);
+        
         return Db::getInstance()->executeS($sql);
     }    
     
