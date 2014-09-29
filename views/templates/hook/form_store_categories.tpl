@@ -30,15 +30,22 @@
 	</div>
 	{/if}
     
-    {if $has_store_categories}
-    	<p>
-    		<b>{l s='Select a category' mod='ebay'}</b>
-    		<br />
-    		{l s='To list your products on eBay, please map your Prestashop categories with your eBay shop categories.' mod='ebay'} <br />
-    		{l s='This mapping has no effect on “Categories and pricing” tab.' mod='ebay'}
-            <br />
-            {l s='If you do not map any category below, products will all appear in an “Other” category in your eBay shop.' mod='ebay'}   
-    	</p>
+    {if $has_ebay_shop}
+    
+        {if $has_store_categories && false}
+        	<p>
+        		<b>{l s='Select a category' mod='ebay'}</b>
+        		<br />
+        		{l s='To list your products on eBay, please map your Prestashop categories with your eBay shop categories.' mod='ebay'} <br />
+        		{l s='This mapping has no effect on “Categories and pricing” tab.' mod='ebay'}
+                <br />
+                {l s='If you do not map any category below, products will all appear in an “Other” category in your eBay shop.' mod='ebay'}   
+        	</p>
+        {else}
+            <p>
+                <b><a href="http://cgi6.sandbox.ebay.fr/ws/eBayISAPI.dll?StoreCategoryMgmt" target="_blank">{l s="you don’t have any category in your shop, please refer to this page to create categories" mod='ebay'}</a></b>
+            </p> 
+        {/if}
     {else}
         <div class="ebay_mind big">
         	<p>
@@ -46,9 +53,8 @@
             
         		<a href="{$ebay_store_url}" target="_blank">{l s="An eBay shop subscription isn’t required but you may benefit. Find out if an eBay Shop is right for you." mod='ebay'}</a>
         	</p>
-        </div>
+        </div>    
     {/if}
-    
 
 </div>
 <br />

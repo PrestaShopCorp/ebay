@@ -33,6 +33,9 @@ class EbayFormStoreCategoryTab extends EbayTab
 
 		$configs = Configuration::getMultiple(array('EBAY_CATEGORY_LOADED_'.$this->ebay_profile->ebay_site_id, 'EBAY_SECURITY_TOKEN'));
         
+        $ebay_request = new EbayRequest();
+        $user_profile = $ebay_request->getUserProfile($this->ebay_profile->ebay_user_identifier);
+        
         $template_vars = array(
 			'configs' => $configs,            
 			'_path' => $this->path,            
@@ -44,6 +47,7 @@ class EbayFormStoreCategoryTab extends EbayTab
 			'tab' => Tools::getValue('tab'),            
 			'nb_categorie' => count(Category::getCategories($this->context->cookie->id_lang, true, false)),
             'has_store_categories' => EbayStoreCategory::hasStoreCategories(),
+            'has_ebay_shop' => (bool)($user_profile && $user_profile['StoreUrl']),
             'ebay_store_url' => EbayCountrySpec::getProUrlBySiteId($this->ebay_profile->ebay_site_id)
         );
 
