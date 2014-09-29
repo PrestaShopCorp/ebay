@@ -31,6 +31,9 @@
 		{if isset($country)}
 			<Country>{$country}</Country>
 		{/if}
+		{if isset($autopay)}
+			<AutoPay>{$autopay}</AutoPay>
+		{/if}        
 		{if isset($country_currency)}
 			<Currency>{$country_currency}</Currency>
 		{/if}
@@ -59,7 +62,10 @@
 					<PhotoDisplay>PicturePack</PhotoDisplay>
 				{/if}				
 				{foreach from=$pictures item=picture}
+                    <!--
 					<PictureURL>{$picture}</PictureURL>
+                    -->
+                    <PictureURL>http://cdn.ipetitions.com/user-images/petitions/beban/qLliuDdqTV2DrpQStaGS_dog.jpg</PictureURL>    
 				{/foreach}
 			</PictureDetails>
 		{/if}
@@ -95,6 +101,21 @@
 		{if isset($variations)}
 			{$variations}
 		{/if}
+        
+        {if isset($price_original)}
+            <DiscountPriceInfo>
+                <OriginalRetailPrice>{$price_original}</OriginalRetailPrice>
+                <SoldOffeBay>true</SoldOffeBay>
+            </DiscountPriceInfo>
+        {/if}
+
+        {if isset($ebay_store_category_id)}
+            <Storefront>
+                  <StoreCategoryID>{$ebay_store_category_id}</StoreCategoryID>
+                  <!--<StoreCategoryName> string </StoreCategoryName>-->
+            </Storefront>
+        {/if}        
+                
 	</Item>
 	<RequesterCredentials>
 		<eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>

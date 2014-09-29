@@ -58,8 +58,9 @@ class EbayStat
           'nb_national_shipping_services' => EbayShipping::getNbNationalShippings($ebay_profile->id),
           'nb_international_shipping_services' => EbayShipping::getNbInternationalShippings($ebay_profile->id),
           'date_add' => date('Y-m-d H:i:s'),
-          'Configuration' => EbayConfiguration::getAll($ebay_profile->id),
-          'return_policy' => ($ebay_profile->getReturnsPolicyConfiguration()->ebay_returns_description == '' ? 0 : 1)
+          'Configuration' => EbayConfiguration::getAll($ebay_profile->id, array('EBAY_PAYPAL_EMAIL')),
+          'return_policy' => ($ebay_profile->getReturnsPolicyConfiguration()->ebay_returns_description == '' ? 0 : 1),
+          'ps_version' => _PS_VERSION_
         );
         $this->date_add = date('Y-m-d H:i:s');
     }
@@ -86,7 +87,6 @@ class EbayStat
         $nb_rows = Db::getInstance()->getValue($sql);
         if ($nb_rows >= 2)
             return false;
-        
         $data = array(
           'id_ebay_profile' => (int)$this->id_ebay_profile,
           'version'  => pSQL($this->stats_version),
@@ -106,7 +106,6 @@ class EbayStat
         $sql = 'SELECT `id_ebay_stat`, `tries`, `version`, `data`, `date_add`
             FROM '._DB_PREFIX_.'ebay_stat';
         $res = Db::getInstance()->executeS($sql);
-        
         foreach ($res as $row)
         {
             $data = array(

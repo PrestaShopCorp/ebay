@@ -45,4 +45,18 @@ class EbayShippingService
 	{
 		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_service', $data, 'INSERT');
 	}
+    
+	public static function getCarriers($ebay_site_id)
+	{
+		if (EbayShippingService::getTotal($ebay_site_id))
+			return EbayShippingService::getAll($ebay_site_id);
+
+		$ebay = new EbayRequest();
+		$carriers = $ebay->getCarriers();
+
+		foreach ($carriers as $carrier)
+			EbayShippingService::insert(array_map('pSQL', $carrier));
+
+		return $carriers;
+	}
 }

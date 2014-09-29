@@ -23,41 +23,67 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<ul id="menuTab">
+<ul id="settings-menu" class="menuTab">
+    
 	<li id="menuTab1" class="menuTabButton selected {$parametersValidator.indicator|escape:'htmlall'}">1. {l s='Account settings' mod='ebay'}</li>
+    
 	<li id="menuTab2" class="menuTabButton {$categoryValidator.indicator|escape:'htmlall'}">2. {l s='Categories and pricing' mod='ebay'}</li>
+    
 	<li id="menuTab8" class="menuTabButton {$itemSpecificValidator.indicator|escape:'htmlall'}">3. {l s='Item specifics' mod='ebay'}</li>
-	<li id="menuTab3" class="menuTabButton {$shippingValidator.indicator|escape:'htmlall'}">4. {l s='Dispatch and Shipping' mod='ebay'}</li>
-	<li id="menuTab4" class="menuTabButton {$templateValidator.indicator|escape:'htmlall'}">5. {l s='Template manager' mod='ebay'}</li>
-	<li id="menuTab5" class="menuTabButton ">6. {l s='List products' mod='ebay'}</li>
-	<li id="menuTab9" class="menuTabButton">7. {l s='eBay listings' mod='ebay'}</li>
-	<li id="menuTab7" class="menuTabButton">9. {l s='Help' mod='ebay'}</li>
-	<li id="menuTab6" class="menuTabButton">8. {l s='Order history' mod='ebay'}</li>
+    
+    <li id="menuTab10" class="menuTabButton">4. {l s='Store Categories' mod='ebay'}</li>
+    
+	<li id="menuTab3" class="menuTabButton {$shippingValidator.indicator|escape:'htmlall'}">5. {l s='Dispatch and Shipping' mod='ebay'}</li>
+    
+	<li id="menuTab4" class="menuTabButton {$templateValidator.indicator|escape:'htmlall'}">6. {l s='Template manager' mod='ebay'}</li>    
+    
 </ul>
+
+
+<ul id="sync-menu" class="menuTab ebay_hidden">
+    
+	<li id="menuTab5" class="menuTabButton ">1. {l s='List products' mod='ebay'}</li>
+	
+    <li id="menuTab14" class="menuTabButton ">2. {l s='Orders Synchronization' mod='ebay'}</li>
+
+</ul>
+
+
+<ul id="visu-menu" class="menuTab ebay_hidden">
+    
+	<li id="menuTab9" class="menuTabButton">1. {l s='eBay listings' mod='ebay'}</li>
+	
+    <li id="menuTab6" class="menuTabButton">2. {l s='Order history' mod='ebay'}</li>    
+	
+    <li id="menuTab11" class="menuTabButton">3. {l s='API Logs' mod='ebay'}</li>
+	
+    <li id="menuTab12" class="menuTabButton">4. {l s='Order Logs' mod='ebay'}</li>
+    
+</ul>
+
+
+<ul id="advanced-settings-menu" class="menuTab ebay_hidden">
+    <li id="menuTab13" class="menuTabButton">1. {l s='Advanced Settings' mod='ebay'}</li>    
+</ul>
+
 <div id="tabList" class="{$class_general|escape:'htmlall'}">
 	<div id="menuTab1Sheet" class="tabItem selected">{if isset($parametersValidator.message)}<div class="ebay_{$parametersValidator.indicatorBig|escape:'htmlall'} big">{$parametersValidator.message|escape:'htmlall'}</div>{/if}{$form_parameters}</div>
+	<div id="menuTab13Sheet" class="tabItem selected">{if isset($parametersValidator.message)}<div class="ebay_{$parametersValidator.indicatorBig|escape:'htmlall'} big">{$parametersValidator.message|escape:'htmlall'}</div>{/if}{$form_advanced_parameters}</div>
 	<div id="menuTab2Sheet" class="tabItem">{if isset($categoryValidator.message)}<div class="ebay_{$categoryValidator.indicatorBig|escape:'htmlall'} big">{$categoryValidator.message|escape:'htmlall'}</div>{/if}{$form_category}</div>
 	<div id="menuTab8Sheet" class="tabItem">{if isset($itemSpecificValidator.message)}<div class="ebay_{$itemSpecificValidator.indicatorBig|escape:'htmlall'} big">{$itemSpecificValidator.message|escape:'htmlall'}</div>{/if}{$form_items_specifics}</div>
 	<div id="menuTab3Sheet" class="tabItem">{if isset($shippingValidator.message)}<div class="ebay_{$shippingValidator.indicatorBig|escape:'htmlall'} big">{$shippingValidator.message|escape:'htmlall'}</div>{/if}{$form_shipping}</div>
 	<div id="menuTab4Sheet" class="tabItem">{if isset($templateValidator.message)}<div class="ebay_{$templateValidator.indicatorBig|escape:'htmlall'} big">{$templateValidator.message|escape:'htmlall'}</div>{/if}{$form_template_manager}</div>
 	<div id="menuTab5Sheet" class="tabItem">{if isset($listingValidator.message)}<div class="ebay_{$listingValidator.indicatorBig|escape:'htmlall'} big">{$listingValidator.message|escape:'htmlall'}</div>{/if}{$form_ebay_sync}</div>
 	<div id="menuTab9Sheet" class="tabItem">{$ebay_listings}</div>
-	<div id="menuTab7Sheet" class="tabItem">{$help}</div>
+    <div id="menuTab10Sheet" class="tabItem">{$form_store_category}</div>
+	<div id="menuTab11Sheet" class="tabItem">{$api_logs}</div>
+	<div id="menuTab12Sheet" class="tabItem">{$order_logs}</div>
 	<div id="menuTab6Sheet" class="tabItem">{$orders_history}</div>
+	<div id="menuTab14Sheet" class="tabItem">{$orders_sync}</div>
 </div>
 <br clear="left" />
 <br />
-<style>{literal}
-	#menuTab { float: left; padding: 0; margin: 0; text-align: left; width: 100% }
-	#menuTab li { text-align: left; float: left; display: inline; padding: 5px; padding-right: 10px; background-color: #EFEFEF; font-weight: bold; cursor: pointer; border-left: 1px solid #EFEFEF; border-right: 1px solid #EFEFEF; border-top: 1px solid #EFEFEF; }
-	#menuTab li.menuTabButton.selected { background-color: #FFF6D3; border-left: 1px solid #CCCCCC; border-right: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; }
-	#tabList { clear: left; }
-	.tabItem { display: none; }
-	.tabItem.selected { display: block; background-color: #FFFFF0; border: 1px solid #CCCCCC; padding: 10px; padding-top: 20px; }
-	#menuTab #menuTab7, #menuTab #menuTab6 { float:right;background-color:#DFDFDF; border-left: 1px solid #CFCFCF; border-right: 1px solid #CFCFCF; border-top: 1px solid #CFCFCF; }
-	#menuTab #menuTab7.menuTabButton.selected, #menuTab #menuTab6.menuTabButton.selected { background-color: #FFF6D3; border-left: 1px solid #DFDFDF; border-right: 1px solid #DFDFDF; border-top: 1px solid #DFDFDF; }
-	{/literal}
-</style>
+{*
 <script>
 	{literal}
 	$(".menuTabButton").click(function () {
@@ -76,6 +102,7 @@
 		$("#menuTab{$id_tab|escape:'htmlall'}Sheet").addClass("selected");
 	</script>
 {/if}
+*}
 
 
 <div id="helpertexts" style="display:none;">

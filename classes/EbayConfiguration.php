@@ -83,11 +83,19 @@ class EbayConfiguration
 			return Db::getInstance()->insert('ebay_configuration', $datas , false, true, Db::REPLACE);
 	}	
 	
-    public static function getAll($id_ebay_profile)
+    public static function getAll($id_ebay_profile, $exceptions = false)
     {
         $sql = 'SELECT `name`, `value`
             FROM `'._DB_PREFIX_.'ebay_configuration`
-            WHERE `id_ebay_profile` = '.(int)$id_ebay_profile;
+            WHERE `id_ebay_profile` = "'.(int)$id_ebay_profile;
+        if($exceptions)
+        {
+        	$sql .= '" AND name != "';
+        	$sql .= implode('" AND name != "', $exceptions);
+        }
+
+        $sql .= '"';
+        var_dump($sql);
         return Db::getInstance()->executeS($sql);
     }    
     

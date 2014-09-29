@@ -23,8 +23,13 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+<div class="ebay_mind big">
+    {l s='You need to answer this question to enter module settings' mod='ebay'}
+</div>
+
 <fieldset class="new" style="margin-top:10px;" id="statsForm">
-	<legend>{l s='Ebay Data Usage' mod='ebay'}</legend>
+	<legend>{l s='eBay module Data Usage' mod='ebay'}</legend>
+
 	<div class="label">{l s='Help us improve the eBay Module by sending anonymous usage stats' mod='ebay'} : </div>
     <form action="#" method="POST">
 	<div class="margin-form">
