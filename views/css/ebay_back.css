@@ -382,14 +382,14 @@ textarea + .tooltip {
 	padding-left: 20px;
 }
 
-#menuTab2Sheet #pagination
+.pagination
 {
 	overflow: hidden;
 	margin-bottom: 5px;
 	list-style: none;
 }
 
-#menuTab2Sheet #pagination li
+.pagination li
 {
 	width: 15px;
 	height: 15px;
@@ -399,25 +399,25 @@ textarea + .tooltip {
 	margin-left: 5px;
 }
 
-#menuTab2Sheet #pagination li:hover
+.pagination li:hover
 {
 	color: #0055FF;
 }
 
-#menuTab2Sheet #pagination li:first-child
+.pagination li:first-child
 {
 	margin-left: 0;
 }
 
 
-#menuTab2Sheet #pagination li.prev,
-#menuTab2Sheet #pagination li.next
+.pagination li.prev,
+.pagination li.next
 {
 	background: #ffffff;
 	border: 1px solid #585A69;
 }
 
-#menuTab2Sheet #pagination li.current
+.pagination li.current
 {
 	border: 1px solid #585A69;
 	color: #0055FF;

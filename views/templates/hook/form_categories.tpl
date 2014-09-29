@@ -59,7 +59,7 @@
 
 {if $nb_categorie > 0}
 	<p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nb_categorie / 20)|round:"0" + 1) mod='ebay'}</p>
-	<ul id="pagination">
+	<ul id="pagination" class="pagination">
 		<li class="prev"><</li>
 		{for $i=0 to ($nb_categorie / 20)|round:"0"}
 			<li{if $i == 0} class="current"{/if}>{$i + 1}</li>

@@ -25,7 +25,7 @@
 
 {if $nb_logs > 0}
 	<p id="textStoresPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nb_logs / 20)|round:"0" + 1) mod='ebay'}</p>
-	<ul id="order_logs_pagination">
+	<ul id="order_logs_pagination" class="pagination">
 		<li class="prev"><</li>
 		{for $i=0 to ($nb_logs / 20)|round:"0"}
 			<li{if $i == 0} class="current"{/if}>{$i + 1}</li>
