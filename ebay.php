@@ -1234,8 +1234,16 @@ class Ebay extends Module
         } else
     		$wrong_domain = ($_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN') && $_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN_SSL'));
         
-        if ($wrong_domain)
-            $warning = $this->l('You are currently connected to the Prestashop Back Office using a different URL <a>than set up</a>, this module will not work properly. Please login in using URL_Back_Office');
+        //if ($wrong_domain) {
+        if (true) {
+            $url_vars = array();
+    		if (version_compare(_PS_VERSION_, '1.5', '>'))
+    			$url_vars['controller'] = 'AdminMeta';
+    		else
+    			$url_vars['tab'] = 'AdminMeta';
+            $warning_url = $this->_getUrl($url_vars);
+        }
+
     
 		$this->smarty->assign(array(
 			'img_stats' => ($this->ebay_country ? $this->ebay_country->getImgStats() : ''),
@@ -1273,7 +1281,7 @@ class Ebay extends Module
             'main_tab' => $main_tab,
             'id_tab' => (int)Tools::getValue('id_tab'),
             'pro_url' => EbayCountrySpec::getProUrlBySiteId($this->ebay_profile->ebay_site_id),            
-            'warning' => isset($warning) ? $warning : null,
+            'warning_url' => isset($warning_url) ? $warning_url : null,
             '_module_dir_' => _MODULE_DIR_,
             'date' => pSQL(date('Ymdhis')),         
 		));
