@@ -27,6 +27,7 @@
 
 class EbayOrder
 {
+    private $id_ebay_order;
 	private $id_order_ref;
 	private $amount;
 	private $status;
@@ -564,7 +565,7 @@ class EbayOrder
 
 	public function add($id_ebay_profile = null)
 	{
-		$id_ebay_order = EbayOrder::insert(array(
+		$this->id_ebay_order = EbayOrder::insert(array(
 			'id_order_ref' => pSQL($this->id_order_ref),
 		));		
 			
@@ -574,13 +575,13 @@ class EbayOrder
 			{
 				if (version_compare(_PS_VERSION_, '1.5', '>'))
 					$res = Db::getInstance()->insert('ebay_order_order', array(
-						'id_ebay_order' => (int)$id_ebay_order,
+						'id_ebay_order' => (int)$this->id_ebay_order,
 						'id_order'      => (int)$id_order,
 						'id_shop'       => (int)$id_shop
 					));
 				else
 					$res = Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_order_order', array(
-						'id_ebay_order' => (int)$id_ebay_order,
+						'id_ebay_order' => (int)$this->id_ebay_order,
 						'id_order'      => (int)$id_order,
 						'id_shop'       => (int)$id_shop
 					), 'INSERT');
@@ -788,15 +789,15 @@ class EbayOrder
 		);
 	}
     
-    private function _writeLog($id_ebay_profile, $type, $success, $response = nul, $is_update = false)
+    private function _writeLog($id_ebay_profile, $type, $success, $response = null, $is_update = false)
     {
         if (!$this->write_logs)
             return;
         
         $log = new EbayOrderLog();
         $log->id_ebay_profile = (int)$id_ebay_profile;
-        $log->id_ebay_order = (int)$this->id;
-        $log->id_orders = implode(';', $id_orders);
+        $log->id_ebay_order = (int)$this->id_ebay_order;
+        $log->id_orders = implode(';', $this->id_orders);
         $log->type = (bool)$type;
         $log->success = (bool)$success;
         
