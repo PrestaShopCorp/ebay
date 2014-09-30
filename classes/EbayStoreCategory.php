@@ -28,6 +28,7 @@
 class EbayStoreCategory extends ObjectModel
 {
 	public $ebay_category_id;
+    public $id_ebay_profile;
 	public $name;
     public $order;
     public $ebay_parent_category_id;
@@ -51,6 +52,7 @@ class EbayStoreCategory extends ObjectModel
 		if (isset($this->id))
 			$fields['id_ebay_store_category'] = (int)($this->id);
 
+		$fields['id_ebay_profile'] = (int)$this->id_ebay_profile;
 		$fields['ebay_category_id'] = (int)$this->ebay_category_id;
 		$fields['name'] = pSQL($this->name);
 		$fields['order'] = (int)$this->order;
@@ -65,6 +67,7 @@ class EbayStoreCategory extends ObjectModel
            		'table' => 'ebay_store_category',
            		'primary' => 'id_ebay_store_category',
            		'fields' => array(
+                    'id_ebay_profile' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
                     'ebay_category_id' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
                     'name' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
                     'order' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
@@ -74,46 +77,69 @@ class EbayStoreCategory extends ObjectModel
         else 
         {
         	$tables = array ('ebay_store_category');
-        	$fieldsRequired = array('ebay_category_id', 'name', 'order');
+        	$fieldsRequired = array('id_ebay_profile', 'ebay_category_id', 'name', 'order');
         	$fieldsValidate = array();
         }
         return parent::__construct($id, $id_lang, $id_shop);     
     }
     
     /**
-     * return true if there are store categories in the ebay_store_category table
-     * there is always one at list ('Other') so we need to test > 1 to make sure
-     * we also need to take categories with no child categories only
+     * return compatible and not capatible categories, i.e. having children or being a child
      *
      **/
-    public static function hasStoreCategories()
+    public static function getStoreCategories($id_ebay_profile)
     {
         $store_categories = Db::getInstance()->executeS('SELECT * 
-            FROM `'._DB_PREFIX_.'ebay_store_category`');
+            FROM `'._DB_PREFIX_.'ebay_store_category` 
+            WHERE `id_ebay_profile` = '.(int)$id_ebay_profile);
         
-        $store_categories = self::_filterCategories($store_categories);
+        $compatible_store_categories = self::_filterCategories($store_categories);
         
-        return (count($store_categories) > 1);
+        // all categories are compatible
+        if (count($store_categories) == count($compatible_store_categories))
+            $not_compatible_store_categories = array();
+        else {
+
+            $not_compatible_store_categories = array();
+            foreach ($store_categories as $cat) {
+                $is_not_compatible = true;
+                foreach ($compatible_store_categories as $cat2) {
+                    if ($cat['ebay_category_id'] == $cat2['ebay_category_id']) {
+                        $is_not_compatible = false;
+                        break;
+                    }
+                }
+                if ($is_not_compatible)
+                    $not_compatible_store_categories[] = $cat;
+            }            
+        }
+        
+        return array(
+            'compatible'     => $compatible_store_categories,
+            'not_compatible' => $not_compatible_store_categories,
+        );
         
     }
 	
-	public static function updateStoreCategoryTable($store_categories)
+	public static function updateStoreCategoryTable($store_categories, $ebay_profile)
 	{
         // clean table before inserts
-		Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_store_category`');
+		Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_store_category`
+            WHERE `id_ebay_profile` = '.(int)$ebay_profile->id);
         
         foreach ($store_categories as $custom_cat)
-            EbayStoreCategory::_writeStoreCategory($custom_cat);
+            EbayStoreCategory::_writeStoreCategory($custom_cat, $ebay_profile->id);
         
         // make sure that all referenced categories still exists
-        EbayStoreCategoryConfiguration::checkExistingCategories();
+        EbayStoreCategoryConfiguration::checkExistingCategories($ebay_profile->id);
 
-		Configuration::updateValue('EBAY_STORE_CATEGORY_UPDATE', 1, false, 0, 0);
+        $ebay_profile->setConfiguration('EBAY_STORE_CATEGORY_UPDATE', 1);
 	}  
     
-    private static function _writeStoreCategory($category_data, $ebay_parent_category_id = null)
+    private static function _writeStoreCategory($category_data, $id_ebay_profile, $ebay_parent_category_id = null)
     {
         $store_category = new EbayStoreCategory();
+        $store_category->id_ebay_profile = (int)$id_ebay_profile;
         $store_category->ebay_category_id = (int)$category_data->CategoryID;
         $store_category->name = (string)$category_data->Name;
         $store_category->order = (int)$category_data->Order;
@@ -125,7 +151,7 @@ class EbayStoreCategory extends ObjectModel
         
         if (isset($category_data->ChildCategory))
             foreach ($category_data->ChildCategory as $child_category)
-                EbayStoreCategory::_writeStoreCategory($child_category, $store_category->ebay_category_id);
+                EbayStoreCategory::_writeStoreCategory($child_category, $id_ebay_profile, $store_category->ebay_category_id);
             
     }
     
@@ -135,6 +161,7 @@ class EbayStoreCategory extends ObjectModel
             FROM `'._DB_PREFIX_.'ebay_store_category` esc
             LEFT JOIN `'._DB_PREFIX_.'ebay_store_category_configuration` escc
             ON esc.`ebay_category_id` = escc.`ebay_category_id`
+            AND esc.`id_ebay_profile` = escc.`id_ebay_profile`
             AND escc.`id_ebay_profile` = '.(int)$id_ebay_profile.'
             ORDER BY `ebay_parent_category_id` ASC, `order` ASC');
             

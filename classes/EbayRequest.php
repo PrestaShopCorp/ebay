@@ -624,7 +624,7 @@ class EbayRequest
 	}
     
 	/**
-	 * Set order status to "shipped"
+	 * Get Store Categories
 	 *
 	 **/
 	public function getStoreCategories()

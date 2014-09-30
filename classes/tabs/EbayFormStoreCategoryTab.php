@@ -36,6 +36,13 @@ class EbayFormStoreCategoryTab extends EbayTab
         $ebay_request = new EbayRequest();
         $user_profile = $ebay_request->getUserProfile($this->ebay_profile->ebay_user_identifier);
         
+        $store_categories = EbayStoreCategory::getStoreCategories($this->ebay_profile->id);
+        
+        $not_compatible_names = array();
+        if ($store_categories['not_compatible'])
+            foreach ($store_categories['not_compatible'] as $cat)
+                $not_compatible_names[] = $cat['name'];
+        
         $template_vars = array(
 			'configs' => $configs,            
 			'_path' => $this->path,            
@@ -46,7 +53,8 @@ class EbayFormStoreCategoryTab extends EbayTab
 			'module_name' => Tools::getValue('module_name'),
 			'tab' => Tools::getValue('tab'),            
 			'nb_categorie' => count(Category::getCategories($this->context->cookie->id_lang, true, false)),
-            'has_store_categories' => EbayStoreCategory::hasStoreCategories(),
+            'has_store_categories' => (bool)($store_categories['compatible']),
+            'not_compatible_store_categories' => implode(', ', $not_compatible_names),
             'has_ebay_shop' => (bool)($user_profile && $user_profile['StoreUrl']),
             'ebay_store_url' => EbayCountrySpec::getProUrlBySiteId($this->ebay_profile->ebay_site_id)
         );

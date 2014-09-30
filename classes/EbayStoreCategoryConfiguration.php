@@ -51,12 +51,14 @@ class EbayStoreCategoryConfiguration
             AND `id_category` = '.(int)$id_category);
     }
     
-    public static function checkExistingCategories()
+    public static function checkExistingCategories($id_ebay_profile)
     {
         return Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_store_category_configuration`
-            WHERE `ebay_category_id` NOT IN (
+            WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
+            AND `ebay_category_id` NOT IN (
                 SELECT `ebay_category_id` 
-                FROM `'._DB_PREFIX_.'ebay_store_category`)');
+                FROM `'._DB_PREFIX_.'ebay_store_category`
+                WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.')');
     }
     
 }

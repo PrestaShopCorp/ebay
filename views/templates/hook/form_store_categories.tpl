@@ -97,6 +97,12 @@
             <input class="button" type="submit" value="{l s='Reload store categories' mod='ebay'}" />
         </form>
 	</div>
+    
+    <p>
+    {if $not_compatible_store_categories}
+        {l s="The following categories are not available for they contain subcategories or are subcategories themselves. The eBay API doesn't permit sending products in these categories: " mod='ebay'} {$not_compatible_store_categories}
+    {/if}
+    </p>
 
 <script type="text/javascript">
 		
