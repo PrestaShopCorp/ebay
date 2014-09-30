@@ -53,8 +53,9 @@ $(document).ready(function() {
         $('#' + menu_name + '-menu-link').parent().addClass('selected');
         
         $('.menuTab').hide();
-        var menu = $('#' + menu_name + '-menu');
-        $('#' + menu_name + '-menu').show();
+        $('.menu-msg').hide();
+        var menu = $('.' + menu_name + '-menu');
+        $('.' + menu_name + '-menu').show();
         
         menu.children(":first").trigger('click');
         

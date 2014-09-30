@@ -363,6 +363,8 @@ textarea + .tooltip {
 	background : url('../img/big-error.png') no-repeat 2px 50% #fff;;
 }
 
+.menu-msg { display: none; }
+
 
 .menuTab li.success
 {

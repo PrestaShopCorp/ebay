@@ -23,7 +23,11 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<ul id="settings-menu" class="menuTab">
+{if isset($green_message) && $green_message}
+    <div class="module_confirmation conf confirm settings-menu menu-msg">{$green_message|escape:'htmlall'}</div>
+{/if}
+
+<ul class="settings-menu menuTab">
     
 	<li id="menuTab1" class="menuTabButton selected {$parametersValidator.indicator|escape:'htmlall'}">1. {l s='Account settings' mod='ebay'}</li>
     
@@ -40,7 +44,7 @@
 </ul>
 
 
-<ul id="sync-menu" class="menuTab ebay_hidden">
+<ul class="sync-menu menuTab ebay_hidden">
     
 	<li id="menuTab5" class="menuTabButton ">1. {l s='List products' mod='ebay'}</li>
 	
@@ -49,7 +53,7 @@
 </ul>
 
 
-<ul id="visu-menu" class="menuTab ebay_hidden">
+<ul class="visu-menu menuTab ebay_hidden">
     
 	<li id="menuTab9" class="menuTabButton">1. {l s='eBay listings' mod='ebay'}</li>
 	
@@ -62,7 +66,7 @@
 </ul>
 
 
-<ul id="advanced-settings-menu" class="menuTab ebay_hidden">
+<ul class="advanced-settings-menu menuTab ebay_hidden">
     <li id="menuTab13" class="menuTabButton">1. {l s='Advanced Settings' mod='ebay'}</li>    
 </ul>
 

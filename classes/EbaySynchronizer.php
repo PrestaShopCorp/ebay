@@ -69,6 +69,8 @@ class EbaySynchronizer
 			$quantity_product = EbaySynchronizer::_getProductQuantity($product, (int)$p['id_product']);
 
             $ebay_profile = new EbayProfile((int)$p['id_ebay_profile']);
+            if (!$ebay_profile->getConfiguration('EBAY_HAS_SYNCED_PRODUCTS'));
+                $ebay_profile->setConfiguration('EBAY_HAS_SYNCED_PRODUCTS', 1);
 
 			$ebay_category = EbaySynchronizer::_getEbayCategory($product->id_category_default, $ebay_profile);
 			    

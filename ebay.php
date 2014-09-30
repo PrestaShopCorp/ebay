@@ -1495,6 +1495,19 @@ class Ebay extends Module
         $api_logs = new EbayApiLogsTab($this, $this->smarty, $this->context, $this->_path);
         $order_logs = new EbayOrderLogsTab($this, $this->smarty, $this->context, $this->_path);
         
+        
+        // test if everything is green
+        if ($this->ebay_profile && $this->ebay_profile->isAllSettingsConfigured()) {
+            
+            if (!$this->ebay_profile->getConfiguration('EBAY_HAS_SYNCED_PRODUCTS'))
+                $green_message = $this->l('Your profile is ready to go, go to Synchronization to list your products');
+             elseif (!empty($_POST) && Tools::isSubmit('submitSave')) // config has changed
+                 $green_message = $this->l('To implement these changes on active listings you need to resynchronize your items');  
+
+         }
+        
+            
+        
 		$smarty_vars = array(
 			'class_general' => version_compare(_PS_VERSION_, '1.5', '>') ? 'uncinq' : 'unquatre',
 			'form_parameters' => $form_parameters_tab->getContent(),
@@ -1508,6 +1521,7 @@ class Ebay extends Module
 			'ebay_listings' => $listings_tab->getContent(),
             'form_store_category' => $form_store_category_tab->getContent(),
             'orders_sync' => $orders_sync->getContent(),
+            'green_message' => isset($green_message) ? $green_message : null,
             
             'api_logs' => $api_logs->getContent(),
             'order_logs' => $order_logs->getContent(),
