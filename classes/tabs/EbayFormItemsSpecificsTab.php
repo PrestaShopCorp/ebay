@@ -89,7 +89,7 @@ class EbayFormItemsSpecificsTab extends EbayTab
 			foreach ($condition as $type => $condition_ref)
 				EbayCategoryConditionConfiguration::replace(array('id_ebay_profile' => $this->ebay_profile->id, 'id_condition_ref' => $condition_ref, 'id_category_ref' => $category_id, 'condition_type' => $type));
 
-		return $this->ebay->displayConfirmation($this->l('Settings updated'));       
+		return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));       
     }    
     
 	/*
