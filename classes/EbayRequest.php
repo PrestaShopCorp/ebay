@@ -896,4 +896,24 @@ class EbayRequest
 		return ((int)$val['id_feature'] == (int)$feature['id_feature'] ? $val['value'] : false);
 	}
 
+
+	//Rob2014
+	public function setCompleteSale($data = array())
+	{
+		// Check data
+		if (!$data)
+			return false;
+
+		// Build the request Xml string
+		$vars = array('shipped' => 1,
+			'orderId' => $data['id_order_ref']);
+
+		$response = $this->_makeRequest('CompleteSale', $vars);
+
+		if ($response === false)
+			return false;
+
+		return $this->_checkForErrors($response);
+
+	}
 }
