@@ -905,8 +905,12 @@ class EbayRequest
 			return false;
 
 		// Build the request Xml string
-		$vars = array('shipped' => 1,
-			'orderId' => $data['id_order_ref']);
+		$vars = array('shipped' => ($data['shipped'] ? 1 : 0),
+			'orderId' => $data['id_order_ref'],
+			'carrier' => $data['carrier'],
+			'tracking_number' => $data['tracking_number'],
+			'shipping_date' => $data['shipping_date']
+			);
 
 		$response = $this->_makeRequest('CompleteSale', $vars);
 
