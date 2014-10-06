@@ -62,8 +62,8 @@ class EbayFormCategoryTab extends EbayTab
 		{
 			$ebay_request = new EbayRequest();
 			EbayCategory::insertCategories($ebay_site_id, $ebay_request->getCategories(), $ebay_request->getCategoriesSkuCompliancy());
-			$this->setConfiguration('EBAY_CATEGORY_LOADED_'.$ebay_site_id, 1);
-			$this->setConfiguration('EBAY_CATEGORY_LOADED_'.$ebay_site_id.'_DATE', date('Y-m-d H:i:s')); // THIS LINE MIGHT BE REMOVED
+			$this->ebay_profile->setConfiguration('EBAY_CATEGORY_LOADED_'.$ebay_site_id, 1);
+			$this->ebay_profile->setConfiguration('EBAY_CATEGORY_LOADED_'.$ebay_site_id.'_DATE', date('Y-m-d H:i:s')); // THIS LINE MIGHT BE REMOVED
 		}
 		
 		// Smarty
