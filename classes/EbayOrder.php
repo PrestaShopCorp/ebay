@@ -414,7 +414,7 @@ class EbayOrder
 		
 		$this->id_orders[$id_shop] = $paiement->currentOrder;
         
-        $this->_writeLog($id_ebay_profile, 'validate_order', true, (string)$paiement);
+        $this->_writeLog($id_ebay_profile, 'validate_order', true, 'End of validate order');
 
 		// Fix on date
 		Db::getInstance()->autoExecute(_DB_PREFIX_.'orders', array('date_add' => pSQL($this->date_add)), 'UPDATE', '`id_order` = '.(int)$this->id_orders[$id_shop]);
