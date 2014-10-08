@@ -153,7 +153,7 @@ class EbayFormParametersTab extends EbayTab
 
 		if (Tools::getValue('relogin'))
 		{
-			$this->login();
+			$this->ebay->login();
 
 			$smarty_vars = array_merge($smarty_vars, array(
 				'relogin' => true,
