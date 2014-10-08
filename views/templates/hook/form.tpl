@@ -272,7 +272,7 @@
     {/if}
     
     <script type="text/javascript">
-        var ebay_l = {
+        var header_ebay_l = {
           'Hide seller tips' : "{l s='Hide seller tips' mod='ebay'}",
           'Show seller tips'  : "{l s='Show seller tips' mod='ebay'}",
           'Are you sure you want to delete the profile number %profile_number%?' : "{l s='Are you sure you want to delete the profile number %profile_number%?' mod='ebay'}"

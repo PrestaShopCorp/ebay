@@ -3,10 +3,10 @@ $(document).ready(function() {
       event.preventDefault();
       var sellerTips = $('#seller-tips');
       if (sellerTips.css('display') == 'none') {
-          $(this).html(ebay_l['Hide seller tips']);
+          $(this).html(header_ebay_l['Hide seller tips']);
           sellerTips.show();
       } else {
-          $(this).html(ebay_l['Show seller tips']);
+          $(this).html(header_ebay_l['Show seller tips']);
           sellerTips.hide();                  
       }
       return false;
@@ -35,7 +35,7 @@ $(document).ready(function() {
     $('.delete-profile').click(function(event) {
         event.preventDefault();
         var profileId = $(this).data('profile');
-        if (confirm(ebay_l['Are you sure you want to delete the profile number %profile_number%?'].replace('%profile_number%', profileId))) {
+        if (confirm(header_ebay_l['Are you sure you want to delete the profile number %profile_number%?'].replace('%profile_number%', profileId))) {
             $.ajax({
                 url: delete_profile_url + '&profile='+profileId,
                 cache: false,
