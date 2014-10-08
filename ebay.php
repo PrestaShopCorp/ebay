@@ -366,6 +366,10 @@ class Ebay extends Module
 		 `'._DB_PREFIX_.'ebay_stat`,
 		 `'._DB_PREFIX_.'ebay_sync_history`,
 		 `'._DB_PREFIX_.'ebay_sync_history_product`,
+		 `'._DB_PREFIX_.'ebay_api_log`,
+		 `'._DB_PREFIX_.'ebay_order_log`,
+		 `'._DB_PREFIX_.'ebay_store_category`,
+		 `'._DB_PREFIX_.'ebay_store_category_configuration`,
 		 `'._DB_PREFIX_.'ebay_user_identifier_token`;
 		 ');
 
