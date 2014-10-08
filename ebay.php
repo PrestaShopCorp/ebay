@@ -116,7 +116,7 @@ class Ebay extends Module
 	{
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.9.0.1';
+		$this->version = '1.9.0.2';
 		$this->stats_version = '1.0';
 
 		$this->author = 'PrestaShop';
@@ -519,7 +519,7 @@ class Ebay extends Module
 				foreach($products as $product)
 					EbayProductModified::addProduct($this->ebay_profile->id, $product['id_product']);
 			else
-				EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_country->getIdLang(), 'hookNewOrder');    
+				EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_profile->id_lang, 'hookNewOrder');    
 		}
 	}
 
@@ -558,7 +558,7 @@ class Ebay extends Module
 				foreach($products as $product)
 					EbayProductModified::addProduct($this->ebay_profile->id, $product['id_product']);
 			else
-				EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_country->getIdLang(), 'hookAddProduct');                
+				EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_profile->id_lang, 'hookAddProduct');                
 		}
 	}
 
@@ -639,7 +639,7 @@ class Ebay extends Module
 	
 	public function cronProductsSync()
 	{
-		EbaySynchronizer::syncProducts(EbayProductModified::getAll(), Context::getContext(), $this->ebay_country->getIdLang(), 'CRON', 'CRON_PRODUCT');
+		EbaySynchronizer::syncProducts(EbayProductModified::getAll(), Context::getContext(), $this->ebay_profile->id_lang, 'CRON', 'CRON_PRODUCT');
 		EbayProductModified::truncate();
 	}
 	
@@ -967,7 +967,7 @@ class Ebay extends Module
 				foreach($products as $product)
 					EbayProductModified::addProduct($product['id_ebay_profile'], $product['id_product']);
 			else
-				EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_country->getIdLang(), 'hookUpdateProduct');                
+				EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_profile->id_lang, 'hookUpdateProduct');                
 		}
 
 	}
@@ -1624,7 +1624,7 @@ class Ebay extends Module
 		if (count($products))
 		{
 			$this->ebay_profile->setConfiguration('EBAY_SYNC_LAST_PRODUCT', (int)$products[0]['id_product']);
-			EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_country->getIdLang(), 'SYNC_FROM_MODULE_BACK');
+			EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_profile->id_lang, 'SYNC_FROM_MODULE_BACK');
 
 			// we cheat a bit to display a consistent number of products done
 			$nb_products_done = min($nb_products - $nb_products_less + 1, $nb_products);

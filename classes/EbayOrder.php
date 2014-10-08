@@ -798,7 +798,7 @@ class EbayOrder
         $log->id_ebay_profile = (int)$id_ebay_profile;
         $log->id_ebay_order = (int)$this->id_ebay_order;
         $log->id_orders = implode(';', $this->id_orders);
-        $log->type = (bool)$type;
+        $log->type = (string)$type;
         $log->success = (bool)$success;
         
         if ($response)
