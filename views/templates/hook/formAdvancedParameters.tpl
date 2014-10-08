@@ -152,7 +152,7 @@
 		<legend>{l s='Orders Collection Duration' mod='ebay'}</legend>
 		<label>{l s='Since when fetch orders (in days, change if you receive more than 100 orders per fortnight)' mod='ebay'} : </label>
 		<div class="margin-form">
-            <input type="text" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall'}">
+            <input type="text" name="orders_days_backward" value="{$orders_days_backward|escape:'htmlall'}">
 		</div>
 		<div style="clear:both;"></div>
         
