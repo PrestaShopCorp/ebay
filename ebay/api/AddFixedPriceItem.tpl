@@ -41,7 +41,7 @@
 					<PhotoDisplay>PicturePack</PhotoDisplay>
 				{/if}
 				{foreach from=$pictures item=picture}
-					<!--<PictureURL>{$picture}</PictureURL>-->  <PictureURL>http://cdn.ipetitions.com/user-images/petitions/beban/qLliuDdqTV2DrpQStaGS_dog.jpg</PictureURL>
+					<PictureURL>{$picture}</PictureURL>
 				{/foreach}
 			</PictureDetails>
 		{/if}
