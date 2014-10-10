@@ -118,36 +118,8 @@ class TotFormat
         $desc = preg_replace('/<iframe\b[^>]*>(.*?)<\/iframe>/is', "", $desc);
         
         // removes javascript
-        $desc = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $desc);
-        
-        $desc = preg_replace('/on([A-Za-z0-9]*)="(.*)"/is', "", $desc);
- 
-        /*
-        $dom = new DOMDocument;
-        $dom->loadHTML($desc);
-        $nodes = $dom->getElementsByTagName('*');
-        foreach($nodes as $node)
-        {
-            if ($node->hasAttribute('onload'))
-            {
-                $node->removeAttribute('onload');
-            }
-            if ($node->hasAttribute('onclick'))
-            {
-                $node->removeAttribute('onclick');
-            }
-            
-            echo $node->tagName;
-            
-            if (in_array(strtolower($node->tagName), array('iframe')))
-                $node->parentNode->removeChild($node);
-                
-        }
-        $res = $dom->saveHTML();//will include html, head, body tags and doctype
-        
-        $res = substr($res, 122, -19);
-        */
-        
+        $desc = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $desc);      
+        $desc = preg_replace('/ on([A-Za-z0-9]*)="(.*)"/is', "", $desc);
         return $desc;
 	}    
 

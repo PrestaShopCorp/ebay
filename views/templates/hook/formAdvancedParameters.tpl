@@ -106,7 +106,7 @@
 			</label>
 			
 			<div class="margin-form">
-				<a href="../modules/ebay/log/request.txt" class="button">{l s='Download' mod='ebay'}</a>
+				<a href="../modules/ebay/log/request.txt" target="_blank" class="button">{l s='Download' mod='ebay'}</a>
 			</div>
 			<div class="clear both"></div>
 		{/if}
