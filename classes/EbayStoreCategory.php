@@ -94,7 +94,9 @@ class EbayStoreCategory extends ObjectModel
             WHERE `id_ebay_profile` = '.(int)$id_ebay_profile);
         
         $compatible_store_categories = self::_filterCategories($store_categories);
-        
+
+
+
         // all categories are compatible
         if (count($store_categories) == count($compatible_store_categories))
             $not_compatible_store_categories = array();
@@ -163,6 +165,7 @@ class EbayStoreCategory extends ObjectModel
             ON esc.`ebay_category_id` = escc.`ebay_category_id`
             AND esc.`id_ebay_profile` = escc.`id_ebay_profile`
             AND escc.`id_ebay_profile` = '.(int)$id_ebay_profile.'
+            WHERE esc.`id_ebay_profile` = '.(int)$id_ebay_profile.'
             ORDER BY `ebay_parent_category_id` ASC, `order` ASC');
             
         $categories = self::_filterCategories($categories);
