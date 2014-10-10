@@ -1238,8 +1238,7 @@ class Ebay extends Module
         } else
     		$wrong_domain = ($_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN') && $_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN_SSL'));
         
-        //if ($wrong_domain) {
-        if (true) {
+        if ($wrong_domain) {
             $url_vars = array();
     		if (version_compare(_PS_VERSION_, '1.5', '>'))
     			$url_vars['controller'] = 'AdminMeta';
