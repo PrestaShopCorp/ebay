@@ -72,7 +72,7 @@ function showProducts(id_category) {
 
 			$.ajax({
 				dataType: 'json',
-				url: module_dir + 'ebay/ajax/getProducts.php?category=' + id_category + '&token=' + ebay_token,
+				url: module_dir + 'ebay/ajax/getProducts.php?category=' + id_category + '&token=' + ebay_token + '&id_ebay_profile='+id_ebay_profile,
 				success: function(products) { 
 					loadedCategories[id_category] = true;
 					for (var i in products)
