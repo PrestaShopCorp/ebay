@@ -132,3 +132,15 @@
 	{rdelim};
     </script>
 <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/views/js/categories.js?date={$date|escape:'htmlall'}"></script>
+<script type="text/javascript">
+	// <![CDATA[
+	$(document).ready(function(){
+		var form_categories = parseInt("{$form_categories|escape:'htmlall'}");
+		if (form_categories >= 1)
+			$("#menuTab2").addClass('success');
+		
+		else
+			$("#menuTab2").addClass('wrong');
+	});
+	//]]>
+</script>

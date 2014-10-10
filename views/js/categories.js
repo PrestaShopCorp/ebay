@@ -103,12 +103,6 @@ function toggleSyncProduct(obj)
 
 $(document).ready(function() {
   
-	var form_categories = parseInt("{$form_categories|escape:'htmlall'}");
-	if (form_categories >= 1)
-		$("#menuTab2").addClass('success');
-	else
-		$("#menuTab2").addClass('wrong');
-
 	$("#pagination").children('li').click(function(){
 		var p = $(this).html();
 		var li = $("#pagination").children('li.current');
