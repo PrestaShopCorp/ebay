@@ -36,6 +36,18 @@
 	</div>
 </fieldset>
 
+<fieldset>
+	<legend>{l s='Free Shipping' mod='ebay'}</legend>
+	<label>{l s='Free Shipping' mod='ebay'}</label>
+	<div class="margin-form">
+		<select name="freeShipping" id="freeShipping" data-dialoghelp="#dispatchTime" data-inlinehelp="{l s='Include cheapest shipping cost within item price and reduce amounts by the same amount.' mod='ebay'}" class="ebay_select">
+				<option value="0" {if $freeShipping == 0} selected="selected"{/if}>{l s='No' mod='ebay'}</option>
+				<option value="1" {if $freeShipping > 0} selected="selected"{/if}>{l s='Yes' mod='ebay'}</option>
+		</select>
+	</div>
+</fieldset>
+
+
 
 <script type="text/javascript">
 	// <![CDATA[
@@ -77,7 +89,7 @@
 		{/foreach}
 		createSelecstShipping += "</select></div></td>";
 		// end carrier eBay
-		
+
 		if (currentName == 'internationalShipping')
 		{
 			createSelecstShipping += "<td style='visibility:hidden;clear:left;' class='shipping_destinations'><p>{l s='Select the countries you will ship to:' mod='ebay'}</p>";
@@ -231,8 +243,8 @@
 	function addShippingFee(show, internationalOnly, idEbayCarrier, idPSCarrier, additionalFee){
 	{/literal}
 		var currentShippingService = -1;
-		
-	
+
+
 		if(internationalOnly == 1)
 		{literal}{{/literal}
 			var lastId = $('#internationalCarrier .internationalShipping').length;
@@ -240,11 +252,11 @@
 		}
 		else
 		{literal}{{/literal}
-			
+
 			var lastId = $('#nationalCarrier tr').length;
 			internationsuffix = '';
 		}
-			
+
 
 
 
@@ -297,7 +309,7 @@
 		stringShippingFee += 		"<input type='text' name='extrafee"+internationsuffix+"["+lastId+"]' value='"+additionalFee+"'>";
 		stringShippingFee += 	"</td>";
 		stringShippingFee += 	"<td>";
-		stringShippingFee += 	"<img src='../img/admin/delete.gif' title='Delete' class='deleteCarrier' />";	
+		stringShippingFee += 	"<img src='../img/admin/delete.gif' title='Delete' class='deleteCarrier' />";
 		stringShippingFee += 	"</td>";
 		stringShippingFee += "</tr>";
 
@@ -307,7 +319,7 @@
 			return stringShippingFee;
 	}
 
-	
+
 	function getShippingLocation(lastId, zone)
 	{literal}{{/literal}
 		var string = '';
@@ -320,7 +332,7 @@
 			{literal}{{/literal}
 			string += '<div class="shippinglocationOption"><input type="checkbox" name="internationalShippingLocation['+lastId+'][{$shippingLocation.location|escape:'htmlall'}] value="{$shippingLocation.location|escape:'htmlall'}">{$shippingLocation.description|escape:'htmlall'}</option></div>';
 			}
-			
+
 		{/foreach}
 		return string;
 	}
@@ -348,7 +360,7 @@
 	{literal}{{/literal}
 		string = '<input type="hidden" value="1" name="excludeLocationHidden"/>'
 		string += '<table class="allregion table">';
-		
+
 		{foreach from=$excludeShippingLocation.all item=region key=regionvalue name=count}
 			{if $smarty.foreach.count.index % 4 == 0}
 				string += "<tr>";
@@ -372,7 +384,7 @@
 		return string;
 	}
 
-	jQuery(document).ready(function($) 
+	jQuery(document).ready(function($)
 	{literal}{{/literal}
 		/* INIT */
 		{foreach from=$existingNationalCarrier item=nationalCarrier}
@@ -388,10 +400,10 @@
 			{foreach from=$internationalCarrier.shippingLocation item=shippingLocation}
 				zone.push('{$shippingLocation.id_ebay_zone|escape:'htmlall'}');
 			{/foreach}
-			addInternationalShippingFee('{$internationalCarrier.ebay_carrier|escape:'htmlall'}', {$internationalCarrier.ps_carrier|escape:'htmlall'}, {$internationalCarrier.extra_fee|escape:'htmlall'}, zone, zoneExcluded);
+			addInternationalShippingFee('{$internationalCarrier.ebay_carrier|escape:'htmlall'}', {0+$internationalCarrier.ps_carrier|escape:'htmlall'}, {0+$internationalCarrier.extra_fee|escape:'htmlall'}, zone, zoneExcluded);
 		{/foreach}
 
-		
+
 		showExcludeLocation();
 
 		{foreach from=$existingNationalCarrier item=nationalCarrier key=i}
@@ -406,7 +418,7 @@
 			{foreach from=$internationalCarrier.shippingLocation item=shippingLocation}
 				zone.push('{$shippingLocation.id_ebay_zone|escape:'htmlall'}');
 			{/foreach}
-			addShipping('internationalShipping', {$internationalCarrier.ps_carrier|escape:'htmlall'}, '{$internationalCarrier.ebay_carrier|escape:'htmlall'}', {$internationalCarrier.extra_fee|escape:'htmlall'}, {$i}, {$internationalCarrier.id_zone|escape:'htmlall'}, zone);
+			addShipping('internationalShipping', {0+$internationalCarrier.ps_carrier|escape:'htmlall'}, '{$internationalCarrier.ebay_carrier|escape:'htmlall'}', {0+$internationalCarrier.extra_fee|escape:'htmlall'}, {$i}, {0+$internationalCarrier.id_zone|escape:'htmlall'}, zone);
 		{foreachelse}
 			addShipping('internationalShipping');
 		{/foreach}
@@ -421,8 +433,8 @@
 	{literal}{{/literal}
 		$('#nolist').fadeOut('normal', function()
 		{literal}{{/literal}
-			$('#list').html(excludeLocation());	
-			
+			$('#list').html(excludeLocation());
+
 		{literal}
 		$('.showCountries').each(function()
 		{
@@ -495,7 +507,7 @@
 			if(el.find('input').filter(':checked').length == 0)
 				is_configured = false;
 		}
-		
+
 		if(el.find('.prestaCarrier').val() == '')
 			is_configured = false;
 
@@ -529,12 +541,12 @@
 			$(this).before(excluded);
 		});
 
-		
+
 		$('#addNationalCarrier').unbind().click(function(){literal}{{/literal}
 			addShippingFee(1, 0);
 			bindElements();
 		});
-		
+
 		$('#addInternationalCarrier').unbind().click(function(){literal}{{/literal}
 			addInternationalShippingFee();
 			bindElements();
@@ -610,11 +622,11 @@
 	.excludeCountry input{
 		margin-right:5px;
 	}
-	
+
 	.allregion tr td{
 		vertical-align: top;
 	}
-	
+
 	.showCountries{
 		color:blue;
 		font-size:9px;
@@ -685,7 +697,7 @@
 				closeClick	: false,
 				openEffect	: 'none',
 				closeEffect	: 'none'
-			});	
+			});
 		}
 		else{
 			$(".fancyboxeBay").click(function(){
@@ -701,7 +713,7 @@
 
 <fieldset style="margin-top:10px;">
 	<legend><span data-dialoghelp="#DomShipp" data-inlinehelp="{l s='You must specify at least one domestic shipping method. ' mod='ebay'}">{l s='Domestic shipping' mod='ebay'}</span></legend>
-	
+
 	<div id="domesticShipping"></div>
 	<a id="domesticShippingButton" class="button bold"><img src="../img/admin/add.gif">{l s='Add new domestic carrier' mod='ebay'}</a>
 </fieldset>
@@ -721,7 +733,7 @@
 		<div id="nolist">
 		</div>
 		<div id="list">
-			
+
 		</div>
 	</div>
 </fieldset>

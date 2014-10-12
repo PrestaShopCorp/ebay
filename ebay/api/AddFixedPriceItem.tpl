@@ -77,6 +77,20 @@
 		<ShippingDetails>{$shipping_details}</ShippingDetails>
 		{$buyer_requirements_details}
 		<Site>{$site}</Site>
+		<ProductListingDetails>
+		{if isset($ean13)}
+			<EAN>{$ean13}</EAN>
+		{/if}
+		{if isset($upc)}
+			<UPC>{$upc}</UPC>
+		{/if}
+		{if isset($manufacturer_name) || isset($mpn)}
+		    <BrandMPN>
+        	{if isset($manufacturer_name)}<Brand>{$manufacturer_name}</Brand>{/if}
+       		{if isset($mpn)}<MPN>{$mpn}</MPN>{/if}
+      		</BrandMPN>
+		{/if}
+		</ProductListingDetails>
 	</Item>
 	<RequesterCredentials>
 		<eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>

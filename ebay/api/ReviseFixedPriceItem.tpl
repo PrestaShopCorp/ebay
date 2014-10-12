@@ -50,14 +50,14 @@
 		{if isset($category_id)}
 			<PrimaryCategory>
 				<CategoryID>{$category_id}</CategoryID>
-			</PrimaryCategory>		
+			</PrimaryCategory>
 		{/if}
 		{if count($pictures)}
 			<PictureDetails>
 				<GalleryType>Gallery</GalleryType>
 				{if $pictures|count > 1}
 					<PhotoDisplay>PicturePack</PhotoDisplay>
-				{/if}				
+				{/if}
 				{foreach from=$pictures item=picture}
 					<PictureURL>{$picture}</PictureURL>
 				{/foreach}
@@ -86,12 +86,26 @@
 						<Name><![CDATA[{$name}]]></Name>
 						<Value><![CDATA[{$value}]]></Value>
 					</NameValueList>
-				{/foreach}				
+				{/foreach}
 			</ItemSpecifics>
 		{$return_policy}
 		{if isset($site)}
 			<Site>{$site}</Site>
 		{/if}
+		<ProductListingDetails>
+		{if isset($ean13)}
+			<EAN>{$ean13}</EAN>
+		{/if}
+		{if isset($upc)}
+			<UPC>{$upc}</UPC>
+		{/if}
+		{if isset($manufacturer_name) || isset($mpn)}
+		    <BrandMPN>
+        	{if isset($manufacturer_name)}<Brand>{$manufacturer_name}</Brand>{/if}
+       		{if isset($mpn)}<MPN>{$mpn}</MPN>{/if}
+      		</BrandMPN>
+		{/if}
+		</ProductListingDetails>
 		{if isset($variations)}
 			{$variations}
 		{/if}
