@@ -43,7 +43,7 @@ class ebaySynchronizeStatusTask extends Ebay {
 		// get all ebay orders where current state is shipped and doesn't match last recorded state
 		// Should possibly only do it on change of shipped flag from the status...
 		$sql = 'SELECT os.shipped, eoo.id_shop, eoo.id_order, eo.id_ebay_order, eo.id_order_ref, o.current_state,
-				c.name AS carrier, oc.tracking_number, DATE_FORMAT(oc.date_add, "%Y-%m-%d") AS shipping_date
+				c.name AS carrier, oc.tracking_number, DATE_FORMAT(oc.date_add, "%Y-%m-%dT%H:%i:%s.000Z") AS shipping_date
 			FROM '._DB_PREFIX_.'ebay_order_order eoo
 			LEFT JOIN '._DB_PREFIX_.'ebay_order eo ON eo.id_ebay_order = eoo.id_ebay_order AND eoo.id_ebay_order > 0
 			LEFT JOIN '._DB_PREFIX_.'orders o ON eoo.id_order = o.id_order

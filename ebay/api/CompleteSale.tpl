@@ -18,7 +18,7 @@
   {if isset($paid)}<Paid>{$paid}</Paid>{/if}
   {if !empty($carrier)}<Shipment>
     <Notes>{l s='Shipped' mod='ebay'} {$carrier} {$shipping_date}</Notes>
-    </ShipmentTrackingDetails>
+    <ShipmentTrackingDetails>
        {if !empty($tracking_number)}<ShipmentTrackingNumber>{$tracking_number}</ShipmentTrackingNumber>{/if}
       <ShippingCarrierUsed>{$carrier}</ShippingCarrierUsed>
     </ShipmentTrackingDetails>
