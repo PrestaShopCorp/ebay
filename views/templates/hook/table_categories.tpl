@@ -38,7 +38,7 @@
 				{if isset($categoryConfigList[$c.id_category]) && isset($categoryConfigList[$c.id_category].var)}
 					{$categoryConfigList[$c.id_category].var}
 				{else}
-					<select name="category[{$c.id_category}]|escape:'htmlall'" id="categoryLevel1-{$c.id_category|escape:'htmlall'}" rel="{$c.id_category|escape:'htmlall'}" style="font-size: 12px; width: 160px;" OnChange="changeCategoryMatch(1, {$c.id_category|escape:'htmlall'});" class="ebay_select">
+					<select name="category[{$c.id_category|escape:'htmlall'}]" id="categoryLevel1-{$c.id_category|escape:'htmlall'}" rel="{$c.id_category|escape:'htmlall'}" style="font-size: 12px; width: 160px;" OnChange="changeCategoryMatch(1, {$c.id_category|escape:'htmlall'});" class="ebay_select">
 						<option value="0">{$noCatSelected|escape:'htmlall'}</option>
 						{foreach from=$eBayCategoryList item=ec}
 							<option value="{$ec.id_ebay_category|escape:'htmlall'}">{$ec.name|escape:'htmlall'}{if $ec.is_multi_sku == 1} *{/if}</option>
