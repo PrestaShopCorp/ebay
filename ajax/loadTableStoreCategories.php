@@ -77,7 +77,6 @@ $template_vars = array(
 	'categoryList' => $category_list,
 	'eBayStoreCategoryList' => $ebay_store_category_list,
 	'request_uri' => $_SERVER['REQUEST_URI'],
-	'noCatSelected' => Tools::getValue('ch_cat_str'),
 	'noCatFound' => Tools::getValue('ch_no_cat_str'),
 	'p' => $page
 );

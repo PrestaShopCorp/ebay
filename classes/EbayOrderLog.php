@@ -72,8 +72,8 @@ class EbayOrderLog extends ObjectModel
     public function __construct($id = null, $id_lang = null, $id_shop = null) {
         if (version_compare(_PS_VERSION_, '1.5', '>'))
             self::$definition = array(
-           		'table' => 'ebay_api_log',
-           		'primary' => 'id_ebay_log',
+           		'table' => 'ebay_order_log',
+           		'primary' => 'id_ebay_order_log',
            		'fields' => array(
                     'id_ebay_profile' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
                     'id_ebay_order' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
