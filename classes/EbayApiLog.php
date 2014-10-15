@@ -101,6 +101,7 @@ class EbayApiLog extends ObjectModel
     {
         return Db::getInstance()->executeS('SELECT * 
             FROM `'._DB_PREFIX_.'ebay_api_log`
+            ORDER BY `id_ebay_api_log` DESC
             LIMIT '.(int)$offset. ', '.(int)$limit);
     }
     
