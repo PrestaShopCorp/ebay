@@ -44,9 +44,15 @@ $offset = $nb_results * ($page - 1);
 
 $smarty =  Context::getContext()->smarty;
 
+$logs = EbayApiLog::get($offset, $nb_results);
+foreach ($logs as &$log) {
+    $log['data_sent'] = nl2br(TotFormat::prettyPrint($log['data_sent']));
+    $log['response'] = nl2br(TotFormat::prettyPrint($log['response']));
+}
+
 /* Smarty datas */
 $template_vars = array(
-    'logs' => EbayApiLog::get($offset, $nb_results),
+    'logs' => $logs,
 	'p' => $page,
 	'noLogFound' => Tools::getValue('no_logs_str'),
     'showStr' =>  Tools::getValue('show_str'),
