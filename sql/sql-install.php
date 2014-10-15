@@ -315,8 +315,8 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_store_category_configu
     `id_ebay_store_category_configuration` int(16) NOT NULL AUTO_INCREMENT,
 	`id_ebay_profile` int(16) NOT NULL,
     `ebay_category_id` int(16) NOT NULL,
-    `id_category` varchar(255) NOT NULL,
-	UNIQUE(`id_ebay_profile`, `ebay_category_id`),
+    `id_category` int(16) NOT NULL,
+	UNIQUE(`id_ebay_profile`, `id_category`),
 	PRIMARY KEY  (`id_ebay_store_category_configuration`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
