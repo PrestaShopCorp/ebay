@@ -164,13 +164,30 @@ class EbayStoreCategory extends ObjectModel
             LEFT JOIN `'._DB_PREFIX_.'ebay_store_category_configuration` escc
             ON esc.`ebay_category_id` = escc.`ebay_category_id`
             AND esc.`id_ebay_profile` = escc.`id_ebay_profile`
-            AND escc.`id_ebay_profile` = '.(int)$id_ebay_profile.'
             WHERE esc.`id_ebay_profile` = '.(int)$id_ebay_profile.'
             ORDER BY `ebay_parent_category_id` ASC, `order` ASC');
-            
-        $categories = self::_filterCategories($categories);
         
-        return $categories;
+        $categories = self::_filterCategories($categories);
+            
+        $final_categories = array();
+        foreach ($categories as $category) {
+            $ebay_category_id = $category['ebay_category_id'];
+            $id_category = $category['id_category'];
+            unset($category['id_category']);
+            
+            if (!isset($final_categories['c_'.$ebay_category_id])) {
+                
+                $final_categories['c_'.$ebay_category_id] = $category;
+                $final_categories['c_'.$ebay_category_id]['id_categories'] = array($id_category);
+
+            } else {
+                
+                $final_categories['c_'.$ebay_category_id]['id_categories'][] = $id_category;
+                
+            }
+        }
+        
+        return $final_categories;
     }
     
     /*

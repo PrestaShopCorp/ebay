@@ -566,7 +566,7 @@ class EbayRequest
 			'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
 			'category_id' => $data['categoryId'],
 			'pictures' => isset($data['pictures']) ? $data['pictures'] : array(),
-			'value' => htmlentities($data['brand']),
+//			'value' => htmlentities($data['brand']),
 			'return_policy' => $this->_getReturnPolicy(),
 			'resynchronize' => ($this->ebay_profile->getConfiguration('EBAY_SYNC_OPTION_RESYNC') != 1),
 			'title' => Tools::substr(self::prepareTitle($data), 0, 80),
@@ -659,6 +659,8 @@ class EbayRequest
 		);
 
 		$response = $this->_makeRequest('CompleteSale', $vars);
+        
+        $this->_logApiCall('completeSale', $vars, $response);
 
 		if ($response === false)
 			return false;
@@ -686,6 +688,8 @@ class EbayRequest
 		);
 
 		$response = $this->_makeRequest('CompleteSale', $vars);
+        
+        $this->_logApiCall('completeSale', $vars, $response);
 
 		if ($response === false)
 			return false;

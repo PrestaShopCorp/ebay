@@ -44,9 +44,13 @@ $offset = $nb_results * ($page - 1);
 
 $smarty =  Context::getContext()->smarty;
 
+$logs = EbayOrderLog::get($offset, $nb_results);
+foreach ($logs as &$log)
+    $log['data'] = nl2br(TotFormat::prettyPrint($log['data']));
+
 /* Smarty datas */
 $template_vars = array(
-    'logs' => EbayOrderLog::get($offset, $nb_results),
+    'logs' => $logs,
 	'p' => $page,
 	'noLogFound' => Tools::getValue('no_logs_str'),
     'showStr' =>  Tools::getValue('show_str'),

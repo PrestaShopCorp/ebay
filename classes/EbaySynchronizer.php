@@ -586,15 +586,27 @@ class EbaySynchronizer
 
 		return $ebay;
 	}
+    
+    private static function _getPriceDescriptionStr($price, $price_percent) {
+        $ebay = new Ebay();
+        $price_str = $ebay->l('au lieu de <del>%price_original%</del> (remise de %percent%)', 'ebay');
+        return str_replace(
+            array( '%price_original%', '%percent%' ), 
+            array( Tools::displayPrice($price), round($price_percent) ),
+            $price_str
+        );        
+    }
 
 	private static function _getItemDescription($data)
 	{
-		return EbaySynchronizer::_fillDescription($data['description'], $data['picturesMedium'], $data['picturesLarge'], Tools::displayPrice($data['price']), isset($data['price_original']) ? 'au lieu de <del>'.Tools::displayPrice($data['price_original']).'</del> (remise de '.round($data['price_percent']).')' : '');
+        $price_str = isset($data['price_original']) ? EbaySynchronizer::_getPriceDescriptionStr($data['price_original'], $data['price_percent']) : '';
+        
+		return EbaySynchronizer::_fillDescription($data['description'], $data['picturesMedium'], $data['picturesLarge'], Tools::displayPrice($data['price']), $price_str);
 	}
 
 	private static function _getMultiSkuItemDescription($data)
 	{
-		return EbaySynchronizer::_fillDescription($data['description'], $data['picturesMedium'], $data['picturesLarge'], Tools::displayPrice($data['price']), isset($data['price_original']) ? 'au lieu de <del>'.Tools::displayPrice($data['price_original']).'</del> (remise de '.round($data['price_percent']).')' : '');
+        return EbaySynchronizer::_getItemDescription($data);
 	}
 
 	private static function _fillDescription($description, $medium_pictures, $large_pictures, $product_price = '', $product_price_discount = '')
@@ -659,7 +671,7 @@ class EbaySynchronizer
 			$data['picturesMedium'],
 			$data['picturesLarge'],
 			Tools::displayPrice($data['price']),
-			isset($data['price_original']) ? 'au lieu de <del>'.Tools::displayPrice($data['price_original']).'</del> (remise de '.round($data['price_percent']).')' : '');
+            isset($data['price_original']) ? EbaySynchronizer::_getPriceDescriptionStr($data['price_original'], $data['price_percent']) : '');
 
 		$data['id_product'] .= '-'.(int)$data['id_attribute'];
 		$data['item_specifics'] = array_merge($data['item_specifics'], $variation['variation_specifics']);

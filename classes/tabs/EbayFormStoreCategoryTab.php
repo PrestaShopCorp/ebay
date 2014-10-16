@@ -53,7 +53,7 @@ class EbayFormStoreCategoryTab extends EbayTab
 			'module_name' => Tools::getValue('module_name'),
 			'tab' => Tools::getValue('tab'),            
 			'nb_categorie' => count(Category::getCategories($this->context->cookie->id_lang, true, false)),
-            'has_store_categories' => (bool)($store_categories['compatible']),
+            'has_store_categories' => (count($store_categories['compatible']) > 1),
             'not_compatible_store_categories' => implode(', ', $not_compatible_names),
             'has_ebay_shop' => (bool)($user_profile && $user_profile['StoreUrl']),
             'ebay_store_url' => EbayCountrySpec::getProUrlBySiteId($this->ebay_profile->ebay_site_id)
