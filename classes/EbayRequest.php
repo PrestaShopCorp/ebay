@@ -384,6 +384,8 @@ class EbayRequest
 		// Check data
 		if (!$data)
 			return false;
+        
+        $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
 		$vars = array(
 			'sku' => 'prestashop-'.$data['id_product'],
@@ -395,7 +397,7 @@ class EbayRequest
 			'price_update' => !isset($data['noPriceUpdate']),
 			'start_price' => $data['price'],
 			'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
-			'country_currency' => $this->ebay_country->getCurrency(),
+			'country_currency' => $currency->iso_code,
 			'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
 			'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
 			'pay_pal_email_address' => $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'),
@@ -490,11 +492,13 @@ class EbayRequest
 		// Check data
 		if (!$data)
 			return false;
+        
+        $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
 		// Build the request Xml string
 		$vars = array(
 			'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
-			'country_currency' => $this->ebay_country->getCurrency(),
+			'country_currency' => $currency->iso_code,
 			'description' => $data['description'],
 			'condition_id' => $data['condition'],
 			'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
@@ -552,11 +556,13 @@ class EbayRequest
 
 		// Set Api Call
 		$this->apiCall = 'ReviseFixedPriceItem';
+        
+        $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
 		$vars = array(
 			'item_id' => $data['itemID'],
 			'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
-			'country_currency' => $this->ebay_country->getCurrency(),
+			'country_currency' => $currency->iso_code,
 			'condition_id' => $data['condition'],
 			'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
 			'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
