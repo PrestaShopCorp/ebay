@@ -766,6 +766,8 @@ a.ebay-primary {
 #ebay_main_menu {
   float: right;
   list-style: none;
+  margin-top: 3px;
+margin-bottom: 3px;
 }
 
 #ebay_main_menu li {
@@ -777,6 +779,8 @@ a.ebay-primary {
   border-radius: 5px;
   font-weight: normal;
   opacity:0.5;
+  margin-bottom: 3px;
+  margin-top: 3px;
 }
 
 #ebay_main_menu li.selected {

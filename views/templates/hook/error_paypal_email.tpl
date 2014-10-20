@@ -44,7 +44,7 @@
 <script type="text/javascript">
 	// <![CDATA[
 	$(document).ready(function(){
-		var form_categories = parseInt("{$form_categories|escape:'htmlall'}");
+		var form_categories = parseInt("0");
 		if (form_categories >= 1)
 			$("#menuTab2").addClass('success');
 		
