@@ -617,17 +617,17 @@ class Ebay extends Module
     {
         $config = Configuration::getMultiple(array('EBAY_LOGS_LAST_CLEANUP', 'EBAY_LOGS_DAYS', 'EBAY_API_LOGS', 'EBAY_ACTIVATE_LOGS'));
 
-        if ($config['EBAY_LOGS_LAST_CLEANUP'] >= date('Y-m-d\TH:i:s', strtotime('-1 day')).'.000Z')
+        if (isset($config['EBAY_LOGS_LAST_CLEANUP']) && $config['EBAY_LOGS_LAST_CLEANUP'] >= date('Y-m-d\TH:i:s', strtotime('-1 day')).'.000Z')
             return;
         
         $has_cleaned_logs = false;
         
-        if ($config['EBAY_API_LOGS']) {
+        if (isset($config['EBAY_API_LOGS']) && $config['EBAY_API_LOGS']) {
             EbayApiLog::cleanOlderThan($config['EBAY_LOGS_DAYS']);
             $has_cleaned_logs = true;
         }
         
-        if ($config['EBAY_ACTIVATE_LOGS']) {
+        if (isset($config['EBAY_ACTIVATE_LOGS']) &&$config['EBAY_ACTIVATE_LOGS']) {
             EbayOrderLog::cleanOlderThan($config['EBAY_LOGS_DAYS']);
             $has_cleaned_logs = true;                
         }
@@ -1283,7 +1283,7 @@ class Ebay extends Module
             'delete_profile_url' => _MODULE_DIR_.'ebay/ajax/deleteProfile.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')),
             'main_tab' => $main_tab,
             'id_tab' => (int)Tools::getValue('id_tab'),
-            'pro_url' => EbayCountrySpec::getProUrlBySiteId($this->ebay_profile->ebay_site_id),            
+            'pro_url' => isset($this->ebay_profile) ? EbayCountrySpec::getProUrlBySiteId($this->ebay_profile->ebay_site_id) : '',                        
             'warning_url' => isset($warning_url) ? $warning_url : null,
             '_module_dir_' => _MODULE_DIR_,
             'date' => pSQL(date('Ymdhis')),         
