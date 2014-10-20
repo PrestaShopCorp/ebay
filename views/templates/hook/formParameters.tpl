@@ -27,7 +27,7 @@
 	{literal}
 	<script>
 		$(document).ready(function() {
-			win = window.redirect('{/literal}{$redirect_url|escape:'urlencode'}{literal}');
+			win = window.location = '{/literal}{$redirect_url|escape:'urlencode'}{literal}';
 		});
 	</script>
 	{/literal}
