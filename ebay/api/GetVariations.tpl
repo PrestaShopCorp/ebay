@@ -65,10 +65,8 @@
 				<VariationSpecificName>{$picture.name}</VariationSpecificName>
 			{/if}
 			<VariationSpecificPictureSet>
-				<VariationSpecificValue>{$picture.value}</VariationSpecificValue>
-                <!--
+				<VariationSpecificValue>{$picture.value}</VariationSpecificValue>                
 				<PictureURL>{$picture.url}</PictureURL>
-                -->   <PictureURL>http://cdn.ipetitions.com/user-images/petitions/beban/qLliuDdqTV2DrpQStaGS_dog.jpg</PictureURL>
 			</VariationSpecificPictureSet>
 		{/foreach}
 	{/foreach}
