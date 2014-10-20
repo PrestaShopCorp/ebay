@@ -399,6 +399,9 @@ class EbayOrder
 		$customer = new Customer($this->id_customers[$id_shop]);
 		$paiement = new EbayPayment();
 
+		//Change context's currency
+		$this->context->currency = new Currency($this->carts[$id_shop]->id_currency);
+
 		$paiement->validateOrder(
 			(int)$this->carts[$id_shop]->id,
 			Configuration::get('PS_OS_PAYMENT'),
