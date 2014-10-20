@@ -48,6 +48,14 @@
 					</NameValueList>
 				{/foreach}				
 			</VariationSpecifics>
+            
+            {if isset($variation.price_original)}
+                <DiscountPriceInfo>
+                    <OriginalRetailPrice>{$variation.price_original}</OriginalRetailPrice>
+                    <SoldOffeBay>true</SoldOffeBay>
+                </DiscountPriceInfo>
+            {/if}
+                    
 		</Variation>
 	{/foreach}
 	<Pictures>
@@ -57,7 +65,7 @@
 				<VariationSpecificName>{$picture.name}</VariationSpecificName>
 			{/if}
 			<VariationSpecificPictureSet>
-				<VariationSpecificValue>{$picture.value}</VariationSpecificValue>
+				<VariationSpecificValue>{$picture.value}</VariationSpecificValue>                
 				<PictureURL>{$picture.url}</PictureURL>
 			</VariationSpecificPictureSet>
 		{/foreach}

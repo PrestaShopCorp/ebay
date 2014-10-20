@@ -30,6 +30,9 @@
 		{if isset($sku)}
 			<SKU>{$sku}</SKU>
 		{/if}
+		{if isset($autopay)}
+			<AutoPay>{$autopay}</AutoPay>
+		{/if}        
 		<Title>{$title}</Title>
 		{if count($pictures)}
 			<PictureDetails>
@@ -77,6 +80,21 @@
 		<ShippingDetails>{$shipping_details}</ShippingDetails>
 		{$buyer_requirements_details}
 		<Site>{$site}</Site>
+        
+        {if isset($price_original)}
+            <DiscountPriceInfo>
+                <OriginalRetailPrice>{$price_original}</OriginalRetailPrice>
+                <SoldOffeBay>true</SoldOffeBay>
+            </DiscountPriceInfo>
+        {/if}
+        
+        {if isset($ebay_store_category_id)}
+            <Storefront>
+                  <StoreCategoryID>{$ebay_store_category_id}</StoreCategoryID>
+                  <!--<StoreCategoryName> string </StoreCategoryName>-->
+            </Storefront>
+        {/if}
+
 	</Item>
 	<RequesterCredentials>
 		<eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>

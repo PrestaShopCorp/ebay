@@ -314,11 +314,11 @@
 		{foreach from=$internationalShippingLocations item=shippingLocation}
 			if(zone != undefined && zone.indexOf('{$shippingLocation.location|escape:'htmlall'}') != -1)
 			{literal}{{/literal}
-			string += '<div class="shippinglocationOption"><input type="checkbox" checked="checked" name="internationalShippingLocation['+lastId+'][{$shippingLocation.location|escape:'htmlall'}] value="{$shippingLocation.location|escape:'htmlall'}">{$shippingLocation.description|escape:'htmlall'}</option></div>';
+			string += '<div class="shippinglocationOption"><input type="checkbox" checked="checked" name="internationalShippingLocation['+lastId+'][{$shippingLocation.location|escape:'htmlall'}] value="{$shippingLocation.location|escape:'htmlall'}">{$shippingLocation.description|escape:'htmlall'}</div>';
 			}
 			else
 			{literal}{{/literal}
-			string += '<div class="shippinglocationOption"><input type="checkbox" name="internationalShippingLocation['+lastId+'][{$shippingLocation.location|escape:'htmlall'}] value="{$shippingLocation.location|escape:'htmlall'}">{$shippingLocation.description|escape:'htmlall'}</option></div>';
+			string += '<div class="shippinglocationOption"><input type="checkbox" name="internationalShippingLocation['+lastId+'][{$shippingLocation.location|escape:'htmlall'}] value="{$shippingLocation.location|escape:'htmlall'}">{$shippingLocation.description|escape:'htmlall'}</div>';
 			}
 			
 		{/foreach}

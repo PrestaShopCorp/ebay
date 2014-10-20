@@ -40,6 +40,7 @@
 <br />
 *}
 <link rel="stylesheet" href="{$css_file|escape:'urlencode'}" />
+<link rel="stylesheet" href="{$font_awesome_css_file|escape:'urlencode'}" />
 <script>
 	var $j = $;
 </script>
@@ -185,8 +186,8 @@
                     <p id="ebay-install-title">{l s='Resources' mod='ebay'}</p>
                     <ul id="ebay-install-ul">
                         <li><a href="http://202-ecommerce.com/d/eBay-doc_{$documentation_lang}.pdf" target="_blank">{l s='Download the add-on installation guide' mod='ebay'}</a></li>
-                        <li><a href="">{l s='eBay Seller center' mod='ebay'}</a></li>
-                        <li><a href="http://pages.ebay.{$site_extension}/help/sell/fees.html" target="_blank">{l s='eBay fees for professional sellers' mod='ebay'}</a></li>
+                        <li><a href="{$pro_url}" target="_blank">{l s='eBay Seller center' mod='ebay'}</a></li>
+                        {*<li><a href="http://pages.ebay.{$site_extension}/help/sell/fees.html" target="_blank">{l s='eBay fees for professional sellers' mod='ebay'}</a></li>*}
                         <li><a href="{if $site_extension == 'fr'}http://202-ecommerce.com/ebay/{else}http://en.202-ecommerce.com/ebay-en/{/if}"  target="_blank">{l s='Contact us' mod='ebay'}</a></li>
                     </ul>
                 </fieldset>
@@ -241,64 +242,47 @@
             <div style="clear:both"></div>
         </div>
     </div>
+    
+    {if isset($warning_url) && $warning_url}
+        <div class="warn">
+		    <span style="float:right">
+			    <a id="hideWarn" href=""><img alt="X" src="../img/admin/close.png" /></a>
+		    </span>
+            <ul style="margin-top: 3px">
+                <li>You are currently connected to the Prestashop Back Office using a different URL <a href="{$warning_url|escape:'urlencode'}">than set up</a>, this module will not work properly. Please login in using URL_Back_Office</li>
+            </ul>
+        </div>
+    {/if}
+
     {if $current_profile && !$add_profile}
-    <div class="ebay_gray_title_box">
-        {assign var="user_identifier" value=$current_profile->ebay_user_identifier|escape:'htmlall'}
-        {{l s='You are updating the "|profile_identifier| for eBay.|profile_domain|" profile' mod='ebay'}|replace:'|profile_identifier|':$user_identifier|replace:'|profile_domain|':$current_profile_site_extension}
-    </div>
+        <div class="ebay-boxes-2-col-table">
+            <div class="ebay-boxes-2-col-cell left ebay_gray_title_box">
+                {assign var="user_identifier" value=$current_profile->ebay_user_identifier|escape:'htmlall'}
+                {{l s='You are updating the "|profile_identifier| for eBay.|profile_domain|" profile' mod='ebay'}|replace:'|profile_identifier|':$user_identifier|replace:'|profile_domain|':$current_profile_site_extension}
+            </div>
+            <div class="ebay-boxes-2-col-cell right ebay_gray_title_box">
+                <ul id="ebay_main_menu">
+                    <li class="selected"><i class="fa fa-cog"></i> <a id="settings-menu-link" class="main-menu-a" href data-sub="settings">{l s='Settings' mod='ebay'}</a></li>
+                    <li><i class="fa fa-paper-plane-o"></i> <a id="sync-menu-link" class="main-menu-a" href data-sub="sync">{l s='Synchronization' mod='ebay'}</a></li>
+                    <li><i class="fa fa-eye"></i> <a id="visu-menu-link" class="main-menu-a" href data-sub="visu">{l s='Visualization' mod='ebay'}</a></li>
+                    <li><i class="fa fa-wrench"></i> <a id="advanced-settings-menu-link" class="main-menu-a" href data-sub="advanced-settings">{l s='Advanced Settings' mod='ebay'}</a></li>
+                </ul>
+            </div>
+        </div>
     {/if}
     
     <script type="text/javascript">
-        $(document).ready(function() {
-            $('#ebay-seller-tips-link').click(function(event) {
-              event.preventDefault();
-              var sellerTips = $('#seller-tips');
-              if (sellerTips.css('display') == 'none') {
-                  $(this).html('{l s='Hide seller tips' mod='ebay'}');
-                  sellerTips.show();
-              } else {
-                  $(this).html('{l s='Show seller tips' mod='ebay'}');
-                  sellerTips.hide();                  
-              }
-              return false;
-            });
-          
-          	$("#ebay_video_fancybox").click(function() {
-          		$.fancybox({
-          			'padding'		: 0,
-          			'autoScale'		: false,
-          			'transitionIn'	: 'none',
-          			'transitionOut'	: 'none',
-          			'title'			: this.title,
-          			'width'			: 640,
-          			'height'		: 385,
-          			'href'			: this.href.replace(new RegExp("watch\\?v=", "i"), 'v/'),
-          			'type'			: 'swf',
-          			'swf'			: {
-          			'wmode'				: 'transparent',
-          			'allowfullscreen'	: 'true'
-          			}
-          		});
-
-          		return false;
-          	});
+        var header_ebay_l = {
+          'Hide seller tips' : "{l s='Hide seller tips' mod='ebay'}",
+          'Show seller tips'  : "{l s='Show seller tips' mod='ebay'}",
+          'Are you sure you want to delete the profile number %profile_number%?' : "{l s='Are you sure you want to delete the profile number %profile_number%?' mod='ebay'}"
+        };
         
-            $('.delete-profile').click(function(event) {
-                event.preventDefault();
-                var profileId = $(this).data('profile');
-                if (confirm('{l s='Are you sure you want to delete the profile number %profile_number%?' mod='ebay'}'.replace('%profile_number%', profileId))) {
-                    $.ajax({
-                        url: '{$delete_profile_url|escape:'htmlall'}&profile='+profileId,
-                        cache: false,
-                        success: function(data) {
-                            location.reload();
-                        }
-                    });
-                }
-                return false;
-            });
-            
-        });
+        var delete_profile_url = '{$delete_profile_url|escape:'htmlall'}';
+        
+        var main_tab = '{$main_tab}';
+        var id_tab = '{$id_tab}';
     </script>
+    <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/views/js/header.js?date={$date|escape:'htmlall'}"></script>
 {/if}
 <!-- after seller tips -->

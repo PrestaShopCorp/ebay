@@ -48,7 +48,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'it',
 			'signin'         => 'https://signin.ebay.it/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.it/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.it/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.ebay.fr/professionnels/index.html'
 		),
 		'gb' => array(
 			'site_id'        => 3,
@@ -60,7 +61,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'gb',
 			'signin'         => 'https://signin.ebay.co.uk/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.co.uk/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.co.uk/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://sellercentre.ebay.co.uk/'            
 		),
 		'es' => array(
 			'site_id'        => 186,
@@ -72,7 +74,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'es',
 			'signin'         => 'https://signin.ebay.es/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.es/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.es/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.ebay.es/businesscentre/index.html'                        
 		),
 		'fr' => array(
 			'site_id'        => 71,
@@ -84,7 +87,8 @@ class EbayCountrySpec
 			'img_stats'      => 'views/img/ebay_stats.png',
 			'iso_code'       => 'fr',
 			'signin'         => 'https://signin.ebay.fr/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.fr/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.fr/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.ebay.fr/professionnels/index.html'            
 		),
 		'nl' => array(
 			'site_id'        => 146,
@@ -96,7 +100,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'nl',
 			'signin'         => 'https://signin.ebay.nl/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.nl/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.nl/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.ebay.nl/help/sell/rampingup.html'
 		),
 		'pl' => array(
 			'site_id'        => 212,
@@ -108,7 +113,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'pl',
 			'signin'         => 'https://signin.ebay.pl/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.pl/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.pl/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.ebay.pl/help/sell/rampingup.html'            
 		),
 		'be-fr' => array(
 			'site_id'        => 23,
@@ -121,7 +127,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'be',
 			'signin'         => 'https://signin.befr.ebay.be/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.befr.ebay.be/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.befr.ebay.be/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.befr.ebay.be/befr/hubs/selling/professional/index.html'            
 		),
 		'be-nl' => array(
 			'site_id'        => 123,
@@ -134,7 +141,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'be',
 			'signin'         => 'https://signin.benl.ebay.be/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.benl.ebay.be/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.benl.ebay.be/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.befr.ebay.be/befr/hubs/selling/professional/index.html'        
 		),
 		'de' => array(
 			'site_id'        => 77,
@@ -146,7 +154,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'de',
 			'signin'         => 'https://signin.ebay.de/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.de/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.de/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://verkaeuferportal.ebay.de/'
 		),
 		'ch' => array(
 			'site_id'        => 193,
@@ -158,7 +167,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'ch',
 			'signin'         => 'https://signin.ebay.ch/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.ch/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.ch/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.ebay.ch/help/sell/rampingup.html'            
 		),
 		'at' => array(
 			'site_id'        => 16,
@@ -170,7 +180,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'at',
 			'signin'         => 'https://signin.ebay.at/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.at/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.at/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.ebay.at/help/sell/rampingup.html'
 		),
 	);
 
@@ -382,6 +393,16 @@ class EbayCountrySpec
         
         return null;
     }        
+    
+    public static function getProUrlBySiteId($site_id)
+    {
+        foreach(self::$country_data as $country)
+            if ($country['site_id'] == $site_id)
+                return $country['pro_url'];
+        
+        return null;        
+    }
+    
 
     public static function getSiteIdByIsoCode($iso_code) {
     	foreach(self::$country_data as $country)
@@ -390,4 +411,5 @@ class EbayCountrySpec
         
         return null;
     }
+    
 }

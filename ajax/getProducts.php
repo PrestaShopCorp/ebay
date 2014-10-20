@@ -34,6 +34,7 @@ if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get(
 
 $ebay_country = EbayCountrySpec::getInstanceByKey(Configuration::get('EBAY_COUNTRY_DEFAULT'));
 $id_lang = $ebay_country->getIdLang();
+$id_ebay_profile = (int)Tools::getValue('id_ebay_profile');
 
 $is_one_five = version_compare(_PS_VERSION_, '1.5', '>');
 
@@ -47,7 +48,7 @@ $sql .= ' LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
 $sql .= $is_one_five ? Shop::addSqlRestrictionOnLang('pl') : '';
 $sql .= ')
 		LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
-			ON p.`id_product` = epc.`id_product`
+			ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.$id_ebay_profile.'
 		WHERE ';
 		
 $sql .= $is_one_five ? ' product_shop.`id_shop` = 1 AND ' : '';

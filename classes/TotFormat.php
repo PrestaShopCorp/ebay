@@ -107,6 +107,84 @@ class TotFormat
         return trim(preg_replace('/[^+0-9. ()-]+/', ' ', $number));        
 	}
     
+	/**
+	 * Format product description by removing potential hazardous code
+	 *
+	 * @param string $desc description to be cleaned
+	 */
+	public static function formatDescription($desc)
+	{
+        // removes iFrames
+        $desc = preg_replace('/<iframe\b[^>]*>(.*?)<\/iframe>/is', "", $desc);
+        
+        // removes javascript
+        $desc = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $desc);      
+        $desc = preg_replace('/ on([A-Za-z0-9]*)="(.*)"/is', "", $desc);
+        return $desc;
+	}    
+    
+    
+    /**
+     * This function will take JSON string and indent it very readable.
+     *
+     * @param string $json to be formatted
+     */
+    public static function prettyPrint( $json )
+    {
+        $result = '';
+        $level = 0;
+        $in_quotes = false;
+        $in_escape = false;
+        $ends_line_level = NULL;
+        $json_length = strlen( $json );
+
+        for( $i = 0; $i < $json_length; $i++ ) {
+            $char = $json[$i];
+            $new_line_level = NULL;
+            $post = "";
+            if( $ends_line_level !== NULL ) {
+                $new_line_level = $ends_line_level;
+                $ends_line_level = NULL;
+            }
+            if ( $in_escape ) {
+                $in_escape = false;
+            } else if( $char === '"' ) {
+                $in_quotes = !$in_quotes;
+            } else if( ! $in_quotes ) {
+                switch( $char ) {
+                    case '}': case ']':
+                        $level--;
+                        $ends_line_level = NULL;
+                        $new_line_level = $level;
+                        break;
+
+                    case '{': case '[':
+                        $level++;
+                    case ',':
+                        $ends_line_level = $level;
+                        break;
+
+                    case ':':
+                        $post = " ";
+                        break;
+
+                    case " ": case "\t": case "\n": case "\r":
+                        $char = "";
+                        $ends_line_level = $new_line_level;
+                        $new_line_level = NULL;
+                        break;
+                }
+            } else if ( $char === '\\' ) {
+                $in_escape = true;
+            }
+            if( $new_line_level !== NULL ) {
+                $result .= "\n".str_repeat( "\t", $new_line_level );
+            }
+            $result .= $char.$post;
+        }
+
+        return $result;
+    }
 
     
 }

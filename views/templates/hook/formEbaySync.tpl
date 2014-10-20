@@ -130,12 +130,19 @@
 	}
 	{/literal}
 </script>
+
 <div id="resultSync" style="text-align: center; font-weight: bold; font-size: 14px;"></div>
+
+
 <form action="{$action_url|escape:'urlencode'}" method="post" class="form" id="configForm4">
 	<fieldset style="border: 0">
-		<div class="warning big">
-			<b data-dialoghelp="http://pages.ebay.com/help/sell/listing-variations.html" data-inlinehelp="{l s='Find out more about multi-variation listings.' mod='ebay'}">{l s='Note: If some of your categories don’t support multi-variation listings, all variations will appear as separate listings.' mod='ebay'}</b>
-		</div>
+
+        {if isset($category_alerts) && !empty($category_alerts)}
+            <div class="warning big">
+                {$category_alerts|escape:'htmlall'}
+            </div>
+        {/if}
+
 		<h4>{l s='You\'re now ready to list your products on eBay.' mod='ebay'}</h4>
 		<label style="width: 250px;">{l s='List all products on eBay' mod='ebay'} : </label><br /><br />
 		<div class="margin-form">

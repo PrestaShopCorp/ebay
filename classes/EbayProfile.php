@@ -269,6 +269,33 @@ class EbayProfile extends ObjectModel
 		$this->setConfiguration('EBAY_PICTURE_PER_LISTING', 0);
     }
     
+    /*
+     * returns true if all settings are properly configured in the settings tab
+     * returns false otherwise
+     *
+     **/
+    public function isAllSettingsConfigured()
+    {
+        $tabs = array(
+            'param' => EbayValidatorTab::getParametersTabConfiguration($this->id),
+            'categories' => EbayValidatorTab::getCategoryTabConfiguration($this->id),
+            'items_specifics' => EbayValidatorTab::getitemSpecificsTabConfiguration($this->id),
+            'shipping' => EbayValidatorTab::getShippingTabConfiguration($this->id),
+            'template' => EbayValidatorTab::getTemplateTabConfiguration($this->id)
+        );
+        
+        $is_all_set = true;
+        foreach ($tabs as $key => $tab) {
+            if (isset($tab['indicator']) && ($tab['indicator'] !== 'success')) {
+                $is_all_set = false;
+                break;
+            }
+        }
+        
+        return $is_all_set;
+
+    }
+    
 	/**
 	  * Get token from the ebay_user_identifier
 	  *
