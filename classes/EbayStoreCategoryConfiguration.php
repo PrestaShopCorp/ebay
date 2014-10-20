@@ -29,7 +29,7 @@ class EbayStoreCategoryConfiguration
 {
     public static function deleteByIdEbayProfile($id_ebay_profile)
     {
-        return Db::getInstance()->delete('ebay_store_category_configuration', '`id_ebay_profile` = '.(int)$id_ebay_profile);
+        return Db::getInstance()->delete(_DB_PREFIX_.'ebay_store_category_configuration', '`id_ebay_profile` = '.(int)$id_ebay_profile);
     }
     
     public static function insert($id_ebay_profile, $ebay_category_id, $id_category)
