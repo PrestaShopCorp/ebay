@@ -55,21 +55,11 @@ class EbayFormParametersTab extends EbayTab
 		$createShopUrl = 'http://cgi3.ebay.'.$ebay_country->getSiteExtension().'/ws/eBayISAPI.dll?CreateProductSubscription&&productId=3&guest=1';
 
 		$ebay_request = new EbayRequest();
-        
-        // Raph test
-        $ebay_request->getStoreCategories();
-        
+                
 		$ebay_sign_in_url = $ebay_request->getLoginUrl().'?SignIn&runame='.$ebay_request->runame.'&SessID='.$this->context->cookie->eBaySession;
 		
 		$returns_policy_configuration = $this->ebay_profile->getReturnsPolicyConfiguration();
 
-        /*
-		$sync_products_by_cron_url = $this->_getModuleUrl().'synchronizeProducts_CRON.php';
-		$sync_products_by_cron_path = dirname(__FILE__).'/synchronizeProducts_CRON.php';
-		$sync_orders_by_cron_path = dirname(__FILE__).'/synchronizeOrders_CRON.php';
-		$sync_orders_by_cron_url = $this->_getModuleUrl().'synchronizeOrders_CRON.php';
-        */
-        
 		$returnsConditionAccepted = Tools::getValue('ebay_returns_accepted_option', Configuration::get('EBAY_RETURNS_ACCEPTED_OPTION'));
 		
 		$ebay_paypal_email = Tools::getValue('ebay_paypal_email', $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'));
@@ -77,11 +67,6 @@ class EbayFormParametersTab extends EbayTab
 		$shopCountry = Tools::getValue('ebay_shop_country', $this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY'));        
 		$ebayListingDuration = $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') ? $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') : 'GTC';
             
-        /*
-		$sizedefault = $this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_DEFAULT');
-		$picture_per_listing = (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING');
-        */
-		
         $user_profile = $ebay_request->getUserProfile($this->ebay_profile->ebay_user_identifier);
         
         $is_multishop = (version_compare(_PS_VERSION_, '1.5', '>') && Shop::isFeatureActive());
@@ -101,7 +86,6 @@ class EbayFormParametersTab extends EbayTab
 			'url' => $url,
 			'ebay_sign_in_url' => $ebay_sign_in_url,
 			'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
-			//'ebayIdentifier' => $ebay_identifier,
 			'configCurrencysign' => $config_currency->sign,
 			'policies' => EbayReturnsPolicy::getReturnsPolicies(),
 			'catLoaded' => !Configuration::get('EBAY_CATEGORY_LOADED_'.$this->ebay_profile->ebay_site_id),
@@ -120,25 +104,10 @@ class EbayFormParametersTab extends EbayTab
 			'ebayListingDuration' => $ebayListingDuration,
 			'automaticallyRelist' => Configuration::get('EBAY_AUTOMATICALLY_RELIST'),
 			'is_multishop'  => $is_multishop,
-
-            /*
-			'sync_products_by_cron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON'),
-			'sync_products_by_cron_url' => $sync_products_by_cron_url,
-			'sync_products_by_cron_path' => $sync_products_by_cron_path,            
-			'sync_orders_by_cron' => Configuration::get('EBAY_SYNC_ORDERS_BY_CRON'),
-			'sync_orders_by_cron_url' => $sync_orders_by_cron_url,
-			'sync_orders_by_cron_path' => $sync_orders_by_cron_path,
-            */
-			
             'within_values' => unserialize(Configuration::get('EBAY_RETURNS_WITHIN_VALUES')),
 			'within' => $returns_policy_configuration->ebay_returns_within,
 			'whopays_values' => unserialize(Configuration::get('EBAY_RETURNS_WHO_PAYS_VALUES')),
 			'whopays' => $returns_policy_configuration->ebay_returns_who_pays,
-            /*
-			'activate_logs' => Configuration::get('EBAY_ACTIVATE_LOGS'),
-			'is_writable' => is_writable(_PS_MODULE_DIR_.'ebay/log/request.txt'),
-			'log_file_exists' => file_exists(_PS_MODULE_DIR_.'ebay/log/request.txt'),
-            */
 			'activate_mails' => Configuration::get('EBAY_ACTIVATE_MAILS'),
 			'hasEbayBoutique' => isset($user_profile['StoreUrl']) && !empty($user_profile['StoreUrl']) ? true : false,
             'currencies' => TotCompatibility::getCurrenciesByIdShop($this->ebay_profile->id_shop),
@@ -190,7 +159,6 @@ class EbayFormParametersTab extends EbayTab
 			)
 			&& Configuration::updateValue('EBAY_SYNC_PRODUCTS_BY_CRON', ('cron' === Tools::getValue('sync_products_mode')))
 			&& Configuration::updateValue('EBAY_SYNC_ORDERS_BY_CRON', ('cron' === Tools::getValue('sync_orders_mode')))
-//			&& $this->ebay_profile->setConfiguration('EBAY_IDENTIFIER', pSQL(Tools::getValue('ebay_identifier')))
 			&& $this->ebay->setConfiguration('EBAY_ACTIVATE_MAILS', Tools::getValue('activate_mails') ? 1 : 0)
             && in_array((int)Tools::getValue('currency'), $currencies_ids)
             && $this->ebay_profile->setConfiguration('EBAY_CURRENCY', (int)Tools::getValue('currency'))
