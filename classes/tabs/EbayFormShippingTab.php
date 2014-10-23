@@ -159,7 +159,7 @@ class EbayFormShippingTab extends EbayTab
 			$international_excluded_shipping_locations = Tools::getValue('internationalExcludedShippingLocation');
 
 			foreach ($ebay_carriers_international as $key => $ebay_carrier_international)
-			{//				
+			{			
 				if (!empty($ebay_carrier_international) && !empty($ps_carriers_international[$key]) && isset($international_shipping_locations[$key]))
 				{
 					$infos = explode('-', $ps_carriers_international[$key]); 

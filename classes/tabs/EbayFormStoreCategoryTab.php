@@ -64,7 +64,6 @@ class EbayFormStoreCategoryTab extends EbayTab
     
     public function postProcess()
     {
-        
 		// Insert and update categories
         if ($store_categories = Tools::getValue('store_category')) {
             
@@ -77,12 +76,6 @@ class EbayFormStoreCategoryTab extends EbayTab
                     EbayStoreCategoryConfiguration::insert($this->ebay_profile->id, $ebay_category_id, $id_category);
 
         }
-        
-        /*
-		if (Tools::getValue('ajax'))
-			die('{"valid" : true}');
-        */
-
 		return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));        
     }    
 
