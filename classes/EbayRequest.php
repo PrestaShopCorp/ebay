@@ -639,13 +639,8 @@ class EbayRequest
 
 		// Set Api Call
 		$this->apiCall = 'GetStore';
-
 		$response = $this->_makeRequest('GetStore');
-
-		if ($response === false)
-			return false;
-        
-        return $response->Store->CustomCategories->CustomCategory;
+        return ($response === false) ? false : $response->Store->CustomCategories->CustomCategory;
         
 	}    
     
