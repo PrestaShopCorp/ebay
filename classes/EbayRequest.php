@@ -664,10 +664,7 @@ class EbayRequest
         
         $this->_logApiCall('completeSale', $vars, $response);
 
-		if ($response === false)
-			return false;
-        
-		return $this->_checkForErrors($response);
+		return ($response === false) ? false : $this->_checkForErrors($response);
 	}
     
 	/**
