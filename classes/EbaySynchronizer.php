@@ -438,7 +438,6 @@ class EbaySynchronizer
 					))
 			);
 
-//			$price_original = $price;
 
 			if (preg_match('#[-]{0,1}[0-9]{1,2}%$#is', $ebay_category->getPercent()))
 				$price *= (1 + ($ebay_category->getPercent() / 100));
@@ -450,7 +449,6 @@ class EbaySynchronizer
 			if ($ebay_category->getPercent() < 0)
 			{
 				$variation['price_original'] = round($price_original, 2);
-//				$variation['price_percent'] = round($ebay_category->getPercent());
 			} else if ($price_original > $price)
                 $variation['price_original'] = round($price_original, 2);                
 
