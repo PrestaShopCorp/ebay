@@ -45,7 +45,6 @@ class EbayFormParametersTab extends EbayTab
 
 		$url = $this->_getUrl($url_vars);
         
-		//$ebay_identifier = Tools::getValue('ebay_identifier', $this->ebay_profile->ebay_user_identifier).'';
 		$ebayShop = $this->ebay_profile->getConfiguration('EBAY_SHOP') ? $this->ebay_profile->getConfiguration('EBAY_SHOP') : $this->ebay->StoreName;
 		
         $ebayShopValue = Tools::getValue('ebay_shop', $ebayShop);
