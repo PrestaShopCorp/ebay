@@ -949,8 +949,8 @@ class EbayRequest
         $log->type = $type;
         $log->context = $this->context;
 
-        $log->data_sent = json_encode($data_sent);
-        $log->response = json_encode($response);
+        $log->data_sent = Tools::jsonEncode($data_sent);
+        $log->response = Tools::jsonEncode($response);
         
         if ($id_product)
             $log->id_product = (int)$id_product;
