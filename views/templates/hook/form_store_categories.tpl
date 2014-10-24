@@ -32,7 +32,7 @@
     
     {if $has_ebay_shop}
     
-        {if $has_store_categories }
+        {if $has_store_categories}
         	<p>
         		<b>{l s='Select a category' mod='ebay'}</b>
         		<br />
@@ -114,10 +114,10 @@
 	var module_path = '{$_path|escape:'htmlall'}';
 	var id_lang = '{$id_lang|escape:'htmlall'}';
 	var id_ebay_profile = '{$id_ebay_profile|escape:'htmlall'}';
-	var store_categories_ebay_l = {
+	var store_categories_ebay_l = {ldelim}
 		'No category found'		 : "{l s='No category found' mod='ebay'}",
 		'You are not logged in': "{l s='You are not logged in' mod='ebay'}",
 		'Settings updated'		 : "{l s='Settings updated' mod='ebay'}",
-	};
+	{rdelim};
 </script>
 <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/storeCategories.js?date={$date|escape:'htmlall'}"></script>
