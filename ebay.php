@@ -1145,7 +1145,7 @@ class Ebay extends Module
 				$this->_postProcess();
 			else
 				foreach ($errors as $error)
-					$this->html .= '<div class="alert error"><img src="../modules/ebay/views/img/forbbiden.gif" alt="nok" />&nbsp;'.$error.'</div>';
+					$this->html .= '<div class="alert error"><img src="../modules/ebay/img/forbbiden.gif" alt="nok" />&nbsp;'.$error.'</div>';
 			
 			if (Configuration::get('EBAY_SEND_STATS')) {
 				$ebay_stat = new EbayStat($this->stats_version, $this->ebay_profile);
@@ -1232,8 +1232,7 @@ class Ebay extends Module
         
         // check domain
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
-            
-            $shop = new Shop($this->ebay_profile->id_shop);
+            $shop = $this->ebay_profile instanceof EbayProfile ? new Shop($this->ebay_profile->id_shop) : new Shop();
             $wrong_domain = ($_SERVER['HTTP_HOST'] != $shop->domain && $_SERVER['HTTP_HOST'] != $shop->domain_ssl && Tools::getValue('ajax') == false);
 
         } else
@@ -1629,7 +1628,7 @@ class Ebay extends Module
 			// we cheat a bit to display a consistent number of products done
 			$nb_products_done = min($nb_products - $nb_products_less + 1, $nb_products);
 
-			echo 'KO|<br /><br /> <img src="../modules/ebay/views/img/loading-small.gif" border="0" /> '.$this->l('Products').' : '.$nb_products_done.' / '.$nb_products.'<br /><br />';
+			echo 'KO|<br /><br /> <img src="../modules/ebay/img/loading-small.gif" border="0" /> '.$this->l('Products').' : '.$nb_products_done.' / '.$nb_products.'<br /><br />';
 		}
 		else
 		{

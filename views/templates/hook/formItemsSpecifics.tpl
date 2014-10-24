@@ -60,7 +60,7 @@
 				<tr id="specifics-{$category.id|escape:'htmlall'}">
 					<td style="vertical-align: top">{$category.name|escape:'htmlall'}</td>
 					<td>
-						<img id="specifics-{$category.id|escape:'htmlall'}-loader" src="{$_path|escape:'htmlall'}views/img/loading-small.gif" alt="" style="height:20px;" />
+						<img id="specifics-{$category.id|escape:'htmlall'}-loader" src="{$_path|escape:'htmlall'}img/loading-small.gif" alt="" style="height:20px;" />
 					</td>
 					<td></td>
 				</tr>

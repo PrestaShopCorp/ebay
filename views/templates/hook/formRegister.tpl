@@ -44,7 +44,7 @@
 		.ebay_dl > * {float: left; margin: 10px 0 0 10px}
 		.ebay_dl > dt {min-width: 100px; display: block; clear: both; text-align: left}
 		#ebay_label {font-weight: normal; float: none}
-		#button_ebay{background-image:url({/literal}{$path|escape:'htmlall'}{literal}views/img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:385px;height:191px;cursor:pointer;padding-bottom:70px;font-weight:bold;font-size:22px}
+		#button_ebay{background-image:url({/literal}{$path|escape:'htmlall'}{literal}img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:385px;height:191px;cursor:pointer;padding-bottom:70px;font-weight:bold;font-size:22px}
 	input.primary {
 		text-shadow: none;
 		background: -webkit-gradient(linear, center top ,center bottom, from(#0055FF), to(#0055AA)) repeat scroll 0 0 transparent;

@@ -65,7 +65,7 @@
 
 {if $show_welcome}
 <div class="ebay-welcome">
-    <img id="ebay-logo" src="{$path|escape:'htmlall'}views/img/ebay.png" />
+    <img id="ebay-logo" src="{$path|escape:'htmlall'}img/ebay.png" />
     <div id="ebay-welcome-top" class="ebay-boxes-2-col-table">
         <div class="ebay-boxes-2-col-cell right">
             <div class="ebay-boxes-2-col-cell-content">
@@ -115,19 +115,19 @@
                 	<legend><img src="{$path|escape:'htmlall'}logo.gif" alt="" />{l s='eBay Module Status' mod='ebay'}</legend>
                 	<div style="float: left">
                     	{if empty($alert)}
-                    		<img src="../modules/ebay/views/img/valid.png" /><strong>{l s='eBay Module is configured and online!' mod='ebay'}</strong>
+                    		<img src="../modules/ebay/img/valid.png" /><strong>{l s='eBay Module is configured and online!' mod='ebay'}</strong>
                     		{if $is_version_one_dot_five}
                     			{if $is_version_one_dot_five_dot_one}
-                    				<br/><img src="../modules/ebay/views/img/warn.png" /><strong>{l s='You\'re using version 1.5.1 of PrestaShop. We invite you to upgrade to version 1.5.2  so you can use the eBay module properly.' mod='ebay'}</strong>
+                    				<br/><img src="../modules/ebay/img/warn.png" /><strong>{l s='You\'re using version 1.5.1 of PrestaShop. We invite you to upgrade to version 1.5.2  so you can use the eBay module properly.' mod='ebay'}</strong>
                     				<br/><strong>{l s='Please synchronize your eBay sales in your Prestashop front office' mod='ebay'}</strong>
                     			{/if}
                     		{/if}
                     	{else}
-                    		<img src="../modules/ebay/views/img/warn.png" /><strong>{l s='Please complete the following settings to configure the module' mod='ebay'}</strong>
-                    		<br />{if in_array('registration', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 1) {l s='Register the module on eBay' mod='ebay'}
-                    		<br />{if in_array('allowurlfopen', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 2) {l s='Allow url fopen' mod='ebay'}
-                    		<br />{if in_array('curl', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 3) {l s='Enable cURL' mod='ebay'}
-                    		<br />{if in_array('SellerBusinessType', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 4) {l s='Please register an eBay business seller account to configure the application' mod='ebay'}
+                    		<img src="../modules/ebay/img/warn.png" /><strong>{l s='Please complete the following settings to configure the module' mod='ebay'}</strong>
+                    		<br />{if in_array('registration', $alert)}<img src="../modules/ebay/img/warn.png" />{else}<img src="../modules/ebay/img/valid.png" />{/if} 1) {l s='Register the module on eBay' mod='ebay'}
+                    		<br />{if in_array('allowurlfopen', $alert)}<img src="../modules/ebay/img/warn.png" />{else}<img src="../modules/ebay/img/valid.png" />{/if} 2) {l s='Allow url fopen' mod='ebay'}
+                    		<br />{if in_array('curl', $alert)}<img src="../modules/ebay/img/warn.png" />{else}<img src="../modules/ebay/img/valid.png" />{/if} 3) {l s='Enable cURL' mod='ebay'}
+                    		<br />{if in_array('SellerBusinessType', $alert)}<img src="../modules/ebay/img/warn.png" />{else}<img src="../modules/ebay/img/valid.png" />{/if} 4) {l s='Please register an eBay business seller account to configure the application' mod='ebay'}
                     	{/if}
                     </div>
                 {else}
@@ -182,7 +182,7 @@
                     {if $show_seller_tips}
                         <a id="ebay-seller-tips-link" href>{l s='Show seller tips' mod='ebay'}</a>
                     {/if}
-                    {*<a id="ebay_video_fancybox" href="#"><img id="ebay-install-pict" src="{$path|escape:'htmlall'}views/img/install.jpg" /></a>*}
+                    {*<a id="ebay_video_fancybox" href="#"><img id="ebay-install-pict" src="{$path|escape:'htmlall'}img/install.jpg" /></a>*}
                     <p id="ebay-install-title">{l s='Resources' mod='ebay'}</p>
                     <ul id="ebay-install-ul">
                         <li><a href="http://202-ecommerce.com/d/eBay-doc_{$documentation_lang}.pdf" target="_blank">{l s='Download the add-on installation guide' mod='ebay'}</a></li>
@@ -203,7 +203,7 @@
             <div class="ebay-boxes-2-col-cell right">
                 <div class="ebay-boxes-2-col-cell-content">
                     <div id="ebay-welcome-left-content" style="padding-bottom: 3em">
-                        <img src="{$path|escape:'htmlall'}views/img/ebay.png" />                    
+                        <img src="{$path|escape:'htmlall'}img/ebay.png" />                    
                         <p class="title ebay-title">{l s='A PERFECT PARTNER FOR YOUR BUSINESS' mod='ebay'}</p>
                         <p>{{l s='eBay is one of the |b|largest marketplaces in the world that connects buyers and sellers of all sizes around the world|/b|.' mod='ebay'}|replace:'|b|':'<b>'|replace:'|/b|':'</b>'}</p>
 

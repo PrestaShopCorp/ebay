@@ -2,7 +2,7 @@
 
 abstract class EbayLoadLogs {
 
-	abstract protected $file;
+	protected $file;
 
 	public function getLogs()
 	{
