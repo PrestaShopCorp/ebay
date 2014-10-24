@@ -132,7 +132,7 @@ class EbayFormParametersTab extends EbayTab
 			$smarty_vars['relogin'] = false;
         
 		if (Tools::getValue('action') == 'regenerate_token')
-			$smarty_vars['check_token_tpl'] = $this->_displayCheckToken();
+			$smarty_vars['check_token_tpl'] = $this->ebay->_displayCheckToken();
 
 		return $this->display('formParameters.tpl', $smarty_vars);
     }

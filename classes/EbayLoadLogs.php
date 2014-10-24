@@ -21,7 +21,7 @@ abstract class EbayLoadLogs {
 
 		$smarty =  Context::getContext()->smarty;
 
-		$logs = $this->getDatas($logs);
+		$logs = $this->getDatas($offset, $nb_results);
 
 
 		/* Smarty datas */
@@ -36,6 +36,6 @@ abstract class EbayLoadLogs {
 		return $ebay->display(realpath(dirname(__FILE__).'/../'), $this->file);
 	}
 
-	protected abstract function getDatas($logs);
+	protected abstract function getDatas($offset, $nb_results);
 
 }

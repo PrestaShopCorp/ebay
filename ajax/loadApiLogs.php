@@ -32,7 +32,7 @@ include_once dirname(__FILE__).'/../ebay.php';
 class EbayLoadAPILogs extends EbayLoadLogs {
 
 	protected $file = '/views/templates/hook/table_api_logs.tpl';
-	protected function getData($logs)
+	protected function getDatas($offset, $nb_results)
 	{
 		$logs = EbayApiLog::get($offset, $nb_results);
 		foreach ($logs as &$log) {

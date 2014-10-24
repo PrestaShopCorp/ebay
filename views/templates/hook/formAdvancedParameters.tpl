@@ -35,7 +35,7 @@
 			<select name="sizedefault" data-inlinehelp="{l s='This will be the main photo and will appear on the search result and item pages.' mod='ebay'}" class="ebay_select">
 				{if isset($sizes) && $sizes && sizeof($sizes)}
 					{foreach from=$sizes item='size'}
-						<option value="{$size.id_image_type|escape:'htmlall'}"{if $size.id_image_type == $sizedefault} selected{/if}>{$size.name|escape:'htmlall'}</option>
+						<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizedefault} selected{/if}>{$size.name|escape:'htmlall':'UTF-8'}</option>
 					{/foreach}
 				{/if}
 			</select>
@@ -49,7 +49,7 @@
 			<select name="sizebig" data-inlinehelp="{l s='This photo will appear as default photo in your listing\'s description.' mod='ebay'}" class="ebay_select">
 				{if isset($sizes) && $sizes && sizeof($sizes)}
 					{foreach from=$sizes item='size'}
-						<option value="{$size.id_image_type|escape:'htmlall'}"{if $size.id_image_type == $sizebig} selected{/if}>{$size.name|escape:'htmlall'}</option>
+						<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizebig} selected{/if}>{$size.name|escape:'htmlall':'UTF-8'}</option>
 					{/foreach}
 				{/if}
 			</select>
@@ -63,7 +63,7 @@
 			<select name="sizesmall" data-inlinehelp="{l s='This photo will appear as thumbnail in your listing\'s description.' mod='ebay'}" class="ebay_select">
 				{if isset($sizes) && $sizes && sizeof($sizes)}
 					{foreach from=$sizes item='size'}
-						<option value="{$size.id_image_type|escape:'htmlall'}"{if $size.id_image_type == $sizesmall} selected{/if}>{$size.name|escape:'htmlall'}</option>
+						<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizesmall} selected{/if}>{$size.name|escape:'htmlall':'UTF-8'}</option>
 					{/foreach}
 				{/if}
 			</select>
@@ -74,7 +74,7 @@
 			{l s='Number of additional pictures (0 will send one picture)' mod='ebay'}
 		</label>
 		<div class="margin-form">
-			<input type="text" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall'}">
+			<input type="text" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall':'UTF-8'}">
 		</div>
 		<div style="clear:both;"></div>
 
@@ -113,7 +113,7 @@
         
 		<label>{l s='Logs Conservation Duration' mod='ebay'} : </label>
 		<div class="margin-form">
-            <input type="text" name="logs_conservation_duration" value="{$logs_conservation_duration|escape:'htmlall'}">
+            <input type="text" name="logs_conservation_duration" value="{$logs_conservation_duration|escape:'htmlall':'UTF-8'}">
 		</div>        
         
 	</fieldset>
@@ -152,7 +152,7 @@
 		<legend>{l s='Orders Collection Duration' mod='ebay'}</legend>
 		<label>{l s='Since when fetch orders (in days, change if you receive more than 100 orders per fortnight)' mod='ebay'} : </label>
 		<div class="margin-form">
-            <input type="text" name="orders_days_backward" value="{$orders_days_backward|escape:'htmlall'}">
+            <input type="text" name="orders_days_backward" value="{$orders_days_backward|escape:'htmlall':'UTF-8'}">
 		</div>
 		<div style="clear:both;"></div>
         

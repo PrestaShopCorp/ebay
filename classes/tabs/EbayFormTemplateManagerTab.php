@@ -64,13 +64,13 @@ class EbayFormTemplateManagerTab extends EbayTab
 			'features_product' => Feature::getFeatures($this->context->language->id),
 			'ad' => dirname($_SERVER['PHP_SELF']),
 			'base_uri' => __PS_BASE_URI__,
-			'is_one_dot_three' => (substr(_PS_VERSION_, 0, 3) == '1.3'),
+			'is_one_dot_three' => (Tools::substr(_PS_VERSION_, 0, 3) == '1.3'),
 			'is_one_dot_five' => version_compare(_PS_VERSION_, '1.5', '>'),
 			'theme_css_dir' => _THEME_CSS_DIR_,
 			
 		);
 
-		if (substr(_PS_VERSION_, 0, 3) == '1.3')
+		if (Tools::substr(_PS_VERSION_, 0, 3) == '1.3')
 		{
 			$smarty_vars['theme_name'] = _THEME_NAME_;
 			$smarty_vars['language'] = file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en';

@@ -31,7 +31,7 @@ class EbayHelpTab extends EbayTab
     function getContent()
     {
         $ebay_country = EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'));        
-		$help_file = dirname(__FILE__).'/../../help/help-'.strtolower($ebay_country->getDocumentationLang()).'.html';
+		$help_file = dirname(__FILE__).'/../../help/help-'.Tools::strtolower($ebay_country->getDocumentationLang()).'.html';
 
 		if (!file_exists($help_file))
 			$help_file = dirname(__FILE__).'/../../help/help-en.html';

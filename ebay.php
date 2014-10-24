@@ -1445,7 +1445,7 @@ class Ebay extends Module
 	 *
 	 */
 
-	private function _displayCheckToken()
+	public function _displayCheckToken()
 	{
 		$url_vars = array(
 			'action' => 'validateToken',
@@ -1680,7 +1680,7 @@ class Ebay extends Module
 			$this->ebay_profile->setConfiguration('EBAY_LAST_RELIST', date('Y-m-d'));
 
 			$ebay = new EbayRequest();
-			$days = substr($this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'), 5);
+			$days = Tools::substr($this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'), 5);
 
 			foreach (EbayProduct::getProducts($days, 10) as $item)
 			{

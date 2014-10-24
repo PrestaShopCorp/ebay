@@ -795,7 +795,6 @@ margin-bottom: 3px;
 #tabList { clear: left; }
 .tabItem { display: none; }
 .tabItem.selected { display: block; background-color: #FFFFF0; border: 1px solid #CCCCCC; padding: 10px; padding-top: 20px; }
-.menuTab #menuTab7, .menuTab #menuTab6 { float:left;background-color:#DFDFDF; border-left: 1px solid #CFCFCF; border-right: 1px solid #CFCFCF; border-top: 1px solid #CFCFCF; }
 .menuTab #menuTab7.menuTabButton.selected, .menuTab #menuTab6.menuTabButton.selected { background-color: #FFF6D3; border-left: 1px solid #DFDFDF; border-right: 1px solid #DFDFDF; border-top: 1px solid #DFDFDF; }
 
 .ebay_hidden {

@@ -110,9 +110,9 @@ class EbayStat
         {
             $data = array(
                 'version' => $row['version'],
-                'data'    => stripslashes($row['data']),
+                'data'    => Tools::stripslashes($row['data']),
                 'date'    => $row['date_add'],
-                'sig'     => EbayStat::_computeSignature($row['version'], stripslashes($row['data']), $row['date_add'])
+                'sig'     => EbayStat::_computeSignature($row['version'], Tools::stripslashes($row['data']), $row['date_add'])
             );
             $opts = array('http' =>
                 array(

@@ -201,32 +201,7 @@
         <label for="">{l s='Do you want to automatically relist' mod='ebay'}</label>
 		<div class="margin-form"><input type="checkbox" name="automaticallyrelist" {if $automaticallyRelist == 'on'} checked="checked" {/if} /></div>
 	</fieldset>
-     
-
-    {*
-	<fieldset style="margin-top:10px;">
-		<legend>{l s='Others' mod='ebay'}</legend>
-		{if !$is_writable && $activate_logs}<p class="warning">{l s='The log file is not writable' mod='ebay'}</p>{/if}
-		<label>
-			{l s='Activate Logs' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<input type="checkbox" name="activate_logs" value="1"{if $activate_logs} checked="checked"{/if}>
-		</div>
-		<div class="clear both"></div>
-		{if $log_file_exists}
-			<label>
-				{l s='Download logs' mod='ebay'}
-			</label>
-			
-			<div class="margin-form">
-				<a href="../modules/ebay/log/request.txt" class="button">{l s='Download' mod='ebay'}</a>
-			</div>
-			<div class="clear both"></div>
-		{/if}
-	</fieldset>
-    *}
-
+    
         
 	<div class="margin-form" id="buttonEbayParameters" style="margin-top:5px;">
 		<a href="#categoriesProgression" {if $catLoaded}id="displayFancybox"{/if}>

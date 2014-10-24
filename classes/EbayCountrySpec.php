@@ -274,7 +274,7 @@ class EbayCountrySpec
 	**/
 	public function checkCountry()
 	{
-		if (in_array(strtolower($this->country->iso_code), $this->accepted_isos))
+		if (in_array(Tools::strtolower($this->country->iso_code), $this->accepted_isos))
 			return true;
 		return false;
 	}

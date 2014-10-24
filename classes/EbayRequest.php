@@ -240,7 +240,7 @@ class EbayRequest
 	{
 		$response = $this->_makeRequest('GetSuggestedCategories', array(
 			'version' => $this->compatibility_level,
-			'query' => Tools::substr(strtolower($query), 0, 350)
+			'query' => Tools::substr(Tools::strtolower($query), 0, 350)
 		));
 
 		if ($response === false)
@@ -640,7 +640,7 @@ class EbayRequest
 		// Set Api Call
 		$this->apiCall = 'GetStore';
 		$response = $this->_makeRequest('GetStore');
-        return ($response === false) ? false : $response->Store->CustomCategories->CustomCategory;
+        return ($response === false) ? false : (isset($response->Store) ? $response->Store->CustomCategories->CustomCategory : false);
         
 	}    
     
