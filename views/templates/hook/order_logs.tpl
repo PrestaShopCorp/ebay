@@ -63,7 +63,7 @@ var load_order_logs = {if $id_tab == 12}true{else}false{/if};
 var order_logs_ebay_l = {ldelim}
 	'No logs available' : "{l s='No logs available' mod='ebay'}",
     'You are not logged in': "{l s='You are not logged in' mod='ebay'}",
-    'show': "{l s='show'}"
+    'show': "{l s='show' mod='ebay'}"
 {rdelim};
 </script>
 <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/orderLogs.js?date={$date|escape:'htmlall'}"></script>

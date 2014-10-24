@@ -168,7 +168,7 @@
                         {else}
                             <legend>{l s='Status of your eBay Add-on' mod='ebay'}</legend>
                             <p id="ebay-no-profile">{l s='You don\'t have any profile setup yet' mod='ebay'}</p>
-                            {l s='Your module is up to date' mod='module'}
+                            {l s='Your module is up to date' mod='ebay'}
                         {/if}
                     {/if}
                 </fieldset>
