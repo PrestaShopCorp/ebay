@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
- *  @license	http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -359,12 +358,12 @@ class EbayCountrySpec
 
 		$country = new Country((int) Configuration::get('PS_COUNTRY_DEFAULT'));
 
-		$default_country = strtolower($country->iso_code);
+		$default_country = Tools::strtolower($country->iso_code);
 
 		if (in_array( $default_country, EbayCountrySpec::$multilang )) {
 			$lang = new Language((int) Configuration::get('PS_LANG_DEFAULT'));
 
-			$default_country .= '-' . strtolower($lang->iso_code);
+			$default_country .= '-'.Tools::strtolower($lang->iso_code);
 		}
 
 		return $default_country;

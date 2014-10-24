@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
- *  @license	http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -29,25 +28,27 @@ include_once dirname(__FILE__).'/../../../config/config.inc.php';
 include_once dirname(__FILE__).'/../../../init.php';
 include_once dirname(__FILE__).'/../ebay.php';
 
-function array_insert_after($key, array &$array, $new_key, $new_value) {
+function array_insert_after($key, array &$array, $new_key, $new_value) 
+{
+	if (array_key_exists($key, $array)) 
+	{
+			
+		$new = array();
 
-  if (array_key_exists($key, $array)) {
-      
-    $new = array();
+		foreach ($array as $k => $value) 
+		{
+		
+			$new[$k] = $value;
+			if ($k === $key)
+				$new[$new_key] = $new_value;
+		
+		}
+		
+		return $new;
 
-    foreach ($array as $k => $value) {
-    
-      $new[$k] = $value;
-      if ($k === $key)
-        $new[$new_key] = $new_value;
-    
-    }
-    
-    return $new;
+	}
 
-  }
-
-  return false;
+	return false;
 }
 
 $ebay = new Ebay();
@@ -68,7 +69,7 @@ $category_list = array_slice($category_list, $limit, $offset);
 
 $ebay_store_category_list = EbayStoreCategory::getCategoriesWithConfiguration($ebay_profile->id);
 
-$smarty =  Context::getContext()->smarty;
+$smarty = Context::getContext()->smarty;
 
 /* Smarty datas */
 $template_vars = array(
