@@ -120,4 +120,4 @@
 		'Settings updated'		 : "{l s='Settings updated' mod='ebay'}",
 	};
 </script>
-<script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/views/js/storeCategories.js?date={$date|escape:'htmlall'}"></script>
+<script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/storeCategories.js?date={$date|escape:'htmlall'}"></script>

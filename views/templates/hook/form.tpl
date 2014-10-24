@@ -283,6 +283,6 @@
         var main_tab = '{$main_tab}';
         var id_tab = '{$id_tab}';
     </script>
-    <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/views/js/header.js?date={$date|escape:'htmlall'}"></script>
+    <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/header.js?date={$date|escape:'htmlall'}"></script>
 {/if}
 <!-- after seller tips -->

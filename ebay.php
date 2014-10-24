@@ -1260,14 +1260,14 @@ class Ebay extends Module
 			'documentation_lang' => ($this->ebay_country ? $this->ebay_country->getDocumentationLang() : ''),
 			'is_version_one_dot_five' => version_compare(_PS_VERSION_, '1.5', '>'),
 			'is_version_one_dot_five_dot_one' => (version_compare(_PS_VERSION_, '1.5.1', '>=') && version_compare(_PS_VERSION_, '1.5.2', '<')),
-			'css_file' => $this->_path.'views/css/ebay_back.css',
-            'font_awesome_css_file' => $this->_path.'views/css/font-awesome/css/font-awesome.min.css',
-			'tooltip' => $this->_path.'views/js/jquery.tooltipster.min.js',
-			'tips202' => $this->_path.'views/js/202tips.js',
-			'noConflicts' => $this->_path.'views/js/jquery.noConflict.php?version=1.7.2',
-			'ebayjquery' => $this->_path.'views/js/jquery-1.7.2.min.js',
-			'fancybox' => $this->_path.'views/js/jquery.fancybox.min.js',
-			'fancyboxCss' => $this->_path.'views/css/jquery.fancybox.css',
+			'css_file' => $this->_path.'css/ebay_back.css',
+            'font_awesome_css_file' => $this->_path.'css/font-awesome/css/font-awesome.min.css',
+			'tooltip' => $this->_path.'js/jquery.tooltipster.min.js',
+			'tips202' => $this->_path.'js/202tips.js',
+			'noConflicts' => $this->_path.'js/jquery.noConflict.php?version=1.7.2',
+			'ebayjquery' => $this->_path.'js/jquery-1.7.2.min.js',
+			'fancybox' => $this->_path.'js/jquery.fancybox.min.js',
+			'fancyboxCss' => $this->_path.'css/jquery.fancybox.css',
 			'parametersValidator' => ($this->ebay_profile ? EbayValidatorTab::getParametersTabConfiguration($this->ebay_profile->id) : ''),
 			'categoryValidator' => ($this->ebay_profile ? EbayValidatorTab::getCategoryTabConfiguration($this->ebay_profile->id) : ''),
 			'itemSpecificValidator' => ($this->ebay_profile ? EbayValidatorTab::getitemSpecificsTabConfiguration($this->ebay_profile->id) : ''),
@@ -1802,7 +1802,7 @@ class Ebay extends Module
 	public function ajaxPreviewTemplate($content, $id_lang)
 	{
 		// work around for the tinyMCE bug deleting the css line
-		$css_line = '<link rel="stylesheet" type="text/css" href="'.$this->_getModuleUrl().'views/css/ebay.css" />';
+		$css_line = '<link rel="stylesheet" type="text/css" href="'.$this->_getModuleUrl().'css/ebay.css" />';
 		$content = $css_line.$content;
 
 		// random product
