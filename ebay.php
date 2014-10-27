@@ -518,6 +518,9 @@ class Ebay extends Module
 		if (!(int)$params['cart']->id)
 			return false;
 
+		if(!($this->ebay_profile instanceof EbayProfile))
+			return false;
+
 		if (version_compare(_PS_VERSION_, '1.5', '>'))		
 		{
 			$sql = 'SELECT cp.`id_product`, ep.`id_ebay_profile`
@@ -938,6 +941,9 @@ class Ebay extends Module
 		if (!($id_product = (int)$params['product']->id))
 			return false;
 		
+		if(!($this->ebay_profile instanceof EbayProfile))
+			return false;
+
 		if ($this->is_multishop)
 		{
 			$sql = 'SELECT p.`id_product`,  ep.`id_ebay_profile`
