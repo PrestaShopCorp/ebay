@@ -604,7 +604,7 @@ class EbaySynchronizer
     
     private static function _getPriceDescriptionStr($price, $price_percent, $id_currency) {
         $ebay = new Ebay();
-        $price_str = $ebay->l('au lieu de <del>%price_original%</del> (remise de %percent%%)', 'ebay');
+        $price_str = $ebay->l('instead of', 'ebay'). ' <del> %price_original% </del> ('. $ebay->l('promotion of', 'ebay') .' %percent%%)';
         return str_replace(
             array( '%price_original%', '%percent%' ), 
             array( Tools::displayPrice($price, $id_currency), round($price_percent) ),
