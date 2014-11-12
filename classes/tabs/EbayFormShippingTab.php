@@ -110,7 +110,7 @@ class EbayFormShippingTab extends EbayTab
 			if ($exclude_locations = Tools::getValue('excludeLocation'))
 			{
 				$locations = array_keys($exclude_locations);
-				$where = 'location IN ("'.implode('","', $locations).'")';
+				$where = 'location IN ("'.implode('","', array_map('pSQL', $locations)).'")';
 				
 				$where .= ' AND `id_ebay_profile` = '.(int)$this->ebay_profile->id;
 

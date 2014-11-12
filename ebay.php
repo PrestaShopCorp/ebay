@@ -1287,7 +1287,7 @@ class Ebay extends Module
             'delete_profile_url' => _MODULE_DIR_.'ebay/ajax/deleteProfile.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')),
             'main_tab' => $main_tab,
             'id_tab' => (int)Tools::getValue('id_tab'),
-            'pro_url' => isset($this->ebay_profile) ? EbayCountrySpec::getProUrlBySiteId($this->ebay_profile->ebay_site_id) : '',                        
+            'pro_url' => isset($this->ebay_profile) ? EbayCountrySpec::getProUrlBySiteId($this->ebay_profile->ebay_site_id) : EbayCountrySpec::getProUrlBySiteId(),                        
             'warning_url' => isset($warning_url) ? $warning_url : null,
             '_module_dir_' => _MODULE_DIR_,
             'date' => pSQL(date('Ymdhis')),         

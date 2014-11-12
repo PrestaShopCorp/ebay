@@ -39,7 +39,7 @@
 			<td>{$log['id_orders']|escape:'htmlall'}</td>
 			<td>{$log['type']|escape:'htmlall'}</td>
 			<td>{if $log['success']}true{else}false{/if}</td>
-			<td><a class="show_link" href data-content="{$log['data']|escape:'htmlall'}">{$showStr}</a></td>
+			<td><a class="show_link" href data-content="{$log['data']|escape:'htmlall'}">{$showStr|escape:'htmlall'}</a></td>
 			<td>{$log['date_add']|escape:'htmlall'}</td>
 			<td>{$log['date_update']|escape:'htmlall'}</td>            
 		</tr>

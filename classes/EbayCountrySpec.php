@@ -393,7 +393,7 @@ class EbayCountrySpec
         return null;
     }        
     
-    public static function getProUrlBySiteId($site_id)
+    public static function getProUrlBySiteId($site_id = 3)
     {
         foreach(self::$country_data as $country)
             if ($country['site_id'] == $site_id)

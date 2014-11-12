@@ -86,7 +86,7 @@ class EbayConfiguration
     {
         $sql = 'SELECT `name`, `value`
             FROM `'._DB_PREFIX_.'ebay_configuration`
-            WHERE `id_ebay_profile` = "'.(int)$id_ebay_profile.'" AND name NOT IN ("'.implode('","', $exceptions).'")';
+            WHERE `id_ebay_profile` = "'.(int)$id_ebay_profile.'" AND name NOT IN ("'.implode('","', array_map('pSQL', $exceptions)).'")';
         
         return Db::getInstance()->executeS($sql);
     }    

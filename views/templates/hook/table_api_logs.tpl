@@ -37,8 +37,8 @@
 			<td>{$log['id_ebay_profile']|escape:'htmlall'}</td>
 			<td>{$log['type']|escape:'htmlall'}</td>
 			<td>{$log['context']|escape:'htmlall'}</td>
-			<td><a class="show_link" href data-content="{$log['data_sent']|escape:'htmlall'}">{$showStr}</a></td>
-			<td><a class="show_link" href data-content="{$log['response']|escape:'htmlall'}">{$showStr}</a></td>
+			<td><a class="show_link" href data-content="{$log['data_sent']|escape:'htmlall'}">{$showStr|escape:'htmlall'}</a></td>
+			<td><a class="show_link" href data-content="{$log['response']|escape:'htmlall'}">{$showStr|escape:'htmlall'}</a></td>
 			<td>{if $log['id_product']}{$log['id_product']|escape:'htmlall'}{/if}</td>
 			<td>{if $log['id_order']}{$log['id_order']|escape:'htmlall'}{/if}</td>
 			<td>{$log['date_add']|escape:'htmlall'}</td>

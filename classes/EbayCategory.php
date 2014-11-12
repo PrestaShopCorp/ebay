@@ -224,9 +224,9 @@ class EbayCategory
 				$db->autoExecuteWithNullValues(_DB_PREFIX_.'ebay_category', array(
 					'id_category_ref' => pSQL($category['CategoryID']),
 					'id_category_ref_parent' => pSQL($category['CategoryParentID']),
-					'id_country' => $ebay_site_id,
+					'id_country' => pSQL($ebay_site_id),
 					'level' => pSQL($category['CategoryLevel']),
-					'is_multi_sku' => isset($categories_multi_sku[$category['CategoryID']]) ? $categories_multi_sku[$category['CategoryID']] : null,
+					'is_multi_sku' => isset($categories_multi_sku[$category['CategoryID']]) ? pSQL($categories_multi_sku[$category['CategoryID']]) : null,
 					'name' => pSQL($category['CategoryName'])
 				), 'INSERT', '', 0);
 			}
@@ -235,7 +235,7 @@ class EbayCategory
 				$db->autoExecute(_DB_PREFIX_.'ebay_category', array(
 					'id_category_ref' => pSQL($category['CategoryID']),
 					'id_category_ref_parent' => pSQL($category['CategoryParentID']),
-					'id_country' => $ebay_site_id,
+					'id_country' => pSQL($ebay_site_id),
 					'level' => pSQL($category['CategoryLevel']),
 					'is_multi_sku' => isset($categories_multi_sku[$category['CategoryID']]) ? (int)$categories_multi_sku[$category['CategoryID']] : null,
 					'name' => pSQL($category['CategoryName'])
