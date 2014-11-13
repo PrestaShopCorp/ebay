@@ -128,8 +128,9 @@ class EbayStoreCategory extends ObjectModel
 		Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_store_category`
             WHERE `id_ebay_profile` = '.(int)$ebay_profile->id);
         
-        foreach ($store_categories as $custom_cat)
-            EbayStoreCategory::_writeStoreCategory($custom_cat, $ebay_profile->id);
+        if($store_categories)
+            foreach ($store_categories as $custom_cat)
+                EbayStoreCategory::_writeStoreCategory($custom_cat, $ebay_profile->id);
         
         // make sure that all referenced categories still exists
         EbayStoreCategoryConfiguration::checkExistingCategories($ebay_profile->id);

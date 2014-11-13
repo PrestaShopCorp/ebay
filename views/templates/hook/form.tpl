@@ -30,15 +30,7 @@
 	regenerate_token_show = true;
 	{/if}
 </script>
-{*
-<fieldset>
-	{if $img_stats}
-		<center><img src="{$path|escape:'htmlall'}{$img_stats|escape:'htmlall'}" alt="eBay stats"/></center><br />
-	{/if}
-	<u><a href="{l s="http://pages.ebay.fr/professionnels/index.html" mod='ebay'}" target="_blank">{l s='Click here to learn more about business selling on eBay' mod='ebay'}</a></u>
-</fieldset>
-<br />
-*}
+
 <link rel="stylesheet" href="{$css_file|escape:'urlencode'}" />
 <link rel="stylesheet" href="{$font_awesome_css_file|escape:'urlencode'}" />
 <script>
@@ -63,7 +55,7 @@
 
 {/literal}
 
-{if $show_welcome}
+{if $show_welcome || $show_welcome_stats}
 <div class="ebay-welcome">
     <img id="ebay-logo" src="{$path|escape:'htmlall'}img/ebay.png" />
     <div id="ebay-welcome-top" class="ebay-boxes-2-col-table">
@@ -187,7 +179,7 @@
                     <ul id="ebay-install-ul">
                         <li><a href="http://202-ecommerce.com/d/eBay-doc_{$documentation_lang}.pdf" target="_blank">{l s='Download the add-on installation guide' mod='ebay'}</a></li>
                         <li><a href="{$pro_url}" target="_blank">{l s='eBay Seller center' mod='ebay'}</a></li>
-                        {*<li><a href="http://pages.ebay.{$site_extension}/help/sell/fees.html" target="_blank">{l s='eBay fees for professional sellers' mod='ebay'}</a></li>*}
+                        <li><a href="http://pages.ebay.{$site_extension}/help/sell/fees.html" target="_blank">{l s='eBay fees for professional sellers' mod='ebay'}</a></li>
                         <li><a href="{if $site_extension == 'fr'}http://202-ecommerce.com/ebay/{else}http://en.202-ecommerce.com/ebay-en/{/if}"  target="_blank">{l s='Contact us' mod='ebay'}</a></li>
                     </ul>
                 </fieldset>

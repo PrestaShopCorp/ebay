@@ -190,6 +190,7 @@ class EbayCountrySpec
 			$this->country = $country;
 		else
 			$this->country = $this->_getCountry();
+
 	}
 
 	public function getSiteID()
@@ -354,7 +355,8 @@ class EbayCountrySpec
 	 * Get key for iso_code tab
 	 * @return string Key for iso_code tab
 	 */
-	public static function getKeyForEbayCountry() {
+	public static function getKeyForEbayCountry() 
+	{
 
 		$country = new Country((int) Configuration::get('PS_COUNTRY_DEFAULT'));
 
@@ -369,7 +371,8 @@ class EbayCountrySpec
 		return $default_country;
 	}
     
-    public static function getSiteNameBySiteId($site_id) {
+    public static function getSiteNameBySiteId($site_id = 3) 
+    {
         foreach(self::$country_data as $country)
             if ($country['site_id'] == $site_id)
                 return $country['site_name'];
@@ -377,7 +380,8 @@ class EbayCountrySpec
         return null;
     }
     
-    public static function getSiteExtensionBySiteId($site_id) {
+    public static function getSiteExtensionBySiteId($site_id = 3) 
+    {
         foreach(self::$country_data as $country)
             if ($country['site_id'] == $site_id)
                 return $country['site_extension'];
@@ -385,7 +389,8 @@ class EbayCountrySpec
         return null;
     }
     
-    public static function getIsoCodeBySiteId($site_id) {
+    public static function getIsoCodeBySiteId($site_id = 3) 
+    {
         foreach(self::$country_data as $country)
             if ($country['site_id'] == $site_id)
                 return $country['iso_code'];
@@ -403,7 +408,8 @@ class EbayCountrySpec
     }
     
 
-    public static function getSiteIdByIsoCode($iso_code) {
+    public static function getSiteIdByIsoCode($iso_code = 3) 
+    {
     	foreach(self::$country_data as $country)
             if ($country['iso_code'] == $iso_code)
                 return $country['site_id'];
