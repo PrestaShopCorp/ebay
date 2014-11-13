@@ -376,7 +376,7 @@
 	{literal}{{/literal}
 		/* INIT */
 		{foreach from=$existingNationalCarrier item=nationalCarrier}
-			addShippingFee(1, 0, '{$nationalCarrier.ebay_carrier|escape:'htmlall'}', {$nationalCarrier.ps_carrier|escape:'htmlall'}, {$nationalCarrier.extra_fee|escape:'htmlall'});
+			addShippingFee(1, 0, '{$nationalCarrier.ebay_carrier|escape:'htmlall'}', '{$nationalCarrier.ps_carrier|escape:'htmlall'}', '{$nationalCarrier.extra_fee|escape:'htmlall'}');
 		{/foreach}
 		{literal}
 		var zone = new Array();
@@ -388,14 +388,14 @@
 			{foreach from=$internationalCarrier.shippingLocation item=shippingLocation}
 				zone.push('{$shippingLocation.id_ebay_zone|escape:'htmlall'}');
 			{/foreach}
-			addInternationalShippingFee('{$internationalCarrier.ebay_carrier|escape:'htmlall'}', {$internationalCarrier.ps_carrier|escape:'htmlall'}, {$internationalCarrier.extra_fee|escape:'htmlall'}, zone, zoneExcluded);
+			addInternationalShippingFee('{$internationalCarrier.ebay_carrier|escape:'htmlall'}', '{$internationalCarrier.ps_carrier|escape:'htmlall'}', '{$internationalCarrier.extra_fee|escape:'htmlall'}', zone, zoneExcluded);
 		{/foreach}
 
 		
 		showExcludeLocation();
 
 		{foreach from=$existingNationalCarrier item=nationalCarrier key=i}
-			addShipping('domesticShipping', {$nationalCarrier.ps_carrier|escape:'htmlall'}, '{$nationalCarrier.ebay_carrier|escape:'htmlall'}', {$nationalCarrier.extra_fee|escape:'htmlall'}, {$i}, {$nationalCarrier.id_zone|escape:'htmlall'});
+			addShipping('domesticShipping', '{$nationalCarrier.ps_carrier|escape:'htmlall'}', '{$nationalCarrier.ebay_carrier|escape:'htmlall'}', '{$nationalCarrier.extra_fee|escape:'htmlall'}', '{$i}', '{$nationalCarrier.id_zone|escape:'htmlall'}');
 		{foreachelse}
 			addShipping('domesticShipping');
 		{/foreach}
