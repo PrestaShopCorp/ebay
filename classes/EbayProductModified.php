@@ -96,7 +96,7 @@ class EbayProductModified extends ObjectModel
     
     public static function truncate()
     {
-        return Db::getInstance()->execute('TRUNCATE TABLE `'._DB_PREFIX_.'ebay_product_modified');
+        return Db::getInstance()->execute('TRUNCATE TABLE `'._DB_PREFIX_.'ebay_product_modified`');
     }
 
 }
