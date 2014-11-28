@@ -113,12 +113,18 @@ class TotFormat
 	 */
 	public static function formatDescription($desc)
 	{
-        // removes iFrames
-        $desc = preg_replace('/<iframe\b[^>]*>(.*?)<\/iframe>/is', "", $desc);
-        
-        // removes javascript
-        $desc = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $desc);      
-        $desc = preg_replace('/ on([A-Za-z0-9]*)="(.*)"/is', "", $desc);
+        if(method_exists('Tools', 'purifyHTML'))
+            $desc = Tools::purifyHTML($desc);
+        else
+        {
+            // removes iFrames
+            $desc = preg_replace('/<iframe\b[^>]*>(.*?)<\/iframe>/is', "", $desc);
+            
+            // // removes javascript
+            $desc = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $desc);      
+            $desc = preg_replace('/ on([A-Za-z0-9]*)="(.*)"/is', "", $desc);
+            
+        }
         return $desc;
 	}    
     
