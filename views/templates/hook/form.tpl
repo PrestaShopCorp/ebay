@@ -208,7 +208,7 @@
             <div class="ebay-boxes-2-col-cell right">
                 <div class="ebay-boxes-2-col-cell-content">
                     <div id="ebay-welcome-left-content" style="padding-bottom: 3em">
-                        <img src="{$path|escape:'htmlall'}img/ebay.png" />                    
+                        <img id="ebay-logo" src="../modules/ebay/img/ebay.png" />
                         <p class="title ebay-title">{l s='A PERFECT PARTNER FOR YOUR BUSINESS' mod='ebay'}</p>
                         <p>{{l s='eBay is one of the |b|largest marketplaces in the world that connects buyers and sellers of all sizes around the world|/b|.' mod='ebay'}|replace:'|b|':'<b>'|replace:'|/b|':'</b>'}</p>
 

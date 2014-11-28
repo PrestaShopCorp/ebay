@@ -1,7 +1,9 @@
 <?php
 
 global $_MODULE;
+
 $_MODULE = array();
+
 $_MODULE['<{ebay}prestashop>ebay_282539987a2276dd5259f8e745d668a1'] = 'eBay';
 $_MODULE['<{ebay}prestashop>ebay_fe4139533f9589aed248d4210bf2137e'] = 'Exportez facilement vos produits de PrestaShop vers eBay.';
 $_MODULE['<{ebay}prestashop>ebay_324d5b9eb4d6c052ceb767215ea3780b'] = 'Le module eBay fonctionne avec les sites eBay.fr, eBay.it, eBay.co.uk, eBay.nl, eBay.be et eBay.es';
@@ -29,6 +31,10 @@ $_MODULE['<{ebay}prestashop>ebay_1761efb946aa43c14af989665dae691a'] = 'Produit(s
 $_MODULE['<{ebay}prestashop>ebay_5096b1cd265224acf046bf2a04c97e98'] = 'Les valeur de l\'état de l\'objet défini dans votre configuration ne sont pas supportées par les catégories d\'eBay.';
 $_MODULE['<{ebay}prestashop>ebay_98dc9c312b853d330c69fbe11141e596'] = 'Vous pouvez modifier vos configuration d\'état de l\'objet dans l\'onglet paramètres. (Voir les états supportés par ebay : http://pages.ebay.fr/help/sell/item-condition.html)';
 $_MODULE['<{ebay}prestashop>ebay_1ec3f6e91783ec459fcdb51c89ddf225'] = 'Une version future du module vous permettra de spécifier les valeurs d\'état de l\'objet par catégories';
+$_MODULE['<{ebay}prestashop>ebay_3defc5eecc87a01b7ff5dfc4fcd8898a'] = 'Consulter nos évaluations';
+$_MODULE['<{ebay}prestashop>ebay_356c707afada9bf5305aee151b7e42c9'] = 'Ajouter cette boutique à mes favoris';
+$_MODULE['<{ebay}prestashop>ebay_faeaec9eda6bc4c8cb6e1a9156a858be'] = 'Disponibilité';
+$_MODULE['<{ebay}prestashop>ebay_8289b7ec22f39ace395a246dec26e79f'] = 'en stock';
 $_MODULE['<{ebay}prestashop>suggestcategories_c888438d14855d7d96a2724ee9c306bd'] = 'Configuration mise à jour';
 $_MODULE['<{ebay}prestashop>ebaysynchronizer_7bb63c7de5a5ee79356083a12f21e1e8'] = 'au lieu de';
 $_MODULE['<{ebay}prestashop>ebaysynchronizer_320fa491b6a72b8221a881eea63a399d'] = 'réduction de';
@@ -73,10 +79,6 @@ $_MODULE['<{ebay}prestashop>ebayformtemplatemanagertab_04e5a085ee8db3d10b3572374
 $_MODULE['<{ebay}prestashop>ebayformtemplatemanagertab_c888438d14855d7d96a2724ee9c306bd'] = 'Paramètres mis à jour';
 $_MODULE['<{ebay}prestashop>ebayformtemplatemanagertab_b9284bff13acffdd879ef4ac7fca5234'] = 'Echec de la configuration des paramètres';
 $_MODULE['<{ebay}prestashop>ebayorderhistorytab_04e5a085ee8db3d10b357237472d28f7'] = 'Veuillez configurer l\'onglet Paramètres généraux avant de l\'utiliser.';
-$_MODULE['<{ebay}prestashop>ebay_3defc5eecc87a01b7ff5dfc4fcd8898a'] = 'Consulter nos évaluations';
-$_MODULE['<{ebay}prestashop>ebay_356c707afada9bf5305aee151b7e42c9'] = 'Ajouter cette boutique à mes favoris';
-$_MODULE['<{ebay}prestashop>ebay_faeaec9eda6bc4c8cb6e1a9156a858be'] = 'Disponibilité';
-$_MODULE['<{ebay}prestashop>ebay_8289b7ec22f39ace395a246dec26e79f'] = 'en stock';
 $_MODULE['<{ebay}prestashop>api_logs_193cfc9be3b995831c6af2fea6650e60'] = 'Page ';
 $_MODULE['<{ebay}prestashop>api_logs_d9efc413ecd9988caf09c5e921902dfc'] = 'sur %s';
 $_MODULE['<{ebay}prestashop>api_logs_490aa6e856ccf208a054389e47ce0d06'] = 'Identifiant';
@@ -114,6 +116,12 @@ $_MODULE['<{ebay}prestashop>form_05f9b58157edec7a54cf69c918abc211'] = 'Créez un
 $_MODULE['<{ebay}prestashop>form_1326a43a80b8241e21c809f80b997845'] = 'Ouvrez votre Boutique eBay';
 $_MODULE['<{ebay}prestashop>form_3d9742de1b9742bd8031ec3f8334da22'] = 'Liez votre compte eBay au module eBay';
 $_MODULE['<{ebay}prestashop>form_c9e6616dc1bb37bf1ab3d56156288a8f'] = 'Configurez le module eBay';
+$_MODULE['<{ebay}prestashop>form_5c79609876d64e33ff348736ba605867'] = 'Ouvrez une Boutique eBay gratuitement';
+$_MODULE['<{ebay}prestashop>form_f7781230f034f74844124eb49c04e684'] = 'Lancez ou boostez votre activité sur eBay, en profitant de';
+$_MODULE['<{ebay}prestashop>form_1c1d90087dfad5f38c4135ac25197e6d'] = '90 jours* d\'abonnement gratuits ';
+$_MODULE['<{ebay}prestashop>form_de02798502e46104ef6d3627c34721af'] = 'à la Boutique A la Une.';
+$_MODULE['<{ebay}prestashop>form_6b2535c9030827712b8315f4b33afaad'] = 'http://portal.ebay.fr/ouvrezuneboutiquegratuitement';
+$_MODULE['<{ebay}prestashop>form_7d5a27f1b53dc519eac7bb288f664892'] = 'Plus d\'infos';
 $_MODULE['<{ebay}prestashop>form_2e4f4d8b849fb72905addc231d160e8b'] = 'Statut du module eBay';
 $_MODULE['<{ebay}prestashop>form_85f9d92e0551772437b934b7222d63cb'] = 'Le module est configuré et en ligne';
 $_MODULE['<{ebay}prestashop>form_23be65c546606a79458fe7a3ab52519a'] = 'Vous utilisez la version 1.5.1 de PrestaShop. Nous vous invitons à mettre à jour la version de PrestaShop pour utiliser le module correctement';
