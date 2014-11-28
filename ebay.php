@@ -1278,6 +1278,7 @@ class Ebay extends Module
 			'synchronisationValidator' => ($this->ebay_profile ? EbayValidatorTab::getSynchronisationTabConfiguration($this->ebay_profile->id) : ''),
 			'templateValidator' => ($this->ebay_profile ? EbayValidatorTab::getTemplateTabConfiguration($this->ebay_profile->id) : ''),
 			'show_welcome_stats' => $ebay_send_stats === false,
+			'free_shop_for_90_days' => $this->shopIsAvailableFor90DaysOffer(),
             'show_welcome' => ( ($ebay_send_stats !== false) && (!count($id_ebay_profiles))),
             'show_seller_tips' => ( ($ebay_send_stats !== false) && $this->ebay_profile && $this->ebay_profile->getToken() ),
             'current_profile' => $this->ebay_profile,
@@ -1307,6 +1308,19 @@ class Ebay extends Module
 		else
 			$template = $this->_displayFormConfig();			
 		return $this->display(__FILE__, 'views/templates/hook/form.tpl').$template;
+	}
+
+	private function shopIsAvailableFor90DaysOffer()
+	{
+		$ebay_site_offers = array(
+			'FR', 
+			'IT', 
+			'ES'
+		);
+		$country = new Country(Configuration::get('PS_COUNTRY_DEFAULT'));
+		if(in_array($country->iso_code, $ebay_site_offers))
+			return true;
+		return false;
 	}
 
 	private function _postValidation()

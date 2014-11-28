@@ -518,6 +518,26 @@ fieldset.new legend {
   position: relative; 
 }
 
+.ebay-dark-gray-box-container
+{
+	margin-top:15px;
+	background-color:#f2f2f2;
+	padding:10px;
+}
+
+.ebay-dark-gray-box-title
+{
+	font-size:15px;
+	font-weight:bold;
+}
+
+.ebay-dark-gray-box-content
+{
+	width: 150px;
+	float: left;
+	margin-right: 20px;
+}
+
 .ebay-light-gray-box {
   box-sizing: border-box;
   top: 0; left: 0; right: 0; bottom: 0;
