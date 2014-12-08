@@ -399,10 +399,10 @@ class EbaySynchronizer
 	 **/
 	public static function _getEbayCategory($category_id, $ebay_profile)
 	{
-		if (!isset(EbaySynchronizer::$ebay_categories[$category_id]))
-			EbaySynchronizer::$ebay_categories[$category_id] = new EbayCategory($ebay_profile, null, $category_id);
+		if (!isset(EbaySynchronizer::$ebay_categories[$category_id.'_'.$ebay_profile->id]))
+			EbaySynchronizer::$ebay_categories[$category_id.'_'.$ebay_profile->id] = new EbayCategory($ebay_profile, null, $category_id);
 
-		return EbaySynchronizer::$ebay_categories[$category_id];
+		return EbaySynchronizer::$ebay_categories[$category_id.'_'.$ebay_profile->id];
 	}
 
 	private static function _loadVariations($product, $ebay_profile, $context, $ebay_category)

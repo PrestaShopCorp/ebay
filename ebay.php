@@ -946,9 +946,10 @@ class Ebay extends Module
 		if(!($this->ebay_profile instanceof EbayProfile))
 			return false;
 
+		$sql = array();
 		if ($this->is_multishop)
 		{
-			$sql = 'SELECT p.`id_product`,  ep.`id_ebay_profile`
+			$sql[] = 'SELECT p.`id_product`,  ep.`id_ebay_profile`
 				FROM `'._DB_PREFIX_.'product` p
 				INNER JOIN `'._DB_PREFIX_.'ebay_product` ep
 				ON p.`id_product` = ep.`id_product`
@@ -959,20 +960,26 @@ class Ebay extends Module
 		}
 		else
 		{
-			$sql = 'SELECT `id_product`, '.$this->ebay_profile->id.' AS `id_ebay_profile`
+			$ebay_profiles = eBayProfile::getProfilesByIdShop();
+			foreach ($ebay_profiles as $profile) {
+				$sql[] = 'SELECT `id_product`, '.$profile['id_ebay_profile'].' AS `id_ebay_profile`, '.$profile['id_lang'].' AS `id_lang` 
 				FROM `'._DB_PREFIX_.'product`
 				WHERE `id_product` = '.$id_product.'
 				AND `active` = 1
 				AND `id_category_default` IN
-				('.EbayCategoryConfiguration::getCategoriesQuery($this->ebay_profile).')';            
+				('.EbayCategoryConfiguration::getCategoriesQuery(new EbayProfile($profile['id_ebay_profile'])).')';	
+			}
+			
 		}
 
-		if ($products = Db::getInstance()->executeS($sql)) {
-			if (Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON'))
-				foreach($products as $product)
-					EbayProductModified::addProduct($product['id_ebay_profile'], $product['id_product']);
-			else
-				EbaySynchronizer::syncProducts($products, $this->context, $this->ebay_profile->id_lang, 'hookUpdateProduct');                
+		foreach ($sql as $q) {
+			if ($products = Db::getInstance()->executeS($q)) {
+				if (Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON'))
+					foreach($products as $product)
+						EbayProductModified::addProduct($product['id_ebay_profile'], $product['id_product']);
+				else
+					EbaySynchronizer::syncProducts($products, $this->context, $products[0]['id_lang'], 'hookUpdateProduct');                
+			}	
 		}
 
 	}
