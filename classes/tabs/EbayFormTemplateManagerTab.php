@@ -48,12 +48,12 @@ class EbayFormTemplateManagerTab extends EbayTab
 			$url_vars['tab'] = Tools::getValue('tab');
 
 		$action_url = $this->_getUrl($url_vars);
-		$forbiddenJs = array('textarea', 'script', 'onmousedown', 'onmousemove', 'onmmouseup', 'onmouseover', 'onmouseout', 'onload', 'onunload', 'onfocus', 'onblur', 'onchange', 'onsubmit', 'ondblclick', 'onclick', 'onkeydown', 'onkeyup', 'onkeypress', 'onmouseenter', 'onmouseleave', 'onerror');
-
+		
 		if (Tools::getValue('reset_template'))
-			$ebay_product_template = str_replace($forbiddenJs, '', EbayProductTemplate::getContent($this->ebay, $this->smarty));
+			$ebay_product_template = TotFormat::formatDescription(EbayProductTemplate::getContent($this->ebay, $this->smarty));
 		else
-			$ebay_product_template = str_replace($forbiddenJs, '', Tools::getValue('ebay_product_template', $this->ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE')));
+			$ebay_product_template = TotFormat::formatDescription(Tools::getValue('ebay_product_template', $this->ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE')));
+		
 		$ebay_product_template_title = $this->ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE');
 
 		$smarty_vars = array(
