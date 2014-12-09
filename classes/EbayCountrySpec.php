@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
- *  @license	http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -48,7 +47,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'it',
 			'signin'         => 'https://signin.ebay.it/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.it/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.it/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.ebay.fr/professionnels/index.html'
 		),
 		'gb' => array(
 			'site_id'        => 3,
@@ -60,7 +60,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'gb',
 			'signin'         => 'https://signin.ebay.co.uk/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.co.uk/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.co.uk/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://sellercentre.ebay.co.uk/'            
 		),
 		'es' => array(
 			'site_id'        => 186,
@@ -72,7 +73,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'es',
 			'signin'         => 'https://signin.ebay.es/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.es/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.es/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.ebay.es/businesscentre/index.html'                        
 		),
 		'fr' => array(
 			'site_id'        => 71,
@@ -81,10 +83,11 @@ class EbayCountrySpec
 			'currency'       => 'EUR',
 			'site_name'      => 'France',
 			'site_extension' => 'fr',
-			'img_stats'      => 'views/img/ebay_stats.png',
+			'img_stats'      => 'img/ebay_stats.png',
 			'iso_code'       => 'fr',
 			'signin'         => 'https://signin.ebay.fr/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.fr/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.fr/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.ebay.fr/professionnels/index.html'            
 		),
 		'nl' => array(
 			'site_id'        => 146,
@@ -96,7 +99,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'nl',
 			'signin'         => 'https://signin.ebay.nl/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.nl/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.nl/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.ebay.nl/help/sell/rampingup.html'
 		),
 		'pl' => array(
 			'site_id'        => 212,
@@ -108,7 +112,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'pl',
 			'signin'         => 'https://signin.ebay.pl/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.pl/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.pl/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.ebay.pl/help/sell/rampingup.html'            
 		),
 		'be-fr' => array(
 			'site_id'        => 23,
@@ -121,7 +126,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'be',
 			'signin'         => 'https://signin.befr.ebay.be/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.befr.ebay.be/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.befr.ebay.be/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.befr.ebay.be/befr/hubs/selling/professional/index.html'            
 		),
 		'be-nl' => array(
 			'site_id'        => 123,
@@ -134,7 +140,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'be',
 			'signin'         => 'https://signin.benl.ebay.be/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.benl.ebay.be/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.benl.ebay.be/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.befr.ebay.be/befr/hubs/selling/professional/index.html'        
 		),
 		'de' => array(
 			'site_id'        => 77,
@@ -146,7 +153,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'de',
 			'signin'         => 'https://signin.ebay.de/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.de/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.de/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://verkaeuferportal.ebay.de/'
 		),
 		'ch' => array(
 			'site_id'        => 193,
@@ -158,7 +166,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'ch',
 			'signin'         => 'https://signin.ebay.ch/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.ch/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.ch/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.ebay.ch/help/sell/rampingup.html'            
 		),
 		'at' => array(
 			'site_id'        => 16,
@@ -170,7 +179,8 @@ class EbayCountrySpec
 			'img_stats'      => null,
 			'iso_code'       => 'at',
 			'signin'         => 'https://signin.ebay.at/ws/eBayISAPI.dll',
-			'signin_sandbox' => 'https://signin.sandbox.ebay.at/ws/eBayISAPI.dll'
+			'signin_sandbox' => 'https://signin.sandbox.ebay.at/ws/eBayISAPI.dll',
+            'pro_url'        => 'http://pages.ebay.at/help/sell/rampingup.html'
 		),
 	);
 
@@ -180,6 +190,7 @@ class EbayCountrySpec
 			$this->country = $country;
 		else
 			$this->country = $this->_getCountry();
+
 	}
 
 	public function getSiteID()
@@ -263,7 +274,7 @@ class EbayCountrySpec
 	**/
 	public function checkCountry()
 	{
-		if (in_array(strtolower($this->country->iso_code), $this->accepted_isos))
+		if (in_array(Tools::strtolower($this->country->iso_code), $this->accepted_isos))
 			return true;
 		return false;
 	}
@@ -344,22 +355,24 @@ class EbayCountrySpec
 	 * Get key for iso_code tab
 	 * @return string Key for iso_code tab
 	 */
-	public static function getKeyForEbayCountry() {
+	public static function getKeyForEbayCountry() 
+	{
 
 		$country = new Country((int) Configuration::get('PS_COUNTRY_DEFAULT'));
 
-		$default_country = strtolower($country->iso_code);
+		$default_country = Tools::strtolower($country->iso_code);
 
 		if (in_array( $default_country, EbayCountrySpec::$multilang )) {
 			$lang = new Language((int) Configuration::get('PS_LANG_DEFAULT'));
 
-			$default_country .= '-' . strtolower($lang->iso_code);
+			$default_country .= '-'.Tools::strtolower($lang->iso_code);
 		}
 
 		return $default_country;
 	}
     
-    public static function getSiteNameBySiteId($site_id) {
+    public static function getSiteNameBySiteId($site_id = 3) 
+    {
         foreach(self::$country_data as $country)
             if ($country['site_id'] == $site_id)
                 return $country['site_name'];
@@ -367,7 +380,8 @@ class EbayCountrySpec
         return null;
     }
     
-    public static function getSiteExtensionBySiteId($site_id) {
+    public static function getSiteExtensionBySiteId($site_id = 3) 
+    {
         foreach(self::$country_data as $country)
             if ($country['site_id'] == $site_id)
                 return $country['site_extension'];
@@ -375,19 +389,32 @@ class EbayCountrySpec
         return null;
     }
     
-    public static function getIsoCodeBySiteId($site_id) {
+    public static function getIsoCodeBySiteId($site_id = 3) 
+    {
         foreach(self::$country_data as $country)
             if ($country['site_id'] == $site_id)
                 return $country['iso_code'];
         
         return null;
     }        
+    
+    public static function getProUrlBySiteId($site_id = 3)
+    {
+        foreach(self::$country_data as $country)
+            if ($country['site_id'] == $site_id)
+                return $country['pro_url'];
+        
+        return null;        
+    }
+    
 
-    public static function getSiteIdByIsoCode($iso_code) {
+    public static function getSiteIdByIsoCode($iso_code = 3) 
+    {
     	foreach(self::$country_data as $country)
             if ($country['iso_code'] == $iso_code)
                 return $country['site_id'];
         
         return null;
     }
+    
 }

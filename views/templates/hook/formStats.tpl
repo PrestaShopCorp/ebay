@@ -17,14 +17,19 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2013 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+<div class="ebay_mind big">
+    {l s='You need to answer this question to enter module settings' mod='ebay'}
+</div>
+
 <fieldset class="new" style="margin-top:10px;" id="statsForm">
-	<legend>{l s='Ebay Data Usage' mod='ebay'}</legend>
+	<legend>{l s='eBay module Data Usage' mod='ebay'}</legend>
+
 	<div class="label">{l s='Help us improve the eBay Module by sending anonymous usage stats' mod='ebay'} : </div>
     <form action="#" method="POST">
 	<div class="margin-form">

@@ -17,9 +17,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2014 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 <Variations>
@@ -48,6 +48,14 @@
 					</NameValueList>
 				{/foreach}				
 			</VariationSpecifics>
+            
+            {if isset($variation.price_original)}
+                <DiscountPriceInfo>
+                    <OriginalRetailPrice>{$variation.price_original}</OriginalRetailPrice>
+                    <SoldOffeBay>true</SoldOffeBay>
+                </DiscountPriceInfo>
+            {/if}
+                    
 		</Variation>
 	{/foreach}
 	<Pictures>
@@ -57,7 +65,7 @@
 				<VariationSpecificName>{$picture.name}</VariationSpecificName>
 			{/if}
 			<VariationSpecificPictureSet>
-				<VariationSpecificValue>{$picture.value}</VariationSpecificValue>
+				<VariationSpecificValue>{$picture.value}</VariationSpecificValue>                
 				<PictureURL>{$picture.url}</PictureURL>
 			</VariationSpecificPictureSet>
 		{/foreach}

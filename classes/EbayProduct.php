@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2013 PrestaShop SA
- *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -88,7 +87,7 @@ class EbayProduct
         $query = 'SELECT `id_ebay_profile`, count(*) AS `nb`
 			FROM `'._DB_PREFIX_.'ebay_product`';
         if ($id_ebay_profiles)
-            $query .= ' WHERE `id_ebay_profile` IN ('.implode(',', $id_ebay_profiles).')
+            $query .= ' WHERE `id_ebay_profile` IN ('.implode(',', array_map('intval', $id_ebay_profiles)).')
                 GROUP BY `id_ebay_profile`';
         
 		$res = Db::getInstance()->executeS($query);
@@ -123,7 +122,7 @@ class EbayProduct
 		//If eBay Product has been inserted then the configuration of eBay is OK
 		Configuration::updateValue('EBAY_CONFIGURATION_OK', true);
 
-		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_product', $to_insert, 'UPDATE', '`id_product_ref` = '.pSQL($id_product_ref));
+		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_product', $to_insert, 'UPDATE', '`id_product_ref` = "'.pSQL($id_product_ref).'"');
 	}
 
 	public static function deleteByIdProductRef($id_product_ref)

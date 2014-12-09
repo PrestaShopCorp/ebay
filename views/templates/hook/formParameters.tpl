@@ -17,9 +17,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2013 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
@@ -27,7 +27,7 @@
 	{literal}
 	<script>
 		$(document).ready(function() {
-			win = window.redirect('{/literal}{$redirect_url|escape:'urlencode'}{literal}');
+			win = window.location = '{/literal}{$redirect_url|escape:'urlencode'}{literal}';
 		});
 	</script>
 	{/literal}
@@ -56,33 +56,33 @@
 	{/if}
 	
 <form action="{$url|escape:'urlencode'}" method="post" class="form" id="configForm1">
-	
+    
 	<fieldset style="margin-top:10px;">
 		<legend>{l s='Account details' mod='ebay'}</legend>
-		<h4>{l s='To list your products on eBay, you need to create' mod='ebay'} <a href="{l s='https://scgi.ebay.co.uk/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2' mod='ebay'}" target="_blank">{l s='a business seller account' mod='ebay'}</a> {l s='and' mod='ebay'} <a href="https://www.paypal.com/"  target="_blank">{l s='a PayPal account.' mod='ebay'}</a></h4>
-		<label>{l s='eBay User ID' mod='ebay'} : </label>
-		<div class="margin-form">
-			<input type="text" size="20" name="ebay_identifier" value="{$ebayIdentifier|escape:'htmlall'}" readonly="readonly" disabled />
-		</div>
-		<label>{l s='eBay Shop' mod='ebay'} : </label>
-		<div class="margin-form">
-			<input type="text" size="20" name="ebay_shop" value="{$ebayShopValue|escape:'htmlall'}" data-dialoghelp="http://sellercentre.ebay.co.uk/ebay-shop" data-inlinehelp="{l s='An eBay shop subscription isn’t required but you may benefit. Find out if an eBay Shop is right for you.' mod='ebay'}"/> 
-			<p>
-				{if $ebayShop!== false}
-					<a href="http://stores.{if $ebayCountry->getSiteSubdomain()}{$ebayCountry->getSiteSubdomain()|escape:'htmlall'}.{/if}ebay.{$ebayCountry->getSiteExtension()|escape:'htmlall'}/{$ebayShop|escape:'htmlall'}" target="_blank">{l s='Your shop on eBay' mod='ebay'}</a>
-				{else} 
-					<a href="{$createShopUrl|escape:'urlencode'}" style="color:#7F7F7F;">
-						{l s='Open your shop' mod='ebay'}
-					</a>
-				{/if}
-			</p>
-		</div>
+		<h4>{l s='To list your products on eBay, you need to create' mod='ebay'} <a href="{l s='https://scgi.ebay.co.uk/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2' mod='ebay'}" target="_blank">{l s='a business seller account' mod='ebay'}</a> {l s='and' mod='ebay'} <a href="https://www.paypal.com/">{l s='a PayPal account.' mod='ebay'}</a></h4>
+        
+		<input type="hidden" name="ebay_shop" value="{$ebayShopValue|escape:'htmlall'}" />            
+        
 		<label>{l s='Paypal email address' mod='ebay'} : </label>
 		<div class="margin-form">
 
 			<input type="text" size="20" name="ebay_paypal_email" value="{$ebay_paypal_email|escape:'htmlall'}"/>
 			<p>{l s='You have to set your PayPal e-mail account, it\'s the only payment available with this module' mod='ebay'}</p>
 		</div>
+        
+		<label>
+			{l s='Currency' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<select name="currency" data-inlinehelp="{l s='This currency will be used for your products sold on eBay' mod='ebay'}" class="ebay_select">
+				{if isset($currencies) && $currencies && sizeof($currencies)}
+					{foreach from=$currencies item='currency'}
+						<option value="{$currency.id_currency|escape:'htmlall'}"{if $currency.id_currency == $current_currency} selected{/if}>{$currency.name|escape:'htmlall'}</option>
+					{/foreach}
+				{/if}
+			</select>
+		</div>        
+        
 		<label>{l s='Item location' mod='ebay'} : </label>
 		<div class="margin-form">
 			<input type="text" size="20" name="ebay_shop_postalcode" value="{$shopPostalCode|escape:'htmlall'}"/>
@@ -97,7 +97,13 @@
 			{/foreach}							   
 			</select>            
 			<p>{l s='Your shop\'s country' mod='ebay'}</p>
-		</div>        
+		</div>     
+		<label>
+			{l s='Immediate Payment' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<input type="checkbox" name="immediate_payment" value="1"{if $immediate_payment} checked="checked"{/if}>
+		</div>           
 
 		<div class="show regenerate_token_click" style="display:block;text-align:center;cursor:pointer">
 			<span data-inlinehelp="{l s='Use only if you get a message saying that your authentication is expired.' mod='ebay'}">{l s='Click here to generate a new authentication token.' mod='ebay'}</span>
@@ -109,7 +115,7 @@
 			</a>
 		</div>
 	</fieldset>
-	
+        
    <fieldset style="margin-top:10px;">
 		<legend>{l s='Returns policy' mod='ebay'}</legend>
 		<label>{l s='Please define your returns policy' mod='ebay'} : </label>
@@ -147,7 +153,35 @@
 			<textarea name="ebay_returns_description" cols="120" rows="10" data-inlinehelp="{l s='This description will be displayed in the returns policy section of the listing page.' mod='ebay'}">{$ebayReturns|escape:'htmlall':'UTF-8'}</textarea>
 		</div>
 	</fieldset>
-
+             
+	
+    <fieldset style="margin-top:10px;">
+ 		<legend>{l s='Order Synchronization from PrestaShop to eBay' mod='ebay'}</legend>
+		<label>
+			{l s='Send tracking code' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<input type="checkbox" name="send_tracking_code" value="1"{if $send_tracking_code} checked="checked"{/if}>
+		</div>
+        
+		<label>
+			{l s='Status used to indicate product has been shipped' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<select name="shipped_order_state" class="ebay_select">
+                <option value=""></option>
+				{if isset($order_states) && $order_states && sizeof($order_states)}
+					{foreach from=$order_states item='order_state'}
+						<option value="{$order_state.id_order_state|escape:'htmlall'}"{if $order_state.id_order_state == $current_order_state} selected{/if}>{$order_state.name|escape:'htmlall'}</option>
+					{/foreach}
+				{/if}
+			</select>
+		</div>        
+        
+ 		<div style="clear:both;"></div>
+     </fieldset>    
+     
+     
 	<!-- Listing Durations -->
 	<fieldset style="margin-top:10px;">
 		<legend>{l s='Listing Duration' mod='ebay'}</legend>
@@ -167,148 +201,7 @@
         <label for="">{l s='Do you want to automatically relist' mod='ebay'}</label>
 		<div class="margin-form"><input type="checkbox" name="automaticallyrelist" {if $automaticallyRelist == 'on'} checked="checked" {/if} /></div>
 	</fieldset>
-
-	<fieldset style="margin-top:10px;">
-		<legend><span data-dialoghelp="http://sellerupdate.ebay.co.uk/autumn2013/picture-standards" data-inlinehelp="{l s='Select the size of your main photo and any photos you want to include in your description. Go to Preferences> images. Your images must comply with eBay’s photo standards.' mod='ebay'}">{l s='Photo sizes' mod='ebay'}</span></legend>
-
-		<label>
-			{l s='Default photo' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<select name="sizedefault" data-inlinehelp="{l s='This will be the main photo and will appear on the search result and item pages.' mod='ebay'}" class="ebay_select">
-				{if isset($sizes) && $sizes && sizeof($sizes)}
-					{foreach from=$sizes item='size'}
-						<option value="{$size.id_image_type|escape:'htmlall'}"{if $size.id_image_type == $sizedefault} selected{/if}>{$size.name|escape:'htmlall'}</option>
-					{/foreach}
-				{/if}
-			</select>
-		</div>
-		<div class="clear both"></div>
-
-		<label>
-			{l s='Main photo' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<select name="sizebig" data-inlinehelp="{l s='This photo will appear as default photo in your listing\'s description.' mod='ebay'}" class="ebay_select">
-				{if isset($sizes) && $sizes && sizeof($sizes)}
-					{foreach from=$sizes item='size'}
-						<option value="{$size.id_image_type|escape:'htmlall'}"{if $size.id_image_type == $sizebig} selected{/if}>{$size.name|escape:'htmlall'}</option>
-					{/foreach}
-				{/if}
-			</select>
-		</div>
-		<div class="clear both"></div>
-
-		<label>
-			{l s='Small photo' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<select name="sizesmall" data-inlinehelp="{l s='This photo will appear as thumbnail in your listing\'s description.' mod='ebay'}" class="ebay_select">
-				{if isset($sizes) && $sizes && sizeof($sizes)}
-					{foreach from=$sizes item='size'}
-						<option value="{$size.id_image_type|escape:'htmlall'}"{if $size.id_image_type == $sizesmall} selected{/if}>{$size.name|escape:'htmlall'}</option>
-					{/foreach}
-				{/if}
-			</select>
-		</div>
-		<div style="clear:both;"></div>
-
-		<label>
-			{l s='Number of additional pictures (0 will send one picture)' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<input type="text" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall'}">
-		</div>
-		<div style="clear:both;"></div>
-
-	</fieldset>
     
-	<fieldset style="margin-top:10px;">
-		<legend><span>{l s='Currency' mod='ebay'}</span></legend>
-
-		<label>
-			{l s='Currency' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<select name="currency" data-inlinehelp="{l s='This currency will be used for your products sold on eBay' mod='ebay'}" class="ebay_select">
-				{if isset($currencies) && $currencies && sizeof($currencies)}
-					{foreach from=$currencies item='currency'}
-						<option value="{$currency.id_currency|escape:'htmlall'}"{if $currency.id_currency == $current_currency} selected{/if}>{$currency.name|escape:'htmlall'}</option>
-					{/foreach}
-				{/if}
-			</select>
-		</div>
-		<div class="clear both"></div>
-
-	</fieldset>    
-
-	<fieldset style="margin-top:10px;">
-		<legend>{l s='Others' mod='ebay'}</legend>
-		{if !$is_writable && $activate_logs}<p class="warning">{l s='The log file is not writable' mod='ebay'}</p>{/if}
-		<label>
-			{l s='Activate Logs' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<input type="checkbox" name="activate_logs" value="1"{if $activate_logs} checked="checked"{/if}>
-		</div>
-		<div class="clear both"></div>
-		{if $log_file_exists}
-			<label>
-				{l s='Download logs' mod='ebay'}
-			</label>
-			
-			<div class="margin-form">
-				<a href="../modules/ebay/log/request.txt" class="button">{l s='Download' mod='ebay'}</a>
-			</div>
-			<div class="clear both"></div>
-		{/if}
-	</fieldset>
-    
-	<fieldset style="margin-top:10px;">
-		<legend>{l s='Sync' mod='ebay'}</legend>
-		
-		<label>
-			{l s='Manually Sync Orders' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			
-			<a href="{$url|escape:'urlencode'}&EBAY_SYNC_ORDERS=1">
-				<span class="button">{l s='Sync Orders from eBay' mod='ebay'}</span>
-			</a>
-	        <br>
-		</div>
-		<div class="clear both"></div>
-		<label>
-			{l s='Sync Orders' mod='ebay'}
-		</label>
-        <div class="margin-form">
-			<input type="radio" size="20" name="sync_orders_mode" class="sync_orders_mode" value="save" {if $sync_orders_by_cron == false}checked="checked"{/if}/> {l s='every 30 minutes on page load' mod='ebay'}
-			<input type="radio" size="20" name="sync_orders_mode" class="sync_orders_mode" value="cron" {if $sync_orders_by_cron == true}checked="checked"{/if}/> {l s='by CRON task' mod='ebay'}<br>
-	        <p><a id="sync_orders_by_cron_url" href="{$sync_orders_by_cron_url|escape:'urlencode'}" target="_blank" style="{if $sync_orders_by_cron == false};display:none{/if}">{$sync_orders_by_cron_path|escape:'urlencode'}</a></p>
-        	
-        </div>
-		<label>
-			{l s='Sync Products' mod='ebay'}
-		</label>
-        <div class="margin-form">
-			<input type="radio" size="20" name="sync_products_mode" class="sync_products_mode" value="save" {if $sync_products_by_cron == false}checked="checked"{/if}/> {l s='on save' mod='ebay'}
-			<input type="radio" size="20" name="sync_products_mode" class="sync_products_mode" value="cron" {if $sync_products_by_cron == true}checked="checked"{/if}/> {l s='by CRON task' mod='ebay'}<br>
-	        <p><a id="sync_products_by_cron_url" href="{$sync_products_by_cron_url|escape:'urlencode'}" target="_blank" style="{if $sync_products_by_cron == false};display:none{/if}">{$sync_products_by_cron_path|escape:'urlencode'}</a></p>
-        	
-        </div>
-		<div class="clear both"></div>
-        
-	</fieldset>
-
-   <fieldset style="margin-top:10px;">
-		<legend>{l s='Ebay Data Usage' mod='ebay'}</legend>
-		<label>{l s='Help us improve the eBay Module by sending anonymous usage stats' mod='ebay'} : </label>
-		<div class="margin-form">
-            <input type="radio" name="stats" value="0" {if isset($stats) && !$stats}checked="checked"{/if}> {l s='No thanks' mod='ebay'}&nbsp;&nbsp;
-            <input type="radio" name="stats" value="1" {if !isset($stats) || $stats}checked="checked"{/if}> {l s='I agree' mod='ebay'}<br>
-		</div>
-		<div style="clear:both;"></div>
-    </fieldset>
         
 	<div class="margin-form" id="buttonEbayParameters" style="margin-top:5px;">
 		<a href="#categoriesProgression" {if $catLoaded}id="displayFancybox"{/if}>
@@ -319,35 +212,6 @@
 
 	<div id="ebayreturnshide" style="display:none;">{$ebayReturns|escape:'htmlall':'UTF-8'}</div>
 
-	{literal}
-		<script>
-			$(document).ready(function() {
-				setTimeout(function(){					
-					$('#ebay_returns_description').val($('#ebayreturnshide').html());
-				}, 1000);
-			});
-			
-			$('#token-btn').click(function() {
-					window.open(module_dir + 'ebay/pages/getSession.php?token={/literal}{$ebay_token|escape:'urlencode'}{literal}');			
-			});
-            
-            $('.sync_products_mode').change(function() {
-                if ($(this).val() == 'cron') {
-                    $('#sync_products_by_cron_url').show();
-                } else {
-                    $('#sync_products_by_cron_url').hide();
-                }
-            });
-
-            $('.sync_orders_mode').change(function() {
-                if ($(this).val() == 'cron') {
-                    $('#sync_orders_by_cron_url').show();
-                } else {
-                    $('#sync_orders_by_cron_url').hide();
-                }
-            });
-		</script>
-	{/literal}
 </form>
 
 {if $catLoaded}

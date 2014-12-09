@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
- *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -32,7 +32,7 @@ function update_product_template($module)
 {
 	if ($product_template = Configuration::get('EBAY_PRODUCT_TEMPLATE'))
 	{
-		// We cannot just replace "template/images/" by "views/img" since the use may have added its own images in "template/images"
+		// We cannot just replace "template/images/" by "img" since the use may have added its own images in "template/images"
 		$product_template = str_replace(
 			array(
 				'template/images/favorite.png',
@@ -42,11 +42,11 @@ function update_product_template($module)
 				'template/images/stats.png',
 			),
 			array(
-				'views/img/favorite.png',
-				'views/img/footer.png',
-				'views/img/header.png',
-				'views/img/search.png',
-				'views/img/stats.png',
+				'img/favorite.png',
+				'img/footer.png',
+				'img/header.png',
+				'img/search.png',
+				'img/stats.png',
 			),
 			$product_template
 		);

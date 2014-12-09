@@ -17,9 +17,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2014 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
@@ -30,16 +30,9 @@
 	regenerate_token_show = true;
 	{/if}
 </script>
-{*
-<fieldset>
-	{if $img_stats}
-		<center><img src="{$path|escape:'htmlall'}{$img_stats|escape:'htmlall'}" alt="eBay stats"/></center><br />
-	{/if}
-	<u><a href="{l s="http://pages.ebay.fr/professionnels/index.html" mod='ebay'}" target="_blank">{l s='Click here to learn more about business selling on eBay' mod='ebay'}</a></u>
-</fieldset>
-<br />
-*}
+
 <link rel="stylesheet" href="{$css_file|escape:'urlencode'}" />
+<link rel="stylesheet" href="{$font_awesome_css_file|escape:'urlencode'}" />
 <script>
 	var $j = $;
 </script>
@@ -62,9 +55,9 @@
 
 {/literal}
 
-{if $show_welcome}
+{if $show_welcome || $show_welcome_stats}
 <div class="ebay-welcome">
-    <img id="ebay-logo" src="{$path|escape:'htmlall'}views/img/ebay.png" />
+    <img id="ebay-logo" src="{$path|escape:'htmlall'}img/ebay.png" />
     <div id="ebay-welcome-top" class="ebay-boxes-2-col-table">
         <div class="ebay-boxes-2-col-cell right">
             <div class="ebay-boxes-2-col-cell-content">
@@ -98,6 +91,19 @@
                             </ul>
                         </div>
                     </div>
+                    {if $free_shop_for_90_days}
+                    <div class="ebay-dark-gray-box-container">
+                        <p class="ebay-dark-gray-box-title">
+                            {l s='Open your shop for free' mod='ebay'}
+                        </p>
+                        <div class="ebay-dark-gray-box-content">
+                            {l s='Begin or boost your activity on eBay, enjoying ' mod='ebay'}<b> {l s='90 free days of subscription' mod='ebay'}</b> {l s='to eBay Shops' mod='ebay'}<br/>
+                            <a href="{l s='http://pages.ebay.fr/promos/termsfrstoretrial3months/' mod='ebay'}">{l s='More informations' mod='ebay'}</a>
+                        </div>
+                        <img src="../modules/ebay/img/open_your_shop.jpg" alt="" id="open_your_shop">
+                        <div class="clear clearfix"></div>
+                    </div>
+                    {/if}
                 </div>
             </div>
         </div>
@@ -114,19 +120,19 @@
                 	<legend><img src="{$path|escape:'htmlall'}logo.gif" alt="" />{l s='eBay Module Status' mod='ebay'}</legend>
                 	<div style="float: left">
                     	{if empty($alert)}
-                    		<img src="../modules/ebay/views/img/valid.png" /><strong>{l s='eBay Module is configured and online!' mod='ebay'}</strong>
+                    		<img src="../modules/ebay/img/valid.png" /><strong>{l s='eBay Module is configured and online!' mod='ebay'}</strong>
                     		{if $is_version_one_dot_five}
                     			{if $is_version_one_dot_five_dot_one}
-                    				<br/><img src="../modules/ebay/views/img/warn.png" /><strong>{l s='You\'re using version 1.5.1 of PrestaShop. We invite you to upgrade to version 1.5.2  so you can use the eBay module properly.' mod='ebay'}</strong>
+                    				<br/><img src="../modules/ebay/img/warn.png" /><strong>{l s='You\'re using version 1.5.1 of PrestaShop. We invite you to upgrade to version 1.5.2  so you can use the eBay module properly.' mod='ebay'}</strong>
                     				<br/><strong>{l s='Please synchronize your eBay sales in your Prestashop front office' mod='ebay'}</strong>
                     			{/if}
                     		{/if}
                     	{else}
-                    		<img src="../modules/ebay/views/img/warn.png" /><strong>{l s='Please complete the following settings to configure the module' mod='ebay'}</strong>
-                    		<br />{if in_array('registration', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 1) {l s='Register the module on eBay' mod='ebay'}
-                    		<br />{if in_array('allowurlfopen', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 2) {l s='Allow url fopen' mod='ebay'}
-                    		<br />{if in_array('curl', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 3) {l s='Enable cURL' mod='ebay'}
-                    		<br />{if in_array('SellerBusinessType', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 4) {l s='Please register an eBay business seller account to configure the application' mod='ebay'}
+                    		<img src="../modules/ebay/img/warn.png" /><strong>{l s='Please complete the following settings to configure the module' mod='ebay'}</strong>
+                    		<br />{if in_array('registration', $alert)}<img src="../modules/ebay/img/warn.png" />{else}<img src="../modules/ebay/img/valid.png" />{/if} 1) {l s='Register the module on eBay' mod='ebay'}
+                    		<br />{if in_array('allowurlfopen', $alert)}<img src="../modules/ebay/img/warn.png" />{else}<img src="../modules/ebay/img/valid.png" />{/if} 2) {l s='Allow url fopen' mod='ebay'}
+                    		<br />{if in_array('curl', $alert)}<img src="../modules/ebay/img/warn.png" />{else}<img src="../modules/ebay/img/valid.png" />{/if} 3) {l s='Enable cURL' mod='ebay'}
+                    		<br />{if in_array('SellerBusinessType', $alert)}<img src="../modules/ebay/img/warn.png" />{else}<img src="../modules/ebay/img/valid.png" />{/if} 4) {l s='Please register an eBay business seller account to configure the application' mod='ebay'}
                     	{/if}
                     </div>
                 {else}
@@ -167,7 +173,7 @@
                         {else}
                             <legend>{l s='Status of your eBay Add-on' mod='ebay'}</legend>
                             <p id="ebay-no-profile">{l s='You don\'t have any profile setup yet' mod='ebay'}</p>
-                            {l s='Your module is up to date' mod='module'}
+                            {l s='Your module is up to date' mod='ebay'}
                         {/if}
                     {/if}
                 </fieldset>
@@ -181,13 +187,13 @@
                     {if $show_seller_tips}
                         <a id="ebay-seller-tips-link" href>{l s='Show seller tips' mod='ebay'}</a>
                     {/if}
-                    {*<a id="ebay_video_fancybox" href="#"><img id="ebay-install-pict" src="{$path|escape:'htmlall'}views/img/install.jpg" /></a>*}
+                    <a id="" href="{l s='http://www.202-ecommerce.com/ebay/tuto-en' mod='ebay'}" target="_blank"><img id="ebay-install-pict" src="../modules/ebay/img/{l s='ebay_video_en' mod='ebay'}.png" /></a>
                     <p id="ebay-install-title">{l s='Resources' mod='ebay'}</p>
                     <ul id="ebay-install-ul">
                         <li><a href="http://202-ecommerce.com/d/eBay-doc_{$documentation_lang}.pdf" target="_blank">{l s='Download the add-on installation guide' mod='ebay'}</a></li>
-                        <li><a href="">{l s='eBay Seller center' mod='ebay'}</a></li>
+                        <li><a href="{$pro_url}" target="_blank">{l s='eBay Seller center' mod='ebay'}</a></li>
                         <li><a href="http://pages.ebay.{$site_extension}/help/sell/fees.html" target="_blank">{l s='eBay fees for professional sellers' mod='ebay'}</a></li>
-                        <li><a href="{if $site_extension == 'fr'}http://202-ecommerce.com/ebay/{else}http://en.202-ecommerce.com/ebay-en/{/if}"  target="_blank">{l s='Contact us' mod='ebay'}</a></li>
+                        <li><b><a href="{if $site_extension == 'fr'}http://202-ecommerce.com/ebay/{else}http://en.202-ecommerce.com/ebay-en/{/if}"  target="_blank">{l s='Contact us' mod='ebay'}</a></b></li>
                     </ul>
                 </fieldset>
             </div>
@@ -202,7 +208,7 @@
             <div class="ebay-boxes-2-col-cell right">
                 <div class="ebay-boxes-2-col-cell-content">
                     <div id="ebay-welcome-left-content" style="padding-bottom: 3em">
-                        <img src="{$path|escape:'htmlall'}views/img/ebay.png" />                    
+                        <img id="ebay-logo" src="../modules/ebay/img/ebay.png" />
                         <p class="title ebay-title">{l s='A PERFECT PARTNER FOR YOUR BUSINESS' mod='ebay'}</p>
                         <p>{{l s='eBay is one of the |b|largest marketplaces in the world that connects buyers and sellers of all sizes around the world|/b|.' mod='ebay'}|replace:'|b|':'<b>'|replace:'|/b|':'</b>'}</p>
 
@@ -241,64 +247,47 @@
             <div style="clear:both"></div>
         </div>
     </div>
+    
+    {if isset($warning_url) && $warning_url}
+        <div class="warn">
+		    <span style="float:right">
+			    <a id="hideWarn" href=""><img alt="X" src="../img/admin/close.png" /></a>
+		    </span>
+            <ul style="margin-top: 3px">
+                <li>You are currently connected to the Prestashop Back Office using a different URL <a href="{$warning_url|escape:'urlencode'}">than set up</a>, this module will not work properly. Please login in using URL_Back_Office</li>
+            </ul>
+        </div>
+    {/if}
+
     {if $current_profile && !$add_profile}
-    <div class="ebay_gray_title_box">
-        {assign var="user_identifier" value=$current_profile->ebay_user_identifier|escape:'htmlall'}
-        {{l s='You are updating the "|profile_identifier| for eBay.|profile_domain|" profile' mod='ebay'}|replace:'|profile_identifier|':$user_identifier|replace:'|profile_domain|':$current_profile_site_extension}
-    </div>
+        <div class="ebay-boxes-2-col-table">
+            <div class="ebay-boxes-2-col-cell left ebay_gray_title_box">
+                {assign var="user_identifier" value=$current_profile->ebay_user_identifier|escape:'htmlall'}
+                {{l s='You are updating the "|profile_identifier| for eBay.|profile_domain|" profile' mod='ebay'}|replace:'|profile_identifier|':$user_identifier|replace:'|profile_domain|':$current_profile_site_extension}
+            </div>
+            <div class="ebay-boxes-2-col-cell right ebay_gray_title_box">
+                <ul id="ebay_main_menu">
+                    <li class="selected"><i class="fa fa-cog"></i> <a id="settings-menu-link" class="main-menu-a" href data-sub="settings">{l s='Settings' mod='ebay'}</a></li>
+                    <li><i class="fa fa-paper-plane-o"></i> <a id="sync-menu-link" class="main-menu-a" href data-sub="sync">{l s='Synchronization' mod='ebay'}</a></li>
+                    <li><i class="fa fa-eye"></i> <a id="visu-menu-link" class="main-menu-a" href data-sub="visu">{l s='Visualization' mod='ebay'}</a></li>
+                    <li><i class="fa fa-wrench"></i> <a id="advanced-settings-menu-link" class="main-menu-a" href data-sub="advanced-settings">{l s='Advanced Settings' mod='ebay'}</a></li>
+                </ul>
+            </div>
+        </div>
     {/if}
     
     <script type="text/javascript">
-        $(document).ready(function() {
-            $('#ebay-seller-tips-link').click(function(event) {
-              event.preventDefault();
-              var sellerTips = $('#seller-tips');
-              if (sellerTips.css('display') == 'none') {
-                  $(this).html('{l s='Hide seller tips' mod='ebay'}');
-                  sellerTips.show();
-              } else {
-                  $(this).html('{l s='Show seller tips' mod='ebay'}');
-                  sellerTips.hide();                  
-              }
-              return false;
-            });
-          
-          	$("#ebay_video_fancybox").click(function() {
-          		$.fancybox({
-          			'padding'		: 0,
-          			'autoScale'		: false,
-          			'transitionIn'	: 'none',
-          			'transitionOut'	: 'none',
-          			'title'			: this.title,
-          			'width'			: 640,
-          			'height'		: 385,
-          			'href'			: this.href.replace(new RegExp("watch\\?v=", "i"), 'v/'),
-          			'type'			: 'swf',
-          			'swf'			: {
-          			'wmode'				: 'transparent',
-          			'allowfullscreen'	: 'true'
-          			}
-          		});
-
-          		return false;
-          	});
+        var header_ebay_l = {
+          'Hide seller tips' : "{l s='Hide seller tips' mod='ebay'}",
+          'Show seller tips'  : "{l s='Show seller tips' mod='ebay'}",
+          'Are you sure you want to delete the profile number %profile_number%?' : "{l s='Are you sure you want to delete the profile number %profile_number%?' mod='ebay'}"
+        };
         
-            $('.delete-profile').click(function(event) {
-                event.preventDefault();
-                var profileId = $(this).data('profile');
-                if (confirm('{l s='Are you sure you want to delete the profile number %profile_number%?' mod='ebay'}'.replace('%profile_number%', profileId))) {
-                    $.ajax({
-                        url: '{$delete_profile_url|escape:'htmlall'}&profile='+profileId,
-                        cache: false,
-                        success: function(data) {
-                            location.reload();
-                        }
-                    });
-                }
-                return false;
-            });
-            
-        });
+        var delete_profile_url = '{$delete_profile_url|escape:'htmlall'}';
+        
+        var main_tab = '{$main_tab}';
+        var id_tab = '{$id_tab}';
     </script>
+    <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/header.js?date={$date|escape:'htmlall'}"></script>
 {/if}
 <!-- after seller tips -->
