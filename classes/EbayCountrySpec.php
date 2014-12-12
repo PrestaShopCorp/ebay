@@ -49,7 +49,11 @@ class EbayCountrySpec
 			'signin'         => 'https://signin.ebay.it/ws/eBayISAPI.dll',
 			'signin_sandbox' => 'https://signin.sandbox.ebay.it/ws/eBayISAPI.dll',
             'pro_url'        => 'http://pages.ebay.fr/professionnels/index.html',
-            'fee_url' 		 => 'http://pages.ebay.it/help/sell/fees.html'
+            'fee_url' 		 => 'http://pages.ebay.it/help/sell/fees.html',
+            'title_desc_url' => 'http://pages.ebay.it/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://sellercentre.ebay.co.uk/research-items-similar-yours',
+            'picture_url'	 => 'http://sellercentre.ebay.co.uk/new-picture-standards',
+            'top_rated_url'  => 'http://pages.ebay.it/help/sell/top-rated.html',
 		),
 		'gb' => array(
 			'site_id'        => 3,
@@ -63,7 +67,11 @@ class EbayCountrySpec
 			'signin'         => 'https://signin.ebay.co.uk/ws/eBayISAPI.dll',
 			'signin_sandbox' => 'https://signin.sandbox.ebay.co.uk/ws/eBayISAPI.dll',
             'pro_url'        => 'http://sellercentre.ebay.co.uk/',
-            'fee_url' 		 => 'http://sellercentre.ebay.co.uk/introduction-ebay-fees'           
+            'fee_url' 		 => 'http://sellercentre.ebay.co.uk/introduction-ebay-fees',
+            'title_desc_url' => 'http://pages.ebay.co.uk/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://sellercentre.ebay.co.uk/research-items-similar-yours',
+            'picture_url'	 => 'http://sellercentre.ebay.co.uk/new-picture-standards',
+            'top_rated_url'  => 'http://pages.ebay.co.uk/help/sell/top-rated.html',           
 		),
 		'es' => array(
 			'site_id'        => 186,
@@ -77,7 +85,11 @@ class EbayCountrySpec
 			'signin'         => 'https://signin.ebay.es/ws/eBayISAPI.dll',
 			'signin_sandbox' => 'https://signin.sandbox.ebay.es/ws/eBayISAPI.dll',
             'pro_url'        => 'http://pages.ebay.es/businesscentre/index.html',
-            'fee_url' 		 => 'http://pages.ebay.es/help/sell/fees.html'
+            'fee_url' 		 => 'http://pages.ebay.es/help/sell/fees.html',
+            'title_desc_url' => 'http://pages.ebay.es/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://sellercentre.ebay.co.uk/research-items-similar-yours',
+            'picture_url'	 => 'http://sellercentre.ebay.co.uk/new-picture-standards',
+            'top_rated_url'  => 'http://pages.ebay.es/help/sell/top-rated.html',
         ),
 		'fr' => array(
 			'site_id'        => 71,
@@ -91,7 +103,11 @@ class EbayCountrySpec
 			'signin'         => 'https://signin.ebay.fr/ws/eBayISAPI.dll',
 			'signin_sandbox' => 'https://signin.sandbox.ebay.fr/ws/eBayISAPI.dll',
             'pro_url'        => 'http://pages.ebay.fr/professionnels/index.html',
-            'fee_url' 		 => 'http://pages.ebay.fr/help/sell/fees.html'
+            'fee_url' 		 => 'http://pages.ebay.fr/help/sell/fees.html',
+            'title_desc_url' => 'http://pages.ebay.fr/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://sellercentre.ebay.co.uk/research-items-similar-yours',
+            'picture_url'	 => 'http://sellercentre.ebay.co.uk/new-picture-standards',
+            'top_rated_url'  => 'http://pages.ebay.fr/help/sell/top-rated.html',
 
 		),
 		'nl' => array(
@@ -106,7 +122,11 @@ class EbayCountrySpec
 			'signin'         => 'https://signin.ebay.nl/ws/eBayISAPI.dll',
 			'signin_sandbox' => 'https://signin.sandbox.ebay.nl/ws/eBayISAPI.dll',
             'pro_url'        => 'http://pages.ebay.nl/help/sell/rampingup.html',
-            'fee_url' 		 => 'http://pages.ebay.nl/help/sell/fees.html'
+            'fee_url' 		 => 'http://pages.ebay.nl/help/sell/fees.html',
+            'title_desc_url' => 'http://pages.ebay.nl/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://sellercentre.ebay.co.uk/research-items-similar-yours',
+            'picture_url'	 => 'http://sellercentre.ebay.co.uk/new-picture-standards',
+            'top_rated_url'  => 'http://pages.ebay.nl/help/sell/top-rated.html',
 
 		),
 		'pl' => array(
@@ -121,7 +141,11 @@ class EbayCountrySpec
 			'signin'         => 'https://signin.ebay.pl/ws/eBayISAPI.dll',
 			'signin_sandbox' => 'https://signin.sandbox.ebay.pl/ws/eBayISAPI.dll',
             'pro_url'        => 'http://pages.ebay.pl/help/sell/rampingup.html',
-            'fee_url' 		 => 'http://pages.ebay.pl/help/sell/fees.html'           
+            'fee_url' 		 => 'http://pages.ebay.pl/help/sell/fees.html',
+            'title_desc_url' => 'http://pages.ebay.pl/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://sellercentre.ebay.co.uk/research-items-similar-yours',
+            'picture_url'	 => 'http://sellercentre.ebay.co.uk/new-picture-standards',
+            'top_rated_url'  => 'http://pages.ebay.pl/help/sell/top-rated.html',          
 		),
 		'be-fr' => array(
 			'site_id'        => 23,
@@ -136,7 +160,11 @@ class EbayCountrySpec
 			'signin'         => 'https://signin.befr.ebay.be/ws/eBayISAPI.dll',
 			'signin_sandbox' => 'https://signin.sandbox.befr.ebay.be/ws/eBayISAPI.dll',
             'pro_url'        => 'http://pages.befr.ebay.be/befr/hubs/selling/professional/index.html',           
-            'fee_url'        => 'http://pages.befr.ebay.be/help/sell/fees.html'            
+            'fee_url'        => 'http://pages.befr.ebay.be/help/sell/fees.html',
+            'title_desc_url' => 'http://pages.befr.ebay.be/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://sellercentre.ebay.co.uk/research-items-similar-yours',
+            'picture_url'	 => 'http://sellercentre.ebay.co.uk/new-picture-standards',
+            'top_rated_url'  => 'http://pages.befr.ebay.be/help/sell/top-rated.html',          
 		),
 		'be-nl' => array(
 			'site_id'        => 123,
@@ -151,7 +179,11 @@ class EbayCountrySpec
 			'signin'         => 'https://signin.benl.ebay.be/ws/eBayISAPI.dll',
 			'signin_sandbox' => 'https://signin.sandbox.benl.ebay.be/ws/eBayISAPI.dll',
             'pro_url'        => 'http://pages.befr.ebay.be/befr/hubs/selling/professional/index.html',
-            'fee_url'        => 'http://pages.benl.ebay.be/help/sell/fees.html'        
+            'fee_url'        => 'http://pages.benl.ebay.be/help/sell/fees.html',
+            'title_desc_url' => 'http://pages.benl.ebay.be/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://sellercentre.ebay.co.uk/research-items-similar-yours',
+            'picture_url'	 => 'http://sellercentre.ebay.co.uk/new-picture-standards',
+            'top_rated_url'  => 'http://pages.benl.ebay.be/help/sell/top-rated.html',     
 		),
 		'de' => array(
 			'site_id'        => 77,
@@ -165,7 +197,11 @@ class EbayCountrySpec
 			'signin'         => 'https://signin.ebay.de/ws/eBayISAPI.dll',
 			'signin_sandbox' => 'https://signin.sandbox.ebay.de/ws/eBayISAPI.dll',
             'pro_url'        => 'http://verkaeuferportal.ebay.de/',
-            'fee_url'       => 'http://pages.ebay.de/help/sell/fees.html'
+            'fee_url'       => 'http://pages.ebay.de/help/sell/fees.html',
+            'title_desc_url' => 'http://pages.ebay.de/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://sellercentre.ebay.co.uk/research-items-similar-yours',
+            'picture_url'	 => 'http://sellercentre.ebay.co.uk/new-picture-standards',
+            'top_rated_url'  => 'http://pages.ebay.de/help/sell/top-rated.html',
 		),
 		'ch' => array(
 			'site_id'        => 193,
@@ -179,7 +215,11 @@ class EbayCountrySpec
 			'signin'         => 'https://signin.ebay.ch/ws/eBayISAPI.dll',
 			'signin_sandbox' => 'https://signin.sandbox.ebay.ch/ws/eBayISAPI.dll',
             'pro_url'        => 'http://pages.ebay.ch/help/sell/rampingup.html',
-            'fee_url'       => 'http://pages.ebay.ch/help/sell/fees.html'
+            'fee_url'       => 'http://pages.ebay.ch/help/sell/fees.html',
+            'title_desc_url' => 'http://pages.ebay.ch/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://sellercentre.ebay.co.uk/research-items-similar-yours',
+            'picture_url'	 => 'http://sellercentre.ebay.co.uk/new-picture-standards',
+            'top_rated_url'  => 'http://pages.ebay.ch/help/sell/top-rated.html',
 
 		),
 		'at' => array(
@@ -194,7 +234,11 @@ class EbayCountrySpec
 			'signin'         => 'https://signin.ebay.at/ws/eBayISAPI.dll',
 			'signin_sandbox' => 'https://signin.sandbox.ebay.at/ws/eBayISAPI.dll',
             'pro_url'        => 'http://pages.ebay.at/help/sell/rampingup.html',
-            'fee_url'       => 'http://pages.ebay.at/help/sell/fees.html'
+            'fee_url'       => 'http://pages.ebay.at/help/sell/fees.html',
+            'title_desc_url' => 'http://pages.ebay.at/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://sellercentre.ebay.co.uk/research-items-similar-yours',
+            'picture_url'	 => 'http://sellercentre.ebay.co.uk/new-picture-standards',
+            'top_rated_url'  => 'http://pages.ebay.at/help/sell/top-rated.html',
 
 		),
 	);
@@ -206,6 +250,26 @@ class EbayCountrySpec
 		else
 			$this->country = $this->_getCountry();
 
+	}
+
+	public function getTitleDescUrl()
+	{
+		return $this->_getCountryData('title_desc_url');
+	}
+
+	public function getSimilarItemsUrl()
+	{
+		return $this->_getCountryData('similar_items_url');
+	}
+
+	public function getPictureUrl()
+	{
+		return $this->_getCountryData('picture_url');
+	}
+
+	public function getTopRatedUrl()
+	{
+		return $this->_getCountryData('top_rated_url');
 	}
 
 	public function getSiteID()

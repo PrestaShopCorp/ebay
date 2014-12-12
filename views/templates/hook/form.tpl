@@ -189,8 +189,8 @@
                     <p id="ebay-install-title">{l s='Resources' mod='ebay'}</p>
                     <ul id="ebay-install-ul">
                         <li><a href="http://202-ecommerce.com/d/eBay-doc_{$documentation_lang}.pdf" target="_blank">{l s='Download the add-on installation guide' mod='ebay'}</a></li>
-                        <li><a href="{$pro_url}" target="_blank">{l s='eBay Seller center' mod='ebay'}</a></li>
-                        <li><a href="{$fee_url}" target="_blank">{l s='eBay fees for professional sellers' mod='ebay'}</a></li>
+                        <li><a href="{$pro_url|escape:'htmlall'}" target="_blank">{l s='eBay Seller center' mod='ebay'}</a></li>
+                        <li><a href="{$fee_url|escape:'htmlall'}" target="_blank">{l s='eBay fees for professional sellers' mod='ebay'}</a></li>
                         <li><b><a href="{if $site_extension == 'fr'}http://202-ecommerce.com/ebay/{else}http://en.202-ecommerce.com/ebay-en/{/if}"  target="_blank">{l s='Contact us' mod='ebay'}</a></b></li>
                     </ul>
                 </fieldset>
@@ -222,19 +222,19 @@
                                 <p class="ebay-light-gray-box-title">{l s='Tips to sell more on eBay:' mod='ebay'}</p>
                                 <ul class="ebay-light-gray-box-ul">
                                     <li>
-                                        {assign var="link" value="<a href=\"{l s='http://pages.ebay.co.uk/help/sell/title_desc_ov.html' mod='ebay'}\" target=\"_blank\">"}
+                                        {assign var="link" value="<a href=\"{$title_desc_url|escape:'htmlall'}\" target=\"_blank\">"}
                                         <span class="ebay-light-gray-box-number">1</span> <b>{l s='Help buyers to find your product:' mod='ebay'}</b> {{l s='Write good |a|titles and descriptions|/a|' mod='ebay'}|replace:'|a|':$link|replace:'|/a|':'</a>'}</a>
                                     </li>
                                     <li>
-                                        {assign var="link" value="<a href=\"{l s='http://sellercentre.ebay.co.uk/research-items-similar-yours' mod='ebay'}\" target=\"_blank\">"}
+                                        {assign var="link" value="<a href=\"{$similar_items_url|escape:'htmlall'}\" target=\"_blank\">"}
                                         <span class="ebay-light-gray-box-number">2</span> <b>{l s='Make your products competitive:' mod='ebay'}</b> {{l s='|a|research on eBay for similar products|/a| to yours and compare with your prices.' mod='ebay'}|replace:'|a|':$link|replace:'|/a|':'</a>'}
     </li>
                                     <li>
-                                        {assign var="link" value="<a href=\"{l s='http://sellercentre.ebay.co.uk/new-picture-standards' mod='ebay'}\" target=\"_blank\">"}
+                                        {assign var="link" value="<a href=\"{$picture_url|escape:'htmlall'}\" target=\"_blank\">"}
                                         <span class="ebay-light-gray-box-number">3</span> {{l s='|b|Take special care of your product pictures,|/b| |a|this will help buyers to buy from you.|/a|' mod='ebay'}|replace:'|b|':'</b>'|replace:'|/b|':'</b>'|replace:'|a|':$link|replace:'|/a|':'</a>'}
                                     </li>    
                                     <li>
-                                        {assign var="link" value="<a href=\"{l s='http://pages.ebay.co.uk/help/sell/top-rated.html' mod='ebay'}\" target=\"_blank\">"}
+                                        {assign var="link" value="<a href=\"{$top_rated_url|escape:'htmlall'}\" target=\"_blank\">"}
                                         <span class="ebay-light-gray-box-number">4</span> {{l s='|b|Make buyers to come back|/b| by |a|delivering a great service|/a| and offering free shipping.' mod='ebay'}|replace:'|b|':'</b>'|replace:'|/b|':'</b>'|replace:'|a|':$link|replace:'|/a|':'</a>'}                                                        </li>
                                 </ul>
                             </div>

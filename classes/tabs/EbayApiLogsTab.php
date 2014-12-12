@@ -34,7 +34,8 @@ class EbayApiLogsTab extends EbayTab
         
 		return $this->display('api_logs.tpl', array(
 		    'nb_logs' => EbayApiLog::count(),
-            'configs' => $configs
+            'configs' => $configs,
+            'api_not_configured' => !Configuration::get('EBAY_API_LOGS')
 		));
     }
     
