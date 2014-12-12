@@ -372,6 +372,7 @@ $_MODULE['<{ebay}prestashop>form_store_categories_d492cd5166f77cd57395649b4e49b3
 $_MODULE['<{ebay}prestashop>form_store_categories_d735bbdf17a0abe4cecd63e6c748ffb7'] = 'Aucune catégorie n\'a été trouvée';
 $_MODULE['<{ebay}prestashop>form_store_categories_51a86cf2722f1be8670a091910017425'] = 'Vous n\'êtes pas connecté';
 $_MODULE['<{ebay}prestashop>form_store_categories_c888438d14855d7d96a2724ee9c306bd'] = 'Paramètres mis à jour';
+$_MODULE['<{ebay}prestashop>order_logs_54b1a52487d66c4f98fda5b1954d60dd'] = 'Les journaux ne sont pas activés, merci de vous rendre dans les paramètres avancés afin de les activer';
 $_MODULE['<{ebay}prestashop>order_logs_193cfc9be3b995831c6af2fea6650e60'] = 'Page ';
 $_MODULE['<{ebay}prestashop>order_logs_d9efc413ecd9988caf09c5e921902dfc'] = 'sur %s';
 $_MODULE['<{ebay}prestashop>order_logs_490aa6e856ccf208a054389e47ce0d06'] = 'Identifiant';
