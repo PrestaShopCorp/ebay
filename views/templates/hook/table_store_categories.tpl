@@ -33,7 +33,7 @@
 			<td>{$c.name|escape:'htmlall'}
 			</td>
 			<td id="categoryPath{$c.id_category|escape:'htmlall'}">
-                <select name="store_category[{$c.id_category}]|escape:'htmlall'" style="font-size: 12px; width: 160px;" class="ebay_select">
+                <select name="store_category[{$c.id_category|escape:'htmlall'}]" style="font-size: 12px; width: 160px;" class="ebay_select">
                     {foreach from=$eBayStoreCategoryList item=ec}
                         <option value="{$ec.ebay_category_id|escape:'htmlall'}" {if in_array($c.id_category, $ec.id_categories)}selected="selected"{/if}>{$ec.name|escape:'htmlall'}</option>
                     {/foreach}

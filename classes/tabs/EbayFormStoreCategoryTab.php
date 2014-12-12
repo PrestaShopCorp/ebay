@@ -64,17 +64,18 @@ class EbayFormStoreCategoryTab extends EbayTab
     public function postProcess()
     {
 		// Insert and update categories
-        if ($store_categories = Tools::getValue('store_category')) {
-            
-            // cleanup Db for this profile
-            EbayStoreCategoryConfiguration::deleteByIdEbayProfile($this->ebay_profile->id);
-            
+        if ($store_categories = Tools::getValue('store_category')) 
+        {
             // insert rows
             foreach($store_categories as $id_category => $ebay_category_id)
                 if ($ebay_category_id)
-                    EbayStoreCategoryConfiguration::insert($this->ebay_profile->id, $ebay_category_id, $id_category);
+                    EbayStoreCategoryConfiguration::update($this->ebay_profile->id, $ebay_category_id, $id_category);
 
         }
+
+        if (Tools::getValue('ajax'))
+            die('{"valid" : true}');
+
 		return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));        
     }    
 

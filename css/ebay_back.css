@@ -830,3 +830,14 @@ margin-bottom: 3px;
 	margin-bottom:15px;
 }
 
+.module_confirmation
+{
+	background: #DFF2BF url(../img/admin/icon-valid.png) no-repeat scroll 6px 6px;
+	border: 1px solid #4F8A10;
+	color: #4F8A10;
+	border-radius: 3px;
+	padding: 13px 5px 5px 40px;
+	min-height: 28px;
+	margin:0 0 10px 0;
+}
+
