@@ -136,7 +136,6 @@ $_MODULE['<{ebay}prestashop>form_920dc5e73ec934da7215f65aa6fc642e'] = 'Boutique 
 $_MODULE['<{ebay}prestashop>form_4994a8ffeba4ac3140beb89e8d41f174'] = 'Langue';
 $_MODULE['<{ebay}prestashop>form_3c54123fc64232cfcad3cedd49266ce5'] = 'Nb de listings';
 $_MODULE['<{ebay}prestashop>form_004bf6c9a40003140292e97330236c53'] = 'Action';
-$_MODULE['<{ebay}prestashop>form_3e9983cf1885a5ec9f5a5d8127137bd2'] = 'Supprimer';
 $_MODULE['<{ebay}prestashop>form_0599b1ea4ecbec20a40188dca59e5ff9'] = 'Le profil en gras est votre profil actuel. Pour remplacer le profil que vous utilisez actuellement, cliquez sur le profil souhaité.';
 $_MODULE['<{ebay}prestashop>form_15f046413a3aed81622b21bf550add71'] = 'Ajouter un nouveau profil';
 $_MODULE['<{ebay}prestashop>form_7fcf7ae95171549f39479f4983cef281'] = 'Statut du module eBay';
@@ -195,6 +194,8 @@ $_MODULE['<{ebay}prestashop>formadvancedparameters_1946fcd18638ae9703119c103c670
 $_MODULE['<{ebay}prestashop>formadvancedparameters_23b1672185d27fe1ba03806f43f79e9f'] = 'Délai de récupération des commandes (en nombre de jours, à modifier si vous recevez plus de 100 commandes toutes les deux semaines)';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_019fc92d49206aab1d669ef9e32e4b89'] = 'Utilisation des données du module eBay';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_c0e4b9f3fbbb5e65319e9a6c4554166f'] = 'Aidez-nous à améliorer le module eBay en nous envoyant des statistiques d\'utilisation anonymes.';
+$_MODULE['<{ebay}prestashop>formadvancedparameters_8ad4303b83a62fb6ca3b025bad5bc114'] = 'Non merci ';
+$_MODULE['<{ebay}prestashop>formadvancedparameters_39535fa9d04b1337c8394b684ccec7bb'] = 'J\'accepte';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_26030c760e6e50206710389d768204a9'] = 'Enregistrer et continuer';
 $_MODULE['<{ebay}prestashop>formconfig_8af703b2bf59cc9742883ae7f4cb0e5b'] = 'Paramètres';
 $_MODULE['<{ebay}prestashop>formconfig_0dc0fd7c3581a948e896865f8f13717e'] = 'Catégories';
