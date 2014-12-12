@@ -32,7 +32,7 @@
 		<tr{if $k % 2 !== 0} class="alt_row"{/if} id="category-{$c.id_category|escape:'htmlall'}">
 			<td><a id="show-products-switch-{$c.id_category|escape:'htmlall'}" showing="0" class="show-products" href="javascript:showProducts({$c.id_category|escape:'htmlall'})">&#9654;</a> {$c.name|escape:'htmlall'} ({if isset($getCatInStock[$c.id_category])}
 				{$getCatInStock[$c.id_category]|escape:'htmlall'}
-				{/if})
+				{else}0{/if})
 			</td>
 			<td id="categoryPath{$c.id_category|escape:'htmlall'}">
 				{if isset($categoryConfigList[$c.id_category]) && isset($categoryConfigList[$c.id_category].var)}
