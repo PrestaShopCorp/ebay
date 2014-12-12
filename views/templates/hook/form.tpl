@@ -141,14 +141,13 @@
                             <table class="table tableDnD" cellpadding="0" cellspacing="0">
                         		<thead>
                         			<tr class="nodrag nodrop">
-                                        <th>{l s='Id' mod='ebay'}</th>
+                                        <th>#</th>
                                         <th>{l s='eBay User Id' mod='ebay'}</th>
                                         <th>{l s='eBay Site' mod='ebay'}</th>
                                         {if version_compare(_PS_VERSION_, '1.5', '>')}<th>{l s='Prestashop Shop' mod='ebay'}</th>{/if}
                                         <th class="center">{l s='Language' mod='ebay'}</th>
                                         <th class="center">{l s='Nb Current Listings' mod='ebay'}</th>
                                         <th class="center">{l s='Action' mod='ebay'}</th>
-                                        <th class="center">{l s='Delete Profile' mod='ebay'}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -160,8 +159,7 @@
                                             {if version_compare(_PS_VERSION_, '1.5', '>')}<td>{$profile.name|escape:'htmlall'}</td>{/if}
                                             <td align="center"><img src="../img/l/{$profile.id_lang|escape:'htmlall'}.jpg" alt="{$profile.language_name|escape:'htmlall'}" title="{$profile.language_name|escape:'htmlall'}"></td>
                                             <td align="center">{$profile.nb_products|escape:'htmlall'}</td>
-                                            <td align="center"><img src="../img/admin/edit.gif" /></td>
-                                            <td align="center"><a href class="delete-profile" data-profile="{$profile.id_ebay_profile|escape:'htmlall'}"><img src="../img/admin/delete.gif" /></a></td>     
+                                            <td align="center"><img src="../img/admin/edit.gif" /><a href class="delete-profile" data-profile="{$profile.id_ebay_profile|escape:'htmlall'}"><img src="../img/admin/delete.gif" /></a></td>     
                                         </tr>
                                     {/foreach}
                                 </tbody>

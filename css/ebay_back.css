@@ -771,10 +771,14 @@ a.ebay-primary {
   background-color: #f2f2f2;
   font-size: 1.2em;
   font-weight: bold;
-  border: 1px solid #e0e0e0;
   padding: 1em;
   margin-top: 1em;
   margin-bottom: 1em;
+  width:60%;
+}
+
+.ebay_gray_title_box:first-child {
+	width:40%;
 }
 
 /* override PrestaShop css */

@@ -146,7 +146,7 @@ class EbayFormParametersTab extends EbayTab
 
         // we retrieve the potential currencies to make sure the selected currency exists in this shop
         $currencies = TotCompatibility::getCurrenciesByIdShop($this->ebay_profile->id_shop);
-        $currencies_ids = array_map('getCurrencyId', $currencies);
+        $currencies_ids = array_map(array($this,'getCurrencyId'), $currencies);
 
 		if ($this->ebay_profile->setConfiguration('EBAY_PAYPAL_EMAIL', pSQL(Tools::getValue('ebay_paypal_email')))
 			&& $this->ebay_profile->setConfiguration('EBAY_SHOP', pSQL(Tools::getValue('ebay_shop')))
