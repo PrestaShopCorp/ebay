@@ -98,7 +98,7 @@
                         </p>
                         <div class="ebay-dark-gray-box-content">
                             {l s='Begin or boost your activity on eBay, enjoying ' mod='ebay'}<b> {l s='90 free days of subscription' mod='ebay'}</b> {l s='to eBay Shops' mod='ebay'}<br/>
-                            <a href="{l s='http://pages.ebay.fr/promos/termsfrstoretrial3months/' mod='ebay'}">{l s='More informations' mod='ebay'}</a>
+                            <a href="{l s='http://pages.ebay.fr/promos/termsfrstoretrial3months/' mod='ebay'}" target="_blank">{l s='More informations' mod='ebay'}</a>
                         </div>
                         <img src="../modules/ebay/img/open_your_shop.jpg" alt="" id="open_your_shop">
                         <div class="clear clearfix"></div>
@@ -192,7 +192,7 @@
                     <ul id="ebay-install-ul">
                         <li><a href="http://202-ecommerce.com/d/eBay-doc_{$documentation_lang}.pdf" target="_blank">{l s='Download the add-on installation guide' mod='ebay'}</a></li>
                         <li><a href="{$pro_url}" target="_blank">{l s='eBay Seller center' mod='ebay'}</a></li>
-                        <li><a href="http://pages.ebay.{$site_extension}/help/sell/fees.html" target="_blank">{l s='eBay fees for professional sellers' mod='ebay'}</a></li>
+                        <li><a href="{$fee_url}" target="_blank">{l s='eBay fees for professional sellers' mod='ebay'}</a></li>
                         <li><b><a href="{if $site_extension == 'fr'}http://202-ecommerce.com/ebay/{else}http://en.202-ecommerce.com/ebay-en/{/if}"  target="_blank">{l s='Contact us' mod='ebay'}</a></b></li>
                     </ul>
                 </fieldset>
