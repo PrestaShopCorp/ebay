@@ -630,7 +630,7 @@ fieldset.new legend {
 
 #ebay-no-profile {
   font-size: 1.2em;
-  line-height: 5em;
+  line-height: 69px;
   text-align: center;
 }
 
@@ -771,10 +771,14 @@ a.ebay-primary {
   background-color: #f2f2f2;
   font-size: 1.2em;
   font-weight: bold;
-  border: 1px solid #e0e0e0;
   padding: 1em;
   margin-top: 1em;
   margin-bottom: 1em;
+  width:60%;
+}
+
+.ebay_gray_title_box:first-child {
+	width:40%;
 }
 
 /* override PrestaShop css */
@@ -824,5 +828,16 @@ margin-bottom: 3px;
 #configFormStoreCategories
 {
 	margin-bottom:15px;
+}
+
+.module_confirmation
+{
+	background: #DFF2BF url(/../img/admin/icon-valid.png) no-repeat scroll 6px 6px;
+	border: 1px solid #4F8A10;
+	color: #4F8A10;
+	border-radius: 3px;
+	padding: 13px 5px 5px 40px;
+	min-height: 28px;
+	margin:0 0 10px 0;
 }
 

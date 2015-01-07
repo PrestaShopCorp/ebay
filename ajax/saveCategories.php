@@ -32,4 +32,7 @@ if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get(
 	die('ERROR: Invalid Token');
 
 $ebay = new eBay();
-$ebay->_postProcessCategory();
+$context = Context::getContext();
+$tab = new EbayFormCategoryTab($ebay, $context->smarty);
+
+$tab->postProcess();
