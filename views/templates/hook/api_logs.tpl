@@ -23,6 +23,11 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+{if $api_not_configured}
+<div class="warning big">
+ {l s='Logs are not enabled please go to advanced parameters to enable them' mod='ebay'}
+</div>
+{/if}
 {if $nb_logs > 0}
 	<p id="textStoresPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nb_logs / 20)|round:"0" + 1) mod='ebay'}</p>
 	<ul id="api_logs_pagination" class="pagination">
@@ -33,6 +38,7 @@
 		<li class="next">></li>
 	</ul>
 {/if}
+
 
 <table id="api_logs_table" class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
 		<thead>

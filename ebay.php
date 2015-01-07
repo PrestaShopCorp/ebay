@@ -115,7 +115,7 @@ class Ebay extends Module
 	{
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.9.1';
+		$this->version = '1.9.2';
 		$this->stats_version = '1.0';
 
 		$this->author = 'PrestaShop';
@@ -188,7 +188,8 @@ class Ebay extends Module
 
 			if(class_exists('EbayCountrySpec'))
 			{
-                if (!$this->ebay_profile) {
+                if (!$this->ebay_profile) 
+                {
     				if ($id_ebay_profile)
     					$this->ebay_profile = new EbayProfile($id_ebay_profile);
     				else
@@ -209,6 +210,11 @@ class Ebay extends Module
 				} 
 				else 
 				{
+					
+					$iso_country = strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
+					$iso_lang = strtolower(Language::getIsoById(Configuration::get('PS_LANG_DEFAULT')));
+					$this->ebay_country = EbayCountrySpec::getInstanceByCountryAndLang($iso_country,$iso_lang);
+
 					return false;
 				}
 			}
@@ -1186,7 +1192,7 @@ class Ebay extends Module
 			'shop' => urlencode(Configuration::get('PS_SHOP_NAME')),
 			'registered' => in_array('registration', $alerts) ? 'no' : 'yes',
 			'url' => urlencode($_SERVER['HTTP_HOST']),
-			'iso_country' => ($this->ebay_country ? Tools::strtolower($this->ebay_country->getIsoCode()) : ''),
+			'iso_country' => (Tools::strtolower($this->ebay_country->getIsoCode())),
 			'iso_lang' => Tools::strtolower($this->context->language->iso_code),
 			'id_lang' => (int)$this->context->language->id,
 			'email' => urlencode(Configuration::get('PS_SHOP_EMAIL')),
@@ -1260,14 +1266,14 @@ class Ebay extends Module
 
     
 		$this->smarty->assign(array(
-			'img_stats' => ($this->ebay_country ? $this->ebay_country->getImgStats() : ''),
+			'img_stats' => ($this->ebay_country->getImgStats()),
 			'alert' => $alerts,
 			'regenerate_token' => Configuration::get('EBAY_TOKEN_REGENERATE', null, 0, 0),
 			'prestashop_content' => $prestashop_content,
 			'path' => $this->_path,
 			'multishop' => (version_compare(_PS_VERSION_, '1.5', '>') && Shop::isFeatureActive()),
-			'site_extension' => ($this->ebay_country ? $this->ebay_country->getSiteExtension() : 'co.uk'),
-			'documentation_lang' => ($this->ebay_country ? $this->ebay_country->getDocumentationLang() : 'en'),
+			'site_extension' => ($this->ebay_country->getSiteExtension()),
+			'documentation_lang' => ($this->ebay_country->getDocumentationLang()),
 			'is_version_one_dot_five' => version_compare(_PS_VERSION_, '1.5', '>'),
 			'is_version_one_dot_five_dot_one' => (version_compare(_PS_VERSION_, '1.5.1', '>=') && version_compare(_PS_VERSION_, '1.5.2', '<')),
 			'css_file' => $this->_path.'css/ebay_back.css',
@@ -1296,7 +1302,12 @@ class Ebay extends Module
             'delete_profile_url' => _MODULE_DIR_.'ebay/ajax/deleteProfile.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')),
             'main_tab' => $main_tab,
             'id_tab' => (int)Tools::getValue('id_tab'),
-            'pro_url' => isset($this->ebay_profile) ? EbayCountrySpec::getProUrlBySiteId($this->ebay_profile->ebay_site_id) : EbayCountrySpec::getProUrlBySiteId(),                        
+            'pro_url' => $this->ebay_country->getProUrl(),                        
+            'fee_url' => $this->ebay_country->getFeeUrl(),                        
+            'title_desc_url' => $this->ebay_country->getTitleDescUrl(),                        
+            'picture_url' => $this->ebay_country->getPictureUrl(),                        
+            'similar_items_url' => $this->ebay_country->getSimilarItemsUrl(),                        
+            'top_rated_url' => $this->ebay_country->getTopRatedUrl(),                        
             'warning_url' => isset($warning_url) ? $warning_url : null,
             '_module_dir_' => _MODULE_DIR_,
             'date' => pSQL(date('Ymdhis')),         

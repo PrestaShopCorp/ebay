@@ -24,20 +24,15 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-class EbayApiLogsTab extends EbayTab
-{
+include(dirname(__FILE__).'/../../../config/config.inc.php');
+require_once(dirname(__FILE__).'/../../../init.php');
+include('../ebay.php');
 
-    function getContent()
-    {
-		// Load prestashop ebay's configuration
-		$configs = Configuration::getMultiple(array('EBAY_SECURITY_TOKEN'));        
-        
-		return $this->display('api_logs.tpl', array(
-		    'nb_logs' => EbayApiLog::count(),
-            'configs' => $configs,
-            'api_not_configured' => !Configuration::get('EBAY_API_LOGS')
-		));
-    }
-    
-}
+if (Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+	die('ERROR: Invalid Token');
 
+$ebay = new eBay();
+$context = Context::getContext();
+$tab = new EbayFormStoreCategoryTab($ebay, $context->smarty);
+
+$tab->postProcess();
