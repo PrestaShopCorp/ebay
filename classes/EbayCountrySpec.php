@@ -379,7 +379,9 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
 	{
 		$ebay_profile = EbayProfile::getCurrent();	
 		if($ebay_profile)	
-		$ebayCountry = self::getInstanceByKey($ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'));
+			$ebayCountry = self::getInstanceByKey($ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'));
+		else
+			$ebayCountry = self::getInstanceByKey('gb');
 
 		$this->country = $ebayCountry->country;
 
