@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
- *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -83,11 +82,12 @@ class EbayConfiguration
 			return Db::getInstance()->insert('ebay_configuration', $datas , false, true, Db::REPLACE);
 	}	
 	
-    public static function getAll($id_ebay_profile)
+    public static function getAll($id_ebay_profile, $exceptions = false)
     {
         $sql = 'SELECT `name`, `value`
             FROM `'._DB_PREFIX_.'ebay_configuration`
-            WHERE `id_ebay_profile` = '.(int)$id_ebay_profile;
+            WHERE `id_ebay_profile` = "'.(int)$id_ebay_profile.'" AND name NOT IN ("'.implode('","', array_map('pSQL', $exceptions)).'")';
+        
         return Db::getInstance()->executeS($sql);
     }    
     

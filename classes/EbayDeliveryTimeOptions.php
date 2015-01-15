@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
- *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -48,4 +47,20 @@ class EbayDeliveryTimeOptions
 
 		Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_delivery_time_options', $to_insert, 'INSERT');
 	}
+    
+	public static function getDeliveryTimeOptions()
+	{
+		if (EbayDeliveryTimeOptions::getTotal())
+			return EbayDeliveryTimeOptions::getAll();
+
+		$ebay = new EbayRequest();
+		$delivery_time_options = $ebay->getDeliveryTimeOptions();
+
+		foreach ($delivery_time_options as $delivery_time_option)
+			EbayDeliveryTimeOptions::insert(array_map('pSQL', $delivery_time_option));
+
+		return $delivery_time_options;
+	}
+
+    
 }

@@ -17,9 +17,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2014 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
@@ -27,8 +27,8 @@
 
 <style> 
 	{literal}
-	#button_ebay_sync1{background-image:url({/literal}{$path|escape:'urlencode'}{literal}views/img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:500px;height:191px;cursor:pointer;padding-bottom:100px;font-weight:bold;font-size:25px;}
-			#button_ebay_sync2{background-image:url({/literal}{$path|escape:'urlencode'}{literal}views/img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:500px;height:191px;cursor:pointer;padding-bottom:100px;font-weight:bold;font-size:15px;}
+	#button_ebay_sync1{background-image:url({/literal}{$path|escape:'urlencode'}{literal}img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:500px;height:191px;cursor:pointer;padding-bottom:100px;font-weight:bold;font-size:25px;}
+			#button_ebay_sync2{background-image:url({/literal}{$path|escape:'urlencode'}{literal}img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:500px;height:191px;cursor:pointer;padding-bottom:100px;font-weight:bold;font-size:15px;}
 	.informations{
 		padding-bottom: 3px;margin-top: 8px;
 	}
@@ -93,7 +93,7 @@
 		$("#button_ebay_sync1").css("background-color", "#D5D5D5");
 		$("#button_ebay_sync2").attr("disabled", "true");
 		$("#button_ebay_sync2").css("background-color", "#D5D5D5");
-		$("#resultSync").html("<img src=\"../modules/ebay/views/img/loading-small.gif\" border=\"0\" />");
+		$("#resultSync").html("<img src=\"../modules/ebay/img/loading-small.gif\" border=\"0\" />");
 		eBaySyncProduct(option);
 	}
 
@@ -130,12 +130,19 @@
 	}
 	{/literal}
 </script>
+
 <div id="resultSync" style="text-align: center; font-weight: bold; font-size: 14px;"></div>
+
+
 <form action="{$action_url|escape:'urlencode'}" method="post" class="form" id="configForm4">
 	<fieldset style="border: 0">
-		<div class="warning big">
-			<b data-dialoghelp="http://pages.ebay.com/help/sell/listing-variations.html" data-inlinehelp="{l s='Find out more about multi-variation listings.' mod='ebay'}">{l s='Note: If some of your categories don’t support multi-variation listings, all variations will appear as separate listings.' mod='ebay'}</b>
-		</div>
+
+        {if isset($category_alerts) && !empty($category_alerts)}
+            <div class="warning big">
+                {$category_alerts|escape:'htmlall'}
+            </div>
+        {/if}
+
 		<h4>{l s='You\'re now ready to list your products on eBay.' mod='ebay'}</h4>
 		<label style="width: 250px;">{l s='List all products on eBay' mod='ebay'} : </label><br /><br />
 		<div class="margin-form">

@@ -363,33 +363,35 @@ textarea + .tooltip {
 	background : url('../img/big-error.png') no-repeat 2px 50% #fff;;
 }
 
+.menu-msg { display: none; }
 
-#menuTab li.success
+
+.menuTab li.success
 {
 	background : url('../img/success.png') no-repeat 2px 4px #EFEFEF;
 	padding-left: 20px;
 }
 
-#menuTab li.wrong
+.menuTab li.wrong
 {
 	background : url('../img/error.png') no-repeat 2px 4px #EFEFEF;
 	padding-left: 20px;
 }
 
-#menuTab li.mind
+.menuTab li.mind
 {
 	background : url('../img/warning.png') no-repeat 2px 4px #EFEFEF;
 	padding-left: 20px;
 }
 
-#menuTab2Sheet #pagination
+.pagination
 {
 	overflow: hidden;
 	margin-bottom: 5px;
 	list-style: none;
 }
 
-#menuTab2Sheet #pagination li
+.pagination li
 {
 	width: 15px;
 	height: 15px;
@@ -399,25 +401,25 @@ textarea + .tooltip {
 	margin-left: 5px;
 }
 
-#menuTab2Sheet #pagination li:hover
+.pagination li:hover
 {
 	color: #0055FF;
 }
 
-#menuTab2Sheet #pagination li:first-child
+.pagination li:first-child
 {
 	margin-left: 0;
 }
 
 
-#menuTab2Sheet #pagination li.prev,
-#menuTab2Sheet #pagination li.next
+.pagination li.prev,
+.pagination li.next
 {
 	background: #ffffff;
 	border: 1px solid #585A69;
 }
 
-#menuTab2Sheet #pagination li.current
+.pagination li.current
 {
 	border: 1px solid #585A69;
 	color: #0055FF;
@@ -516,6 +518,26 @@ fieldset.new legend {
   position: relative; 
 }
 
+.ebay-dark-gray-box-container
+{
+	margin-top:15px;
+	background-color:#f2f2f2;
+	padding:10px;
+}
+
+.ebay-dark-gray-box-title
+{
+	font-size:15px;
+	font-weight:bold;
+}
+
+.ebay-dark-gray-box-content
+{
+	width: 210px;
+	float: left;
+	margin-right: 20px;
+}
+
 .ebay-light-gray-box {
   box-sizing: border-box;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -608,7 +630,7 @@ fieldset.new legend {
 
 #ebay-no-profile {
   font-size: 1.2em;
-  line-height: 5em;
+  line-height: 69px;
   text-align: center;
 }
 
@@ -749,10 +771,14 @@ a.ebay-primary {
   background-color: #f2f2f2;
   font-size: 1.2em;
   font-weight: bold;
-  border: 1px solid #e0e0e0;
   padding: 1em;
   margin-top: 1em;
   margin-bottom: 1em;
+  width:60%;
+}
+
+.ebay_gray_title_box:first-child {
+	width:40%;
 }
 
 /* override PrestaShop css */
@@ -760,3 +786,58 @@ a.ebay-primary {
 .nobootstrap {
   min-width: 0 !important;
 }
+
+#ebay_main_menu {
+  float: right;
+  list-style: none;
+  margin-top: 3px;
+margin-bottom: 3px;
+}
+
+#ebay_main_menu li {
+  float: left;
+  padding: 0 5px 0 5px;
+  border: 1px solid black;
+  padding: 5px;
+  margin-left: 10px;
+  border-radius: 5px;
+  font-weight: normal;
+  opacity:0.5;
+  margin-bottom: 3px;
+  margin-top: 3px;
+}
+
+#ebay_main_menu li.selected {
+ opacity:1;
+}
+
+/* from formConfig.tpl */
+
+.menuTab { float: left; padding: 0; margin: 0; text-align: left; width: 100% }
+.menuTab li { text-align: left; float: left; display: inline; padding: 5px; padding-right: 10px; background-color: #EFEFEF; font-weight: bold; cursor: pointer; border-left: 1px solid #EFEFEF; border-right: 1px solid #EFEFEF; border-top: 1px solid #EFEFEF; }
+.menuTab li.menuTabButton.selected { background-color: #FFF6D3; border-left: 1px solid #CCCCCC; border-right: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; }
+#tabList { clear: left; }
+.tabItem { display: none; }
+.tabItem.selected { display: block; background-color: #FFFFF0; border: 1px solid #CCCCCC; padding: 10px; padding-top: 20px; }
+.menuTab #menuTab7.menuTabButton.selected, .menuTab #menuTab6.menuTabButton.selected { background-color: #FFF6D3; border-left: 1px solid #DFDFDF; border-right: 1px solid #DFDFDF; border-top: 1px solid #DFDFDF; }
+
+.ebay_hidden {
+  display: none;
+}
+
+#configFormStoreCategories
+{
+	margin-bottom:15px;
+}
+
+.module_confirmation
+{
+	background: #DFF2BF url(/../img/admin/icon-valid.png) no-repeat scroll 6px 6px;
+	border: 1px solid #4F8A10;
+	color: #4F8A10;
+	border-radius: 3px;
+	padding: 13px 5px 5px 40px;
+	min-height: 28px;
+	margin:0 0 10px 0;
+}
+

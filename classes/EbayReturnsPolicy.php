@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
- *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -46,4 +45,30 @@ class EbayReturnsPolicy
 	{
 		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_returns_policy', $data, 'INSERT');
 	}
+    
+	public static function getReturnsPolicies()
+	{
+		// already in the DB
+		if (EbayReturnsPolicy::getTotal())
+			return EbayReturnsPolicy::getAll();
+
+		$ebay_request = new EbayRequest();
+		$policiesDetails = $ebay_request->getReturnsPolicies();
+
+		foreach ($policiesDetails['ReturnsAccepted'] as $returns_policy)
+			EbayReturnsPolicy::insert(array_map('pSQL', $returns_policy));
+
+		$ReturnsWithin = array();
+		foreach($policiesDetails['ReturnsWithin'] as $returns_within)
+			$ReturnsWithin[] = array_map('pSQL', $returns_within);
+        Configuration::updateValue('EBAY_RETURNS_WITHIN_VALUES', serialize($ReturnsWithin), false, 0, 0);
+
+		$returnsWhoPays = array();
+		foreach($policiesDetails['ReturnsWhoPays'] as $returns_within)
+			$returnsWhoPays[] = array_map('pSQL', $returns_within);
+        Configuration::updateValue('EBAY_RETURNS_WHO_PAYS_VALUES', serialize($returnsWhoPays), false, 0, 0);
+
+		return $policiesDetails['ReturnsAccepted'];
+	}
+    
 }
