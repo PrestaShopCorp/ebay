@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
- *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -110,13 +109,9 @@ class EbayFormShippingTab extends EbayTab
 
 			if ($exclude_locations = Tools::getValue('excludeLocation'))
 			{
-				$where = '(0 || ';
-
-				foreach ($exclude_locations as $location => $on)
-					//build update $where
-					$where .= 'location = "'.pSQL($location).'" || ';
-
-				$where .= ' 0)';
+				$locations = array_keys($exclude_locations);
+				$where = 'location IN ("'.implode('","', array_map('pSQL', $locations)).'")';
+				
 				$where .= ' AND `id_ebay_profile` = '.(int)$this->ebay_profile->id;
 
 				if (version_compare(_PS_VERSION_, '1.5', '>'))
@@ -159,7 +154,7 @@ class EbayFormShippingTab extends EbayTab
 			$international_excluded_shipping_locations = Tools::getValue('internationalExcludedShippingLocation');
 
 			foreach ($ebay_carriers_international as $key => $ebay_carrier_international)
-			{//				
+			{			
 				if (!empty($ebay_carrier_international) && !empty($ps_carriers_international[$key]) && isset($international_shipping_locations[$key]))
 				{
 					$infos = explode('-', $ps_carriers_international[$key]); 

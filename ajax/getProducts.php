@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
- *  @license	http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -55,10 +54,11 @@ $sql .= $is_one_five ? ' product_shop.`id_shop` = 1 AND ' : '';
 $sql .= ' p.`id_category_default` = '.(int)Tools::getValue('category');
 
 $res = Db::getInstance()->ExecuteS($sql);
-foreach ($res as &$row) {
-    $row['name'] = Tools::safeOutput($row['name']);
-    $row['blacklisted'] = Tools::safeOutput($row['blacklisted']);
-    $row['extra_images'] = Tools::safeOutput($row['extra_images']);
+foreach ($res as &$row) 
+{
+	$row['name'] = Tools::safeOutput($row['name']);
+	$row['blacklisted'] = Tools::safeOutput($row['blacklisted']);
+	$row['extra_images'] = Tools::safeOutput($row['extra_images']);
 }
 
 echo Tools::jsonEncode($res);

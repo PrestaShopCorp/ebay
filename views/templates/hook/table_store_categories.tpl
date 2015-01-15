@@ -17,9 +17,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2014 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
@@ -33,7 +33,7 @@
 			<td>{$c.name|escape:'htmlall'}
 			</td>
 			<td id="categoryPath{$c.id_category|escape:'htmlall'}">
-                <select name="store_category[{$c.id_category}]|escape:'htmlall'" style="font-size: 12px; width: 160px;" class="ebay_select">
+                <select name="store_category[{$c.id_category|escape:'htmlall'}]" style="font-size: 12px; width: 160px;" class="ebay_select">
                     {foreach from=$eBayStoreCategoryList item=ec}
                         <option value="{$ec.ebay_category_id|escape:'htmlall'}" {if in_array($c.id_category, $ec.id_categories)}selected="selected"{/if}>{$ec.name|escape:'htmlall'}</option>
                     {/foreach}

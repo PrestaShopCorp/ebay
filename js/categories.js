@@ -17,9 +17,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*	@author PrestaShop SA <contact@prestashop.com>
+*	@author    PrestaShop SA <contact@prestashop.com>
 *	@copyright	2007-2014 PrestaShop SA
-*	@license	http://opensource.org/licenses/afl-3.0.php	Academic Free License (AFL 3.0)
+*	@license   http://opensource.org/licenses/afl-3.0.php	Academic Free License (AFL 3.0)
 *	International Registered Trademark & Property of PrestaShop SA
 */
 
@@ -68,7 +68,7 @@ function showProducts(id_category) {
 			$('.product-row[category=' + id_category +']').show();
 		else
 		{
-			$('<img src="' + module_path + 'views/img/loading-small.gif" id="loading-' + id_category +'" alt="" />').insertAfter(elem);
+			$('<img src="' + module_path + 'img/loading-small.gif" id="loading-' + id_category +'" alt="" />').insertAfter(elem);
 
 			$.ajax({
 				dataType: 'json',
@@ -153,7 +153,7 @@ $(document).ready(function() {
 	});
 	
 	$("#configForm2SuggestedCategories input[type=submit]").click(function(){
-		$('<div class="center"><img src="' + module_path + 'views/img/loading-small.gif" alt="" />' + categories_ebay_l['thank you for waiting'] + '</div>').insertAfter($(this));
+		$('<div class="center"><img src="' + module_path + 'img/loading-small.gif" alt="" />' + categories_ebay_l['thank you for waiting'] + '</div>').insertAfter($(this));
 		$(this).fadeOut();
 		$.ajax({
 			url: module_dir + "ebay/ajax/suggestCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&not_logged_str=' + categories_ebay_l['You are not logged in'] + '&settings_updated_str=' + categories_ebay_l['Settings updated'],

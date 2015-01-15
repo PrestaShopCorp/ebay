@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
- *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -31,7 +30,7 @@ class EbayHelpTab extends EbayTab
     function getContent()
     {
         $ebay_country = EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'));        
-		$help_file = dirname(__FILE__).'/../../help/help-'.strtolower($ebay_country->getDocumentationLang()).'.html';
+		$help_file = dirname(__FILE__).'/../../help/help-'.Tools::strtolower($ebay_country->getDocumentationLang()).'.html';
 
 		if (!file_exists($help_file))
 			$help_file = dirname(__FILE__).'/../../help/help-en.html';

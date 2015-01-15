@@ -17,9 +17,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2013 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
@@ -35,7 +35,7 @@
 			<select name="sizedefault" data-inlinehelp="{l s='This will be the main photo and will appear on the search result and item pages.' mod='ebay'}" class="ebay_select">
 				{if isset($sizes) && $sizes && sizeof($sizes)}
 					{foreach from=$sizes item='size'}
-						<option value="{$size.id_image_type|escape:'htmlall'}"{if $size.id_image_type == $sizedefault} selected{/if}>{$size.name|escape:'htmlall'}</option>
+						<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizedefault} selected{/if}>{$size.name|escape:'htmlall':'UTF-8'}</option>
 					{/foreach}
 				{/if}
 			</select>
@@ -49,7 +49,7 @@
 			<select name="sizebig" data-inlinehelp="{l s='This photo will appear as default photo in your listing\'s description.' mod='ebay'}" class="ebay_select">
 				{if isset($sizes) && $sizes && sizeof($sizes)}
 					{foreach from=$sizes item='size'}
-						<option value="{$size.id_image_type|escape:'htmlall'}"{if $size.id_image_type == $sizebig} selected{/if}>{$size.name|escape:'htmlall'}</option>
+						<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizebig} selected{/if}>{$size.name|escape:'htmlall':'UTF-8'}</option>
 					{/foreach}
 				{/if}
 			</select>
@@ -63,7 +63,7 @@
 			<select name="sizesmall" data-inlinehelp="{l s='This photo will appear as thumbnail in your listing\'s description.' mod='ebay'}" class="ebay_select">
 				{if isset($sizes) && $sizes && sizeof($sizes)}
 					{foreach from=$sizes item='size'}
-						<option value="{$size.id_image_type|escape:'htmlall'}"{if $size.id_image_type == $sizesmall} selected{/if}>{$size.name|escape:'htmlall'}</option>
+						<option value="{$size.id_image_type|escape:'htmlall':'UTF-8'}"{if $size.id_image_type == $sizesmall} selected{/if}>{$size.name|escape:'htmlall':'UTF-8'}</option>
 					{/foreach}
 				{/if}
 			</select>
@@ -74,7 +74,7 @@
 			{l s='Number of additional pictures (0 will send one picture)' mod='ebay'}
 		</label>
 		<div class="margin-form">
-			<input type="text" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall'}">
+			<input type="text" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall':'UTF-8'}">
 		</div>
 		<div style="clear:both;"></div>
 
@@ -113,7 +113,7 @@
         
 		<label>{l s='Logs Conservation Duration' mod='ebay'} : </label>
 		<div class="margin-form">
-            <input type="text" name="logs_conservation_duration" value="{$logs_conservation_duration|escape:'htmlall'}">
+            <input type="text" name="logs_conservation_duration" value="{$logs_conservation_duration|escape:'htmlall':'UTF-8'}">
 		</div>        
         
 	</fieldset>
@@ -152,7 +152,7 @@
 		<legend>{l s='Orders Collection Duration' mod='ebay'}</legend>
 		<label>{l s='Since when fetch orders (in days, change if you receive more than 100 orders per fortnight)' mod='ebay'} : </label>
 		<div class="margin-form">
-            <input type="text" name="orders_days_backward" value="{$orders_days_backward|escape:'htmlall'}">
+            <input type="text" name="orders_days_backward" value="{$orders_days_backward|escape:'htmlall':'UTF-8'}">
 		</div>
 		<div style="clear:both;"></div>
         
@@ -164,8 +164,8 @@
 		<legend>{l s='eBay module Data Usage' mod='ebay'}</legend>
 		<label>{l s='Help us improve the eBay Module by sending anonymous usage stats' mod='ebay'} : </label>
 		<div class="margin-form">
-            <input type="radio" name="stats" value="0" {if isset($stats) && !$stats}checked="checked"{/if}> No thanks&nbsp;&nbsp;
-            <input type="radio" name="stats" value="1" {if !isset($stats) || $stats}checked="checked"{/if}> I agree<br>
+            <input type="radio" name="stats" value="0" {if isset($stats) && !$stats}checked="checked"{/if}> {l s='No thanks' mod='ebay'} &nbsp;&nbsp;
+            <input type="radio" name="stats" value="1" {if !isset($stats) || $stats}checked="checked"{/if}> {l s='I agree' mod='ebay'}<br>
 		</div>
 		<div style="clear:both;"></div>
         

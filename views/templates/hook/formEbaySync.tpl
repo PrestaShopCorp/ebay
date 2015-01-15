@@ -17,9 +17,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2014 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
@@ -27,8 +27,8 @@
 
 <style> 
 	{literal}
-	#button_ebay_sync1{background-image:url({/literal}{$path|escape:'urlencode'}{literal}views/img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:500px;height:191px;cursor:pointer;padding-bottom:100px;font-weight:bold;font-size:25px;}
-			#button_ebay_sync2{background-image:url({/literal}{$path|escape:'urlencode'}{literal}views/img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:500px;height:191px;cursor:pointer;padding-bottom:100px;font-weight:bold;font-size:15px;}
+	#button_ebay_sync1{background-image:url({/literal}{$path|escape:'urlencode'}{literal}img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:500px;height:191px;cursor:pointer;padding-bottom:100px;font-weight:bold;font-size:25px;}
+			#button_ebay_sync2{background-image:url({/literal}{$path|escape:'urlencode'}{literal}img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:500px;height:191px;cursor:pointer;padding-bottom:100px;font-weight:bold;font-size:15px;}
 	.informations{
 		padding-bottom: 3px;margin-top: 8px;
 	}
@@ -93,7 +93,7 @@
 		$("#button_ebay_sync1").css("background-color", "#D5D5D5");
 		$("#button_ebay_sync2").attr("disabled", "true");
 		$("#button_ebay_sync2").css("background-color", "#D5D5D5");
-		$("#resultSync").html("<img src=\"../modules/ebay/views/img/loading-small.gif\" border=\"0\" />");
+		$("#resultSync").html("<img src=\"../modules/ebay/img/loading-small.gif\" border=\"0\" />");
 		eBaySyncProduct(option);
 	}
 

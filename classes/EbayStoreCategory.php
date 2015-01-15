@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2013 PrestaShop SA
- *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -129,8 +128,9 @@ class EbayStoreCategory extends ObjectModel
 		Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_store_category`
             WHERE `id_ebay_profile` = '.(int)$ebay_profile->id);
         
-        foreach ($store_categories as $custom_cat)
-            EbayStoreCategory::_writeStoreCategory($custom_cat, $ebay_profile->id);
+        if($store_categories)
+            foreach ($store_categories as $custom_cat)
+                EbayStoreCategory::_writeStoreCategory($custom_cat, $ebay_profile->id);
         
         // make sure that all referenced categories still exists
         EbayStoreCategoryConfiguration::checkExistingCategories($ebay_profile->id);

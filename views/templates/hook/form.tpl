@@ -17,9 +17,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2014 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
@@ -30,15 +30,7 @@
 	regenerate_token_show = true;
 	{/if}
 </script>
-{*
-<fieldset>
-	{if $img_stats}
-		<center><img src="{$path|escape:'htmlall'}{$img_stats|escape:'htmlall'}" alt="eBay stats"/></center><br />
-	{/if}
-	<u><a href="{l s="http://pages.ebay.fr/professionnels/index.html" mod='ebay'}" target="_blank">{l s='Click here to learn more about business selling on eBay' mod='ebay'}</a></u>
-</fieldset>
-<br />
-*}
+
 <link rel="stylesheet" href="{$css_file|escape:'urlencode'}" />
 <link rel="stylesheet" href="{$font_awesome_css_file|escape:'urlencode'}" />
 <script>
@@ -63,9 +55,9 @@
 
 {/literal}
 
-{if $show_welcome}
+{if $show_welcome || $show_welcome_stats}
 <div class="ebay-welcome">
-    <img id="ebay-logo" src="{$path|escape:'htmlall'}views/img/ebay.png" />
+    <img id="ebay-logo" src="{$path|escape:'htmlall'}img/ebay.png" />
     <div id="ebay-welcome-top" class="ebay-boxes-2-col-table">
         <div class="ebay-boxes-2-col-cell right">
             <div class="ebay-boxes-2-col-cell-content">
@@ -99,6 +91,19 @@
                             </ul>
                         </div>
                     </div>
+                    {if $free_shop_for_90_days}
+                    <div class="ebay-dark-gray-box-container">
+                        <p class="ebay-dark-gray-box-title">
+                            {l s='Open your shop for free' mod='ebay'}
+                        </p>
+                        <div class="ebay-dark-gray-box-content">
+                            {l s='Begin or boost your activity on eBay, enjoying ' mod='ebay'}<b> {l s='90 free days of subscription' mod='ebay'}</b> {l s='to eBay Shops' mod='ebay'}<br/>
+                            <a href="{l s='http://pages.ebay.fr/promos/termsfrstoretrial3months/' mod='ebay'}" target="_blank">{l s='More informations' mod='ebay'}</a>
+                        </div>
+                        <img src="../modules/ebay/img/open_your_shop.jpg" alt="" id="open_your_shop">
+                        <div class="clear clearfix"></div>
+                    </div>
+                    {/if}
                 </div>
             </div>
         </div>
@@ -115,19 +120,19 @@
                 	<legend><img src="{$path|escape:'htmlall'}logo.gif" alt="" />{l s='eBay Module Status' mod='ebay'}</legend>
                 	<div style="float: left">
                     	{if empty($alert)}
-                    		<img src="../modules/ebay/views/img/valid.png" /><strong>{l s='eBay Module is configured and online!' mod='ebay'}</strong>
+                    		<img src="../modules/ebay/img/valid.png" /><strong>{l s='eBay Module is configured and online!' mod='ebay'}</strong>
                     		{if $is_version_one_dot_five}
                     			{if $is_version_one_dot_five_dot_one}
-                    				<br/><img src="../modules/ebay/views/img/warn.png" /><strong>{l s='You\'re using version 1.5.1 of PrestaShop. We invite you to upgrade to version 1.5.2  so you can use the eBay module properly.' mod='ebay'}</strong>
+                    				<br/><img src="../modules/ebay/img/warn.png" /><strong>{l s='You\'re using version 1.5.1 of PrestaShop. We invite you to upgrade to version 1.5.2  so you can use the eBay module properly.' mod='ebay'}</strong>
                     				<br/><strong>{l s='Please synchronize your eBay sales in your Prestashop front office' mod='ebay'}</strong>
                     			{/if}
                     		{/if}
                     	{else}
-                    		<img src="../modules/ebay/views/img/warn.png" /><strong>{l s='Please complete the following settings to configure the module' mod='ebay'}</strong>
-                    		<br />{if in_array('registration', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 1) {l s='Register the module on eBay' mod='ebay'}
-                    		<br />{if in_array('allowurlfopen', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 2) {l s='Allow url fopen' mod='ebay'}
-                    		<br />{if in_array('curl', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 3) {l s='Enable cURL' mod='ebay'}
-                    		<br />{if in_array('SellerBusinessType', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 4) {l s='Please register an eBay business seller account to configure the application' mod='ebay'}
+                    		<img src="../modules/ebay/img/warn.png" /><strong>{l s='Please complete the following settings to configure the module' mod='ebay'}</strong>
+                    		<br />{if in_array('registration', $alert)}<img src="../modules/ebay/img/warn.png" />{else}<img src="../modules/ebay/img/valid.png" />{/if} 1) {l s='Register the module on eBay' mod='ebay'}
+                    		<br />{if in_array('allowurlfopen', $alert)}<img src="../modules/ebay/img/warn.png" />{else}<img src="../modules/ebay/img/valid.png" />{/if} 2) {l s='Allow url fopen' mod='ebay'}
+                    		<br />{if in_array('curl', $alert)}<img src="../modules/ebay/img/warn.png" />{else}<img src="../modules/ebay/img/valid.png" />{/if} 3) {l s='Enable cURL' mod='ebay'}
+                    		<br />{if in_array('SellerBusinessType', $alert)}<img src="../modules/ebay/img/warn.png" />{else}<img src="../modules/ebay/img/valid.png" />{/if} 4) {l s='Please register an eBay business seller account to configure the application' mod='ebay'}
                     	{/if}
                     </div>
                 {else}
@@ -136,14 +141,13 @@
                             <table class="table tableDnD" cellpadding="0" cellspacing="0">
                         		<thead>
                         			<tr class="nodrag nodrop">
-                                        <th>{l s='Id' mod='ebay'}</th>
+                                        <th>#</th>
                                         <th>{l s='eBay User Id' mod='ebay'}</th>
                                         <th>{l s='eBay Site' mod='ebay'}</th>
                                         {if version_compare(_PS_VERSION_, '1.5', '>')}<th>{l s='Prestashop Shop' mod='ebay'}</th>{/if}
                                         <th class="center">{l s='Language' mod='ebay'}</th>
                                         <th class="center">{l s='Nb Current Listings' mod='ebay'}</th>
                                         <th class="center">{l s='Action' mod='ebay'}</th>
-                                        <th class="center">{l s='Delete Profile' mod='ebay'}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -155,8 +159,7 @@
                                             {if version_compare(_PS_VERSION_, '1.5', '>')}<td>{$profile.name|escape:'htmlall'}</td>{/if}
                                             <td align="center"><img src="../img/l/{$profile.id_lang|escape:'htmlall'}.jpg" alt="{$profile.language_name|escape:'htmlall'}" title="{$profile.language_name|escape:'htmlall'}"></td>
                                             <td align="center">{$profile.nb_products|escape:'htmlall'}</td>
-                                            <td align="center"><img src="../img/admin/edit.gif" /></td>
-                                            <td align="center"><a href class="delete-profile" data-profile="{$profile.id_ebay_profile|escape:'htmlall'}"><img src="../img/admin/delete.gif" /></a></td>     
+                                            <td align="center"><img src="../img/admin/edit.gif" /><a href class="delete-profile" data-profile="{$profile.id_ebay_profile|escape:'htmlall'}"><img src="../img/admin/delete.gif" /></a></td>     
                                         </tr>
                                     {/foreach}
                                 </tbody>
@@ -168,7 +171,7 @@
                         {else}
                             <legend>{l s='Status of your eBay Add-on' mod='ebay'}</legend>
                             <p id="ebay-no-profile">{l s='You don\'t have any profile setup yet' mod='ebay'}</p>
-                            {l s='Your module is up to date' mod='module'}
+                            {l s='Your module is up to date' mod='ebay'}
                         {/if}
                     {/if}
                 </fieldset>
@@ -182,13 +185,13 @@
                     {if $show_seller_tips}
                         <a id="ebay-seller-tips-link" href>{l s='Show seller tips' mod='ebay'}</a>
                     {/if}
-                    {*<a id="ebay_video_fancybox" href="#"><img id="ebay-install-pict" src="{$path|escape:'htmlall'}views/img/install.jpg" /></a>*}
+                    <a id="" href="{l s='http://www.202-ecommerce.com/ebay/tuto-en' mod='ebay'}" target="_blank"><img id="ebay-install-pict" src="../modules/ebay/img/{l s='ebay_video_en' mod='ebay'}.png" /></a>
                     <p id="ebay-install-title">{l s='Resources' mod='ebay'}</p>
                     <ul id="ebay-install-ul">
                         <li><a href="http://202-ecommerce.com/d/eBay-doc_{$documentation_lang}.pdf" target="_blank">{l s='Download the add-on installation guide' mod='ebay'}</a></li>
-                        <li><a href="{$pro_url}" target="_blank">{l s='eBay Seller center' mod='ebay'}</a></li>
-                        {*<li><a href="http://pages.ebay.{$site_extension}/help/sell/fees.html" target="_blank">{l s='eBay fees for professional sellers' mod='ebay'}</a></li>*}
-                        <li><a href="{if $site_extension == 'fr'}http://202-ecommerce.com/ebay/{else}http://en.202-ecommerce.com/ebay-en/{/if}"  target="_blank">{l s='Contact us' mod='ebay'}</a></li>
+                        <li><a href="{$pro_url|escape:'htmlall'}" target="_blank">{l s='eBay Seller center' mod='ebay'}</a></li>
+                        <li><a href="{$fee_url|escape:'htmlall'}" target="_blank">{l s='eBay fees for professional sellers' mod='ebay'}</a></li>
+                        <li><b><a href="{if $site_extension == 'fr'}http://202-ecommerce.com/ebay/{else}http://en.202-ecommerce.com/ebay-en/{/if}"  target="_blank">{l s='Contact us' mod='ebay'}</a></b></li>
                     </ul>
                 </fieldset>
             </div>
@@ -203,7 +206,7 @@
             <div class="ebay-boxes-2-col-cell right">
                 <div class="ebay-boxes-2-col-cell-content">
                     <div id="ebay-welcome-left-content" style="padding-bottom: 3em">
-                        <img src="{$path|escape:'htmlall'}views/img/ebay.png" />                    
+                        <img id="ebay-logo" src="../modules/ebay/img/ebay.png" />
                         <p class="title ebay-title">{l s='A PERFECT PARTNER FOR YOUR BUSINESS' mod='ebay'}</p>
                         <p>{{l s='eBay is one of the |b|largest marketplaces in the world that connects buyers and sellers of all sizes around the world|/b|.' mod='ebay'}|replace:'|b|':'<b>'|replace:'|/b|':'</b>'}</p>
 
@@ -219,19 +222,19 @@
                                 <p class="ebay-light-gray-box-title">{l s='Tips to sell more on eBay:' mod='ebay'}</p>
                                 <ul class="ebay-light-gray-box-ul">
                                     <li>
-                                        {assign var="link" value="<a href=\"{l s='http://pages.ebay.co.uk/help/sell/title_desc_ov.html' mod='ebay'}\" target=\"_blank\">"}
+                                        {assign var="link" value="<a href=\"{$title_desc_url|escape:'htmlall'}\" target=\"_blank\">"}
                                         <span class="ebay-light-gray-box-number">1</span> <b>{l s='Help buyers to find your product:' mod='ebay'}</b> {{l s='Write good |a|titles and descriptions|/a|' mod='ebay'}|replace:'|a|':$link|replace:'|/a|':'</a>'}</a>
                                     </li>
                                     <li>
-                                        {assign var="link" value="<a href=\"{l s='http://sellercentre.ebay.co.uk/research-items-similar-yours' mod='ebay'}\" target=\"_blank\">"}
+                                        {assign var="link" value="<a href=\"{$similar_items_url|escape:'htmlall'}\" target=\"_blank\">"}
                                         <span class="ebay-light-gray-box-number">2</span> <b>{l s='Make your products competitive:' mod='ebay'}</b> {{l s='|a|research on eBay for similar products|/a| to yours and compare with your prices.' mod='ebay'}|replace:'|a|':$link|replace:'|/a|':'</a>'}
     </li>
                                     <li>
-                                        {assign var="link" value="<a href=\"{l s='http://sellercentre.ebay.co.uk/new-picture-standards' mod='ebay'}\" target=\"_blank\">"}
+                                        {assign var="link" value="<a href=\"{$picture_url|escape:'htmlall'}\" target=\"_blank\">"}
                                         <span class="ebay-light-gray-box-number">3</span> {{l s='|b|Take special care of your product pictures,|/b| |a|this will help buyers to buy from you.|/a|' mod='ebay'}|replace:'|b|':'</b>'|replace:'|/b|':'</b>'|replace:'|a|':$link|replace:'|/a|':'</a>'}
                                     </li>    
                                     <li>
-                                        {assign var="link" value="<a href=\"{l s='http://pages.ebay.co.uk/help/sell/top-rated.html' mod='ebay'}\" target=\"_blank\">"}
+                                        {assign var="link" value="<a href=\"{$top_rated_url|escape:'htmlall'}\" target=\"_blank\">"}
                                         <span class="ebay-light-gray-box-number">4</span> {{l s='|b|Make buyers to come back|/b| by |a|delivering a great service|/a| and offering free shipping.' mod='ebay'}|replace:'|b|':'</b>'|replace:'|/b|':'</b>'|replace:'|a|':$link|replace:'|/a|':'</a>'}                                                        </li>
                                 </ul>
                             </div>
@@ -283,6 +286,6 @@
         var main_tab = '{$main_tab}';
         var id_tab = '{$id_tab}';
     </script>
-    <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/views/js/header.js?date={$date|escape:'htmlall'}"></script>
+    <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/header.js?date={$date|escape:'htmlall'}"></script>
 {/if}
 <!-- after seller tips -->

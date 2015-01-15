@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
- *  @license	http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -240,7 +239,7 @@ class EbayRequest
 	{
 		$response = $this->_makeRequest('GetSuggestedCategories', array(
 			'version' => $this->compatibility_level,
-			'query' => Tools::substr(strtolower($query), 0, 350)
+			'query' => Tools::substr(Tools::strtolower($query), 0, 350)
 		));
 
 		if ($response === false)
@@ -572,7 +571,6 @@ class EbayRequest
 			'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
 			'category_id' => $data['categoryId'],
 			'pictures' => isset($data['pictures']) ? $data['pictures'] : array(),
-//			'value' => htmlentities($data['brand']),
 			'return_policy' => $this->_getReturnPolicy(),
 			'resynchronize' => ($this->ebay_profile->getConfiguration('EBAY_SYNC_OPTION_RESYNC') != 1),
 			'title' => Tools::substr(self::prepareTitle($data), 0, 80),
@@ -640,13 +638,8 @@ class EbayRequest
 
 		// Set Api Call
 		$this->apiCall = 'GetStore';
-
 		$response = $this->_makeRequest('GetStore');
-
-		if ($response === false)
-			return false;
-        
-        return $response->Store->CustomCategories->CustomCategory;
+        return ($response === false) ? false : (isset($response->Store) ? $response->Store->CustomCategories->CustomCategory : false);
         
 	}    
     
@@ -670,10 +663,7 @@ class EbayRequest
         
         $this->_logApiCall('completeSale', $vars, $response);
 
-		if ($response === false)
-			return false;
-        
-		return $this->_checkForErrors($response);
+		return ($response === false) ? false : $this->_checkForErrors($response);
 	}
     
 	/**
@@ -699,10 +689,7 @@ class EbayRequest
         
         $this->_logApiCall('completeSale', $vars, $response);
 
-		if ($response === false)
-			return false;
-        
-		return $this->_checkForErrors($response);
+		return ($response === false) ? false : $this->_checkForErrors($response);
 	}
     
 	/**
@@ -961,8 +948,8 @@ class EbayRequest
         $log->type = $type;
         $log->context = $this->context;
 
-        $log->data_sent = json_encode($data_sent);
-        $log->response = json_encode($response);
+        $log->data_sent = Tools::jsonEncode($data_sent);
+        $log->response = Tools::jsonEncode($response);
         
         if ($id_product)
             $log->id_product = (int)$id_product;
