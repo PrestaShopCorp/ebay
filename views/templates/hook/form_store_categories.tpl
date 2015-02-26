@@ -17,9 +17,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2014 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
@@ -32,7 +32,7 @@
     
     {if $has_ebay_shop}
     
-        {if $has_store_categories }
+        {if $has_store_categories}
         	<p>
         		<b>{l s='Select a category' mod='ebay'}</b>
         		<br />
@@ -60,11 +60,11 @@
 <br />
 
 {if $nb_categorie > 0}
-	<p id="textStoresPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nb_categorie / 20)|round:"0" + 1) mod='ebay'}</p>
+	<p id="textStoresPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nb_categorie / 20)|round:"0") mod='ebay'}</p>
 	<ul id="stores_pagination" class="pagination">
 		<li class="prev"><</li>
-		{for $i=0 to ($nb_categorie / 20)|round:"0"}
-			<li{if $i == 0} class="current"{/if}>{$i + 1}</li>
+		{for $i=1 to ($nb_categorie / 20)|round:"0"}
+			<li{if $i == 0} class="current"{/if}>{$i}</li>
 		{/for}
 		<li class="next">></li>
 	</ul>
@@ -84,7 +84,7 @@
 		<tbody>
 			<tr id="removeRow">
 				<td class="center" colspan="2">
-					<img src="{$_path|escape:'htmlall'}views/img/loading-small.gif" alt="" />
+					<img src="{$_path|escape:'htmlall'}img/loading-small.gif" alt="" />
 				</td>
 			</tr>
 		</tbody>
@@ -114,10 +114,10 @@
 	var module_path = '{$_path|escape:'htmlall'}';
 	var id_lang = '{$id_lang|escape:'htmlall'}';
 	var id_ebay_profile = '{$id_ebay_profile|escape:'htmlall'}';
-	var store_categories_ebay_l = {
+	var store_categories_ebay_l = {ldelim}
 		'No category found'		 : "{l s='No category found' mod='ebay'}",
 		'You are not logged in': "{l s='You are not logged in' mod='ebay'}",
 		'Settings updated'		 : "{l s='Settings updated' mod='ebay'}",
-	};
+	{rdelim};
 </script>
-<script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/views/js/storeCategories.js?date={$date|escape:'htmlall'}"></script>
+<script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/storeCategories.js?date={$date|escape:'htmlall'}"></script>

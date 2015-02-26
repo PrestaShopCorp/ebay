@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
- *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -362,7 +361,8 @@ class EbaySynchronizer
 			$pictures_default = EbaySynchronizer::_getPictureLink($product->id, $image['id_image'], $context->link, $default->name);
 			if (((count($pictures) == 0) && ($nb_pictures == 1)) || self::_hasVariationProducts($variations)) // no extra picture, we don't upload the image
 			{
-				$pictures[] = $pictures_default;
+				if(count($pictures) == 0)
+					$pictures[] = $pictures_default;
                 $pictures_medium[] = EbaySynchronizer::_getPictureLink($product->id, $image['id_image'], $context->link, $small->name);
                 $pictures_large[] = EbaySynchronizer::_getPictureLink($product->id, $image['id_image'], $context->link, $large->name);                
 			}
@@ -399,10 +399,10 @@ class EbaySynchronizer
 	 **/
 	public static function _getEbayCategory($category_id, $ebay_profile)
 	{
-		if (!isset(EbaySynchronizer::$ebay_categories[$category_id]))
-			EbaySynchronizer::$ebay_categories[$category_id] = new EbayCategory($ebay_profile, null, $category_id);
+		if (!isset(EbaySynchronizer::$ebay_categories[$category_id.'_'.$ebay_profile->id]))
+			EbaySynchronizer::$ebay_categories[$category_id.'_'.$ebay_profile->id] = new EbayCategory($ebay_profile, null, $category_id);
 
-		return EbaySynchronizer::$ebay_categories[$category_id];
+		return EbaySynchronizer::$ebay_categories[$category_id.'_'.$ebay_profile->id];
 	}
 
 	private static function _loadVariations($product, $ebay_profile, $context, $ebay_category)
@@ -438,7 +438,6 @@ class EbaySynchronizer
 					))
 			);
 
-//			$price_original = $price;
 
 			if (preg_match('#[-]{0,1}[0-9]{1,2}%$#is', $ebay_category->getPercent()))
 				$price *= (1 + ($ebay_category->getPercent() / 100));
@@ -450,7 +449,6 @@ class EbaySynchronizer
 			if ($ebay_category->getPercent() < 0)
 			{
 				$variation['price_original'] = round($price_original, 2);
-//				$variation['price_percent'] = round($ebay_category->getPercent());
 			} else if ($price_original > $price)
                 $variation['price_original'] = round($price_original, 2);                
 
@@ -607,7 +605,7 @@ class EbaySynchronizer
     
     private static function _getPriceDescriptionStr($price, $price_percent, $id_currency) {
         $ebay = new Ebay();
-        $price_str = $ebay->l('au lieu de <del>%price_original%</del> (remise de %percent%%)', 'ebay');
+        $price_str = $ebay->l('instead of', 'ebay'). ' <del> %price_original% </del> ('. $ebay->l('promotion of', 'ebay') .' %percent%%)';
         return str_replace(
             array( '%price_original%', '%percent%' ), 
             array( Tools::displayPrice($price, $id_currency), round($price_percent) ),
@@ -745,7 +743,7 @@ class EbaySynchronizer
 	{
 		//Fix for payment modules validating orders out of context, $link will not  generate fatal error.
 		$link = is_object($context_link) ? $context_link : new Link();
-		$prefix = (substr(_PS_VERSION_, 0, 3) == '1.3' ? Tools::getShopDomain(true).'/' : '');
+		$prefix = (Tools::substr(_PS_VERSION_, 0, 3) == '1.3' ? Tools::getShopDomain(true).'/' : '');
 
 		return str_replace('https://', 'http://', $prefix.$link->getImageLink('ebay', $id_product.'-'.$id_image, $size));
 	}

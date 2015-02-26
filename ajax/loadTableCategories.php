@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
- *  @license	http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -48,7 +47,7 @@ $category_list = array_slice($category_list, $limit, $offset);
 $ebay_category_list = Db::getInstance()->executeS('SELECT *
 	FROM `'._DB_PREFIX_.'ebay_category`
 	WHERE `id_category_ref` = `id_category_ref_parent`
-    AND `id_country` = '.(int)$ebay_profile->ebay_site_id);
+	AND `id_country` = '.(int)$ebay_profile->ebay_site_id);
 
 if (version_compare(_PS_VERSION_, '1.5', '>'))
 {
@@ -84,8 +83,8 @@ $sql = '
 	FROM `'._DB_PREFIX_.'ebay_category` AS ec
 	LEFT OUTER JOIN `'._DB_PREFIX_.'ebay_category_configuration` AS ecc
 	ON ec.`id_ebay_category` = ecc.`id_ebay_category`
-    AND ecc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
-    WHERE ec.`id_country` = '.(int)$ebay_profile->ebay_site_id.'
+	AND ecc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
+	WHERE ec.`id_country` = '.(int)$ebay_profile->ebay_site_id.'
 	ORDER BY `level`';
 
 foreach (Db::getInstance()->executeS($sql) as $category)
@@ -109,17 +108,19 @@ foreach (Db::getInstance()->executeS($sql) as $category)
 	}
 }
 
-foreach ($category_config_list as &$category) {
+foreach ($category_config_list as &$category) 
+{
 	$category['var'] = getSelectors($ref_categories, $category['id_category_ref'], $category['id_category'], $category['level'], $ebay).'<input type="hidden" name="category['.(int)$category['id_category'].']" value="'.(int)$category['id_ebay_category'].'" />';
-	if ($category['percent']) {
-		preg_match("#^([-|+]{0,1})([0-9]{0,3})([\%]{0,1})$#is", $category['percent'], $temp);
+	if ($category['percent']) 
+	{
+		preg_match('#^([-|+]{0,1})([0-9]{0,3})([\%]{0,1})$#is', $category['percent'], $temp);
 		$category['percent'] = array('sign' => $temp[1], 'value' => $temp[2], 'type' => $temp[3]);
-	} else {
+	} 
+	else 
 		$category['percent'] = array('sign' => '', 'value' => '', 'type' => '');
-	}
 }
 
-$smarty =  Context::getContext()->smarty;
+$smarty = Context::getContext()->smarty;
 $currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
 
@@ -184,7 +185,7 @@ function getSelectors($ref_categories, $id_category_ref, $id_category, $level, $
 
 		foreach ($ref_categories as $ref_id_category_ref => $category)
 			if (isset($category['id_category_ref']) && (int)$category['id_category_ref'] == (int)$category['id_category_ref_parent'] && !empty($category['id_ebay_category']))
-				$var .= '<option value="'. (int)$category['id_ebay_category'].'"'.((int)$category['id_category_ref'] == (int)$id_category_ref ? ' selected' : '').'>'.Tools::safeOutput($category['name']).'</option>';
+				$var .= '<option value="'.(int)$category['id_ebay_category'].'"'.((int)$category['id_category_ref'] == (int)$id_category_ref ? ' selected' : '').'>'.Tools::safeOutput($category['name']).'</option>';
 
 		$var .= '</select>';
 	}

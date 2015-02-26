@@ -17,9 +17,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2013 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
@@ -59,7 +59,7 @@
     
 	<fieldset style="margin-top:10px;">
 		<legend>{l s='Account details' mod='ebay'}</legend>
-		<h4>{l s='To list your products on eBay, you need to create' mod='ebay'} <a href="{l s='https://scgi.ebay.co.uk/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2' mod='ebay'}" target="_blank">{l s='a business seller account' mod='ebay'}</a> {l s='and' mod='ebay'} <a href="https://www.paypal.com/">{l s='a PayPal account.' mod='ebay'}</a></h4>
+		<h4>{l s='To list your products on eBay, you need to create' mod='ebay'} <a href="{l s='https://scgi.ebay.co.uk/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2' mod='ebay'}" target="_blank">{l s='a business seller account' mod='ebay'}</a> {l s='and' mod='ebay'} <a href="https://www.paypal.com/" target="_blank">{l s='a PayPal account.' mod='ebay'}</a></h4>
         
 		<input type="hidden" name="ebay_shop" value="{$ebayShopValue|escape:'htmlall'}" />            
         
@@ -201,32 +201,7 @@
         <label for="">{l s='Do you want to automatically relist' mod='ebay'}</label>
 		<div class="margin-form"><input type="checkbox" name="automaticallyrelist" {if $automaticallyRelist == 'on'} checked="checked" {/if} /></div>
 	</fieldset>
-     
-
-    {*
-	<fieldset style="margin-top:10px;">
-		<legend>{l s='Others' mod='ebay'}</legend>
-		{if !$is_writable && $activate_logs}<p class="warning">{l s='The log file is not writable' mod='ebay'}</p>{/if}
-		<label>
-			{l s='Activate Logs' mod='ebay'}
-		</label>
-		<div class="margin-form">
-			<input type="checkbox" name="activate_logs" value="1"{if $activate_logs} checked="checked"{/if}>
-		</div>
-		<div class="clear both"></div>
-		{if $log_file_exists}
-			<label>
-				{l s='Download logs' mod='ebay'}
-			</label>
-			
-			<div class="margin-form">
-				<a href="../modules/ebay/log/request.txt" class="button">{l s='Download' mod='ebay'}</a>
-			</div>
-			<div class="clear both"></div>
-		{/if}
-	</fieldset>
-    *}
-
+    
         
 	<div class="margin-form" id="buttonEbayParameters" style="margin-top:5px;">
 		<a href="#categoriesProgression" {if $catLoaded}id="displayFancybox"{/if}>

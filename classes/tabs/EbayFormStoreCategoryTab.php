@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
- *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -64,24 +63,18 @@ class EbayFormStoreCategoryTab extends EbayTab
     
     public function postProcess()
     {
-        
 		// Insert and update categories
-        if ($store_categories = Tools::getValue('store_category')) {
-            
-            // cleanup Db for this profile
-            EbayStoreCategoryConfiguration::deleteByIdEbayProfile($this->ebay_profile->id);
-            
+        if ($store_categories = Tools::getValue('store_category')) 
+        {
             // insert rows
             foreach($store_categories as $id_category => $ebay_category_id)
                 if ($ebay_category_id)
-                    EbayStoreCategoryConfiguration::insert($this->ebay_profile->id, $ebay_category_id, $id_category);
+                    EbayStoreCategoryConfiguration::update($this->ebay_profile->id, $ebay_category_id, $id_category);
 
         }
-        
-        /*
-		if (Tools::getValue('ajax'))
-			die('{"valid" : true}');
-        */
+
+        if (Tools::getValue('ajax'))
+            die('{"valid" : true}');
 
 		return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));        
     }    

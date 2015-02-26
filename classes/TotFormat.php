@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2013 PrestaShop SA
- *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -56,7 +55,7 @@ class TotFormat
 	 */
 	public static function formatName($name)
 	{
-        return trim(preg_replace(self::cleanNonUnicodeSupport('/[0-9!<>,;?=+()@#"°{}_$%:]+/u'), ' ', stripslashes($name)));
+        return trim(preg_replace(self::cleanNonUnicodeSupport('/[0-9!<>,;?=+()@#"°{}_$%:]+/u'), ' ', Tools::stripslashes($name)));
 	}
     
 	/**
@@ -69,7 +68,7 @@ class TotFormat
 	{
         if (empty($address))
             return $address;
-        return trim(preg_replace('/[!<>?=+@{}_$%]+/u', ' ', stripslashes($address)));
+        return trim(preg_replace('/[!<>?=+@{}_$%]+/u', ' ', Tools::stripslashes($address)));
 	}
 
 	/**
@@ -82,7 +81,7 @@ class TotFormat
 	{
         if (empty($postcode))
             return $postcode;
-        return trim(preg_replace('/[^a-zA-Z 0-9-]+/', ' ', stripslashes($postcode)));
+        return trim(preg_replace('/[^a-zA-Z 0-9-]+/', ' ', Tools::stripslashes($postcode)));
 	}
 
 	/**
@@ -93,7 +92,7 @@ class TotFormat
 	 */
 	public static function formatCityName($city)
 	{
-        return trim(preg_replace('/[!<>;?=+@#"°{}_$%]+/u', ' ', stripslashes($city)));
+        return trim(preg_replace('/[!<>;?=+@#"°{}_$%]+/u', ' ', Tools::stripslashes($city)));
 	}
     
 	/**
@@ -114,12 +113,18 @@ class TotFormat
 	 */
 	public static function formatDescription($desc)
 	{
-        // removes iFrames
-        $desc = preg_replace('/<iframe\b[^>]*>(.*?)<\/iframe>/is', "", $desc);
-        
-        // removes javascript
-        $desc = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $desc);      
-        $desc = preg_replace('/ on([A-Za-z0-9]*)="(.*)"/is', "", $desc);
+        if(method_exists('Tools', 'purifyHTML'))
+            $desc = Tools::purifyHTML($desc);
+        else
+        {
+            // removes iFrames
+            $desc = preg_replace('/<iframe\b[^>]*>(.*?)<\/iframe>/is', "", $desc);
+            
+            // // removes javascript
+            $desc = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $desc);      
+            $desc = preg_replace('/ on([A-Za-z0-9]*)="(.*)"/is', "", $desc);
+            
+        }
         return $desc;
 	}    
     
@@ -136,7 +141,7 @@ class TotFormat
         $in_quotes = false;
         $in_escape = false;
         $ends_line_level = NULL;
-        $json_length = strlen( $json );
+        $json_length = Tools::strlen( $json );
 
         for( $i = 0; $i < $json_length; $i++ ) {
             $char = $json[$i];

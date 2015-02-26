@@ -17,9 +17,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2014 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 <form action="{$formUrl|escape:'urlencode'}" method="post">
@@ -376,7 +376,7 @@
 	{literal}{{/literal}
 		/* INIT */
 		{foreach from=$existingNationalCarrier item=nationalCarrier}
-			addShippingFee(1, 0, '{$nationalCarrier.ebay_carrier|escape:'htmlall'}', {$nationalCarrier.ps_carrier|escape:'htmlall'}, {$nationalCarrier.extra_fee|escape:'htmlall'});
+			addShippingFee(1, 0, '{$nationalCarrier.ebay_carrier|escape:'htmlall'}', '{$nationalCarrier.ps_carrier|escape:'htmlall'}', '{$nationalCarrier.extra_fee|escape:'htmlall'}');
 		{/foreach}
 		{literal}
 		var zone = new Array();
@@ -388,14 +388,14 @@
 			{foreach from=$internationalCarrier.shippingLocation item=shippingLocation}
 				zone.push('{$shippingLocation.id_ebay_zone|escape:'htmlall'}');
 			{/foreach}
-			addInternationalShippingFee('{$internationalCarrier.ebay_carrier|escape:'htmlall'}', {$internationalCarrier.ps_carrier|escape:'htmlall'}, {$internationalCarrier.extra_fee|escape:'htmlall'}, zone, zoneExcluded);
+			addInternationalShippingFee('{$internationalCarrier.ebay_carrier|escape:'htmlall'}', '{$internationalCarrier.ps_carrier|escape:'htmlall'}', '{$internationalCarrier.extra_fee|escape:'htmlall'}', zone, zoneExcluded);
 		{/foreach}
 
 		
 		showExcludeLocation();
 
 		{foreach from=$existingNationalCarrier item=nationalCarrier key=i}
-			addShipping('domesticShipping', {$nationalCarrier.ps_carrier|escape:'htmlall'}, '{$nationalCarrier.ebay_carrier|escape:'htmlall'}', {$nationalCarrier.extra_fee|escape:'htmlall'}, {$i}, {$nationalCarrier.id_zone|escape:'htmlall'});
+			addShipping('domesticShipping', '{$nationalCarrier.ps_carrier|escape:'htmlall'}', '{$nationalCarrier.ebay_carrier|escape:'htmlall'}', '{$nationalCarrier.extra_fee|escape:'htmlall'}', '{$i}', '{$nationalCarrier.id_zone|escape:'htmlall'}');
 		{foreachelse}
 			addShipping('domesticShipping');
 		{/foreach}
