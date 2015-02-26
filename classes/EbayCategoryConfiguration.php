@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
- *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -134,6 +133,46 @@ class EbayCategoryConfiguration
 			
 		return Db::getInstance()->executeS($sql);
 	}
+    
+    /*
+     *
+     * get categories for which some multi variation product on PS were added to a non multi sku categorie on ebay
+     *
+     **/
+    public static function getMultiVarToNonMultiSku($ebay_profile, $context)
+    {
+		$cat_with_problem = array();
+
+		$sql_get_cat_non_multi_sku = 'SELECT * FROM '._DB_PREFIX_.'ebay_category_configuration AS ecc
+			INNER JOIN '._DB_PREFIX_.'ebay_category AS ec ON ecc.id_ebay_category = ec.id_ebay_category
+			WHERE ecc.id_ebay_profile = '.(int)$ebay_profile->id;
+
+		foreach (Db::getInstance()->ExecuteS($sql_get_cat_non_multi_sku) as $cat)
+		{
+			if ($cat['is_multi_sku'] != 1 && EbayCategory::getInheritedIsMultiSku($cat['id_category_ref'], $ebay_profile->ebay_site_id) != 1)
+			{
+				$catProblem = 0;
+				$category = new Category($cat['id_category']);
+                $ebay_country = EbayCountrySpec::getInstanceByKey($ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'));
+				$products = $category->getProductsWs($ebay_country->getIdLang(), 0, 300);
+
+				foreach ($products as $product_ar)
+				{
+					$product = new Product($product_ar['id']);
+					$combinations = version_compare(_PS_VERSION_, '1.5', '>') ? $product->getAttributeCombinations($context->cookie->id_lang) : $product->getAttributeCombinaisons($context->cookie->id_lang);
+
+					if (count($combinations) > 0 && !$catProblem)
+					{
+						$cat_with_problem[] = $cat['name'];
+						$catProblem = 1;
+					}
+				}
+			}
+		}
+        
+        return $cat_with_problem;
+        
+    }
 
 
 	public static function add($data)

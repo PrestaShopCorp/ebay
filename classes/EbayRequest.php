@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
- *  @license	http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -51,8 +50,12 @@ class EbayRequest
 	private $smarty_data;
 	
 	private $ebay_profile;
+    
+    private $context;
+    
+    private $write_api_logs;
 
-	public function __construct($id_ebay_profile = null)
+	public function __construct($id_ebay_profile = null, $context = null)
 	{
 		/** Backward compatibility */
 		require(dirname(__FILE__).'/../backward_compatibility/backward.php');
@@ -69,6 +72,9 @@ class EbayRequest
             $this->ebay_country = EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'), $this->dev);
         else
             $this->ebay_country = EbayCountrySpec::getInstanceByKey('gb');            
+
+        if ($context)
+            $this->context = $context;
 
 		/**
 		 * Sandbox params
@@ -94,6 +100,8 @@ class EbayRequest
 			$this->runame = 'Prestashop-Prestash-70a5-4-pepwa';
 			$this->loginURL = $this->ebay_country->getSiteSignin();
 		}
+        
+        $this->write_api_logs = Configuration::get('EBAY_API_LOGS');
 
 	}
 
@@ -231,7 +239,7 @@ class EbayRequest
 	{
 		$response = $this->_makeRequest('GetSuggestedCategories', array(
 			'version' => $this->compatibility_level,
-			'query' => Tools::substr(strtolower($query), 0, 350)
+			'query' => Tools::substr(Tools::strtolower($query), 0, 350)
 		));
 
 		if ($response === false)
@@ -375,6 +383,8 @@ class EbayRequest
 		// Check data
 		if (!$data)
 			return false;
+        
+        $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
 		$vars = array(
 			'sku' => 'prestashop-'.$data['id_product'],
@@ -386,7 +396,7 @@ class EbayRequest
 			'price_update' => !isset($data['noPriceUpdate']),
 			'start_price' => $data['price'],
 			'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
-			'country_currency' => $this->ebay_country->getCurrency(),
+			'country_currency' => $currency->iso_code,
 			'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
 			'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
 			'pay_pal_email_address' => $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'),
@@ -397,13 +407,22 @@ class EbayRequest
 			'shipping_details' => $this->_getShippingDetails($data),
 			'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
 			'site' => $this->ebay_country->getSiteName(),
+            'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
 		);
+        
+        if (isset($data['price_original']) && ($data['price_original'] > $data['price']))
+            $vars['price_original'] = $data['price_original'];
+        
+        if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id'])
+            $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
 
 		$response = $this->_makeRequest('AddFixedPriceItem', $vars);
 
+        $this->_logApiCall('addFixedPriceItem', $vars, $response, $data['id_product']);
+
 		if ($response === false)
 			return false;
-
+        
 		return $this->_checkForErrors($response);
 	}
 
@@ -430,10 +449,16 @@ class EbayRequest
 			'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
 			'return_policy' => $this->_getReturnPolicy(),
 			'item_specifics' => $data['item_specifics'],
-            'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),           
+            'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
+            'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT')            
 		);
+        
+        if (isset($data['price_original']) && ($data['price_original'] > $data['price']))
+            $vars['price_original'] = $data['price_original'];        
 
 		$response = $this->_makeRequest('ReviseFixedPriceItem', $vars);
+
+        $this->_logApiCall('reviseFixedPriceItem', $vars, $response, $data['id_product']);
 
 		if ($response === false)
 			return false;
@@ -452,6 +477,8 @@ class EbayRequest
 			$response_vars['sku'] = 'prestashop-'.$id_product;
 
 		$response = $this->_makeRequest('EndFixedPriceItem', $response_vars);
+        
+        $this->_logApiCall('endFixedPriceItem', $response_vars, $response, $id_product);
 
 		if ($response === false)
 			return false;
@@ -464,11 +491,13 @@ class EbayRequest
 		// Check data
 		if (!$data)
 			return false;
+        
+        $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
 		// Build the request Xml string
 		$vars = array(
 			'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
-			'country_currency' => $this->ebay_country->getCurrency(),
+			'country_currency' => $currency->iso_code,
 			'description' => $data['description'],
 			'condition_id' => $data['condition'],
 			'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
@@ -485,10 +514,16 @@ class EbayRequest
 			'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
 			'site' => $this->ebay_country->getSiteName(),
 			'item_specifics' => $data['item_specifics'],
+            'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT')            
 		);
+        
+        if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id'])
+            $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];        
 
 		// Send the request and get response
 		$response = $this->_makeRequest('AddFixedPriceItem', $vars);
+        
+        $this->_logApiCall('addFixedPriceItemMultiSku', $vars, $response);        
 
 		if ($response === false)
 			return false;
@@ -520,11 +555,13 @@ class EbayRequest
 
 		// Set Api Call
 		$this->apiCall = 'ReviseFixedPriceItem';
+        
+        $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
 		$vars = array(
 			'item_id' => $data['itemID'],
 			'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
-			'country_currency' => $this->ebay_country->getCurrency(),
+			'country_currency' => $currency->iso_code,
 			'condition_id' => $data['condition'],
 			'dispatch_time_max' => $this->ebay_profile->getConfiguration('EBAY_DELIVERY_TIME'),
 			'listing_duration' => $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION'),
@@ -534,7 +571,6 @@ class EbayRequest
 			'postal_code' => $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'),
 			'category_id' => $data['categoryId'],
 			'pictures' => isset($data['pictures']) ? $data['pictures'] : array(),
-			'value' => htmlentities($data['brand']),
 			'return_policy' => $this->_getReturnPolicy(),
 			'resynchronize' => ($this->ebay_profile->getConfiguration('EBAY_SYNC_OPTION_RESYNC') != 1),
 			'title' => Tools::substr(self::prepareTitle($data), 0, 80),
@@ -544,10 +580,16 @@ class EbayRequest
 			'site' => $this->ebay_country->getSiteName(),
 			'variations' => $this->_getVariations($data),
 			'item_specifics' => $data['item_specifics'],
+            'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT')            
 		);
+        
+        if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id'])
+            $vars['ebay_store_category_id'] = $data['ebay_store_category_id'];        
 
 		$response = $this->_makeRequest('ReviseFixedPriceItem', $vars);
 
+		$this->_logApiCall('reviseFixedPriceItem', $vars, $response, $data['id_product']);
+		
 		if ($response === false)
 			return false;
 
@@ -586,7 +628,70 @@ class EbayRequest
 
 		return isset($response->OrderArray->Order) ? $response->OrderArray->Order : array();
 	}
+    
+	/**
+	 * Get Store Categories
+	 *
+	 **/
+	public function getStoreCategories()
+	{
 
+		// Set Api Call
+		$this->apiCall = 'GetStore';
+		$response = $this->_makeRequest('GetStore');
+        return ($response === false) ? false : (isset($response->Store) ? $response->Store->CustomCategories->CustomCategory : false);
+        
+	}    
+    
+	/**
+	 * Set order status to "shipped"
+	 *
+	 **/    
+	public function orderHasShipped($id_order_ref)
+	{
+		if (!$id_order_ref)
+			return false;
+
+		// Set Api Call
+		$this->apiCall = 'CompleteSale';
+
+		$vars = array(
+		    'id_order_ref' => $id_order_ref,
+		);
+
+		$response = $this->_makeRequest('CompleteSale', $vars);
+        
+        $this->_logApiCall('completeSale', $vars, $response);
+
+		return ($response === false) ? false : $this->_checkForErrors($response);
+	}
+    
+	/**
+	 * Set order status to "shipped"
+	 *
+	 **/
+	public function updateOrderTracking($id_order_ref, $tracking_number, $carrier_name)
+	{
+		// Check data
+		if (!$id_order_ref)
+			return false;
+
+		// Set Api Call
+		$this->apiCall = 'CompleteSale';
+
+		$vars = array(
+		    'id_order_ref' => $id_order_ref,
+            'tracking_number' => $tracking_number,
+            'carrier_name' => $carrier_name,
+		);
+
+		$response = $this->_makeRequest('CompleteSale', $vars);
+        
+        $this->_logApiCall('completeSale', $vars, $response);
+
+		return ($response === false) ? false : $this->_checkForErrors($response);
+	}
+    
 	/**
 	 * Add / Update / End Product Methods
 	 *
@@ -740,7 +845,7 @@ class EbayRequest
 		return $headers;
 	}
 
-	private function _makeRequest($api_call, $vars, $shoppingEndPoint = false)
+	private function _makeRequest($api_call, $vars = array(), $shoppingEndPoint = false)
 	{
 		$vars = array_merge($vars, array(
 			'ebay_auth_token' => ($this->ebay_profile ? $this->ebay_profile->getToken() : ''),
@@ -831,6 +936,29 @@ class EbayRequest
 
 		return empty($this->error);
 	}
+    
+    private function _logApiCall($type, $data_sent, $response, $id_product = null, $id_order = null) {
+        
+        if (!$this->write_api_logs)
+            return;
+        
+        $log = new EbayApiLog();
+        
+        $log->id_ebay_profile = $this->ebay_profile->id;
+        $log->type = $type;
+        $log->context = $this->context;
+
+        $log->data_sent = Tools::jsonEncode($data_sent);
+        $log->response = Tools::jsonEncode($response);
+        
+        if ($id_product)
+            $log->id_product = (int)$id_product;
+
+        if ($id_order)
+            $log->id_order = (int)$id_order;
+        
+        return $log->save();
+    }
 
 	public function getDev() {
 		return $this->dev;

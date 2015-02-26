@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2014 PrestaShop SA
- *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -44,5 +43,19 @@ class EbayShippingService
 	public static function insert($data)
 	{
 		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_service', $data, 'INSERT');
+	}
+    
+	public static function getCarriers($ebay_site_id)
+	{
+		if (EbayShippingService::getTotal($ebay_site_id))
+			return EbayShippingService::getAll($ebay_site_id);
+
+		$ebay = new EbayRequest();
+		$carriers = $ebay->getCarriers();
+
+		foreach ($carriers as $carrier)
+			EbayShippingService::insert(array_map('pSQL', $carrier));
+
+		return $carriers;
 	}
 }

@@ -17,9 +17,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2014 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
@@ -58,11 +58,11 @@
 <br />
 
 {if $nb_categorie > 0}
-	<p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nb_categorie / 20)|round:"0" + 1) mod='ebay'}</p>
-	<ul id="pagination">
+	<p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nb_categorie / 20)|round:"0") mod='ebay'}</p>
+	<ul id="pagination" class="pagination">
 		<li class="prev"><</li>
-		{for $i=0 to ($nb_categorie / 20)|round:"0"}
-			<li{if $i == 0} class="current"{/if}>{$i + 1}</li>
+		{for $i=1 to ($nb_categorie / 20)|round:"0"}
+			<li{if $i == 0} class="current"{/if}>{$i}</li>
 		{/for}
 		<li class="next">></li>
 	</ul>
@@ -93,7 +93,7 @@
 		<tbody>
 			<tr id="removeRow">
 				<td class="center" colspan="3">
-					<img src="{$_path|escape:'htmlall'}views/img/loading-small.gif" alt="" />
+					<img src="{$_path|escape:'htmlall'}img/loading-small.gif" alt="" />
 				</td>
 			</tr>
 		</tbody>
@@ -121,7 +121,7 @@
 	var module_path = '{$_path|escape:'htmlall'}';
 	var id_lang = '{$id_lang|escape:'htmlall'}';
 	var id_ebay_profile = '{$id_ebay_profile|escape:'htmlall'}';
-	var ebay_l = {ldelim}
+	var categories_ebay_l = {ldelim}
 		'thank you for waiting': "{l s='Thank you for waiting while creating suggestions' mod='ebay'}",
 		'no category selected' : "{l s='No category selected' mod='ebay'}",
 		'No category found'		 : "{l s='No category found' mod='ebay'}",
@@ -130,63 +130,17 @@
 		'Unselect products'		: "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}",
 		'Unselect products clicked' : "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}"
 	{rdelim};
-
+    </script>
+<script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/categories.js?date={$date|escape:'htmlall'}"></script>
+<script type="text/javascript">
 	// <![CDATA[
 	$(document).ready(function(){
-		$("#menuTab2Sheet").bind("keypress", "input[id][name^='percent']", function(){
-			/*$('#menuTab2Sheet .warning.big.tips').fadeIn();*/
-		})
 		var form_categories = parseInt("{$form_categories|escape:'htmlall'}");
 		if (form_categories >= 1)
 			$("#menuTab2").addClass('success');
+		
 		else
 			$("#menuTab2").addClass('wrong');
-
-		$("#pagination").children('li').click(function(){
-			var p = $(this).html();
-			var li = $("#pagination").children('li.current');
-			if ($(this).attr('class') == 'prev')
-			{
-				var liprev = li.prev();
-				if (!liprev.hasClass('prev'))
-				{
-					liprev.trigger('click');
-				}
-				return false;
-			}
-			if ($(this).attr('class') == 'next')
-			{
-				var linext = li.next();
-				if (!linext.hasClass('next'))
-				{
-					linext.trigger('click');
-				}
-				return false;
-			}
-			$("#pagination").children('li').removeClass('current');
-			$(this).addClass('current');
-			$("#textPagination").children('span').html(p);
-			$.ajax({
-				type: "POST",
-				dataType: "json",
-				url: module_dir + "ebay/ajax/saveCategories.php?token=" + ebay_token + "&profile=" + id_ebay_profile,
-				data: $('#configForm2').serialize()+"&ajax=true",
-				success : function(data)
-				{
-					if (data.valid)
-					{
-						$.ajax({
-							url: module_dir + "ebay/ajax/loadTableCategories.php?token=" + ebay_token + "&p=" + p + "&profile=" + id_ebay_profile + "&id_lang=" + id_lang + "&ch_cat_str=" + ebay_l["no category selected"] + "&ch_no_cat_str=" + ebay_l["no category found"] + "&not_logged_str=" + ebay_l["You are not logged in"] + "&unselect_product=" + ebay_l["Unselect products"]  ,
-							success : function(data) {
-								$("form#configForm2 table tbody #removeRow").remove(); $("form#configForm2 table tbody").html(data);
-							}
-						});
-					}
-				}
-			});
-		})
 	});
 	//]]>
-	
 </script>
-<script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/views/js/categories.js?date={$date|escape:'htmlall'}"></script>

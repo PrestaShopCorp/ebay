@@ -17,9 +17,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2014 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2014 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 <?xml version="1.0" encoding="utf-8"?>
@@ -31,6 +31,9 @@
 		{if isset($country)}
 			<Country>{$country}</Country>
 		{/if}
+		{if isset($autopay)}
+			<AutoPay>{$autopay}</AutoPay>
+		{/if}        
 		{if isset($country_currency)}
 			<Currency>{$country_currency}</Currency>
 		{/if}
@@ -95,6 +98,21 @@
 		{if isset($variations)}
 			{$variations}
 		{/if}
+        
+        {if isset($price_original)}
+            <DiscountPriceInfo>
+                <OriginalRetailPrice>{$price_original}</OriginalRetailPrice>
+                <SoldOffeBay>true</SoldOffeBay>
+            </DiscountPriceInfo>
+        {/if}
+
+        {if isset($ebay_store_category_id)}
+            <Storefront>
+                  <StoreCategoryID>{$ebay_store_category_id}</StoreCategoryID>
+                  <!--<StoreCategoryName> string </StoreCategoryName>-->
+            </Storefront>
+        {/if}        
+                
 	</Item>
 	<RequesterCredentials>
 		<eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>

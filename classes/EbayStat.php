@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * 2007-2014 PrestaShop
  *
  * NOTICE OF LICENSE
@@ -19,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2013 PrestaShop SA
- *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2014 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -58,8 +57,9 @@ class EbayStat
           'nb_national_shipping_services' => EbayShipping::getNbNationalShippings($ebay_profile->id),
           'nb_international_shipping_services' => EbayShipping::getNbInternationalShippings($ebay_profile->id),
           'date_add' => date('Y-m-d H:i:s'),
-          'Configuration' => EbayConfiguration::getAll($ebay_profile->id),
-          'return_policy' => ($ebay_profile->getReturnsPolicyConfiguration()->ebay_returns_description == '' ? 0 : 1)
+          'Configuration' => EbayConfiguration::getAll($ebay_profile->id, array('EBAY_PAYPAL_EMAIL')),
+          'return_policy' => ($ebay_profile->getReturnsPolicyConfiguration()->ebay_returns_description == '' ? 0 : 1),
+          'ps_version' => _PS_VERSION_
         );
         $this->date_add = date('Y-m-d H:i:s');
     }
@@ -86,7 +86,6 @@ class EbayStat
         $nb_rows = Db::getInstance()->getValue($sql);
         if ($nb_rows >= 2)
             return false;
-        
         $data = array(
           'id_ebay_profile' => (int)$this->id_ebay_profile,
           'version'  => pSQL($this->stats_version),
@@ -106,14 +105,13 @@ class EbayStat
         $sql = 'SELECT `id_ebay_stat`, `tries`, `version`, `data`, `date_add`
             FROM '._DB_PREFIX_.'ebay_stat';
         $res = Db::getInstance()->executeS($sql);
-        
         foreach ($res as $row)
         {
             $data = array(
                 'version' => $row['version'],
-                'data'    => stripslashes($row['data']),
+                'data'    => Tools::stripslashes($row['data']),
                 'date'    => $row['date_add'],
-                'sig'     => EbayStat::_computeSignature($row['version'], stripslashes($row['data']), $row['date_add'])
+                'sig'     => EbayStat::_computeSignature($row['version'], Tools::stripslashes($row['data']), $row['date_add'])
             );
             $opts = array('http' =>
                 array(
