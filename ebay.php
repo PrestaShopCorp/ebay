@@ -1029,7 +1029,7 @@ class Ebay extends Module
         $new_order_status = $params['newOrderStatus'];
         $id_order_state = $new_order_status->id;
 
-        if (!$id_order_state)
+        if (!$id_order_state || !$this->ebay_profile)
             return;
 
         if ($this->ebay_profile->getConfiguration('EBAY_SHIPPED_ORDER_STATE') == $id_order_state)
@@ -1043,7 +1043,7 @@ class Ebay extends Module
         if (!$id_order_ref)
             return;
         
-		$ebay_request = new EbayRequest();
+		$ebay_request = new EbayRequest(null, 'ORDER_BACKOFFICE');
         $ebay_request->orderHasShipped($id_order_ref);
     }
     
