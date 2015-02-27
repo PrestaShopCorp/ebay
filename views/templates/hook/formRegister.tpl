@@ -180,8 +180,10 @@
         var val = $('#eBayUsernamesList').val();
         if ((val == undefined) || (val == -1)) {
             $('#eBayUsernameInput').show();
+            $('#ebayRegisterButton').attr('disabled', true);
         } else {
             $('#eBayUsernameInput').hide();
+            $('#ebayRegisterButton').removeAttr('disabled');
         }        
     }
 
