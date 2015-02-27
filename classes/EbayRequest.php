@@ -686,7 +686,7 @@ class EbayRequest
 		);
 
 		$response = $this->_makeRequest('CompleteSale', $vars);
-        
+        $this->context = 'ORDER_BACKOFFICE';
         $this->_logApiCall('completeSale', $vars, $response);
 
 		return ($response === false) ? false : $this->_checkForErrors($response);
