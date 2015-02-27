@@ -661,6 +661,11 @@ fieldset.new legend {
   display: table;
 }
 
+#ebay-register-content .txt-right
+{
+	text-align: right;
+}
+
 #ebay-register-left-col {
   display: table-cell;
   width: 50%;
