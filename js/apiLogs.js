@@ -26,6 +26,7 @@
 function loadApiLogsData(page)
 {
 	$.ajax({
+		type: "POST",
 		url: module_dir + "ebay/ajax/loadApiLogs.php?token=" + ebay_token + "&p=" + page + "&no_logs_str=" + logs_ebay_l['No logs available'] + "&not_logged_str=" + logs_ebay_l['You are not logged in'] + '&show_str=' + logs_ebay_l['show'],
 		success : function(data) {
 			$("#api_logs_table tbody #removeRow").remove();

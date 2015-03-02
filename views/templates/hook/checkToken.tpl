@@ -28,6 +28,7 @@
 		$.ajax({ldelim}
 			url: '{$url|escape:'urlencode'}',
 			cache: false,
+			type: "POST",
 			success: function(data)
 			{ldelim}
 				if (data == 'OK')
