@@ -921,7 +921,7 @@ class Ebay extends Module
 		$orders = array();
 		$nb_page_orders = 100;
 
-		while ($nb_page_orders == 100 && $page < 10)
+		while ($nb_page_orders > 0 && $page < 10)
 		{
 			$page_orders = array();
 			foreach ($ebay->getOrders($from_date, $until_date, $page) as $order_xml)
