@@ -178,13 +178,10 @@
 <script type="text/javascript">
     function checkeBayUsernameSelect() {
         var val = $('#eBayUsernamesList').val();
-        if ((val == undefined) || (val == -1)) {
+        if ((val == undefined) || (val == -1))
             $('#eBayUsernameInput').show();
-            $('#ebayRegisterButton').attr('disabled', true);
-        } else {
+        else
             $('#eBayUsernameInput').hide();
-            $('#ebayRegisterButton').removeAttr('disabled');
-        }        
     }
 
     $(document).ready(function() {
@@ -198,9 +195,19 @@
     $(document).ready(function() {
         
     });
+
     $('#eBayUsernameInput').focusout(function(){
-        if (validateEmail($('#eBayUsernameInput').val()))
+
+        if (validateEmail($('#eBayUsernameInput').val()) || $('#eBayUsernameInput').val() == '')
+        {
             $('#eBayUsernameInput').css('border', '2px solid #a94442');
+            $('#ebayRegisterButton').attr('disabled', true);
+        }
+        else
+        {
+            $('#eBayUsernameInput').css('border', '1px solid #ccc');
+            $('#ebayRegisterButton').removeAttr('disabled');
+        }
     });
 
 {literal}  
