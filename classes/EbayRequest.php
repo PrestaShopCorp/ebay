@@ -452,6 +452,9 @@ class EbayRequest
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
             'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT')            
 		);
+
+	 if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id'])
+	 	$vars['ebay_store_category_id'] = $data['ebay_store_category_id'];
         
         if (isset($data['price_original']) && ($data['price_original'] > $data['price']))
             $vars['price_original'] = $data['price_original'];        
@@ -688,7 +691,7 @@ class EbayRequest
 		$response = $this->_makeRequest('CompleteSale', $vars);
         $this->context = 'ORDER_BACKOFFICE';
         $this->_logApiCall('completeSale', $vars, $response);
-
+        
 		return ($response === false) ? false : $this->_checkForErrors($response);
 	}
     
