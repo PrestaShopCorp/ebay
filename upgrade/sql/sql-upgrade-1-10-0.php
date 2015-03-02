@@ -29,3 +29,5 @@ $sql[] = 'ALTER TABLE  `'._DB_PREFIX_.'ebay_store_category` CHANGE  `ebay_catego
 $sql[] = 'ALTER TABLE  `'._DB_PREFIX_.'ebay_store_category` CHANGE  `ebay_parent_category_id`  `ebay_parent_category_id` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL';
 
 $sql[] = 'ALTER TABLE  `'._DB_PREFIX_.'ebay_store_category_configuration` CHANGE  `ebay_category_id`  `ebay_category_id` VARCHAR( 255 ) NOT NULL';
+
+$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_order_order` ADD `id_ebay_profile` INT NULL';
