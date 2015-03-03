@@ -62,10 +62,10 @@ class EbayFormAdvancedParametersTab extends EbayTab
             // CRON sync
 			'sync_products_by_cron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON'),
 			'sync_products_by_cron_url' => $this->_getModuleUrl().'synchronizeProducts_CRON.php',
-			'sync_products_by_cron_path' => dirname(__FILE__).'/synchronizeProducts_CRON.php',
+			'sync_products_by_cron_path' => $this->_getModuleUrl().'synchronizeProducts_CRON.php',
 			'sync_orders_by_cron' => Configuration::get('EBAY_SYNC_ORDERS_BY_CRON'),
 			'sync_orders_by_cron_url' => $this->_getModuleUrl().'synchronizeOrders_CRON.php',
-			'sync_orders_by_cron_path' => dirname(__FILE__).'/synchronizeOrders_CRON.php',
+			'sync_orders_by_cron_path' => $this->_getModuleUrl().'synchronizeOrders_CRON.php',
             
             // number of days to collect the oders for backward
             'orders_days_backward' => Configuration::get('EBAY_ORDERS_DAYS_BACKWARD'),
@@ -91,6 +91,8 @@ class EbayFormAdvancedParametersTab extends EbayTab
             && $this->ebay_profile->setConfiguration('EBAY_PICTURE_PER_LISTING', $picture_per_listing)
     		&& $this->ebay->setConfiguration('EBAY_API_LOGS', Tools::getValue('api_logs') ? 1 : 0)
     		&& $this->ebay->setConfiguration('EBAY_ACTIVATE_LOGS', Tools::getValue('activate_logs') ? 1 : 0)
+			&& Configuration::updateValue('EBAY_SYNC_PRODUCTS_BY_CRON', ('cron' === Tools::getValue('sync_products_mode')))
+			&& Configuration::updateValue('EBAY_SYNC_ORDERS_BY_CRON', ('cron' === Tools::getValue('sync_orders_mode')))
     		&& Configuration::updateValue('EBAY_SEND_STATS', Tools::getValue('stats') ? 1 : 0, false, 0, 0)
     		&& Configuration::updateValue('EBAY_ORDERS_DAYS_BACKWARD', (int)Tools::getValue('orders_days_backward'), false, 0, 0)
     		&& Configuration::updateValue('EBAY_LOGS_DAYS', (int)Tools::getValue('logs_conservation_duration'), false, 0, 0)

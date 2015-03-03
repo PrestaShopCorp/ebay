@@ -160,8 +160,6 @@ class EbayFormParametersTab extends EbayTab
 				(version_compare(_PS_VERSION_, '1.5', '>') ? Tools::nl2br(Tools::getValue('ebay_returns_description')) : nl2br2(Tools::getValue('ebay_returns_description'))),
 				pSQL(Tools::getValue('ebay_returns_accepted_option'))
 			)
-			&& Configuration::updateValue('EBAY_SYNC_PRODUCTS_BY_CRON', ('cron' === Tools::getValue('sync_products_mode')))
-			&& Configuration::updateValue('EBAY_SYNC_ORDERS_BY_CRON', ('cron' === Tools::getValue('sync_orders_mode')))
 			&& $this->ebay->setConfiguration('EBAY_ACTIVATE_MAILS', Tools::getValue('activate_mails') ? 1 : 0)
             && in_array((int)Tools::getValue('currency'), $currencies_ids)
             && $this->ebay_profile->setConfiguration('EBAY_CURRENCY', (int)Tools::getValue('currency'))

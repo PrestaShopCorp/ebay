@@ -24,16 +24,13 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-include(dirname(__FILE__) . '/../../config/config.inc.php');
-include(dirname(__FILE__) . '/../../init.php');
-include(dirname(__FILE__) . '/ebay.php');
+function upgrade_module_1_10($module)
+{
+    include(dirname(__FILE__).'/sql/sql-upgrade-1-10.php');
 
-class ebaySynchronizeProductsTask extends Ebay {
-
-	public function __construct() {
-		parent::__construct();
-		$this->cronProductsSync();
-	}
+    if (!empty($sql) && is_array($sql))
+        foreach ($sql as $request)
+            if (!Db::getInstance()->execute($request))
+                return false;
+    return true;
 }
-
-new ebaySynchronizeProductsTask();
