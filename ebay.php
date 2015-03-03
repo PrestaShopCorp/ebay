@@ -538,10 +538,10 @@ class Ebay extends Module
 	 **/
 	public function hookAddProduct($params)
 	{
-		if (!isset($params['product']->id))
+		if (!isset($params['id_product']))
 			return false;
 
-		if (!($id_product = (int)$params['product']->id))
+		if (!($id_product = (int)$params['id_product']))
 			return false;
 		
 		if ($this->is_multishop)
@@ -921,7 +921,7 @@ class Ebay extends Module
 		$orders = array();
 		$nb_page_orders = 100;
 
-		while ($nb_page_orders == 100 && $page < 10)
+		while ($nb_page_orders > 0 && $page < 10)
 		{
 			$page_orders = array();
 			foreach ($ebay->getOrders($from_date, $until_date, $page) as $order_xml)
@@ -943,10 +943,10 @@ class Ebay extends Module
 	public function hookUpdateProduct($params)
 	{
 //		$this->hookAddProduct($params);
-		if (!isset($params['product']->id))
+		if (!isset($params['id_product']))
 			return false;
 
-		if (!($id_product = (int)$params['product']->id))
+		if (!($id_product = (int)$params['id_product']))
 			return false;
 		
 		if(!($this->ebay_profile instanceof EbayProfile))
