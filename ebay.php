@@ -429,7 +429,7 @@ class Ebay extends Module
 	private function _upgrade()
 	{
 		$version = Configuration::get('EBAY_VERSION');
-
+		
 		if ($version == '1.1' || empty($version))
 			if (version_compare(_PS_VERSION_, '1.5', '<'))
 			{
@@ -483,11 +483,11 @@ class Ebay extends Module
 			}
 		}
 
-		if (version_compare($version, '1.10.0', '<')) {
+		if (version_compare($version, '1.10', '<')) {
 			if (version_compare(_PS_VERSION_, '1.5', '<'))
 			{
-				include_once(dirname(__FILE__).'/upgrade/Upgrade-1.10.0.php');
-				upgrade_module_1_10_0($this);
+				include_once(dirname(__FILE__).'/upgrade/Upgrade-1.10.php');
+				upgrade_module_1_10($this);
 			}
 		}       
 	}
