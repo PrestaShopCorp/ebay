@@ -50,9 +50,9 @@ class EbayFormTemplateManagerTab extends EbayTab
 		$action_url = $this->_getUrl($url_vars);
 		
 		if (Tools::getValue('reset_template'))
-			$ebay_product_template = TotFormat::formatDescription(EbayProductTemplate::getContent($this->ebay, $this->smarty));
+			$ebay_product_template = EbayProductTemplate::getContent($this->ebay, $this->smarty);
 		else
-			$ebay_product_template = TotFormat::formatDescription(Tools::getValue('ebay_product_template', $this->ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE')));
+			$ebay_product_template = Tools::getValue('ebay_product_template', $this->ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE'));
 		
 		$ebay_product_template_title = $this->ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE');
 

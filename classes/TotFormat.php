@@ -113,7 +113,7 @@ class TotFormat
 	 */
 	public static function formatDescription($desc)
 	{
-        if(method_exists('Tools', 'purifyHTML'))
+      /*  if(method_exists('Tools', 'purifyHTML'))
             $desc = Tools::purifyHTML($desc);
         else
         {
@@ -124,7 +124,7 @@ class TotFormat
             $desc = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $desc);      
             $desc = preg_replace('/ on([A-Za-z0-9]*)="(.*)"/is', "", $desc);
             
-        }
+        }*/
         return $desc;
 	}    
     

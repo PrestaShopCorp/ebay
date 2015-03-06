@@ -44,6 +44,7 @@ $(document).ready(function() {
         var profileId = $(this).data('profile');
         if (confirm(header_ebay_l['Are you sure you want to delete the profile number %profile_number%?'].replace('%profile_number%', profileId))) {
             $.ajax({
+                type: "POST",
                 url: delete_profile_url + '&profile='+profileId,
                 cache: false,
                 success: function(data) {

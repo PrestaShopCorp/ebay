@@ -115,7 +115,7 @@ class Ebay extends Module
 	{
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.9.2';
+		$this->version = '1.10.0';
 		$this->stats_version = '1.0';
 
 		$this->author = 'PrestaShop';
@@ -429,7 +429,7 @@ class Ebay extends Module
 	private function _upgrade()
 	{
 		$version = Configuration::get('EBAY_VERSION');
-
+		
 		if ($version == '1.1' || empty($version))
 			if (version_compare(_PS_VERSION_, '1.5', '<'))
 			{
@@ -481,7 +481,15 @@ class Ebay extends Module
 				include_once(dirname(__FILE__).'/upgrade/Upgrade-1.9.php');
 				upgrade_module_1_9($this);
 			}
-		}                
+		}
+
+		if (version_compare($version, '1.10', '<')) {
+			if (version_compare(_PS_VERSION_, '1.5', '<'))
+			{
+				include_once(dirname(__FILE__).'/upgrade/Upgrade-1.10.php');
+				upgrade_module_1_10($this);
+			}
+		}       
 	}
 
 	/**
@@ -538,11 +546,16 @@ class Ebay extends Module
 	 **/
 	public function hookAddProduct($params)
 	{
-		if (!isset($params['product']->id))
+		if (!isset($params['product']->id) && !isset($params['id_product']))
 			return false;
 
 		if (!($id_product = (int)$params['product']->id))
-			return false;
+		{
+			if (!($id_product = (int)$params['id_product']))
+			{
+				return false;
+			}
+		}
 		
 		if ($this->is_multishop)
 		{
@@ -942,13 +955,17 @@ class Ebay extends Module
 	*/
 	public function hookUpdateProduct($params)
 	{
-//		$this->hookAddProduct($params);
-		if (!isset($params['product']->id))
+		if (!isset($params['product']->id) && !isset($params['id_product']))
 			return false;
 
 		if (!($id_product = (int)$params['product']->id))
-			return false;
-		
+		{
+			if (!($id_product = (int)$params['id_product']))
+			{
+				return false;
+			}
+		}
+
 		if(!($this->ebay_profile instanceof EbayProfile))
 			return false;
 
@@ -1023,7 +1040,7 @@ class Ebay extends Module
         $new_order_status = $params['newOrderStatus'];
         $id_order_state = $new_order_status->id;
 
-        if (!$id_order_state)
+        if (!$id_order_state || !$this->ebay_profile)
             return;
 
         if ($this->ebay_profile->getConfiguration('EBAY_SHIPPED_ORDER_STATE') == $id_order_state)
@@ -1037,7 +1054,7 @@ class Ebay extends Module
         if (!$id_order_ref)
             return;
         
-		$ebay_request = new EbayRequest();
+		$ebay_request = new EbayRequest(null, 'ORDER_BACKOFFICE');
         $ebay_request->orderHasShipped($id_order_ref);
     }
     
@@ -1084,36 +1101,28 @@ class Ebay extends Module
             ($id_order_ref = EbayOrder::getIdOrderRefByIdOrder($id_order)))
         {
             
-            // find eBayProfile for this order
-            // as a security, we retrieve several potential id_ebay_profiles and try all of them on the API
-            $id_ebay_profiles = Db::getInstance()->ExecuteS('SELECT DISTINCT(ep.`id_ebay_profile`)
-                FROM `'._DB_PREFIX_.'ebay_product` ep
-                INNER JOIN `'._DB_PREFIX_.'order_detail` od
-                ON od.`product_id` = ep.`id_product`
-                AND od.`product_attribute_id` = ep.`id_attribute`
-                AND od.`id_order` = '.(int)$id_order.' 
-                INNER JOIN `'._DB_PREFIX_.'ebay_order_order` eoo
-                ON od.`id_order` = eoo.`id_order`
-                INNER JOIN `'._DB_PREFIX_.'ebay_profile` epr
-                ON eoo.`id_shop` = epr.`id_shop`
-                AND ep.`id_ebay_profile` = epr.`id_ebay_profile`');
+            $id_ebay_profiles = Db::getInstance()->ExecuteS('SELECT DISTINCT(`id_ebay_profile`) FROM `'._DB_PREFIX_.'ebay_profile`');
             
-            $order = new Order($id_order);
-                        
-            foreach ($id_ebay_profiles as $data)
+            if (count($id_ebay_profiles) == 1)
             {
-                $id_ebay_profile = (int)$data['id_ebay_profile'];
-                $ebay_profile = new EbayProfile($id_ebay_profile);
-                
-                if (!$ebay_profile->getConfiguration('EBAY_SEND_TRACKING_CODE'))
-                    continue;
-                
-                $carrier = new Carrier($order->id_carrier, $ebay_profile->id_lang);
-                
-                $ebay_request = new EbayRequest($id_ebay_profile);
-                if ($ebay_request->updateOrderTracking($id_order_ref, $tracking_number, $carrier->name))
-                    break;
+	            $order = new Order($id_order);
+	                        
+	            foreach ($id_ebay_profiles as $data)
+	            {
+	                $id_ebay_profile = (int)$data['id_ebay_profile'];
+	                $ebay_profile = new EbayProfile($id_ebay_profile);
+	                
+	                if (!$ebay_profile->getConfiguration('EBAY_SEND_TRACKING_CODE'))
+	                    continue;
+	                
+	                $carrier = new Carrier($order->id_carrier, $ebay_profile->id_lang);
+	                
+	                $ebay_request = new EbayRequest($id_ebay_profile);
+	                if ($ebay_request->updateOrderTracking($id_order_ref, $tracking_number, $carrier->name))
+	                    break;
+	            }
             }
+
 
         }
 		

@@ -26,6 +26,7 @@
 function loadOrderLogsData(page)
 {
 	$.ajax({
+		type: "POST",
 		url: module_dir + "ebay/ajax/loadOrderLogs.php?token=" + ebay_token + "&p=" + page + "&no_logs_str=" + order_logs_ebay_l['No logs available'] + "&not_logged_str=" + order_logs_ebay_l['You are not logged in'] + '&show_str=' + order_logs_ebay_l['show'],
 		success : function(data) {
 			$("#order_logs_table tbody #removeRow").remove();

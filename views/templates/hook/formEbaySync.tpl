@@ -55,6 +55,7 @@
 				params = params + "&action=0";
 
 			$.ajax({
+				type: "POST",
 				url: "{/literal}{$nb_products_sync_url|escape:'urlencode'}{literal}" + params,
 				success: function(data) {
 					
@@ -116,6 +117,7 @@
 	{
 		counter++;
 		$.ajax({
+			type: "POST",
 			url: '{/literal}{$sync_products_url|escape:'urlencode'}{literal}' + counter,
 			success: function(data)
 			{

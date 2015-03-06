@@ -272,7 +272,8 @@ class EbayOrder
 			} elseif (!in_array($ebay_profile->id, $res[$ebay_profile->id_shop]['id_ebay_profiles']))
 				$res[$ebay_profile->id_shop]['id_ebay_profiles'][] = $ebay_profile->id;
 			
-			$res[$ebay_profile->id_shop]['id_products'][] = $product['id_product'];
+			// $res[$ebay_profile->id_shop]['id_products'][] = $product['id_product'];
+			$res[$ebay_profile->id_shop]['id_products'][] = array('id_product' => $product['id_product'], 'id_product_attribute' => $product['id_product_attribute']);
 		}
 		
 		return $res;
@@ -344,11 +345,18 @@ class EbayOrder
 		else
 			$product_list = array();
 
-		foreach ($product_list as $id_product)
-		{
+		// foreach ($product_list as $id_product)
+		// {
+		// 	foreach($this->product_list as $product)
+		// 		if ($id_product == $product['id_product'])
+		// 			break;
+		foreach ($product_list as $p)
+		{//Nombre de produit donc nombre de tour
 			foreach($this->product_list as $product)
-				if ($id_product == $product['id_product'])
+				if ($p['id_product'] == $product['id_product'] && $p['id_product_attribute'] == $product['id_product_attribute'])
 					break;
+
+
 			// check if product is in this cart
 //			if (!count($this->carts[$ebay_profile->id_shop]->getProducts(false, $product['id_product'])))
 //				continue;
@@ -589,7 +597,8 @@ class EbayOrder
 					), 'INSERT');
 
 			}
-            $this->_writeLog($id_ebay_profile, 'add_orders', $res);
+			if($res)
+            	$this->_writeLog($id_ebay_profile, 'add_orders', $res);
 		}
 	}
 
