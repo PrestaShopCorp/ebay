@@ -550,12 +550,8 @@ class Ebay extends Module
 			return false;
 
 		if (!($id_product = (int)$params['product']->id))
-		{
 			if (!($id_product = (int)$params['id_product']))
-			{
 				return false;
-			}
-		}
 		
 		if ($this->is_multishop)
 		{
@@ -959,13 +955,9 @@ class Ebay extends Module
 			return false;
 
 		if (!($id_product = (int)$params['product']->id))
-		{
 			if (!($id_product = (int)$params['id_product']))
-			{
 				return false;
-			}
-		}
-
+		
 		if(!($this->ebay_profile instanceof EbayProfile))
 			return false;
 
