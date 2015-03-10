@@ -95,7 +95,7 @@ class EbayFormTemplateManagerTab extends EbayTab
 
 		// work around for the tinyMCE bug deleting the css line
 		$css_line = '<link rel="stylesheet" type="text/css" href="'.$this->_getModuleUrl().'css/ebay.css" />';
-		$ebay_product_template = $css_line.$ebay_product_template;
+		$ebay_product_template = $css_line.TotFormat::formatDescription($ebay_product_template);
 
 			// Saving new configurations
 		if ($this->ebay_profile->setConfiguration('EBAY_PRODUCT_TEMPLATE', $ebay_product_template, true) && $this->ebay_profile->setConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE', $ebay_product_template_title))

@@ -108,11 +108,13 @@ class TotFormat
     
 	/**
 	 * Format product description by removing potential hazardous code
-	 * @deprecated
 	 * @param string $desc description to be cleaned
 	 */
 	public static function formatDescription($desc)
 	{
+		if(method_exists('Tools', 'purifyHTML'))
+            $desc = Tools::purifyHTML($desc);
+        
         return $desc;
 	}    
     
