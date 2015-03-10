@@ -597,7 +597,8 @@ class EbayOrder
 					), 'INSERT');
 
 			}
-            $this->_writeLog($id_ebay_profile, 'add_orders', $res);
+			if($res)
+            	$this->_writeLog($id_ebay_profile, 'add_orders', $res);
 		}
 	}
 

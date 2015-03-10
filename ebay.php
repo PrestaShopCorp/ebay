@@ -546,10 +546,15 @@ class Ebay extends Module
 	 **/
 	public function hookAddProduct($params)
 	{
-		if (!isset($params['product']->id))
+		
+		if (!isset($params['product']->id) && !isset($params['id_product']))
 			return false;
 
 		if (!($id_product = (int)$params['product']->id))
+			if (!($id_product = (int)$params['id_product']))
+				return false;
+		
+		if(!($this->ebay_profile instanceof EbayProfile))
 			return false;
 		
 		if ($this->is_multishop)
@@ -950,19 +955,13 @@ class Ebay extends Module
 	*/
 	public function hookUpdateProduct($params)
 	{
-//		$this->hookAddProduct($params);
-		
 		if (!isset($params['product']->id) && !isset($params['id_product']))
 			return false;
 
 		if (!($id_product = (int)$params['product']->id))
-		{
 			if (!($id_product = (int)$params['id_product']))
-			{
 				return false;
-			}
-		}
-
+		
 		if(!($this->ebay_profile instanceof EbayProfile))
 			return false;
 
