@@ -50,9 +50,9 @@ class EbayFormTemplateManagerTab extends EbayTab
 		$action_url = $this->_getUrl($url_vars);
 		
 		if (Tools::getValue('reset_template'))
-			$ebay_product_template = TotFormat::formatDescription(EbayProductTemplate::getContent($this->ebay, $this->smarty));
+			$ebay_product_template = EbayProductTemplate::getContent($this->ebay, $this->smarty);
 		else
-			$ebay_product_template = TotFormat::formatDescription(Tools::getValue('ebay_product_template', $this->ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE')));
+			$ebay_product_template = Tools::getValue('ebay_product_template', $this->ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE'));
 		
 		$ebay_product_template_title = $this->ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE');
 
@@ -95,7 +95,7 @@ class EbayFormTemplateManagerTab extends EbayTab
 
 		// work around for the tinyMCE bug deleting the css line
 		$css_line = '<link rel="stylesheet" type="text/css" href="'.$this->_getModuleUrl().'css/ebay.css" />';
-		$ebay_product_template = $css_line.$ebay_product_template;
+		$ebay_product_template = $css_line.TotFormat::formatDescription($ebay_product_template);
 
 			// Saving new configurations
 		if ($this->ebay_profile->setConfiguration('EBAY_PRODUCT_TEMPLATE', $ebay_product_template, true) && $this->ebay_profile->setConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE', $ebay_product_template_title))
