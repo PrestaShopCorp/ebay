@@ -33,6 +33,7 @@
 	var content_ebay_listings = $("#ebayListings button");
 	content_ebay_listings.bind('click', 'button', function(){
 		$.ajax({
+			type: "POST",
 			url: module_dir+'ebay/ajax/getEbayListings.php',
 			data: "token="+ebay_token+"&id_employee={$id_employee|escape:'htmlall'}",
 			success: function(data)

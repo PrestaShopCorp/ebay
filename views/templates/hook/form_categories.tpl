@@ -61,7 +61,8 @@
 	<p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nb_categorie / 20)|round:"0") mod='ebay'}</p>
 	<ul id="pagination" class="pagination">
 		<li class="prev"><</li>
-		{for $i=1 to ($nb_categorie / 20)|round:"0"}
+		{math equation="floor(x/20)" x=$nb_categorie assign=nb_pages} 
+		{for $i=1 to ($nb_pages +1)}
 			<li{if $i == 0} class="current"{/if}>{$i}</li>
 		{/for}
 		<li class="next">></li>

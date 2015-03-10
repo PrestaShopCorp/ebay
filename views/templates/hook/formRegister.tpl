@@ -120,6 +120,8 @@
                         {else}
             			    <input id="eBayUsernameInput" type="text" name="eBayUsername" class="ebay-float-right" value="" />
                         {/if}
+                        <div style="clear:both"></div>  
+                        <div class="txt-right">{l s='eBay User Identifiers only are allowed' mod='ebay'}</div>
                         <div style="clear:both"></div>                             
                     </div>
                 
@@ -176,11 +178,10 @@
 <script type="text/javascript">
     function checkeBayUsernameSelect() {
         var val = $('#eBayUsernamesList').val();
-        if ((val == undefined) || (val == -1)) {
+        if ((val == undefined) || (val == -1))
             $('#eBayUsernameInput').show();
-        } else {
+        else
             $('#eBayUsernameInput').hide();
-        }        
     }
 
     $(document).ready(function() {
@@ -189,4 +190,43 @@
         });
         checkeBayUsernameSelect();
     })
+
+
+    $(document).ready(function() {
+        
+    });
+
+    $('#eBayUsernameInput').focusout(function(){
+
+        if (validateEmail($('#eBayUsernameInput').val()) || $('#eBayUsernameInput').val() == '')
+        {
+            $('#eBayUsernameInput').css('border', '2px solid #a94442');
+            $('#ebayRegisterButton').attr('disabled', true);
+        }
+        else
+        {
+            $('#eBayUsernameInput').css('border', '1px solid #ccc');
+            $('#ebayRegisterButton').removeAttr('disabled');
+        }
+    });
+
+{literal}  
+/**
+ * Validate email function with regualr expression
+ * 
+ * If email isn't valid then return false
+ * 
+ * @param email
+ * @return Boolean
+ */
+function validateEmail(email){
+    var emailReg = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+    var valid = emailReg.test(email);
+
+    if(!valid)
+        return false;
+    else
+        return true;
+}
+{/literal}
 </script>
