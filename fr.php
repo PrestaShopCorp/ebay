@@ -277,6 +277,7 @@ $_MODULE['<{ebay}prestashop>formparameters_752bc04b41b64e886b06aa723ceac63c'] = 
 $_MODULE['<{ebay}prestashop>formparameters_8fe42920b79fc4c8436a18bda74d4fdb'] = 'Statut utilisé pour indiquer que le produit a été envoyé';
 $_MODULE['<{ebay}prestashop>formparameters_7de404c7d7d58e09725cbfae65bd4b1e'] = 'Temps de mise en vente';
 $_MODULE['<{ebay}prestashop>formparameters_a55e604a5bd344251e5f5fec9354c319'] = 'Temps de mise en vente';
+$_MODULE['<{ebay}prestashop>formparameters_89915713614e6417e4d4ee67d5487fa0'] = 'http://pages.ebay.fr/help/sell/duration.html';
 $_MODULE['<{ebay}prestashop>formparameters_5e14b32df295b4dc536a56aa192b42e2'] = 'Le temps de mise en vente est la durée pour laquelle votre vente est active sur eBay. Vous pouvez la faire durée 1, 3, 5, 7, 10, 30 jours ou Valide jusqu\'à annulation. Valide jusqu\'à annulation renouvelle automatiquement tous les 30 jours votre vente, à moins que tous les objets ait été vendus, que vous ayez fini la mise en vente manuellement, ou que la vente ne respectent pas les conditions d\'eBay. C\'est la valeur par défaut afin de vous épargner le temps de remise en vente de vos objets';
 $_MODULE['<{ebay}prestashop>formparameters_24f57c27a39e51dcf58fcfcdfe69f7d6'] = 'Voulez vous automatiquement remettre vos produits en vente';
 $_MODULE['<{ebay}prestashop>formparameters_26030c760e6e50206710389d768204a9'] = 'Sauvegarder et continuer';
