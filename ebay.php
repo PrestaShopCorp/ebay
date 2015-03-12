@@ -115,7 +115,7 @@ class Ebay extends Module
 	{
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.10.0';
+		$this->version = '1.11.0';
 		$this->stats_version = '1.0';
 
 		$this->author = 'PrestaShop';
@@ -489,7 +489,15 @@ class Ebay extends Module
 				include_once(dirname(__FILE__).'/upgrade/Upgrade-1.10.php');
 				upgrade_module_1_10($this);
 			}
-		}       
+		}
+
+		if (version_compare($version, '1.11', '<')) {
+			if (version_compare(_PS_VERSION_, '1.5', '<'))
+			{
+				include_once(dirname(__FILE__).'/upgrade/Upgrade-1.11.php');
+				upgrade_module_1_11($this);
+			}
+		}
 	}
 
 	/**
@@ -660,8 +668,10 @@ class Ebay extends Module
 	
 	public function cronProductsSync()
 	{
+		Configuration::updateValue('NB_PRODUCTS_LAST', '0');
 		EbaySynchronizer::syncProducts(EbayProductModified::getAll(), Context::getContext(), $this->ebay_profile->id_lang, 'CRON', 'CRON_PRODUCT');
 		EbayProductModified::truncate();
+		Configuration::updateValue('DATE_LAST_SYNC_PRODUCTS', date('Y-m-d H:i:s'));
 	}
 	
 	public function cronOrdersSync()
@@ -677,6 +687,7 @@ class Ebay extends Module
 
 	public function importOrders($orders)
 	{
+		return;
 		$errors_email = array();
 		foreach ($orders as $order)
 		{
@@ -1550,8 +1561,31 @@ class Ebay extends Module
                  $green_message = $this->l('To implement these changes on active listings you need to resynchronize your items');  
 
          }
-        
-            
+
+        $cron_task = array();
+
+		if ((int)Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON') == 1)
+		{
+			$cron_task['products']['is_active'] = 1;
+
+			if ($last_sync_datetime = Configuration::get('DATE_LAST_SYNC_PRODUCTS'))
+			{
+				$cron_task['products']['last_sync'] = array('date' => date('Y-m-d', strtotime($last_sync_datetime)), 'time' => date('H:i:s', strtotime($last_sync_datetime)));
+				$cron_task['products']['last_sync']['nb_products'] = Configuration::get('NB_PRODUCTS_LAST');
+			}
+			else
+				$cron_task['products']['last_sync'] = 'none';
+		}
+
+		if ((int)Configuration::get('EBAY_SYNC_ORDERS_BY_CRON') == 1)
+		{
+			$cron_task['orders']['is_active'] = 1;
+
+			if ($last_sync_datetime = Configuration::get('DATE_LAST_SYNC_ORDERS'))
+				$cron_task['orders']['last_sync'] = array('date' => date('Y-m-d', strtotime($last_sync_datetime)), 'time' => date('H:i:s', strtotime($last_sync_datetime)));
+			else
+				$cron_task['orders']['last_sync'] = 'none';
+		}            
         
 		$smarty_vars = array(
 			'class_general' => version_compare(_PS_VERSION_, '1.5', '>') ? 'uncinq' : 'unquatre',
@@ -1567,7 +1601,7 @@ class Ebay extends Module
             'form_store_category' => $form_store_category_tab->getContent(),
             'orders_sync' => $orders_sync->getContent(),
             'green_message' => isset($green_message) ? $green_message : null,
-            
+            'cron_task'	=> $cron_task,
             'api_logs' => $api_logs->getContent(),
             'order_logs' => $order_logs->getContent(),
             'id_tab' => Tools::getValue('id_tab')

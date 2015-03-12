@@ -155,7 +155,10 @@ class EbaySynchronizer
                 if ($log_type)
                     EbayLog::write('Error: '.$ebay->error, $log_type);
             } elseif ($log_type)
-                EbayLog::write('Success', $log_type);                
+                EbayLog::write('Success', $log_type);
+
+			if ($request_context == 'CRON')
+				Configuration::updateValue('NB_PRODUCTS_LAST', (int)Configuration::get('NB_PRODUCTS_LAST')+1);              
 		}
 
 		if (count($tab_error))

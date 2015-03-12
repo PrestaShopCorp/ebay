@@ -213,11 +213,9 @@
                 }
             });
 
-            // Ajax fot delete image on database
             $(function() {
 				$('#reset-image').on('click', function(e){
 					e.preventDefault();
-
 					$.ajax({
 						type: 'POST',
 						url: module_dir + 'ebay/ajax/deleteProductImage.php',
@@ -233,15 +231,8 @@
 					}).fail(function() {
 						$('#reset-image-result').css('color', 'red').text("{/literal}{l s='An error has occurred.' mod='ebay'}{literal}");
 					})
-
-
-
-
 				});
 			});
-
-            
-           
 		</script>
 	{/literal}    
     
