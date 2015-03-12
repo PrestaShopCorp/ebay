@@ -50,7 +50,7 @@ class EbayLog extends ObjectModel
 
 		$fields['text'] = pSQL($this->text);
 		$fields['type'] = pSQL($this->type);
-		$fields['date_add'] = pSQL($this->date_add);
+		$fields['date_add'] = date('Y-m-d H:i:s');
 
 		return $fields;
 	}        
