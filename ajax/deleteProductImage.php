@@ -24,42 +24,19 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-require_once(dirname(__FILE__).'/EbayRequest.php');
+include(dirname(__FILE__).'/../../../config/config.inc.php');
 
-class EbayProductImage
+if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+	die('ERROR: Invalid Token');
+
+include(dirname(__FILE__).'/../classes/EbayProductImage.php');
+
+if (Tools::getValue('action') == 'delete-all')
 {
-	public static function getEbayUrl($ps_url, $ebay_image_name)
-	{
-		$db = Db::getInstance();
-
-		$ebay_url = $db->getValue('SELECT `ebay_image_url` from `'._DB_PREFIX_.'ebay_product_image`
-			WHERE `ps_image_url` = \''.pSQL($ps_url).'\'');
-
-		if (!$ebay_url)
-		{
-			$ebay_request = new EbayRequest();
-			$ebay_url = $ebay_request->uploadSiteHostedPicture($ps_url, $ebay_image_name);
-			
-			if (!$ebay_url)
-				return false;
-
-			$data = array(
-				'ps_image_url' => pSQL($ps_url),
-				'ebay_image_url' => pSQL($ebay_url),
-			);
-
-			if (version_compare(_PS_VERSION_, '1.5', '>'))
-				$db->insert('ebay_product_image', $data);
-			else
-				foreach ($conditions as $condition)
-					$db->autoExecute(_DB_PREFIX_.'ebay_product_image', $data, 'INSERT');
-		}
-
-		return $ebay_url;
-	}
-
-	public static function removeAllProductImage()
-	{
-		return Db::getInstance()->Execute('TRUNCATE '._DB_PREFIX_.'ebay_product_image');
-	}
+	if (EbayProductImage::removeAllProductImage() === true)
+		echo 'success';
+	else
+		echo 'error';
 }
+else
+	die('ERROR: Invalid arguments');

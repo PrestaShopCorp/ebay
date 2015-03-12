@@ -80,11 +80,19 @@ class EbayFormAdvancedParametersTab extends EbayTab
     
     function postProcess()
     {
+    	// Reset Image if they have modification on the size
+        if (   $this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_DEFAULT') != (int)Tools::getValue('sizedefault')
+        	|| $this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_SMALL') != (int)Tools::getValue('sizesmall')
+        	|| $this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_BIG') != (int)Tools::getValue('sizebig')
+        	)
+        	EbayProductImage::removeAllProductImage();
+        
 		// Saving new configurations
 		$picture_per_listing = (int)Tools::getValue('picture_per_listing');
 		if ($picture_per_listing < 0)
 			$picture_per_listing = 0;
         
+
         if ($this->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_DEFAULT', (int)Tools::getValue('sizedefault'))
 			&& $this->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_SMALL', (int)Tools::getValue('sizesmall'))
 			&& $this->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_BIG', (int)Tools::getValue('sizebig'))
