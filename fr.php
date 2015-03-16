@@ -283,6 +283,7 @@ $_MODULE['<{ebay}prestashop>formregister_9b1cb96681f5c0570601ee841310d359'] = 'U
 $_MODULE['<{ebay}prestashop>formregister_3d9742de1b9742bd8031ec3f8334da22'] = 'Liez votre compte eBay au module eBay';
 $_MODULE['<{ebay}prestashop>formregister_6e34142871b2486bca4bfab605008b8a'] = 'J\'ai un compte eBay professionnel :';
 $_MODULE['<{ebay}prestashop>formregister_7ba7cc1dfb00eca77b600084f4ba1304'] = 'Pseudo eBay';
+$_MODULE['<{ebay}prestashop>formregister_e33f971614e2b5f7fba0cc3571a4990b'] = 'Seuls les utilisateurs identifiés d\'eBay sont autorisés';
 $_MODULE['<{ebay}prestashop>formregister_48d1d9771a2f4dd36817e4a68145e1d6'] = 'Choisissez le site eBay pour la mise en vente';
 $_MODULE['<{ebay}prestashop>formregister_e7a105460eb283d3fd17c9d8507b10f9'] = 'Choisissez la langue dans laquelle vous souhaitez mettre vos objets en vente :';
 $_MODULE['<{ebay}prestashop>formregister_dd40944a88874e7049221613fa113244'] = 'Liez votre compte eBay';
