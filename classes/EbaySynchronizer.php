@@ -554,7 +554,10 @@ class EbaySynchronizer
 				'{EBAY_IDENTIFIER}',
 				'{EBAY_SHOP}',
 				'{SLOGAN}',
-				'{PRODUCT_NAME}'
+				'{PRODUCT_NAME}',
+				'{REFERENCE}',
+				'{BRAND}',
+				'{BRAND_ID}',
 			),
 			array(
 				$product->description_short,
@@ -563,7 +566,10 @@ class EbaySynchronizer
 				$ebay_profile->ebay_user_identifier,
 				$ebay_profile->getConfiguration('EBAY_SHOP'),
 				'',
-				$product->name
+				$product->name,
+				$product->reference,
+				Manufacturer::getNameById($product->id_manufacturer),
+				$product->id_manufacturer,
 			),
 			$ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE')
 		);
