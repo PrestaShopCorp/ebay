@@ -35,7 +35,7 @@ class EbayStoreCategoryConfiguration
     {
         $data = array(
           'id_ebay_profile'     => (int)$id_ebay_profile,
-          'ebay_category_id'    => (int)$ebay_category_id,
+          'ebay_category_id'    => pSQL($ebay_category_id),
           'id_category'         => (int)$id_category
         );
         
@@ -49,7 +49,7 @@ class EbayStoreCategoryConfiguration
         else
         {
             $id = self::getIdByIdProfileAndIDCategory($id_ebay_profile, $id_category);
-            Db::getInstance()->Execute("UPDATE "._DB_PREFIX_."ebay_store_category_configuration SET ebay_category_id = '".(int)$ebay_category_id."' WHERE id_ebay_store_category_configuration = '".(int)$id."'");
+            Db::getInstance()->Execute("UPDATE "._DB_PREFIX_."ebay_store_category_configuration SET ebay_category_id = '".pSQL($ebay_category_id)."' WHERE id_ebay_store_category_configuration = '".(int)$id."'");
         }
     }
 
