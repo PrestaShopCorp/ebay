@@ -32,7 +32,7 @@
 	&& $shippingValidator.indicator == "success"
 	&& $templateValidator.indicator == "success"}
 	<div class="bootstrap">
-		{if $cron_task.products.is_active == 1}
+		{if isset($cron_task.products) && $cron_task.products.is_active == 1}
 			{if $cron_task.products.last_sync == 'none'}
 				<div class="alert alert-warning">
 					{l s='The product cron job has never been run.' mod='ebay'}
@@ -50,13 +50,13 @@
 			{/if}
 			
 		{/if}
-		{if $cron_task.orders.is_active == 1}
+		{if isset($cron_task.orders) && $cron_task.orders.is_active == 1}
 			{if $cron_task.orders.last_sync == 'none'}
 				<div class="alert alert-warning">
 					{l s='The order cron job has never been run.' mod='ebay'}
 				</div>
 			{else}
-				<div class="alert alert-info">
+				<div class="alert alert-{$cron_task.orders.alert}">
 					{l s='Last order synchronization has been done the ' mod='ebay'}
 					{$cron_task.orders.last_sync.date}
 					{l s=' at ' mod='ebay'}

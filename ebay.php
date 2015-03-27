@@ -615,13 +615,12 @@ class Ebay extends Module
 
 		// update if not update for more than 30 min or EBAY_SYNC_ORDER = 1
 		if (
+			((int)Configuration::get('EBAY_SYNC_ORDERS_BY_CRON') == 0)
+			&&
 			($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')).'.000Z')
 			|| Tools::getValue('EBAY_SYNC_ORDERS') == 1)
 		{
 			$current_date = date('Y-m-d\TH:i:s').'.000Z';
-			// we set the new last update date after retrieving the last orders
-			$this->ebay_profile->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date);
-
 			// we set the new last update date after retrieving the last orders
 			$this->ebay_profile->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date);
 
@@ -687,8 +686,9 @@ class Ebay extends Module
 
 	public function importOrders($orders)
 	{
-		return;
+
 		$errors_email = array();
+
 		foreach ($orders as $order)
 		{
 			$errors = array();
@@ -1581,8 +1581,18 @@ class Ebay extends Module
 		{
 			$cron_task['orders']['is_active'] = 1;
 
-			if ($last_sync_datetime = Configuration::get('DATE_LAST_SYNC_ORDERS'))
-				$cron_task['orders']['last_sync'] = array('date' => date('Y-m-d', strtotime($last_sync_datetime)), 'time' => date('H:i:s', strtotime($last_sync_datetime)));
+			if ($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE') != null)
+			{
+				$datetime = new DateTime($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE'));
+
+				$cron_task['orders']['last_sync'] = array('date' => date('Y-m-d', strtotime($datetime->format('Y-m-d H:i:s'))), 'time' => date('H:i:s', strtotime($datetime->format('Y-m-d H:i:s'))));
+
+				$datetime2 = new DateTime();
+				
+				$interval = $datetime->diff($datetime2);
+
+				$cron_task['orders']['alert'] = ($interval->format('%a') >= 1 ? 'danger' : 'info');
+			}
 			else
 				$cron_task['orders']['last_sync'] = 'none';
 		}            
