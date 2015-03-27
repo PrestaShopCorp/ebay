@@ -1722,10 +1722,13 @@ class Ebay extends Module
 			{
 				global $all_error;
 				include(dirname(__FILE__).'/log/syncError.php');
+
+                if (count($all_error) == 0)
+                	$msg = $this->l('Settings updated').' ('.$this->l('Option').' '.$this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE').' : '.($nb_products - $nb_products_less).' / '.$nb_products.' '.$this->l('product(s) sync with eBay').')<br/><br/>';
+                else
+                	$msg = '';
                 
-                $msg = $this->l('Settings updated').' ('.$this->l('Option').' '.$this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE').' : '.($nb_products - $nb_products_less).' / '.$nb_products.' '.$this->l('product(s) sync with eBay').')';
-                
-                $msg .= '<br/><br/>'.$this->l('Some products have not been listed successfully due to the error(s) below').'<br/>';
+                $msg .= $this->l('Some products have not been listed successfully due to the error(s) below').'<br/>';
 
 				foreach ($all_error as $error)
 				{
