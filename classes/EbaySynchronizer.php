@@ -334,7 +334,7 @@ class EbaySynchronizer
 	private static function _updateTabError($ebay_error, $name)
 	{
 		$error_key = md5($ebay_error);
-		$tab_error[$error_key]['msg'] = $ebay_error;
+		$tab_error[$error_key]['msg'] = '<hr/>'.$ebay_error;
 
 		if (!isset($tab_error[$error_key]['products']))
 				$tab_error[$error_key]['products'] = array();
