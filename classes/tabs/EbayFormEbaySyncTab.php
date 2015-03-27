@@ -199,6 +199,9 @@ class EbayFormEbaySyncTab extends EbayTab
     {
         
 		// Update Sync Option
+		if ($this->ebay_profile == null)
+			return;
+		
 		$this->ebay_profile->setConfiguration('EBAY_SYNC_OPTION_RESYNC', (Tools::getValue('ebay_sync_option_resync') == 1 ? 1 : 0));
 
 		// Empty error result
