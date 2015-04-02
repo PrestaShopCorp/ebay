@@ -37,7 +37,7 @@ $id_ebay_profile = (int)Tools::getValue('id_ebay_profile');
 
 $is_one_five = version_compare(_PS_VERSION_, '1.5', '>');
 
-$sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`
+$sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, SUM(sa.`quantity`) as stock
 		FROM `'._DB_PREFIX_.'product` p';
 
 $sql .= $is_one_five ? Shop::addSqlAssociation('product', 'p') : '';
@@ -48,6 +48,8 @@ $sql .= $is_one_five ? Shop::addSqlRestrictionOnLang('pl') : '';
 $sql .= ')
 		LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
 			ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.$id_ebay_profile.'
+        LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
+            ON p.`id_product` = sa.`id_product`
 		WHERE ';
 		
 $sql .= $is_one_five ? ' product_shop.`id_shop` = 1 AND ' : '';
@@ -59,6 +61,7 @@ foreach ($res as &$row)
 	$row['name'] = Tools::safeOutput($row['name']);
 	$row['blacklisted'] = Tools::safeOutput($row['blacklisted']);
 	$row['extra_images'] = Tools::safeOutput($row['extra_images']);
+    $row['stock'] = Tools::safeOutput($row['stock']);
 }
 
 echo Tools::jsonEncode($res);

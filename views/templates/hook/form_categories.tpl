@@ -79,11 +79,17 @@
 					<span data-inlinehelp="{l s='Only products with a mapped category will be listed.' mod='ebay'}">{l s='eBay category' mod='ebay'} <span style="color:red">{l s='(required)' mod='ebay'}</span></span>
 				</th>
 				<th style="width:185px;">
+					<span data-inlinehelp="{l s='Increase or decrease the sales price of the items listed on eBay.' mod='ebay'}">{l s='Nb products in category' mod='ebay'}</span>
+				</th>                
+				<th style="width:185px;">
 					<span data-inlinehelp="{l s='Increase or decrease the sales price of the items listed on eBay.' mod='ebay'}">{l s='eBay selling price' mod='ebay'}</span>
 				</th>				
 				<th class="center">
 					<span data-inlinehelp="{l s='All products with mapped categories will be listed.' mod='ebay'}">{l s='List on eBay' mod='ebay'}</span>
 				</th>
+				<th class="center" colspan="2">
+					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='Nb synchronized products' mod='ebay'}</span>
+				</th>                
 				{*
 				<th class="center">
 					<span data-dialoghelp="http://pages.ebay.com/help/sell/pictures.html" data-inlinehelp="{l s='By default, only your main photo will appear in your eBay listing. You can add more photos but there may be a charge.' mod='ebay'}">{l s='Photos' mod='ebay'}</span>
@@ -129,7 +135,9 @@
 		'You are not logged in': "{l s='You are not logged in' mod='ebay'}",
 		'Settings updated'		 : "{l s='Settings updated' mod='ebay'}",
 		'Unselect products'		: "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}",
-		'Unselect products clicked' : "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}"
+		'Unselect products clicked' : "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}",
+        'Products' : "{l s='Products'}",
+        'Stock' : "{l s='Stock'}"
 	{rdelim};
     </script>
 <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/categories.js?date={$date|escape:'htmlall'}"></script>

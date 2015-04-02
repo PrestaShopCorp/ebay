@@ -58,13 +58,13 @@ function showProducts(id_category) {
 		$('.product-row[category=' + id_category +']').hide();
 		elem.attr('showing', 0);
 		elem.html('&#9654;');
-		elem_string.html(categories_ebay_l['Unselect products']);
+//		elem_string.html(categories_ebay_l['Unselect products']);
 	} 
 	else 
 	{
 		elem.attr('showing', 1);
 		elem.html('&#9660;');
-		elem_string.html(categories_ebay_l['Unselect products clicked']);
+//		elem_string.html(categories_ebay_l['Unselect products clicked']);
 
 		if (loadedCategories[id_category])
 			$('.product-row[category=' + id_category +']').show();
@@ -78,6 +78,7 @@ function showProducts(id_category) {
 				url: module_dir + 'ebay/ajax/getProducts.php?category=' + id_category + '&token=' + ebay_token + '&id_ebay_profile='+id_ebay_profile,
 				success: function(products) { 
 					loadedCategories[id_category] = true;
+          
 					for (var i in products)
 					{
 						product = products[i];
@@ -85,13 +86,24 @@ function showProducts(id_category) {
 						$('#category-' + id_category).after('<tr class="product-row ' + (i%2 == 0 ? 'alt_row':'') + '" category="' + id_category + '"> \
 							<td>' + product.name + '</td> \
 							<td></td> \
+							<td class="center">' + (product.stock ? product.stock : '0?') + '</td> \
 							<td></td> \
 							<td class="center"> \
 								<input name="showed_products[' + product.id + ']" type="hidden" value="1" /> \
 								<input onchange="toggleSyncProduct(this)" class="sync-product" product="' + product.id + '" name="to_synchronize[' + product.id + ']" type="checkbox" ' + (product.blacklisted == 1 ? '' : 'checked') + ' /> \
 							</td> \
+							<td colspan="2"></td> \
 						</tr>');
 					}
+          
+          $('#category-' + id_category).after('<tr class="product-row" > \
+            <td class="bold">' + categories_ebay_l['Products'] + '</td> \
+            <td></td> \
+            <td class="center bold">' + categories_ebay_l['Stock'] + '</td> \
+            <td></td> \
+            <td class="center bold" colspan="2">' + categories_ebay_l['Unselect products'] + '</td> \
+          </tr>');          
+          
 					$('#loading-' + id_category).remove();
 				}
 			});
