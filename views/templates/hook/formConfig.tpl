@@ -55,7 +55,10 @@
 
 <ul class="visu-menu menuTab ebay_hidden">
     
+    <!--
 	<li id="menuTab9" class="menuTabButton">1. {l s='eBay listings' mod='ebay'}</li>
+    -->
+    <li id="menuTab15" class="menuTabButton">1. {l s='Prestashop Products' mod='ebay'}</li>
 	
     <li id="menuTab6" class="menuTabButton">2. {l s='Order history' mod='ebay'}</li>    
 	
@@ -84,6 +87,7 @@
 	<div id="menuTab12Sheet" class="tabItem">{$order_logs}</div>
 	<div id="menuTab6Sheet" class="tabItem">{$orders_history}</div>
 	<div id="menuTab14Sheet" class="tabItem">{$orders_sync}</div>
+    <div id="menuTab15Sheet" class="tabItem">{$ps_products}</div>
 </div>
 <br clear="left" />
 <br />
