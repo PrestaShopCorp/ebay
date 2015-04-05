@@ -53,16 +53,6 @@ $ebay_category_list = Db::getInstance()->executeS('SELECT *
 
 if (version_compare(_PS_VERSION_, '1.5', '>'))
 {
-    /*
-	$rq_get_cat_in_stock = '
-		SELECT SUM(s.`quantity`) AS instockProduct, COUNT(DISTINCT(p.`id_product`)) AS nbProducts, p.`id_category_default`
-		FROM `'._DB_PREFIX_.'product` AS p
-		INNER JOIN `'._DB_PREFIX_.'stock_available` AS s ON p.`id_product` = s.`id_product`
-		WHERE 1 '.$ebay->addSqlRestrictionOnLang('s').'
-        AND s.`quantity` > 0
-		GROUP BY p.`id_category_default`';
-    */
-
 	$rq_products = '
 		SELECT COUNT(DISTINCT(p.`id_product`)) AS nbProducts, COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts, p.`id_category_default`
 		FROM `'._DB_PREFIX_.'product` AS p
@@ -71,8 +61,7 @@ if (version_compare(_PS_VERSION_, '1.5', '>'))
 		WHERE 1 '.$ebay->addSqlRestrictionOnLang('s').'
         AND ps.`id_shop` = 1
 		GROUP BY p.`id_category_default`';
-
-}
+    }
 else
 {
 	$rq_products = 'SELECT COUNT(DISTINCT(`id_product`)) AS nbProducts, COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts, `id_category_default`

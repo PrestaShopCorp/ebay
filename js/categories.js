@@ -86,11 +86,11 @@ function showProducts(id_category) {
 						$('#category-' + id_category).after('<tr class="product-row ' + (i%2 == 0 ? 'alt_row':'') + '" category="' + id_category + '"> \
 							<td>' + product.name + '</td> \
 							<td></td> \
-							<td class="center">' + (product.stock ? product.stock : '0?') + '</td> \
+							<td class="center">' + (product.stock ? product.stock : '<span class="red">0?</span>') + '</td> \
 							<td></td> \
 							<td class="center"> \
 								<input name="showed_products[' + product.id + ']" type="hidden" value="1" /> \
-								<input onchange="toggleSyncProduct(this)" class="sync-product" product="' + product.id + '" name="to_synchronize[' + product.id + ']" type="checkbox" ' + (product.blacklisted == 1 ? '' : 'checked') + ' /> \
+								<input onchange="toggleSyncProduct('+id_category+')" class="sync-product" category="'+id_category+'" name="to_synchronize[' + product.id + ']" type="checkbox" ' + (product.blacklisted == 1 ? '' : 'checked') + ' /> \
 							</td> \
 							<td colspan="2"></td> \
 						</tr>');
@@ -111,9 +111,28 @@ function showProducts(id_category) {
 	}
 }
 
-function toggleSyncProduct(obj)
+function toggleSyncProduct(category_id)
 {
-	var product_id = $(obj).attr('product');
+  
+  var nbSelected = 0;
+  
+  var hasNotSelected = false;
+  
+  $('.sync-product[category='+category_id+']').each(function() {
+    
+    if ($(this).attr('checked'))
+      nbSelected++;
+    else if (!hasNotSelected)
+        hasNotSelected = true;
+    
+  });
+  
+  if (hasNotSelected)
+    str = '<span class="bold">' + nbSelected + '</span>';
+  else
+    str = nbSelected;
+  
+  $('.cat-nb-products[category=' + category_id + ']').html(str);
 }
 
 function initPagination() {

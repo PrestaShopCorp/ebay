@@ -29,7 +29,7 @@
 	</tr>
 {else}
 
-    {if $nbCategories > 0}
+    {if $nbCategories > 20}
         <div id="cat-pagination" style="display:none">
         	<p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nbCategories / 20)|round:"0") mod='ebay'}</p>
         	<ul id="pagination" class="pagination">
@@ -74,7 +74,7 @@
 				</select>
 			</td>
 			<td colspan="2" class="show-products" style="text-align:center"><a  id="show-products-switch-string{$c.id_category|escape:'htmlall'}" href="javascript:showProducts({$c.id_category|escape:'htmlall'})">{l s='Choose products' mod='ebay'}</a></td>
-            <td class="center">{if isset($getNbSyncProducts[$c.id_category])}
+            <td class="cat-nb-products center" category="{$c.id_category|escape:'htmlall'}">{if isset($getNbSyncProducts[$c.id_category])}
 				{$getNbSyncProducts[$c.id_category]|escape:'htmlall'}
 				{else}0{/if}</td>			
 		</tr>
