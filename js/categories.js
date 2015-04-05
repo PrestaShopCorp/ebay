@@ -96,7 +96,7 @@ function showProducts(id_category) {
 						</tr>');
 					}
           
-          $('#category-' + id_category).after('<tr class="product-row" > \
+          $('#category-' + id_category).after('<tr class="product-row" category="' + id_category + '"> \
             <td class="bold">' + categories_ebay_l['Products'] + '</td> \
             <td></td> \
             <td class="center bold">' + categories_ebay_l['Stock'] + '</td> \
@@ -116,31 +116,40 @@ function toggleSyncProduct(obj)
 	var product_id = $(obj).attr('product');
 }
 
-$(document).ready(function() {
+function initPagination() {
   
-	$("#pagination").children('li').click(function(){
+	$("#pagination").children('li').click(function() {
+    
 		var p = $(this).html();
+    
 		var li = $("#pagination").children('li.current');
+    
 		if ($(this).attr('class') == 'prev')
 		{
+      
 			var liprev = li.prev();
 			if (!liprev.hasClass('prev'))
 			{
 				liprev.trigger('click');
 			}
 			return false;
+      
 		}
 		if ($(this).attr('class') == 'next')
 		{
+      
 			var linext = li.next();
 			if (!linext.hasClass('next'))
 			{
 				linext.trigger('click');
 			}
 			return false;
+      
 		}
+    
 		$("#pagination").children('li').removeClass('current');
 		$(this).addClass('current');
+    
 		$("#textPagination").children('span').html(p);
 		$.ajax({
 			type: "POST",
@@ -151,24 +160,48 @@ $(document).ready(function() {
 			{
 				if (data.valid)
 				{
-					$.ajax({
-						type: "POST",
-						url: module_dir + "ebay/ajax/loadTableCategories.php?token=" + ebay_token + "&p=" + p + "&profile=" + id_ebay_profile + "&id_lang=" + id_lang + "&ch_cat_str=" + categories_ebay_l["no category selected"] + "&ch_no_cat_str=" + categories_ebay_l["no category found"] + "&not_logged_str=" + categories_ebay_l["You are not logged in"] + "&unselect_product=" + categories_ebay_l["Unselect products"]  ,
-						success : function(data) {
-							$("form#configForm2 table tbody #removeRow").remove(); $("form#configForm2 table tbody").html(data);
-						}
-					});
+          loadCategories(p, $('#cat-filter').val());
 				}
 			}
 		});
 	})  
+    
+}
+
+function loadCategories(page, search) {
   
+  var url = module_dir + "ebay/ajax/loadTableCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&ch_cat_str=' + categories_ebay_l['no category selected'] + '&ch_no_cat_str=' + categories_ebay_l['no category found'] + '&not_logged_str=' + categories_ebay_l['You are not logged in'] + '&unselect_product=' + categories_ebay_l['Unselect products'];
+  if (page != undefined)
+    url += "&p=" + page;
+  if (search != undefined)
+    url += "&s=" + search;
+
 	$.ajax({
 		type: "POST",
-		url: module_dir + "ebay/ajax/loadTableCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&ch_cat_str=' + categories_ebay_l['no category selected'] + '&ch_no_cat_str=' + categories_ebay_l['no category found'] + '&not_logged_str=' + categories_ebay_l['You are not logged in'] + '&unselect_product=' + categories_ebay_l['Unselect products'],
-		success : function(data) { $("form#configForm2 table tbody #removeRow").remove(); $("form#configForm2 table tbody").html(data); }
+		url: url,
+		success : function(data) { 
+
+      $("form#configForm2 table tbody #removeRow").remove(); 
+      $("form#configForm2 table tbody").html(data);
+
+      $('#cat-pagination-holder').html($('#cat-pagination'));
+      $('#cat-pagination').show();
+      
+      initPagination();
+
+    }
 	});
-	
+	  
+}
+
+$(document).ready(function() {
+  
+  $('#cat-filter').keyup(function() {
+    loadCategories(0, $(this).val());
+  })
+  
+  loadCategories();
+  
 	$("#configForm2SuggestedCategories input[type=submit]").click(function(){
 		$('<div class="center"><img src="' + module_path + 'img/loading-small.gif" alt="" />' + categories_ebay_l['thank you for waiting'] + '</div>').insertAfter($(this));
 		$(this).fadeOut();

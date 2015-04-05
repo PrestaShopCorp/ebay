@@ -28,6 +28,21 @@
 		<td colspan="3" class="center">{$noCatFound|escape:'htmlall'}</td>
 	</tr>
 {else}
+
+    {if $nbCategories > 0}
+        <div id="cat-pagination" style="display:none">
+        	<p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nbCategories / 20)|round:"0") mod='ebay'}</p>
+        	<ul id="pagination" class="pagination">
+        		<li class="prev"><</li>
+        		{math equation="floor(x/20)" x=$nbCategories assign=nb_pages} 
+        		{for $i=1 to ($nb_pages)}
+        			<li{if $i == $p} class="current"{/if}>{$i}</li>
+        		{/for}
+        		<li class="next">></li>
+        	</ul>
+        </div>
+    {/if}
+
 	{foreach from=$categoryList key=k  item=c}
 		<tr{if $k % 2 !== 0} class="alt_row"{/if} id="category-{$c.id_category|escape:'htmlall'}">
 			<td><a id="show-products-switch-{$c.id_category|escape:'htmlall'}" showing="0" class="show-products" href="javascript:showProducts({$c.id_category|escape:'htmlall'})">&#9654;</a> {$c.name|escape:'htmlall'}

@@ -35,13 +35,15 @@ $ebay_profile = new EbayProfile((int)Tools::getValue('profile'));
 if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
 	return Tools::safeOutput(Tools::getValue('not_logged_str'));
 
-$category_list = $ebay->getChildCategories(Category::getCategories(Tools::getValue('id_lang')), version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0);
+$categories = Category::getCategories(Tools::getValue('id_lang'));
+$category_list = $ebay->getChildCategories($categories, version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0, array(), '', Tools::getValue('s'));
 
 $offset = 20;
 $page = (int)Tools::getValue('p', 0);
 if ($page < 2)
 	$page = 1;
 $limit = $offset * ($page - 1);
+$nb_categories = count($category_list);
 $category_list = array_slice($category_list, $limit, $offset);
 
 $ebay_category_list = Db::getInstance()->executeS('SELECT *
@@ -146,6 +148,7 @@ $template_vars = array(
 	'tabHelp' => '&id_tab=7',
 	'_path' => $ebay->getPath(),
 	'categoryList' => $category_list,
+    'nbCategories' => $nb_categories,
 	'eBayCategoryList' => $ebay_category_list,
 	'getNbProducts' => $get_cat_nb_products,
     'getNbSyncProducts' => $get_cat_nb_sync_products,

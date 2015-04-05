@@ -54,20 +54,14 @@
 		<br />
 		{l s='Choose which of your items you want to list on eBay by ticking the box.' mod='ebay'}
 	</p>
+    
+    <p>
+        <input id="cat-filter" type="search" />
+    </p>
 </div>
 <br />
 
-{if $nb_categorie > 0}
-	<p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nb_categorie / 20)|round:"0") mod='ebay'}</p>
-	<ul id="pagination" class="pagination">
-		<li class="prev"><</li>
-		{math equation="floor(x/20)" x=$nb_categorie assign=nb_pages} 
-		{for $i=1 to ($nb_pages +1)}
-			<li{if $i == 0} class="current"{/if}>{$i}</li>
-		{/for}
-		<li class="next">></li>
-	</ul>
-{/if}
+<div id="cat-pagination-holder"></div>
 
 <form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall'}{else}tab={$tab|escape:'htmlall'}{/if}&configure={$configure|escape:'htmlall'}&token={$token|escape:'htmlall'}&tab_module={$tab_module|escape:'htmlall'}&module_name={$module_name|escape:'htmlall'}&id_tab=2&section=category" method="post" class="form" id="configForm2">	<table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
 		<thead>

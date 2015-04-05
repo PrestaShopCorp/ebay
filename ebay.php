@@ -1625,7 +1625,7 @@ class Ebay extends Module
 		* Category Form Config Methods
 		*
 	*/
-	public function getChildCategories($categories, $id, $path = array(), $path_add = '')
+	public function getChildCategories($categories, $id, $path = array(), $path_add = '', $search = '')
 	{
 		$category_tab = array();
 
@@ -1651,6 +1651,15 @@ class Ebay extends Module
 				$categoryTmp = $this->getChildCategories($categories, $idc, $path, $cc['infos']['name']);
 				$category_tab = array_merge($category_tab, $categoryTmp);
 			}
+        
+        if ($search) {
+            $category_tab_filtered = array();
+            foreach ($category_tab as $c) {
+                if (strpos(strtolower($c['name']), strtolower($search)) !== false)
+                    $category_tab_filtered[] = $c;
+            }
+            $category_tab = $category_tab_filtered;
+        }
 
 		return $category_tab;
 	}
