@@ -64,10 +64,9 @@ $query = 'SELECT ep.`id_ebay_product`,
     ON cl.`id_category` = p.`id_category_default`
     AND cl.`id_lang` = '.$ebay_profile->id_lang.'
     
-    INNER JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
+    LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
     ON ecc.`id_category` = p.`id_category_default`
     AND ecc.`id_ebay_profile` = '.$ebay_profile->id.'
-    AND ecc.`id_ebay_category` = 0
     
     LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
     ON ec.`id_ebay_category` = ecc.`id_ebay_category`
