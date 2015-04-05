@@ -55,13 +55,17 @@
 
 <ul class="visu-menu menuTab ebay_hidden">
     
+    <!--
 	<li id="menuTab9" class="menuTabButton">1. {l s='eBay listings' mod='ebay'}</li>
+	-->
+        
+    <li id="menuTab16" class="menuTabButton">2. {l s='Orphan Ads' mod='ebay'}</li>
+    
+    <li id="menuTab6" class="menuTabButton">3. {l s='Order history' mod='ebay'}</li>
 	
-    <li id="menuTab6" class="menuTabButton">2. {l s='Order history' mod='ebay'}</li>    
+    <li id="menuTab11" class="menuTabButton">4. {l s='API Logs' mod='ebay'}</li>
 	
-    <li id="menuTab11" class="menuTabButton">3. {l s='API Logs' mod='ebay'}</li>
-	
-    <li id="menuTab12" class="menuTabButton">4. {l s='Order Logs' mod='ebay'}</li>
+    <li id="menuTab12" class="menuTabButton">5. {l s='Order Logs' mod='ebay'}</li>
     
 </ul>
 
@@ -84,6 +88,7 @@
 	<div id="menuTab12Sheet" class="tabItem">{$order_logs}</div>
 	<div id="menuTab6Sheet" class="tabItem">{$orders_history}</div>
 	<div id="menuTab14Sheet" class="tabItem">{$orders_sync}</div>
+	<div id="menuTab16Sheet" class="tabItem">{$orphan_ads}</div>
 </div>
 <br clear="left" />
 <br />
