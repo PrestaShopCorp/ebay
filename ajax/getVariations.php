@@ -33,6 +33,7 @@ if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get(
 
 $ebay = new Ebay();
 $ebay_country = EbayCountrySpec::getInstanceByKey(Configuration::get('EBAY_COUNTRY_DEFAULT'));
+$ebay_request = new EbayRequest();
 $id_lang = $ebay_country->getIdLang();
 $id_ebay_profile = (int)Tools::getValue('id_ebay_profile');
 $id_product = (int)Tools::getValue('product');
@@ -69,6 +70,8 @@ foreach ($res as &$row)
 	$row['name'] = Tools::safeOutput($row['name']);
 	$row['stock'] = Tools::safeOutput($row['stock']);
 	$row['id_product_ref'] = Tools::safeOutput($row['id_product_ref']);
+    if ($row['id_product_ref'])
+        $row['link'] = EbayProduct::getEbayUrl($row['id_product_ref'], $ebay_request->getDev());    
 }
 
 echo Tools::jsonEncode($res);

@@ -73,7 +73,7 @@ $classes_to_load = array(
     'tabs/EbayFormEbaySyncTab',
     'tabs/EbayOrderHistoryTab',
     'tabs/EbayHelpTab',
-    'tabs/EbayListingsTab',
+//    'tabs/EbayListingsTab',
     'tabs/EbayFormStoreCategoryTab',
     'tabs/EbayApiLogsTab',
     'tabs/EbayOrderLogsTab',
@@ -1533,7 +1533,7 @@ class Ebay extends Module
         $form_ebay_sync_tab = new EbayFormEbaySyncTab($this, $this->smarty, $this->context);
         $form_ebay_order_history_tab = new EbayOrderHistoryTab($this, $this->smarty, $this->context);
         $help_tab = new EbayHelpTab($this, $this->smarty, $this->context);        
-        $listings_tab = new EbayListingsTab($this, $this->smarty, $this->context);
+        //$listings_tab = new EbayListingsTab($this, $this->smarty, $this->context);
         $orders_sync = new EbayOrdersSyncTab($this, $this->smarty, $this->context);
         $ps_products = new EbayPrestashopProductsTab($this, $this->smarty, $this->context);
         
@@ -1565,7 +1565,7 @@ class Ebay extends Module
 			'form_template_manager' => $form_template_manager_tab->getContent(),
 			'form_ebay_sync' => $form_ebay_sync_tab->getContent(),
 			'orders_history' => $form_ebay_order_history_tab->getContent(),
-			'ebay_listings' => $listings_tab->getContent(),
+			//'ebay_listings' => $listings_tab->getContent(),
             'form_store_category' => $form_store_category_tab->getContent(),
             'orders_sync' => $orders_sync->getContent(),
             'ps_products' => $ps_products->getContent(),

@@ -23,9 +23,8 @@
 *	International Registered Trademark & Property of PrestaShop SA
 */
 
-$(document).ready(function() {
+function initPagination() {
   
-  /* PAGINATION
 	$("#pagination").children('li').click(function() {
     
 		var p = $(this).html();
@@ -63,31 +62,53 @@ $(document).ready(function() {
 			{
 				if (data.valid)
 				{
-					$.ajax({
-						type: "POST",
-						url: module_dir + "ebay/ajax/loadTableCategories.php?token=" + ebay_token + "&p=" + p + "&profile=" + id_ebay_profile + "&id_lang=" + id_lang + "&ch_cat_str=" + categories_ebay_l["no category selected"] + "&ch_no_cat_str=" + categories_ebay_l["no category found"] + "&not_logged_str=" + categories_ebay_l["You are not logged in"] + "&unselect_product=" + categories_ebay_l["Unselect products"]  ,
-						success : function(data) {
-							$("form#configForm2 table tbody #removeRow").remove(); $("form#configForm2 table tbody").html(data);
-						}
-					});
+          loadPrestaShopProducts(p);
 				}
 			}
 		});
 	})  
-  */
+  
+}
+
+function loadPrestaShopProducts(page) {
+  
+  if (page == undefined)
+    page = 1;
+  
+  var mode = $('#products-mode').val();
+  var search = $('#products-filter').val();
   
 	$.ajax({
 		type: "POST",
-		url: module_dir + "ebay/ajax/loadTablePrestaShopProducts.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile,
+		url: module_dir + "ebay/ajax/loadTablePrestaShopProducts.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + "&mode=" + mode + "&p=" + page + "&s=" + search,
 		success : function(data) {
+      
+      $('#products-form-view').hide();
       
       console.log(data);
       
       $("table#PrestaShopProducts tbody #removeRow").remove();
       $("table#PrestaShopProducts tbody").html(data);
       
+      $('#products-pagination-holder').html($('#products-pagination'));
+      $('#products-pagination').show();
+      
+      initPagination();
+      
     }
-	});
+	});  
+}
+
+$(document).ready(function() {
+  
+  $('#products-mode').change(function() {
+    loadPrestaShopProducts();
+  });
+  $('#products-filter').keyup(function() {
+    loadPrestaShopProducts();
+  });
+  
+  loadPrestaShopProducts();
   
 });
 
@@ -139,18 +160,18 @@ function showVariations(id_product) {
             
             var feedback = '';
             if (!variation.stock) {
-              feedback = 'Empty stock';
+              feedback = products_ebay_l['Empty stock'];
             } else if (!sync) {
-              feedback = 'Synchronisation disabled';
+              feedback = products_ebay_l['Synchronisation disabled'];
             } else if (blacklisted) {
-              feedback = 'Product not selected';
+              feedback = products_ebay_l['Product not selected'];
             }
 
 						$('#product-' + id_product).after('<tr class="variations-row ' + (i%2 == 0 ? 'alt_row':'') + '" product="' + id_product + '"> \
-							<td>' + product_name + ' ' + variation.name + '</td> \
+							<td style="padding-left: 21px">' + product_name + ' ' + variation.name + '</td> \
               <td class="center">' + variation.stock + '</td> \
 							<td colspan="4"></td> \
-							<td>'+ (variation.id_product_ref ? 'Link' : 'No ad') + '</td> \
+							<td>'+ (variation.id_product_ref ? '<a href="' + variations.link + '" target="_blank">' + products_ebay_l['Link'] + '</a>' : products_ebay_l['No ad']) + '</td> \
               <td>' + feedback + '</td> \
 						</tr>');
 					}
@@ -162,37 +183,3 @@ function showVariations(id_product) {
 		}
 	}
 }
-
-/*
-
-function loadCategoryMatch(id_category) {
-	$.ajax({
-		async: false,
-		type: "POST",
-		url: module_dir + 'ebay/ajax/loadCategoryMatch.php?token=' + ebay_token + '&id_category=' + id_category + '&time=' + module_time + '&ch_cat_str=' + categories_ebay_l['no category selected'] + "&profile=" + id_ebay_profile,
-		success: function(data) { $("#categoryPath" + id_category).html(); }
-	});
-}
-
-function changeCategoryMatch(level, id_category) {
-	var levelParams = "&level1=" + $("#categoryLevel1-" + id_category).val();
-
-	if (level > 1) levelParams += "&level2=" + $("#categoryLevel2-" + id_category).val();
-	if (level > 2) levelParams += "&level3=" + $("#categoryLevel3-" + id_category).val();
-	if (level > 3) levelParams += "&level4=" + $("#categoryLevel4-" + id_category).val();
-	if (level > 4) levelParams += "&level5=" + $("#categoryLevel5-" + id_category).val();
-
-	$.ajax({
-		type: "POST",
-		url: module_dir + 'ebay/ajax/changeCategoryMatch.php?token=' + ebay_token + '&id_category=' + id_category + '&time=' + module_time + '&level=' + level + levelParams + '&ch_cat_str=' + categories_ebay_l['no category selected'] + '&profile=' + id_ebay_profile,
-		success: function(data) { $("#categoryPath" + id_category).html(data); }
-	});
-}
-
-var loadedCategories = new Array();
-
-function toggleSyncProduct(obj)
-{
-	var product_id = $(obj).attr('product');
-}
-*/

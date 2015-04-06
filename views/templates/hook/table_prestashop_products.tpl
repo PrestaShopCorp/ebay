@@ -31,6 +31,20 @@
 
 {else}
 
+    {if $nbProducts > $nbPerPage}
+        <div id="products-pagination" style="display:none">
+            <p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(floor($nbProducts / $nbPerPage)|round:"0") mod='ebay'}</p>
+            <ul id="pagination" class="pagination">
+                <li class="prev"><</li>
+                {math equation="floor(x/$nbPerPage)" x=$nbProducts assign=nb_pages} 
+                {for $i=1 to ($nb_pages)}
+                    <li{if $i == $p} class="current"{/if}>{$i}</li>
+                {/for}
+                <li class="next">></li>
+            </ul>
+        </div>
+    {/if}
+
 	{foreach from=$products key=k  item=p}
 
 		<tr{if $k % 2 !== 0} class="alt_row"{/if} id="product-{$p.id_product|escape:'htmlall'}">
@@ -49,9 +63,9 @@
 
             <td class="center{if !$p.stock} red{/if}">{$p.stock}</td>
             
-            <td>{$p.psCategoryName}</td>
+            <td>{$p.psCategoryName|escape:'htmlall'}</td>
 
-            <td>{$p.EbayCategoryName}</td>
+            <td>{$p.EbayCategoryName|escape:'htmlall'}</td>
             
             <td class="center">{if $p.sync }{l s='Yes' mod='ebay'}{else}<span class="red">{l s='No' mod='ebay'}</span>{/if}</td>
 
@@ -65,7 +79,7 @@
                 {elseif !$p.EbayProductRef}
                     {l s='No ad' mod='ebay'}                  
                 {else}
-                    <a href="{$p.EbayProductRef}" target="_blank">{l s='Link' mod='ebay'}</a>    
+                    <a href="{if $p.EbayProductRef}{$p.link}{/if}" target="_blank">{l s='Link' mod='ebay'}</a>    
                 {/if}
             </td>
             

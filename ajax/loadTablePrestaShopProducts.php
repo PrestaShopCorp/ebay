@@ -31,9 +31,19 @@ include_once dirname(__FILE__).'/../ebay.php';
 $ebay = new Ebay();
 
 $ebay_profile = new EbayProfile((int)Tools::getValue('profile'));
+$ebay_request = new EbayRequest();
 
 if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
 	return Tools::safeOutput(Tools::getValue('not_logged_str'));
+
+$page = (int)Tools::getValue('p', 0);
+if ($page < 2)
+	$page = 1;
+$limit = 20;
+$offset = $limit * ($page - 1);
+
+$on_ebay_only = (Tools::getValue('mode') == 'on_ebay');
+$search = Tools::getValue('s');
 
 // to check if a product has attributes (multi-variations), we check if it has a "default_on" attribute in the product_attribute table
 // this prevents us of doing a double "group by" which would complexify the query
@@ -77,7 +87,7 @@ $query = 'SELECT p.`id_product`,
     ON epc.`id_product` = p.`id_product`
     AND epc.`id_ebay_profile` = '.$ebay_profile->id.'
     
-    LEFT JOIN `'._DB_PREFIX_.'ebay_product` ep
+    '.($on_ebay_only ? 'INNER' : 'LEFT').' JOIN `'._DB_PREFIX_.'ebay_product` ep
     ON ep.`id_product` = p.`id_product`
     AND ep.`id_ebay_profile` = '.$ebay_profile->id.'
     AND ep.`id_ebay_product` = (
@@ -87,12 +97,23 @@ $query = 'SELECT p.`id_product`,
         AND ep2.`id_ebay_profile` = ep.`id_ebay_profile`
     )'. // With this inner query we ensure to only return one row of ebay_product. The id_product_ref is only relevant for products having only one correspondant product on eBay
     '
-    WHERE 1'.$ebay->addSqlRestrictionOnLang('pl').$ebay->addSqlRestrictionOnLang('cl').$ebay->addSqlRestrictionOnLang('s').'
-    GROUP BY s.`id_product`';
+    WHERE 1'.$ebay->addSqlRestrictionOnLang('pl').$ebay->addSqlRestrictionOnLang('cl').$ebay->addSqlRestrictionOnLang('s');
+    
+if ($search)
+    $query .= ' AND pl.`name` LIKE \'%'.$search.'%\'';
+
+$query .= ' GROUP BY s.`id_product`';
     
 //    echo $query;
+
+$queryCount = preg_replace('/SELECT ([a-zA-Z.,` ]+) FROM /', 'SELECT COUNT(*) FROM ', $query);
+$nbProducts = Db::getInstance()->getValue($queryCount);
     
-$res = Db::getInstance()->executeS($query);
+$res = Db::getInstance()->executeS($query.' LIMIT '.$offset.', '.$limit);
+
+foreach ($res as &$row)
+    if ($row['EbayProductRef'])
+        $row['link'] = EbayProduct::getEbayUrl($row['EbayProductRef'], $ebay_request->getDev());
 
 $smarty = Context::getContext()->smarty;
 
@@ -112,8 +133,10 @@ $template_vars = array(
 	'noCatFound' => Tools::getValue('ch_no_cat_str'),
 	'currencySign' => $currency->sign,
     */
+    'nbPerPage' => $limit,
+    'nbProducts' => $nbProducts,
     'noProductFound' => Tools::getValue('ch_no_prod_str'),
-//	'p' => $page,
+	'p' => $page,
     'products' => $res,
 );
 

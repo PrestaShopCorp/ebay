@@ -85,6 +85,11 @@ $(document).ready(function() {
     		$(this).addClass("selected");
     		$(".tabItem.selected").removeClass("selected");
     		$("#" + this.id + "Sheet").addClass("selected");
+        
+        if ($(this).attr('id') == 'menuTab15') {
+          loadPrestaShopProducts(1);
+        }
+        
     });
 
     selectMainTab(main_tab);

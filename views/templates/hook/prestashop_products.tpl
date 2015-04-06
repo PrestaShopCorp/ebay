@@ -41,15 +41,15 @@
     </p>
     
     <p>
-        <select name="">
+        <select id="products-mode">
             <option value="catalogue">{l s='Whole Prestashop catalogue' mod='ebay'}</option>
             <option value="on_ebay">{l s='Products synchronised on eBay' mod='ebay'}</option>
         </select>
         
-        <input type="search" />
+        <input id="products-filter" type="search" placeholder="{l s='Filter products' mod='ebay'}" />
     </p>
     
-    <form action="{$show_products_url}" method="post" class="form">
+    <form id="products-form-view" action="{$show_products_url}" method="post" class="form">
         <p class="center">
             <input class="primary button" name="submitSave" type="submit" value="{l s='View Products' mod='ebay'}" />
     	</p>
@@ -57,20 +57,7 @@
     
     <!-- pagination -->
     
-    {*
-    {if $nb_products > 0}
-    	<p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nb_products / 20)|round:"0") mod='ebay'}</p>
-    	<ul id="pagination" class="pagination">
-    		<li class="prev"><</li>
-    		{math equation="floor(x/20)" x=$nb_products assign=nb_pages} 
-    		{for $i=1 to ($nb_pages +1)}
-    			<li{if $i == 0} class="current"{/if}>{$i}</li>
-    		{/for}
-    		<li class="next">></li>
-    	</ul>
-    {/if}
-    *}
-    
+    <div id="products-pagination-holder"></div>
        
     <!-- table -->
        
@@ -122,44 +109,13 @@
 	</table>    
     
     <script type="text/javascript">
-        
+        var products_ebay_l = {ldelim}
+    		'Empty stock': "{l s='Empty stock' mod='ebay'}",
+    		'Synchronisation disabled' : "{l s='Synchronisation disabled' mod='ebay'}",
+    		'Product not selected'		 : "{l s='Product not selected' mod='ebay'}",
+            'Link': "{l s='Link' mod='ebay'}",
+            'No ad': "{l s='No ad' mod='ebay'}"
+        {rdelim};        
     </script>
-    <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/prestaShopProducts.js?date={$date|escape:'htmlall'}"></script>
     
-    {*
-
-
-<script type="text/javascript">
-		
-	var $selects = false;
-	
-	var module_dir = '{$_module_dir_|escape:'htmlall'}';
-	var ebay_token = '{$configs.EBAY_SECURITY_TOKEN|escape:'htmlall'}';
-	var module_time = '{$date|escape:'htmlall'}';
-	var module_path = '{$_path|escape:'htmlall'}';
-	var id_lang = '{$id_lang|escape:'htmlall'}';
-	var id_ebay_profile = '{$id_ebay_profile|escape:'htmlall'}';
-	var categories_ebay_l = {ldelim}
-		'thank you for waiting': "{l s='Thank you for waiting while creating suggestions' mod='ebay'}",
-		'no category selected' : "{l s='No category selected' mod='ebay'}",
-		'No category found'		 : "{l s='No category found' mod='ebay'}",
-		'You are not logged in': "{l s='You are not logged in' mod='ebay'}",
-		'Settings updated'		 : "{l s='Settings updated' mod='ebay'}",
-		'Unselect products'		: "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}",
-		'Unselect products clicked' : "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}"
-	{rdelim};
-    </script>
-<script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/categories.js?date={$date|escape:'htmlall'}"></script>
-<script type="text/javascript">
-	// <![CDATA[
-	$(document).ready(function(){
-		var form_categories = parseInt("{$form_categories|escape:'htmlall'}");
-		if (form_categories >= 1)
-			$("#menuTab2").addClass('success');
-		
-		else
-			$("#menuTab2").addClass('wrong');
-	});
-	//]]>
-</script>
-    *}
+    <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/prestaShopProducts.js?date={$date|escape:'htmlall'}"></script>
