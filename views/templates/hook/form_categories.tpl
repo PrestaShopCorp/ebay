@@ -56,7 +56,7 @@
 	</p>
     
     <p>
-        <input id="cat-filter" type="search" />
+        <input id="cat-filter" type="search" placeholder="{l s='Filter categories' mod='ebay'}" />
     </p>
 </div>
 <br />
