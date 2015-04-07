@@ -30,7 +30,7 @@
 		<b>{l s='The "Orphan eBay Ads" tab shows eBay ads that are not connected to a PrestaShop product or a PrestaShop category anymore.' mod='ebay'}</b>
 	</p>
     
-    <form action="{$show_orphan_ads_url}" method="post" class="form">
+    <form id="orphans-form-view" action="{$show_orphan_ads_url}" method="post" class="form">
         <p class="center">
             <input class="primary button" name="submitSave" type="submit" value="{l s='View Products' mod='ebay'}" />
     	</p>
@@ -67,15 +67,15 @@
 					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='PrestaShop Product' mod='ebay'}</span>
 				</th>
                 
-				<th style="width:185px;">
+				<th class="center">
 					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='Product Disabled' mod='ebay'}</span>
 				</th>
 				
                 <th class="center">
-					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='Category Multi-sku' mod='ebay'}</span>
+					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='Multi-sku Product' mod='ebay'}</span>
 				</th>
                 
-                <th class="center">
+                <th>
 					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='PrestaShop Category' mod='ebay'}</span>
 				</th>
                 
@@ -86,6 +86,10 @@
                 <th class="center">
 					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='Synchronisation Enabled' mod='ebay'}</span>
 				</th>
+                
+                <th class="center">
+					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='Category Multi-sku' mod='ebay'}</span>
+				</th>                
                 
                 <th class="center">
 					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='Action' mod='ebay'}</span>
@@ -107,6 +111,9 @@
 	</table>    
     
     <script type="text/javascript">
-        
+    
+    	var categories_ebay_l = {ldelim}
+    		'Remove this ad?': "{l s='Remove this ad?' mod='ebay'}"
+    	{rdelim};
     </script>
     <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/orphanAds.js?date={$date|escape:'htmlall'}"></script>

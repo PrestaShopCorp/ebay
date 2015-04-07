@@ -23,59 +23,8 @@
 *	International Registered Trademark & Property of PrestaShop SA
 */
 
-$(document).ready(function() {
-  
-  /* PAGINATION
-	$("#pagination").children('li').click(function() {
-    
-		var p = $(this).html();
-		var li = $("#pagination").children('li.current');
-    
-		if ($(this).attr('class') == 'prev')
-		{
-			var liprev = li.prev();
-			if (!liprev.hasClass('prev'))
-			{
-				liprev.trigger('click');
-			}
-			return false;
-		}
-    
-		if ($(this).attr('class') == 'next')
-		{
-			var linext = li.next();
-			if (!linext.hasClass('next'))
-			{
-				linext.trigger('click');
-			}
-			return false;
-		}
-    
-		$("#pagination").children('li').removeClass('current');
-		$(this).addClass('current');
-		$("#textPagination").children('span').html(p);
-		$.ajax({
-			type: "POST",
-			dataType: "json",
-			url: module_dir + "ebay/ajax/saveCategories.php?token=" + ebay_token + "&profile=" + id_ebay_profile,
-			data: $('#configForm2').serialize()+"&ajax=true",
-			success : function(data)
-			{
-				if (data.valid)
-				{
-					$.ajax({
-						type: "POST",
-						url: module_dir + "ebay/ajax/loadTableCategories.php?token=" + ebay_token + "&p=" + p + "&profile=" + id_ebay_profile + "&id_lang=" + id_lang + "&ch_cat_str=" + categories_ebay_l["no category selected"] + "&ch_no_cat_str=" + categories_ebay_l["no category found"] + "&not_logged_str=" + categories_ebay_l["You are not logged in"] + "&unselect_product=" + categories_ebay_l["Unselect products"]  ,
-						success : function(data) {
-							$("form#configForm2 table tbody #removeRow").remove(); $("form#configForm2 table tbody").html(data);
-						}
-					});
-				}
-			}
-		});
-	})  
-  */
-  
+function loadOrphans() {
+
 	$.ajax({
 		type: "POST",
 		url: module_dir + "ebay/ajax/loadTableOrphanAds.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile,
@@ -86,8 +35,40 @@ $(document).ready(function() {
       $("table#OrphanAds tbody #removeRow").remove();
       $("table#OrphanAds tbody").html(data);
       
+      $('#orphans-form-view').hide();
+      
+      $('.delete-orphan').click(function(e) {
+        
+        e.preventDefault();
+        
+        if (!confirm(categories_ebay_l['Remove this ad?']))
+          return;
+        
+        var lnk = $(this);
+        
+        var id_product_ref = $(this).attr('ref');
+        
+      	$.ajax({
+      		type: "POST",
+      		url: module_dir + "ebay/ajax/deleteOrphanAd.php?token=" + ebay_token + "&id_lang=" + id_lang + "&id_product_ref=" + id_product_ref,
+      		success : function(data) {
+      
+            if (data == '1')
+              lnk.parent().parent().remove(); // remove row
+      
+          }
+      	});
+        
+        
+      })
+      
     }
 	});
+
   
+}
+/*
+$(document).ready(function() {
 });
+*/
 

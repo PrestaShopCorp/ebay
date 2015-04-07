@@ -31,22 +31,26 @@ include_once dirname(__FILE__).'/../ebay.php';
 $ebay = new Ebay();
 
 $ebay_profile = new EbayProfile((int)Tools::getValue('profile'));
+$ebay_request = new EbayRequest();
 
 if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
 	return Tools::safeOutput(Tools::getValue('not_logged_str'));
 
 // to check if a product has attributes (multi-variations), we check if it has a "default_on" attribute in the product_attribute table
-$query = 'SELECT ep.`id_ebay_product`,
+$query = 'SELECT DISTINCT(ep.`id_ebay_product`),
         ep.`id_product_ref`,
         ep.`id_product`,
-        p.`id_product` AS `exists`,
+        ep.`id_attribute`                    AS `notSetWithMultiSkuCat`,
+        p.`id_product`                       AS `exists`,
+        p.`id_category_default`,   
         p.`active`,
-        pa.`id_product_attribute` AS isMultiSku,
-        pl.`name`           AS psProductName,
-        cl.`name`           AS psCategoryName,
-        ec.`name`           AS EbayCategoryName,
-        ec.`is_multi_sku`   AS EbayCategoryIsMultiSku,
-        ecc.`sync`          AS sync
+        pa.`id_product_attribute`            AS isMultiSku,
+        pl.`name`                            AS psProductName,
+        cl.`name`                            AS psCategoryName,
+        ecc.`id_ebay_category_configuration` AS EbayCategoryExists,
+        ec.`name`                            AS EbayCategoryName,
+        ec.`is_multi_sku`                    AS EbayCategoryIsMultiSku,
+        ecc.`sync`                           AS sync
     FROM `'._DB_PREFIX_.'ebay_product` ep
 
     LEFT JOIN `'._DB_PREFIX_.'product` p
@@ -71,11 +75,58 @@ $query = 'SELECT ep.`id_ebay_product`,
     LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
     ON ec.`id_ebay_category` = ecc.`id_ebay_category`
     
-    WHERE 1'.$ebay->addSqlRestrictionOnLang('cl');    
+    WHERE ep.`id_ebay_profile` = '.$ebay_profile->id.$ebay->addSqlRestrictionOnLang('cl');    
 
 //$currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
+// categories
+$category_list = $ebay->getChildCategories(Category::getCategories($ebay_profile->id_lang), version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0);
+
 $res = Db::getInstance()->executeS($query);
+
+$final_res = array();
+foreach ($res as &$row) {
+    
+    if ($row['id_product_ref'])
+        $row['link'] = EbayProduct::getEbayUrl($row['id_product_ref'], $ebay_request->getDev());
+    
+    if ($row['id_category_default']) {
+
+        foreach ($category_list as $cat) {
+            if ($cat['id_category'] == $row['id_category_default']) {
+                $row['category_full_name'] = $cat['name'];
+                break;                
+            }
+        }
+        
+    }
+
+    // filtering
+    if (!$row['exists'])
+        $final_res[] = $row;
+    
+    elseif (!$row['EbayCategoryExists'])
+        $final_res[] = $row;
+    
+    elseif ($row['isMultiSku']
+        && !$row['notSetWithMultiSkuCat'] // set as if on a MultiSku category
+        && !$row['EbayCategoryIsMultiSku']
+        
+        )
+        $final_res[] = $row;
+    
+    elseif ($row['notSetWithMultiSkuCat']
+        && $row['EbayCategoryIsMultiSku'])
+        $final_res[] = $row;
+    
+    elseif (!$row['active'])            
+        $final_res[] = $row;
+    
+    elseif (!$row['sync'])
+        $final_res[] = $row;
+
+}
+
 $smarty = Context::getContext()->smarty;
 
 // Smarty datas
@@ -95,8 +146,7 @@ $template_vars = array(
 //    'noProductFound' => Tools::getValue('ch_no_prod_str'),
 //	'p' => $page,
 //    'products' => $res,
-    'noAdFound' => Tools::getValue('ch_no_ad_found'),
-    'ads' => $res
+    'ads' => $final_res
 );
 
 $smarty->assign($template_vars);

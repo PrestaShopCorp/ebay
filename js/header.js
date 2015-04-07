@@ -85,6 +85,10 @@ $(document).ready(function() {
     		$(this).addClass("selected");
     		$(".tabItem.selected").removeClass("selected");
     		$("#" + this.id + "Sheet").addClass("selected");
+        
+        if ($(this).attr('id') == 'menuTab16') {
+          loadOrphans();
+        }
     });
 
     selectMainTab(main_tab);

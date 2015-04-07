@@ -26,7 +26,7 @@
 {if $ads === false || sizeof($ads) === 0}
 
 	<tr>
-		<td colspan="3" class="center">{$noAdFound|escape:'htmlall'}</td>
+		<td colspan="3" class="center">{l s='No ad found' mod='ebay'}</td>
 	</tr>
 
 {else}
@@ -37,23 +37,27 @@
 
 			<td>
                 {if $a.id_product_ref }
-                    {$a.id_product_ref|escape:'htmlall'}
+                    <a style="display: block;width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis" href="{$a.link|escape:'htmlall'}" target="_blank">{$a.link|escape:'htmlall'}</a>
                 {/if} 
 			</td>
 
-            <td>{$a.psProductName|escape:'htmlall'}</td>
+            <td>{if $a.exists}{$a.psProductName|escape:'htmlall'}{else}{l s='Product deleted. Id: ' mod='ebay'} {$a.exists}{/if}</td>
             
             <td class="center">{if $a.exists}{if $a.active}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}{/if}</td>
             
             <td class="center">{if $a.exists}{if $a.isMultiSku}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}{/if}</td>
             
-            <td>{if $a.exists}{$a.psCategoryName}{/if}</td>
+            <td>{if $a.exists}{$a.category_full_name}{/if}</td>
 
             <td>{if $a.exists}{$a.EbayCategoryName}{/if}</td>
             
             <td class="center">{if $a.exists}{if $a.sync }{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}{/if}</td>
 
             <td class="center">{if $a.exists}{if $a.EbayCategoryIsMultiSku }{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}{/if}</td>
+            
+            <td class="center">
+                <a href="#" class="delete-orphan" ref="{$a.id_product_ref}"><img src="../img/admin/delete.gif" /></a>
+            </td>
             
             <td>
                 {if !$a.exists}
