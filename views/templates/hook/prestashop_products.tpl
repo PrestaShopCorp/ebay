@@ -119,3 +119,5 @@
     </script>
     
     <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/prestaShopProducts.js?date={$date|escape:'htmlall'}"></script>
+
+</div>

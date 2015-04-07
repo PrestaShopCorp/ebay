@@ -48,9 +48,9 @@ $query = 'SELECT DISTINCT(ep.`id_ebay_product`),
         pl.`name`                            AS psProductName,
         cl.`name`                            AS psCategoryName,
         ecc.`id_ebay_category_configuration` AS EbayCategoryExists,
-        ec.`name`                            AS EbayCategoryName,
         ec.`is_multi_sku`                    AS EbayCategoryIsMultiSku,
-        ecc.`sync`                           AS sync
+        ecc.`sync`                           AS sync,
+        ec.`id_category_ref`
     FROM `'._DB_PREFIX_.'ebay_product` ep
 
     LEFT JOIN `'._DB_PREFIX_.'product` p
@@ -82,6 +82,9 @@ $query = 'SELECT DISTINCT(ep.`id_ebay_product`),
 // categories
 $category_list = $ebay->getChildCategories(Category::getCategories($ebay_profile->id_lang), version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0);
 
+// eBay categories
+$ebay_categories = EbayCategoryConfiguration::getEbayCategories($ebay_profile->id);
+
 $res = Db::getInstance()->executeS($query);
 
 $final_res = array();
@@ -100,6 +103,21 @@ foreach ($res as &$row) {
         }
         
     }
+    
+    if ($row['id_category_ref']) {
+
+        foreach($ebay_categories as $cat) {
+        
+            if ($cat['id'] == $row['id_category_ref']) {
+                $row['ebay_category_full_name'] = $cat['name'];
+                break;                
+            }        
+        }
+        
+    }
+    
+    if ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A')
+        $row['sync'] = 1;
 
     // filtering
     if (!$row['exists'])
@@ -131,21 +149,6 @@ $smarty = Context::getContext()->smarty;
 
 // Smarty datas
 $template_vars = array(
-    /*
-	'tabHelp' => '&id_tab=15',
-	'_path' => $ebay->getPath(),
-	'categoryList' => $category_list,
-	'eBayCategoryList' => $ebay_category_list,
-	'getCatInStock' => $get_cat_in_stock,
-	'categoryConfigList' => $category_config_list,
-	'request_uri' => $_SERVER['REQUEST_URI'],
-	'noCatSelected' => Tools::getValue('ch_cat_str'),
-	'noCatFound' => Tools::getValue('ch_no_cat_str'),
-	'currencySign' => $currency->sign,
-    */
-//    'noProductFound' => Tools::getValue('ch_no_prod_str'),
-//	'p' => $page,
-//    'products' => $res,
     'ads' => $final_res
 );
 

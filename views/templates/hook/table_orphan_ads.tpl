@@ -49,7 +49,7 @@
             
             <td>{if $a.exists}{$a.category_full_name}{/if}</td>
 
-            <td>{if $a.exists}{$a.EbayCategoryName}{/if}</td>
+            <td>{if $a.exists}{$a.ebay_category_full_name}{/if}</td>
             
             <td class="center">{if $a.exists}{if $a.sync }{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}{/if}</td>
 

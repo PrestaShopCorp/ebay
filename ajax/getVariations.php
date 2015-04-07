@@ -49,6 +49,9 @@ $sql = 'SELECT pa.`id_product_attribute`,
     INNER JOIN `'._DB_PREFIX_.'product_attribute_combination` pac
     ON pac.`id_product_attribute` = pa.`id_product_attribute`
     
+    INNER JOIN `'._DB_PREFIX_.'attribute` a
+    ON a.`id_attribute` = pac.`id_attribute`
+    
     INNER JOIN `'._DB_PREFIX_.'attribute_lang` al
     ON al.`id_attribute` = pac.`id_attribute`
     AND al.`id_lang` = '.(int)$id_lang.'
@@ -57,21 +60,35 @@ $sql = 'SELECT pa.`id_product_attribute`,
     ON sa.`id_product_attribute` = pa.`id_product_attribute`
     
     LEFT JOIN `'._DB_PREFIX_.'ebay_product` ep
-    ON ep.`id_product` = '.$id_product.'
-    AND ep.`id_attribute` = pac.`id_attribute`
+    ON ep.`id_product` = pa.`id_product`
+    AND ep.`id_attribute` = pac.`id_product_attribute`
+    AND ep.`id_ebay_profile` = '.$id_ebay_profile.'
     
-    WHERE pa.`id_product` = '.$id_product.$ebay->addSqlRestrictionOnLang('sa');
+    WHERE pa.`id_product` = '.$id_product.$ebay->addSqlRestrictionOnLang('sa').'
     
-//echo $sql;
-
+    ORDER BY a.`position` ASC';
+    
 $res = Db::getInstance()->ExecuteS($sql);
-foreach ($res as &$row) 
+
+$final_res = array();
+foreach ($res as $row) 
 {
-	$row['name'] = Tools::safeOutput($row['name']);
-	$row['stock'] = Tools::safeOutput($row['stock']);
-	$row['id_product_ref'] = Tools::safeOutput($row['id_product_ref']);
-    if ($row['id_product_ref'])
-        $row['link'] = EbayProduct::getEbayUrl($row['id_product_ref'], $ebay_request->getDev());    
+    if (isset($final_res[$row['id_product_attribute']])) {
+
+        $final_res[$row['id_product_attribute']]['name'].= ' '.Tools::safeOutput($row['name']);
+
+    } else {
+
+    	$row['name'] = Tools::safeOutput($row['name']);
+    	$row['stock'] = Tools::safeOutput($row['stock']);
+    	$row['id_product_ref'] = Tools::safeOutput($row['id_product_ref']);
+        if ($row['id_product_ref'])
+            $row['link'] = EbayProduct::getEbayUrl($row['id_product_ref'], $ebay_request->getDev());
+        
+        $final_res[$row['id_product_attribute']] = $row;
+
+    }
+    
 }
 
-echo Tools::jsonEncode($res);
+echo Tools::jsonEncode($final_res);

@@ -50,22 +50,24 @@
 		<tr{if $k % 2 !== 0} class="alt_row"{/if} id="product-{$p.id_product|escape:'htmlall'}">
 
 			<td>
-                {if $p.hasAttributes }
+                {if $p.hasAttributes}
                     <a id="show-vars-{$p.id_product|escape:'htmlall'}"
                         product-name="{$p.name|escape:'htmlall'}"
                         multi-sku="{if $p.EbayCategoryIsMultiSku}1{else}0{/if}"
                         sync="{if $p.sync }1{else}0{/if}"
                         blacklisted="{if $p.blacklisted }1{else}0{/if}"
                      href="javascript:showVariations({$p.id_product|escape:'htmlall'})">&#9654;</a>
+                     {$p.name|escape:'htmlall'}
+                {else}<span class="left-padded-name">{$p.name|escape:'htmlall'}</span>
                 {/if} 
-                {$p.name|escape:'htmlall'}
+                
 			</td>
 
             <td class="center{if !$p.stock} red{/if}">{$p.stock}</td>
             
-            <td>{$p.psCategoryName|escape:'htmlall'}</td>
+            <td>{$p.category_full_name|escape:'htmlall'}</td>
 
-            <td>{$p.EbayCategoryName|escape:'htmlall'}</td>
+            <td>{$p.ebay_category_full_name|escape:'htmlall'}</td>
             
             <td class="center">{if $p.sync }{l s='Yes' mod='ebay'}{else}<span class="red">{l s='No' mod='ebay'}</span>{/if}</td>
 

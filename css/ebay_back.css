@@ -849,3 +849,7 @@ margin-bottom: 3px;
 .red {
   color: red !important;
 }
+
+.left-padded-name {
+  padding-left: 13px;
+}

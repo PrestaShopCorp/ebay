@@ -25,7 +25,6 @@
 
 <div>
     
-
 	<p>
 		<b>{l s='The "Orphan eBay Ads" tab shows eBay ads that are not connected to a PrestaShop product or a PrestaShop category anymore.' mod='ebay'}</b>
 	</p>
@@ -36,23 +35,6 @@
     	</p>
     </form>
     
-    <!-- pagination -->
-    
-    {*
-    {if $nb_products > 0}
-    	<p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nb_products / 20)|round:"0") mod='ebay'}</p>
-    	<ul id="pagination" class="pagination">
-    		<li class="prev"><</li>
-    		{math equation="floor(x/20)" x=$nb_products assign=nb_pages} 
-    		{for $i=1 to ($nb_pages +1)}
-    			<li{if $i == 0} class="current"{/if}>{$i}</li>
-    		{/for}
-    		<li class="next">></li>
-    	</ul>
-    {/if}
-    *}
-    
-       
     <!-- table -->
        
     <table id="OrphanAds" class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">

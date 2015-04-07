@@ -52,12 +52,12 @@ $query = 'SELECT p.`id_product`,
                 pa.`id_product_attribute`                    AS hasAttributes,
                 p.`id_category_default`                      AS id_category,
                 cl.`name`                                    AS psCategoryName,
-                SUM(s.`quantity`)                            AS stock,
-                ec.`name`                                    AS EbayCategoryName,
+                s.`quantity`                                 AS stock,
                 ec.`is_multi_sku`                            AS EbayCategoryIsMultiSku,
                 ecc.`sync`                                   AS sync,
                 epc.`blacklisted`                            AS blacklisted,
-                ep.`id_product_ref`                          AS EbayProductRef
+                ep.`id_product_ref`                          AS EbayProductRef,
+                ec.`id_category_ref`
 
     FROM `'._DB_PREFIX_.'product` p
     
@@ -71,6 +71,7 @@ $query = 'SELECT p.`id_product`,
     
 	LEFT JOIN `'._DB_PREFIX_.'stock_available` s 
     ON p.`id_product` = s.`id_product`
+    AND s.`id_product_attribute` = 0
 
     INNER JOIN `'._DB_PREFIX_.'category_lang` cl
     ON cl.`id_category` = p.`id_category_default`
@@ -102,37 +103,48 @@ $query = 'SELECT p.`id_product`,
 if ($search)
     $query .= ' AND pl.`name` LIKE \'%'.$search.'%\'';
 
-$query .= ' GROUP BY s.`id_product`';
+//$query .= ' GROUP BY s.`id_product`';
     
-//    echo $query;
-
 $queryCount = preg_replace('/SELECT ([a-zA-Z.,` ]+) FROM /', 'SELECT COUNT(*) FROM ', $query);
 $nbProducts = Db::getInstance()->getValue($queryCount);
     
 $res = Db::getInstance()->executeS($query.' LIMIT '.$offset.', '.$limit);
 
-foreach ($res as &$row)
+// categories
+$category_list = $ebay->getChildCategories(Category::getCategories($ebay_profile->id_lang), version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0);
+
+// eBay categories
+$ebay_categories = EbayCategoryConfiguration::getEbayCategories($ebay_profile->id);
+
+foreach ($res as &$row) {
+    
     if ($row['EbayProductRef'])
         $row['link'] = EbayProduct::getEbayUrl($row['EbayProductRef'], $ebay_request->getDev());
+    
+    foreach ($category_list as $cat) {
+        if ($cat['id_category'] == $row['id_category']) {
+            $row['category_full_name'] = $cat['name'];
+            break;                
+        }
+    }
+    
+    foreach($ebay_categories as $cat) {
+        
+        if ($cat['id'] == $row['id_category_ref']) {
+            $row['ebay_category_full_name'] = $cat['name'];
+            break;                
+        }
+        
+    }
+    
+    if ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A')
+        $row['sync'] = 1;
+    
+}
 
 $smarty = Context::getContext()->smarty;
-
-//$currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
-
 // Smarty datas
 $template_vars = array(
-    /*
-	'tabHelp' => '&id_tab=15',
-	'_path' => $ebay->getPath(),
-	'categoryList' => $category_list,
-	'eBayCategoryList' => $ebay_category_list,
-	'getCatInStock' => $get_cat_in_stock,
-	'categoryConfigList' => $category_config_list,
-	'request_uri' => $_SERVER['REQUEST_URI'],
-	'noCatSelected' => Tools::getValue('ch_cat_str'),
-	'noCatFound' => Tools::getValue('ch_no_cat_str'),
-	'currencySign' => $currency->sign,
-    */
     'nbPerPage' => $limit,
     'nbProducts' => $nbProducts,
     'noProductFound' => Tools::getValue('ch_no_prod_str'),

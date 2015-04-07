@@ -38,7 +38,7 @@ $id_ebay_profile = (int)Tools::getValue('id_ebay_profile');
 
 $is_one_five = version_compare(_PS_VERSION_, '1.5', '>');
 
-$sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, SUM(sa.`quantity`) as stock
+$sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, sa.`quantity` as stock
 		FROM `'._DB_PREFIX_.'product` p';
 
 $sql .= $is_one_five ? Shop::addSqlAssociation('product', 'p') : '';
@@ -51,12 +51,13 @@ $sql .= ')
 			ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.$id_ebay_profile.'
         LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
             ON p.`id_product` = sa.`id_product`
+            AND sa.`id_product_attribute` = 0
 		WHERE ';
 		
 $sql .= $is_one_five ? ' product_shop.`id_shop` = 1 AND ' : '';
 $sql .= ' p.`id_category_default` = '.(int)Tools::getValue('category');
 $sql .= $ebay->addSqlRestrictionOnLang('sa');
-$sql .= ' GROUP BY (p.`id_product`)';
+//$sql .= ' GROUP BY (p.`id_product`)';
 
 $res = Db::getInstance()->ExecuteS($sql);
 foreach ($res as &$row) 
