@@ -53,21 +53,39 @@ $ebay_category_list = Db::getInstance()->executeS('SELECT *
 
 if (version_compare(_PS_VERSION_, '1.5', '>'))
 {
+    
 	$rq_products = '
-		SELECT COUNT(DISTINCT(p.`id_product`)) AS nbProducts, COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts, p.`id_category_default`
+		SELECT COUNT(DISTINCT(p.`id_product`)) AS nbProducts, 
+            COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts, 
+            p.`id_category_default`
 		FROM `'._DB_PREFIX_.'product` AS p
-        INNER JOIN `'._DB_PREFIX_.'product_shop` AS ps ON p.`id_product` = ps.`id_product`
-        LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` AS epc ON p.`id_product` = epc.`id_product` AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.' AND epc.blacklisted = 1
-		WHERE 1 '.$ebay->addSqlRestrictionOnLang('s').'
+        
+        INNER JOIN `'._DB_PREFIX_.'product_shop` AS ps 
+        ON p.`id_product` = ps.`id_product`
+        
+        LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` AS epc 
+        ON p.`id_product` = epc.`id_product` 
+        AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.' 
+        AND epc.blacklisted = 1
+        
+		WHERE 1 '.$ebay->addSqlRestrictionOnLang('ps').'
         AND ps.`id_shop` = 1
 		GROUP BY p.`id_category_default`';
-    }
+
+}
 else
 {
-	$rq_products = 'SELECT COUNT(DISTINCT(`id_product`)) AS nbProducts, COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts, `id_category_default`
+    
+	$rq_products = 'SELECT COUNT(DISTINCT(`id_product`)) AS nbProducts, 
+        COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts, `id_category_default`
 		FROM `'._DB_PREFIX_.'product`
-        LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` AS epc ON p.`id_product` = epc.`id_product` AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.' AND epc.blacklisted = 1    
+        
+        LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` AS epc 
+        ON p.`id_product` = epc.`id_product` 
+        AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.' 
+        AND epc.blacklisted = 1    
 		GROUP BY `id_category_default`';
+        
 }
 
 $get_products = Db::getInstance()->ExecuteS($rq_products);

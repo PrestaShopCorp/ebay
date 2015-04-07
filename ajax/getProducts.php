@@ -31,6 +31,7 @@ include_once dirname(__FILE__).'/../classes/EbayProductConfiguration.php';
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
 	die('ERROR : INVALID TOKEN');
 
+$ebay = new Ebay();
 $ebay_country = EbayCountrySpec::getInstanceByKey(Configuration::get('EBAY_COUNTRY_DEFAULT'));
 $id_lang = $ebay_country->getIdLang();
 $id_ebay_profile = (int)Tools::getValue('id_ebay_profile');
@@ -54,14 +55,18 @@ $sql .= ')
 		
 $sql .= $is_one_five ? ' product_shop.`id_shop` = 1 AND ' : '';
 $sql .= ' p.`id_category_default` = '.(int)Tools::getValue('category');
+$sql .= $ebay->addSqlRestrictionOnLang('sa');
+$sql .= ' GROUP BY (p.`id_product`)';
 
 $res = Db::getInstance()->ExecuteS($sql);
 foreach ($res as &$row) 
 {
+    
 	$row['name'] = Tools::safeOutput($row['name']);
 	$row['blacklisted'] = Tools::safeOutput($row['blacklisted']);
 	$row['extra_images'] = Tools::safeOutput($row['extra_images']);
     $row['stock'] = Tools::safeOutput($row['stock']);
+    
 }
 
 echo Tools::jsonEncode($res);

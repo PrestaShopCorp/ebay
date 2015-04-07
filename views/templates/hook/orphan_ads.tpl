@@ -112,7 +112,7 @@
     
     <script type="text/javascript">
     
-    	var categories_ebay_l = {ldelim}
+    	var orphan_ads_ebay_l = {ldelim}
     		'Remove this ad?': "{l s='Remove this ad?' mod='ebay'}"
     	{rdelim};
     </script>

@@ -41,7 +41,7 @@ function loadOrphans() {
         
         e.preventDefault();
         
-        if (!confirm(categories_ebay_l['Remove this ad?']))
+        if (!confirm(orphan_ads_ebay_l['Remove this ad?']))
           return;
         
         var lnk = $(this);
