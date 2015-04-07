@@ -73,11 +73,12 @@ $classes_to_load = array(
     'tabs/EbayFormEbaySyncTab',
     'tabs/EbayOrderHistoryTab',
     'tabs/EbayHelpTab',
-    'tabs/EbayListingsTab',
+//    'tabs/EbayListingsTab',
     'tabs/EbayFormStoreCategoryTab',
     'tabs/EbayApiLogsTab',
     'tabs/EbayOrderLogsTab',
-    'tabs/EbayOrdersSyncTab'
+    'tabs/EbayOrdersSyncTab',
+    'tabs/EbayPrestashopProductsTab',
 );
 
 foreach ($classes_to_load as $classname)
@@ -1243,7 +1244,7 @@ class Ebay extends Module
         $id_tab = Tools::getValue('id_tab', 1);
         if (in_array($id_tab, array(5, 14))) {
             $main_tab = 'sync';
-        } elseif (in_array($id_tab, array(9, 6, 11, 12))) {
+        } elseif (in_array($id_tab, array(15, 9, 6, 11, 12))) {
             $main_tab = 'visu';
         } elseif (in_array($id_tab, array(13))) {
             $main_tab = 'advanced-settings';
@@ -1532,8 +1533,9 @@ class Ebay extends Module
         $form_ebay_sync_tab = new EbayFormEbaySyncTab($this, $this->smarty, $this->context);
         $form_ebay_order_history_tab = new EbayOrderHistoryTab($this, $this->smarty, $this->context);
         $help_tab = new EbayHelpTab($this, $this->smarty, $this->context);        
-        $listings_tab = new EbayListingsTab($this, $this->smarty, $this->context);
+        //$listings_tab = new EbayListingsTab($this, $this->smarty, $this->context);
         $orders_sync = new EbayOrdersSyncTab($this, $this->smarty, $this->context);
+        $ps_products = new EbayPrestashopProductsTab($this, $this->smarty, $this->context);
         
         $form_store_category_tab = new EbayFormStoreCategoryTab($this, $this->smarty, $this->context, $this->_path);
         
@@ -1563,9 +1565,10 @@ class Ebay extends Module
 			'form_template_manager' => $form_template_manager_tab->getContent(),
 			'form_ebay_sync' => $form_ebay_sync_tab->getContent(),
 			'orders_history' => $form_ebay_order_history_tab->getContent(),
-			'ebay_listings' => $listings_tab->getContent(),
+			//'ebay_listings' => $listings_tab->getContent(),
             'form_store_category' => $form_store_category_tab->getContent(),
             'orders_sync' => $orders_sync->getContent(),
+            'ps_products' => $ps_products->getContent(),
             'green_message' => isset($green_message) ? $green_message : null,
             
             'api_logs' => $api_logs->getContent(),
@@ -1828,7 +1831,7 @@ class Ebay extends Module
 	public function addSqlRestrictionOnLang($alias)
 	{
 		if (version_compare(_PS_VERSION_, '1.5', '>'))
-			Shop::addSqlRestrictionOnLang($alias);
+			return Shop::addSqlRestrictionOnLang($alias);
 	}
 
 	/**
