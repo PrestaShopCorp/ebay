@@ -76,11 +76,11 @@ if (version_compare(_PS_VERSION_, '1.5', '>'))
 else
 {
     
-	$rq_products = 'SELECT COUNT(DISTINCT(`id_product`)) AS nbProducts, 
+	$rq_products = 'SELECT COUNT(DISTINCT(p.`id_product`)) AS nbProducts, 
         COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts, `id_category_default`
-		FROM `'._DB_PREFIX_.'product`
+		FROM `'._DB_PREFIX_.'product` p
         
-        LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` AS epc 
+        LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc 
         ON p.`id_product` = epc.`id_product` 
         AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.' 
         AND epc.blacklisted = 1    

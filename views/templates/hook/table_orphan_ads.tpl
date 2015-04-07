@@ -36,7 +36,7 @@
 		<tr{if $k % 2 !== 0} class="alt_row"{/if} id="ad-{$a.id_ebay_product|escape:'htmlall'}">
 
 			<td>
-                {if $a.id_product_ref }
+                {if $a.id_product_ref}
                     <a style="display: block;width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis" href="{$a.link|escape:'htmlall'}" target="_blank">{$a.link|escape:'htmlall'}</a>
                 {/if} 
 			</td>
@@ -51,9 +51,9 @@
 
             <td>{if $a.exists}{$a.ebay_category_full_name}{/if}</td>
             
-            <td class="center">{if $a.exists}{if $a.sync }{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}{/if}</td>
+            <td class="center">{if $a.exists}{if $a.sync}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}{/if}</td>
 
-            <td class="center">{if $a.exists}{if $a.EbayCategoryIsMultiSku }{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}{/if}</td>
+            <td class="center">{if $a.exists}{if $a.EbayCategoryIsMultiSku}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}{/if}</td>
             
             <td class="center">
                 <a href="#" class="delete-orphan" ref="{$a.id_product_ref}"><img src="../img/admin/delete.gif" /></a>

@@ -45,6 +45,8 @@ $offset = $limit * ($page - 1);
 $on_ebay_only = (Tools::getValue('mode') == 'on_ebay');
 $search = Tools::getValue('s');
 
+$is_one_five = version_compare(_PS_VERSION_, '1.5', '>');
+
 // to check if a product has attributes (multi-variations), we check if it has a "default_on" attribute in the product_attribute table
 // this prevents us of doing a double "group by" which would complexify the query
 $query = 'SELECT p.`id_product`, 
@@ -52,7 +54,7 @@ $query = 'SELECT p.`id_product`,
                 pa.`id_product_attribute`                    AS hasAttributes,
                 p.`id_category_default`                      AS id_category,
                 cl.`name`                                    AS psCategoryName,
-                s.`quantity`                                 AS stock,
+                '.($is_one_five ? 's' : 'p').'.`quantity`    AS stock,
                 ec.`is_multi_sku`                            AS EbayCategoryIsMultiSku,
                 ecc.`sync`                                   AS sync,
                 epc.`blacklisted`                            AS blacklisted,
@@ -68,12 +70,13 @@ $query = 'SELECT p.`id_product`,
     LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
     ON pa.`id_product` = p.`id_product`
     AND pa.default_on = 1
-    
-	LEFT JOIN `'._DB_PREFIX_.'stock_available` s 
+    ';
+if ($is_one_five)    
+        $query .= ' LEFT JOIN `'._DB_PREFIX_.'stock_available` s 
     ON p.`id_product` = s.`id_product`
-    AND s.`id_product_attribute` = 0
+    AND s.`id_product_attribute` = 0';
 
-    INNER JOIN `'._DB_PREFIX_.'category_lang` cl
+$query .= ' INNER JOIN `'._DB_PREFIX_.'category_lang` cl
     ON cl.`id_category` = p.`id_category_default`
     AND cl.`id_lang` = '.$ebay_profile->id_lang.'
     

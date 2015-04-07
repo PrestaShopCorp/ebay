@@ -56,7 +56,7 @@ $sql = 'SELECT pa.`id_product_attribute`,
     ON al.`id_attribute` = pac.`id_attribute`
     AND al.`id_lang` = '.(int)$id_lang.'
     
-    LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
+    LEFT JOIN '. ($is_one_five ? '`'._DB_PREFIX_.'stock_available`' : '`'._DB_PREFIX_.'product_attribute`').' sa
     ON sa.`id_product_attribute` = pa.`id_product_attribute`
     
     LEFT JOIN `'._DB_PREFIX_.'ebay_product` ep
