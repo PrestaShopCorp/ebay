@@ -117,7 +117,7 @@ class Ebay extends Module
 	{
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.10.2';
+		$this->version = '1.11.0';
 		$this->stats_version = '1.0';
 
 		$this->author = 'PrestaShop';
@@ -491,7 +491,15 @@ class Ebay extends Module
 				include_once(dirname(__FILE__).'/upgrade/Upgrade-1.10.php');
 				upgrade_module_1_10($this);
 			}
-		}       
+		}
+
+		if (version_compare($version, '1.11', '<')) {
+			if (version_compare(_PS_VERSION_, '1.5', '<'))
+			{
+				include_once(dirname(__FILE__).'/upgrade/Upgrade-1.11.php');
+				upgrade_module_1_11($this);
+			}
+		}
 	}
 
 	/**
@@ -609,13 +617,12 @@ class Ebay extends Module
 
 		// update if not update for more than 30 min or EBAY_SYNC_ORDER = 1
 		if (
+			((int)Configuration::get('EBAY_SYNC_ORDERS_BY_CRON') == 0)
+			&&
 			($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')).'.000Z')
 			|| Tools::getValue('EBAY_SYNC_ORDERS') == 1)
 		{
 			$current_date = date('Y-m-d\TH:i:s').'.000Z';
-			// we set the new last update date after retrieving the last orders
-			$this->ebay_profile->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date);
-
 			// we set the new last update date after retrieving the last orders
 			$this->ebay_profile->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date);
 
@@ -662,8 +669,10 @@ class Ebay extends Module
 	
 	public function cronProductsSync()
 	{
+		Configuration::updateValue('NB_PRODUCTS_LAST', '0');
 		EbaySynchronizer::syncProducts(EbayProductModified::getAll(), Context::getContext(), $this->ebay_profile->id_lang, 'CRON', 'CRON_PRODUCT');
 		EbayProductModified::truncate();
+		Configuration::updateValue('DATE_LAST_SYNC_PRODUCTS', date('Y-m-d H:i:s'));
 	}
 	
 	public function cronOrdersSync()
@@ -679,7 +688,9 @@ class Ebay extends Module
 
 	public function importOrders($orders)
 	{
+
 		$errors_email = array();
+
 		foreach ($orders as $order)
 		{
 			$errors = array();
@@ -1554,8 +1565,41 @@ class Ebay extends Module
                  $green_message = $this->l('To implement these changes on active listings you need to resynchronize your items');  
 
          }
-        
-            
+
+        $cron_task = array();
+
+		if ((int)Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON') == 1)
+		{
+			$cron_task['products']['is_active'] = 1;
+
+			if ($last_sync_datetime = Configuration::get('DATE_LAST_SYNC_PRODUCTS'))
+			{
+				$cron_task['products']['last_sync'] = array('date' => date('Y-m-d', strtotime($last_sync_datetime)), 'time' => date('H:i:s', strtotime($last_sync_datetime)));
+				$cron_task['products']['last_sync']['nb_products'] = Configuration::get('NB_PRODUCTS_LAST');
+			}
+			else
+				$cron_task['products']['last_sync'] = 'none';
+		}
+
+		if ((int)Configuration::get('EBAY_SYNC_ORDERS_BY_CRON') == 1)
+		{
+			$cron_task['orders']['is_active'] = 1;
+
+			if ($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE') != null)
+			{
+				$datetime = new DateTime($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE'));
+
+				$cron_task['orders']['last_sync'] = array('date' => date('Y-m-d', strtotime($datetime->format('Y-m-d H:i:s'))), 'time' => date('H:i:s', strtotime($datetime->format('Y-m-d H:i:s'))));
+
+				$datetime2 = new DateTime();
+				
+				$interval = $datetime->diff($datetime2);
+
+				$cron_task['orders']['alert'] = ($interval->format('%a') >= 1 ? 'danger' : 'info');
+			}
+			else
+				$cron_task['orders']['last_sync'] = 'none';
+		}            
         
 		$smarty_vars = array(
 			'class_general' => version_compare(_PS_VERSION_, '1.5', '>') ? 'uncinq' : 'unquatre',
@@ -1573,7 +1617,7 @@ class Ebay extends Module
             'ps_products' => $ps_products->getContent(),
             'orphan_ads' => $orphan_ads->getContent(),
             'green_message' => isset($green_message) ? $green_message : null,
-            
+            'cron_task'	=> $cron_task,
             'api_logs' => $api_logs->getContent(),
             'order_logs' => $order_logs->getContent(),
             'id_tab' => Tools::getValue('id_tab')
@@ -1693,10 +1737,13 @@ class Ebay extends Module
 			{
 				global $all_error;
 				include(dirname(__FILE__).'/log/syncError.php');
+
+                if (count($all_error) == 0)
+                	$msg = $this->l('Settings updated').' ('.$this->l('Option').' '.$this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE').' : '.($nb_products - $nb_products_less).' / '.$nb_products.' '.$this->l('product(s) sync with eBay').')<br/><br/>';
+                else
+                	$msg = '';
                 
-                $msg = $this->l('Settings updated').' ('.$this->l('Option').' '.$this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE').' : '.($nb_products - $nb_products_less).' / '.$nb_products.' '.$this->l('product(s) sync with eBay').')';
-                
-                $msg .= '<br/><br/>'.$this->l('Some products have not been listed successfully due to the error(s) below').'<br/>';
+                $msg .= $this->l('Some products have not been listed successfully due to the error(s) below').'<br/>';
 
 				foreach ($all_error as $error)
 				{

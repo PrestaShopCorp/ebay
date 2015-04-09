@@ -277,7 +277,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_product_modified` (
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
 $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_log` (
-	`id_ebay_log` int(16) NOT NULL,
+	`id_ebay_log` int(16) unsigned NOT NULL AUTO_INCREMENT,
 	`text` text NOT NULL,
 	`type` varchar(40) NOT NULL,
     `date_add` datetime NOT NULL,

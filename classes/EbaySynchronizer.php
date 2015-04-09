@@ -155,7 +155,10 @@ class EbaySynchronizer
                 if ($log_type)
                     EbayLog::write('Error: '.$ebay->error, $log_type);
             } elseif ($log_type)
-                EbayLog::write('Success', $log_type);                
+                EbayLog::write('Success', $log_type);
+
+			if ($request_context == 'CRON')
+				Configuration::updateValue('NB_PRODUCTS_LAST', (int)Configuration::get('NB_PRODUCTS_LAST')+1);              
 		}
 
 		if (count($tab_error))
@@ -331,7 +334,7 @@ class EbaySynchronizer
 	private static function _updateTabError($ebay_error, $name)
 	{
 		$error_key = md5($ebay_error);
-		$tab_error[$error_key]['msg'] = $ebay_error;
+		$tab_error[$error_key]['msg'] = '<hr/>'.$ebay_error;
 
 		if (!isset($tab_error[$error_key]['products']))
 				$tab_error[$error_key]['products'] = array();

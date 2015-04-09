@@ -120,7 +120,7 @@
                 	<legend><img src="{$path|escape:'htmlall'}logo.gif" alt="" />{l s='eBay Module Status' mod='ebay'}</legend>
                 	<div style="float: left">
                     	{if empty($alert)}
-                    		<img src="../modules/ebay/img/valid.png" /><strong>{l s='eBay Module is configured and online!' mod='ebay'}</strong>
+                    		<img src="../modules/ebay/img/warn.png" /><strong>{l s='You haven\'t yet defined a profile.' mod='ebay'}</strong>
                     		{if $is_version_one_dot_five}
                     			{if $is_version_one_dot_five_dot_one}
                     				<br/><img src="../modules/ebay/img/warn.png" /><strong>{l s='You\'re using version 1.5.1 of PrestaShop. We invite you to upgrade to version 1.5.2  so you can use the eBay module properly.' mod='ebay'}</strong>
