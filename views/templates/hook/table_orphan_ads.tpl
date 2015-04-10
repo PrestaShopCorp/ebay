@@ -41,19 +41,43 @@
                 {/if} 
 			</td>
 
-            <td>{if $a.exists}{$a.psProductName|escape:'htmlall'}{else}{l s='Product deleted. Id: ' mod='ebay'} {$a.exists}{/if}</td>
+            <td>{if $a.exists}{$a.psProductName|escape:'htmlall'}{else}{l s='Product deleted. Id: ' mod='ebay'}{$a.id_product}{/if}</td>
             
-            <td class="center">{if $a.exists}{if $a.active}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}{/if}</td>
+            {if $a.exists}
+                <td class="center">{if $a.active}{l s='No' mod='ebay'}{else}{l s='Yes' mod='ebay'}{/if}</td>
+            {else}
+                <td class="center">-</td>
+            {/if}                
             
-            <td class="center">{if $a.exists}{if $a.isMultiSku}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}{/if}</td>
+            {if $a.exists}
+                <td class="center">{if $a.isMultiSku}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}</td>
+            {else}
+                <td class="center">-</td>
+            {/if}                
             
-            <td>{if $a.exists}{$a.category_full_name}{/if}</td>
+            {if $a.exists}
+                <td>{$a.category_full_name}</td>
+            {else}
+                <td class="center">-</td>
+            {/if}                
 
-            <td>{if $a.exists}{$a.ebay_category_full_name}{/if}</td>
+            {if $a.exists && $a.id_category_ref}
+                <td>{$a.ebay_category_full_name}</td>
+            {else}
+                <td class="center">-</td>
+            {/if}
             
-            <td class="center">{if $a.exists}{if $a.sync}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}{/if}</td>
+            {if $a.exists && $a.id_category_ref}
+                <td class="center">{if $a.sync}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}</td>
+            {else}
+                <td class="center">-</td>
+            {/if}
 
-            <td class="center">{if $a.exists}{if $a.EbayCategoryIsMultiSku}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}{/if}</td>
+            {if $a.exists && $a.id_category_ref}
+                <td class="center">{if $a.EbayCategoryIsMultiSku}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}</td>
+            {else}
+                <td class="center">-</td>
+            {/if}
             
             <td class="center">
                 <a href="#" class="delete-orphan" ref="{$a.id_product_ref}"><img src="../img/admin/delete.gif" /></a>

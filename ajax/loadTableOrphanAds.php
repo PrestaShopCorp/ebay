@@ -46,7 +46,6 @@ $query = 'SELECT DISTINCT(ep.`id_ebay_product`),
         p.`active`,
         pa.`id_product_attribute`            AS isMultiSku,
         pl.`name`                            AS psProductName,
-        cl.`name`                            AS psCategoryName,
         ecc.`id_ebay_category_configuration` AS EbayCategoryExists,
         ec.`is_multi_sku`                    AS EbayCategoryIsMultiSku,
         ecc.`sync`                           AS sync,
@@ -56,17 +55,13 @@ $query = 'SELECT DISTINCT(ep.`id_ebay_product`),
     LEFT JOIN `'._DB_PREFIX_.'product` p
     ON p.`id_product` = ep.`id_product`
     
-    INNER JOIN `'._DB_PREFIX_.'product_lang` pl
+    LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
     ON pl.`id_product` = p.`id_product`
     AND pl.`id_lang` = '.$ebay_profile->id_lang.'    
     
     LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
     ON pa.`id_product` = p.`id_product`
     AND pa.default_on = 1    
-    
-    LEFT JOIN `'._DB_PREFIX_.'category_lang` cl
-    ON cl.`id_category` = p.`id_category_default`
-    AND cl.`id_lang` = '.$ebay_profile->id_lang.'
     
     LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
     ON ecc.`id_category` = p.`id_category_default`
@@ -75,7 +70,7 @@ $query = 'SELECT DISTINCT(ep.`id_ebay_product`),
     LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
     ON ec.`id_ebay_category` = ecc.`id_ebay_category`
     
-    WHERE ep.`id_ebay_profile` = '.$ebay_profile->id.$ebay->addSqlRestrictionOnLang('cl');    
+    WHERE ep.`id_ebay_profile` = '.$ebay_profile->id;
 
 //$currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
