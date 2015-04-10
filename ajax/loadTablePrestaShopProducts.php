@@ -111,7 +111,7 @@ if ($search)
 $queryCount = preg_replace('/SELECT ([a-zA-Z.,` ]+) FROM /', 'SELECT COUNT(*) FROM ', $query);
 $nbProducts = Db::getInstance()->getValue($queryCount);
     
-$res = Db::getInstance()->executeS($query.' LIMIT '.$offset.', '.$limit);
+$res = Db::getInstance()->executeS($query.' ORDER BY p.`id_product` ASC LIMIT '.$offset.', '.$limit);
 
 // categories
 $category_list = $ebay->getChildCategories(Category::getCategories($ebay_profile->id_lang, false), version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0);
