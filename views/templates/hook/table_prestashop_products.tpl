@@ -96,6 +96,8 @@
                     {l s='Synchronisation disabled' mod='ebay'}
                 {elseif $p.stock && $p.sync && $p.blacklisted}
                     {l s='Product not selected' mod='ebay'}
+                {elseif $p.stock && $p.sync && !$p.blacklisted && !$p.EbayProductRef}
+                    {l s='Product not synchronised or synchronisation error' mod='ebay'}
                 {elseif $p.id_category_ref && (!$p.stock || !$p.sync || $p.blacklisted)}
                     {l s='Several problems' mod='ebay'}
                 {/if}
