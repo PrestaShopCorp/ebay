@@ -80,18 +80,18 @@ $query .= ' INNER JOIN `'._DB_PREFIX_.'category_lang` cl
     ON cl.`id_category` = p.`id_category_default`
     AND cl.`id_lang` = '.$ebay_profile->id_lang.'
     
-    LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
+    '.($on_ebay_only ? 'INNER' : 'LEFT').' JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
     ON ecc.`id_category` = p.`id_category_default`
     AND ecc.`id_ebay_profile` = '.$ebay_profile->id.'
     
-    LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
+    '.($on_ebay_only ? 'INNER' : 'LEFT').' JOIN `'._DB_PREFIX_.'ebay_category` ec
     ON ec.`id_ebay_category` = ecc.`id_ebay_category`
     
     LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
     ON epc.`id_product` = p.`id_product`
     AND epc.`id_ebay_profile` = '.$ebay_profile->id.'
     
-    '.($on_ebay_only ? 'INNER' : 'LEFT').' JOIN `'._DB_PREFIX_.'ebay_product` ep
+    LEFT JOIN `'._DB_PREFIX_.'ebay_product` ep
     ON ep.`id_product` = p.`id_product`
     AND ep.`id_ebay_profile` = '.$ebay_profile->id.'
     AND ep.`id_ebay_product` = (
