@@ -82,7 +82,7 @@
 					<span data-inlinehelp="{l s='All products with mapped categories will be listed.' mod='ebay'}">{l s='List on eBay' mod='ebay'}</span>
 				</th>
 				<th class="center" colspan="2">
-					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='Nb synchronized products' mod='ebay'}</span>
+					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='Nb selected products' mod='ebay'}</span>
 				</th>                
 				{*
 				<th class="center">
