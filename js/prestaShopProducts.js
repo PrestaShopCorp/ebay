@@ -168,10 +168,11 @@ function showVariations(id_product) {
             }
 
 						$('#product-' + id_product).after('<tr class="variations-row ' + (i%2 == 0 ? 'alt_row':'') + '" product="' + id_product + '"> \
-							<td style="padding-left: 21px">' + product_name + ' ' + variation.name + '</td> \
+							<td></td> \
+              <td style="padding-left: 21px">' + product_name + ' ' + variation.name + '</td> \
               <td class="center' + (parseInt(variation.stock) == 0 ? ' red':'') + '">' + variation.stock + '</td> \
 							<td colspan="4"></td> \
-							<td>'+ (variation.id_product_ref ? '<a href="' + variation.link + '" target="_blank">' + products_ebay_l['Link'] + '</a>' : products_ebay_l['No ad']) + '</td> \
+							<td>'+ (variation.id_product_ref ? '<a href="' + variation.link + '" target="_blank">' + products_ebay_l['Link'] + '</a>' : (multi_sku ? products_ebay_l['See main product'] : products_ebay_l['No ad']) ) + '</td> \
               <td>' + feedback + '</td> \
 						</tr>');
 					}

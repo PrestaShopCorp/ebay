@@ -66,6 +66,10 @@
 			<tr class="nodrag nodrop">
 				
                 <th style="width:110px;">
+                    <span data-inlinehelp="{l s='' mod='ebay'}">{l s='ID' mod='ebay'}</span>
+				</th>
+                
+                <th style="width:110px;">
                     <span data-inlinehelp="{l s='' mod='ebay'}">{l s='PrestaShop Product' mod='ebay'}</span>
 				</th>
 				
@@ -114,7 +118,8 @@
     		'Synchronisation disabled' : "{l s='Synchronisation disabled' mod='ebay'}",
     		'Product not selected'		 : "{l s='Product not selected' mod='ebay'}",
             'Link': "{l s='Link' mod='ebay'}",
-            'No ad': "{l s='No ad' mod='ebay'}"
+            'No ad': "{l s='No ad' mod='ebay'}",
+            'See main product': "{l s='See main product' mod='ebay'}",
         {rdelim};        
     </script>
     
