@@ -135,7 +135,7 @@ function toggleSyncProduct(category_id)
   $('.cat-nb-products[category=' + category_id + ']').html(str);
 }
 
-function initPagination() {
+function initCategoriesPagination() {
   
 	$("#pagination").children('li').click(function() {
     
@@ -206,7 +206,7 @@ function loadCategories(page, search) {
       $('#cat-pagination-holder').html($('#cat-pagination'));
       $('#cat-pagination').show();
       
-      initPagination();
+      initCategoriesPagination();
 
     }
 	});

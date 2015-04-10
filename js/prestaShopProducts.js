@@ -23,7 +23,7 @@
 *	International Registered Trademark & Property of PrestaShop SA
 */
 
-function initPagination() {
+function initProductsPagination() {
   
 	$("#pagination").children('li').click(function() {
     
@@ -93,7 +93,7 @@ function loadPrestaShopProducts(page) {
       $('#products-pagination-holder').html($('#products-pagination'));
       $('#products-pagination').show();
       
-      initPagination();
+      initProductsPagination();
       
     }
 	});  
