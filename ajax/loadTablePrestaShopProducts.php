@@ -80,11 +80,11 @@ $query .= ' INNER JOIN `'._DB_PREFIX_.'category_lang` cl
     ON cl.`id_category` = p.`id_category_default`
     AND cl.`id_lang` = '.$ebay_profile->id_lang.'
     
-    INNER JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
+    LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
     ON ecc.`id_category` = p.`id_category_default`
     AND ecc.`id_ebay_profile` = '.$ebay_profile->id.'
     
-    INNER JOIN `'._DB_PREFIX_.'ebay_category` ec
+    LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
     ON ec.`id_ebay_category` = ecc.`id_ebay_category`
     
     LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
@@ -131,11 +131,13 @@ foreach ($res as &$row) {
         }
     }
     
-    foreach($ebay_categories as $cat) {
-        
-        if ($cat['id'] == $row['id_category_ref']) {
-            $row['ebay_category_full_name'] = $cat['name'];
-            break;                
+    if ($row['id_category_ref']) {
+
+        foreach($ebay_categories as $cat) {
+            if ($cat['id'] == $row['id_category_ref']) {
+                $row['ebay_category_full_name'] = $cat['name'];
+                break;                
+            }
         }
         
     }

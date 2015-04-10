@@ -67,18 +67,22 @@
             
             <td>{$p.category_full_name|escape:'htmlall'}</td>
 
-            <td>{$p.ebay_category_full_name|escape:'htmlall'}</td>
+            {if $p.id_category_ref}
+                <td>{$p.ebay_category_full_name|escape:'htmlall'}</td>
+            {else}
+                <td class="center">-</td>
+            {/if}
             
             <td class="center">{if $p.sync}{l s='Yes' mod='ebay'}{else}<span class="red">{l s='No' mod='ebay'}</span>{/if}</td>
 
-            <td class="center">{if !$p.blacklisted}{l s='Yes' mod='ebay'}{else}<span class="red">{l s='No' mod='ebay'}</span>{/if}</td>
+            <td class="center">{if $p.id_category_ref && !$p.blacklisted}{l s='Yes' mod='ebay'}{else}<span class="red">{l s='No' mod='ebay'}</span>{/if}</td>
             
             <td>
-                {if !$p.EbayCategoryIsMultiSku && $p.hasAttributes && !$p.EbayProductRef}
+                {if $p.id_category_ref && !$p.EbayCategoryIsMultiSku && $p.hasAttributes && !$p.EbayProductRef}
                     {l s='Non multi-sku category' mod='ebay'}
-                {elseif !$p.EbayCategoryIsMultiSku && $p.hasAttributes && $p.EbayProductRef}
+                {elseif $p.id_category_ref && !$p.EbayCategoryIsMultiSku && $p.hasAttributes && $p.EbayProductRef}
                     {l s='Several ads' mod='ebay'}
-                {elseif !$p.EbayProductRef}
+                {elseif !$p.id_category_ref || !$p.EbayProductRef}
                     {l s='No ad' mod='ebay'}                  
                 {else}
                     <a href="{if $p.EbayProductRef}{$p.link}{/if}" target="_blank">{l s='Link' mod='ebay'}</a>    
@@ -88,11 +92,11 @@
             <td>
                 {if !$p.stock && $p.sync && !$p.blacklisted}
                     {l s='Empty stock' mod='ebay'}
-                {elseif $p.stock && !$p.sync && !$p.blacklisted}
+                {elseif $p.stock && $p.id_category_ref && !$p.sync && !$p.blacklisted}
                     {l s='Synchronisation disabled' mod='ebay'}
                 {elseif $p.stock && $p.sync && $p.blacklisted}
                     {l s='Product not selected' mod='ebay'}
-                {elseif !$p.stock || !$p.sync || $p.blacklisted}
+                {elseif $p.id_category_ref && (!$p.stock || !$p.sync || $p.blacklisted)}
                     {l s='Several problems' mod='ebay'}
                 {/if}
             </td>
