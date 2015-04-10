@@ -49,7 +49,7 @@
 
 		<tr{if $k % 2 !== 0} class="alt_row"{/if} id="product-{$p.id_product|escape:'htmlall'}">
 
-			<td>
+            <td>
                 {if $p.hasAttributes}
                     <a id="show-vars-{$p.id_product|escape:'htmlall'}"
                         product-name="{$p.name|escape:'htmlall'}"
@@ -57,11 +57,11 @@
                         sync="{if $p.sync}1{else}0{/if}"
                         blacklisted="{if $p.blacklisted}1{else}0{/if}"
                      href="javascript:showVariations({$p.id_product|escape:'htmlall'})">&#9654;</a>
-                     {$p.name|escape:'htmlall'}
-                {else}<span class="left-padded-name">{$p.name|escape:'htmlall'}</span>
-                {/if} 
-                
-			</td>
+                     <a href="?tab=AdminProducts&id_product={$p.id_product|intval}&updateproduct&token={$token|escape:'htmlall'}" target="_blank">{$p.id_product|intval}</a>
+                {else}<span class="left-padded-name"><a href="" target="_blank">{$p.id_product|intval}</a></span>{/if}
+            </td>
+
+			<td>{$p.name|escape:'htmlall'}</td>
 
             <td class="center{if !$p.stock} red{/if}">{$p.stock}</td>
             
@@ -100,6 +100,7 @@
                     {l s='Product not selected' mod='ebay'}
                 {elseif $p.stock && $p.sync && !$p.blacklisted && !$p.EbayProductRef}
                     {l s='Product not synchronised or synchronisation error' mod='ebay'}
+                {elseif $p.id_category_ref && !$p.EbayCategoryIsMultiSku && $p.hasAttributes && $p.EbayProductRef}                        {l s='eBay category is not multi sku' mod='ebay'}
                 {elseif $p.id_category_ref && (!$p.stock || !$p.sync || $p.blacklisted)}
                     {l s='Several problems' mod='ebay'}
                 {/if}
