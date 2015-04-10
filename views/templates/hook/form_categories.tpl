@@ -67,7 +67,7 @@
 		<thead>
 			<tr class="nodrag nodrop">
 				<th style="width:110px;">
-					{l s='PrestaShop category' mod='ebay'}<br/>({l s='Quantity in stock' mod='ebay'})
+					{l s='PrestaShop category' mod='ebay'}
 				</th>
 				<th>
 					<span data-inlinehelp="{l s='Only products with a mapped category will be listed.' mod='ebay'}">{l s='eBay category' mod='ebay'} <span style="color:red">{l s='(required)' mod='ebay'}</span></span>
