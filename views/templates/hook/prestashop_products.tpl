@@ -43,7 +43,7 @@
     <p>
         <select id="products-mode">
             <option value="catalogue">{l s='Whole Prestashop catalogue' mod='ebay'}</option>
-            <option value="on_ebay">{l s='Products synchronised on eBay' mod='ebay'}</option>
+            <option value="on_ebay">{l s='Synchronizable products' mod='ebay'}</option>
         </select>
         
         <input id="products-filter" type="search" placeholder="{l s='Filter products' mod='ebay'}" />
