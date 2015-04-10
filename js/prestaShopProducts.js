@@ -80,7 +80,7 @@ function loadPrestaShopProducts(page) {
   
 	$.ajax({
 		type: "POST",
-		url: module_dir + "ebay/ajax/loadTablePrestaShopProducts.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + "&mode=" + mode + "&p=" + page + "&s=" + search,
+		url: module_dir + "ebay/ajax/loadTablePrestaShopProducts.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + "&mode=" + mode + "&p=" + page + "&id_employee=" + id_employee + "&s=" + search,
 		success : function(data) {
       
       $('#products-form-view').hide();

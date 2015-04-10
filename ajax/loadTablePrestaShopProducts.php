@@ -119,6 +119,10 @@ $category_list = $ebay->getChildCategories(Category::getCategories($ebay_profile
 // eBay categories
 $ebay_categories = EbayCategoryConfiguration::getEbayCategories($ebay_profile->id);
 
+$content = Context::getContext();
+$employee = new Employee((int)Tools::getValue('id_employee'));
+$context->employee = $employee;
+
 foreach ($res as &$row) {
     
     if ($row['EbayProductRef'])
@@ -146,16 +150,20 @@ foreach ($res as &$row) {
     if ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A')
         $row['sync'] = 1;
     
+    $link = $context->link;
+    
+    $row['link'] = ( method_exists($link, 'getAdminLink') ? ( $link->getAdminLink('AdminProducts').'&id_product='.(int)$row['id_product'].'&updateproduct' ) : $link->getProductLink((int)$row['id_product']) );
+    
 }
 
-$smarty = Context::getContext()->smarty;
+$smarty = $context->smarty;
 // Smarty datas
 $template_vars = array(
     'nbPerPage' => $limit,
     'nbProducts' => $nbProducts,
     'noProductFound' => Tools::getValue('ch_no_prod_str'),
 	'p' => $page,
-    'products' => $res,
+    'products' => $res
 );
 
 $smarty->assign($template_vars);

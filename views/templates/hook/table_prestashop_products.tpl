@@ -57,8 +57,8 @@
                         sync="{if $p.sync}1{else}0{/if}"
                         blacklisted="{if $p.blacklisted}1{else}0{/if}"
                      href="javascript:showVariations({$p.id_product|escape:'htmlall'})">&#9654;</a>
-                     <a href="?tab=AdminProducts&id_product={$p.id_product|intval}&updateproduct&token={$token|escape:'htmlall'}" target="_blank">{$p.id_product|intval}</a>
-                {else}<span class="left-padded-name"><a href="" target="_blank">{$p.id_product|intval}</a></span>{/if}
+                     <a href="{$p.link}" target="_blank">{$p.id_product|intval}</a>
+                {else}<span class="left-padded-name"><a href="{$p.link}" target="_blank">{$p.id_product|intval}</a></span>{/if}
             </td>
 
 			<td>{$p.name|escape:'htmlall'}</td>
