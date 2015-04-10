@@ -1697,7 +1697,11 @@ class Ebay extends Module
 						$name .= $p.' > ';
 
 				$name .= $cc['infos']['name'];
-				$category_tab[] = array('id_category' => $cc['infos']['id_category'], 'name' => $name);
+				$category_tab[] = array(
+                    'id_category' => $cc['infos']['id_category'], 
+                    'name' => $name,
+                    'active' => $cc['infos']['active']
+                );
 				$categoryTmp = $this->getChildCategories($categories, $idc, $path, $cc['infos']['name']);
 				$category_tab = array_merge($category_tab, $categoryTmp);
 			}

@@ -92,6 +92,8 @@
             <td>
                 {if !$p.stock && $p.sync && !$p.blacklisted}
                     {l s='Empty stock' mod='ebay'}
+                {elseif !$p.is_category_active}
+                    {l s='Category disabled' mod='ebay'}
                 {elseif $p.stock && $p.id_category_ref && !$p.sync && !$p.blacklisted}
                     {l s='Synchronisation disabled' mod='ebay'}
                 {elseif $p.stock && $p.sync && $p.blacklisted}

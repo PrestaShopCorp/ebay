@@ -114,7 +114,7 @@ $nbProducts = Db::getInstance()->getValue($queryCount);
 $res = Db::getInstance()->executeS($query.' LIMIT '.$offset.', '.$limit);
 
 // categories
-$category_list = $ebay->getChildCategories(Category::getCategories($ebay_profile->id_lang), version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0);
+$category_list = $ebay->getChildCategories(Category::getCategories($ebay_profile->id_lang, false), version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0);
 
 // eBay categories
 $ebay_categories = EbayCategoryConfiguration::getEbayCategories($ebay_profile->id);
@@ -127,6 +127,7 @@ foreach ($res as &$row) {
     foreach ($category_list as $cat) {
         if ($cat['id_category'] == $row['id_category']) {
             $row['category_full_name'] = $cat['name'];
+            $row['is_category_active'] = $cat['active'];
             break;                
         }
     }
