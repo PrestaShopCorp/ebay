@@ -204,7 +204,7 @@ class EbayStoreCategory extends ObjectModel
         
             if ($cat['ebay_parent_category_id']) {
                 $blacklist_ids[] = $cat['ebay_parent_category_id'];
-                $blacklist_ids[] = $cat['ebay_category_id'];
+                //$blacklist_ids[] = $cat['ebay_category_id'];
             }
         
         }
