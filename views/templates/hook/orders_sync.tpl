@@ -33,9 +33,7 @@
 		
         <div class="margin-form">
 			
-			<a href="{$url|escape:'urlencode'}&EBAY_SYNC_ORDERS=1">
-				<input type="button" class="button" value="{l s='Sync Orders from eBay' mod='ebay'}" />
-			</a>
+			<a href="{$url|escape:'urlencode'}&EBAY_SYNC_ORDERS=1"><input type="button" class="button" value="{l s='Sync Orders from eBay' mod='ebay'}" /></a>
 	        <br>
 		
         </div>

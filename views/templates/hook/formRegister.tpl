@@ -216,7 +216,7 @@
     $('#ebay_register_form').submit(function(){
         if(validateEmail($('#eBayUsernameInput').val()))
         {   
-            alert('{l s="Only eBay user identifiers can be used to log in. Please don\'t use your email address" mod="ebay"}');
+            alert("{l s="Only eBay user identifiers can be used to log in. Please do not use your email address" mod="ebay"}");
             return false;
         }
     })
