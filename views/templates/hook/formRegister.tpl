@@ -158,7 +158,7 @@
             <div id="ebay-register-right-col">
                 <div id="ebay-register-right-col-content">
                     <div id="ebay-register-div">
-                        <a id="ebay-register-link" href="{l s='https://scgi.ebay.co.uk/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2' mod='ebay'}" class="ebay-primary primary button" target="_blank">{l s='Register' mod='ebay'}</a>
+                        <a id="ebay-register-link" href="{$signin_pro_url}" class="ebay-primary primary button" target="_blank">{l s='Register' mod='ebay'}</a>
                 		<strong>{l s='New to eBay?' mod='ebay'}</strong><br />
                         {l s='Get started now, Its fast and easy.' mod='ebay'}
                     </div>

@@ -96,14 +96,16 @@
 <ul class="visu-menu menuTab ebay_hidden">
     
     <li id="menuTab15" class="menuTabButton">1. {l s='Prestashop Products' mod='ebay'}</li>
-        
-    <li id="menuTab16" class="menuTabButton">2. {l s='Orphan Ads' mod='ebay'}</li>
     
-    <li id="menuTab6" class="menuTabButton">3. {l s='Order history' mod='ebay'}</li>
+    <li id="menuTab9" class="menuTabButton">2. {l s='Ebay Ads' mod='ebay'}</li>
+        
+    <li id="menuTab16" class="menuTabButton">3. {l s='Orphan Ads' mod='ebay'}</li>
+    
+    <li id="menuTab6" class="menuTabButton">4. {l s='Order history' mod='ebay'}</li>
 	
-    <li id="menuTab11" class="menuTabButton">4. {l s='API Logs' mod='ebay'}</li>
+    <li id="menuTab11" class="menuTabButton">5. {l s='API Logs' mod='ebay'}</li>
 	
-    <li id="menuTab12" class="menuTabButton">5. {l s='Order Logs' mod='ebay'}</li>
+    <li id="menuTab12" class="menuTabButton">6. {l s='Order Logs' mod='ebay'}</li>
     
 </ul>
 
