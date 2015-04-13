@@ -24,11 +24,7 @@
 *}
 
 <div>
-	{if isset($alerts) && !empty($alerts)}
-	<div class="warning big">
-		{$alerts|escape:'htmlall'}
-	</div>
-	{/if}
+	
     
     {if $has_ebay_shop}
     

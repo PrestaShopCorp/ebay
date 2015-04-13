@@ -24,11 +24,6 @@
 *}
 
 <div>
-	{if isset($alerts) && !empty($alerts)}
-	<div class="warning big">
-		{$alerts|escape:'htmlall'}
-	</div>
-	{/if}
 	<!---------------------------->
 	<p>
 		{l s='Item specifics are the details that buyers use to search for products, such as brand, size, colour and are category specific. The more item specifics you add, the easier it is for buyers to find your products. Please also specify the item condition from the options.' mod='ebay'}
