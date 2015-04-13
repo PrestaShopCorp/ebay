@@ -70,7 +70,7 @@
 				}
                 else if(validateEmail($('#eBayUsernameInput').val()))
                 {   
-                    alert('{/literal}{l s="Only eBay user identifiers can be used to log in. Please don\'t use your email address" mod="ebay"}{literal}');
+                    alert("{/literal}{l s="Only eBay user identifiers can be used to log in. Please do not use your email address" mod="ebay"}{literal}");
                     return false;
                 }
 				else{
