@@ -68,6 +68,11 @@
 					alert("{/literal}{l s='Please enter your eBay user ID' mod='ebay'}{literal}");
 					return false;
 				}
+                else if(validateEmail($('#eBayUsernameInput').val()))
+                {   
+                    alert('{/literal}{l s="Only eBay user identifiers can be used to log in. Please don\'t use your email address" mod="ebay"}{literal}');
+                    return false;
+                }
 				else{
                     
 					var country = $("#ebay_countries").val();
@@ -100,7 +105,7 @@
 		});
 		{/literal}
 	</script>
-	<form action="{$action_url|escape:'urlencode'}" method="post">
+	<form action="{$action_url|escape:'urlencode'}" method="post" id="ebay_register_form">
         <div id="ebay-register-content">
             <div id="ebay-register-left-col">
                 <div id="ebay-register-left-col-content">
@@ -201,14 +206,20 @@
         if (validateEmail($('#eBayUsernameInput').val()) || $('#eBayUsernameInput').val() == '')
         {
             $('#eBayUsernameInput').css('border', '2px solid #a94442');
-            $('#ebayRegisterButton').attr('disabled', true);
         }
         else
         {
             $('#eBayUsernameInput').css('border', '1px solid #ccc');
-            $('#ebayRegisterButton').removeAttr('disabled');
         }
     });
+
+    $('#ebay_register_form').submit(function(){
+        if(validateEmail($('#eBayUsernameInput').val()))
+        {   
+            alert('{l s="Only eBay user identifiers can be used to log in. Please don\'t use your email address" mod="ebay"}');
+            return false;
+        }
+    })
 
 {literal}  
 /**
