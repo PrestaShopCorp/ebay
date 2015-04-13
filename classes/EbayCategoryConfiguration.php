@@ -145,7 +145,7 @@ class EbayCategoryConfiguration
 
 		$sql_get_cat_non_multi_sku = 'SELECT * FROM '._DB_PREFIX_.'ebay_category_configuration AS ecc
 			INNER JOIN '._DB_PREFIX_.'ebay_category AS ec ON ecc.id_ebay_category = ec.id_ebay_category
-			WHERE ecc.id_ebay_profile = '.(int)$ebay_profile->id;
+			WHERE ecc.id_ebay_profile = '.(int)$ebay_profile->id.' GROUP BY name';
 
 		foreach (Db::getInstance()->ExecuteS($sql_get_cat_non_multi_sku) as $cat)
 		{

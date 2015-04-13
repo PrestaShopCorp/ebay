@@ -247,7 +247,7 @@ class EbayFormEbaySyncTab extends EbayTab
 			if (count($cat_with_problem) == 1)
 				$alert = $this->ebay->l('You have chosen eBay category : ').' "'.$var.'" '.$this->ebay->l(' which does not support multivariation products. Each variation of a product will generate a new product in eBay');
 			else
-				$alert = $this->ebay->l('You have chosen eBay categories : ').' "'.$var.'"" '.$this->ebay->l(' which do not support multivariation products. Each variation of a product will generate a new product in eBay');
+				$alert = $this->ebay->l('You have chosen eBay categories : ').' "'.$var.'" '.$this->ebay->l(' which do not support multivariation products. Each variation of a product will generate a new product in eBay');
 		}
 
 		return $alert;
