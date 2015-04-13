@@ -1955,7 +1955,7 @@ class Ebay extends Module
 		$link = $this->context->link;
 		$id_lang = $this->context->language->id;
 		$products_ebay_listings = array();
-		$products = EbayProduct::getProductsWithoutBlacklisted($id_lang, $this->ebay_profile->id);
+		$products = EbayProduct::getProductsWithoutBlacklisted($id_lang, $this->ebay_profile->id, false);
 		$data = array(
 			'id_lang' => $id_lang,
 			'titleTemplate' => $this->ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE')
