@@ -52,6 +52,7 @@
             <td>
                 {if $p.hasAttributes}
                     <a id="show-vars-{$p.id_product|escape:'htmlall'}"
+                        class="show-vars"
                         product-name="{$p.name|escape:'htmlall'}"
                         multi-sku="{if $p.EbayCategoryIsMultiSku}1{else}0{/if}"
                         sync="{if $p.sync}1{else}0{/if}"

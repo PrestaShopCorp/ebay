@@ -148,7 +148,7 @@ foreach ($res as &$row) {
     }
     
     if ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A')
-        $row['sync'] = 1;
+        $row['sync'] = (bool)$row['id_category_ref']; // only true if category synced with an eBay category
     
     $link = $context->link;
     
