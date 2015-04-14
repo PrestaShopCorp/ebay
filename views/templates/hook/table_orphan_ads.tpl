@@ -33,7 +33,7 @@
 
 	{foreach from=$ads key=k  item=a}
 
-		<tr{if $k % 2 !== 0} class="alt_row"{/if} id="ad-{$a.id_ebay_product|escape:'htmlall'}">
+		<tr{if $k % 2 !== 0} class="alt_row"{/if}>
 
 			<td>
                 {if $a.id_product_ref}
