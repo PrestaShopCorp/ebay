@@ -237,6 +237,7 @@ class EbayProfile extends ObjectModel
 		$this->setConfiguration('EBAY_LISTING_DURATION', 'GTC');
 		$this->setConfiguration('EBAY_AUTOMATICALLY_RELIST', 'on');
 		$this->setConfiguration('EBAY_LAST_RELIST', date('Y-m-d'));        
+		$this->setConfiguration('EBAY_SEND_TRACKING_CODE', 1);        
 	}
 	
 	public function setPicturesSettings() 
