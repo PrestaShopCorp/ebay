@@ -44,7 +44,7 @@
             <td>{if $a.exists}{$a.psProductName|escape:'htmlall'}{else}{l s='Product deleted. Id: ' mod='ebay'}{$a.id_product}{/if}</td>
             
             {if $a.exists}
-                <td class="center">{if $a.active}{l s='No' mod='ebay'}{else}{l s='Yes' mod='ebay'}{/if}</td>
+                <td class="center">{if $a.active && !$a.blacklisted}{l s='No' mod='ebay'}{else}{l s='Yes' mod='ebay'}{/if}</td>
             {else}
                 <td class="center">-</td>
             {/if}                

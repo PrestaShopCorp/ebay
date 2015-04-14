@@ -55,7 +55,7 @@ function showProducts(id_category) {
 
 	if (elem.attr('showing') == true) 
 	{
-		$('.product-row[category=' + id_category +']').hide();
+		$('.product-table-row[category=' + id_category +']').hide();
 		elem.attr('showing', 0);
 		elem.html('&#9654;');
 //		elem_string.html(categories_ebay_l['Unselect products']);
@@ -67,7 +67,7 @@ function showProducts(id_category) {
 //		elem_string.html(categories_ebay_l['Unselect products clicked']);
 
 		if (loadedCategories[id_category])
-			$('.product-row[category=' + id_category +']').show();
+			$('.product-table-row[category=' + id_category +']').show();
 		else
 		{
 			$('<img src="' + module_path + 'img/loading-small.gif" id="loading-' + id_category +'" alt="" />').insertAfter(elem);
@@ -79,7 +79,7 @@ function showProducts(id_category) {
 				success: function(products) { 
 					loadedCategories[id_category] = true;
           
-          var str = '<tr><td colspan="7"><table class="table tableDnD" width="80%" style="margin: auto">';
+          var str = '<tr class="product-table-row" category="' + id_category + '"><td colspan="7"><table class="table tableDnD" width="80%" style="margin: auto">';
           
           str += '<tr class="product-row" category="' + id_category + '"> \
             <td class="bold">' + categories_ebay_l['Products'] + '</td> \

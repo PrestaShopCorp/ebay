@@ -41,6 +41,7 @@ $query = 'SELECT DISTINCT(ep.`id_ebay_product`),
         ep.`id_product_ref`,
         ep.`id_product`,
         ep.`id_attribute`                    AS `notSetWithMultiSkuCat`,
+        epc.`blacklisted`,
         p.`id_product`                       AS `exists`,
         p.`id_category_default`,   
         p.`active`,
@@ -51,6 +52,10 @@ $query = 'SELECT DISTINCT(ep.`id_ebay_product`),
         ecc.`sync`                           AS sync,
         ec.`id_category_ref`
     FROM `'._DB_PREFIX_.'ebay_product` ep
+
+    LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
+    ON epc.`id_product` = ep.`id_product`
+    AND epc.`id_ebay_profile` = '.$ebay_profile->id.'
 
     LEFT JOIN `'._DB_PREFIX_.'product` p
     ON p.`id_product` = ep.`id_product`
@@ -75,7 +80,7 @@ $query = 'SELECT DISTINCT(ep.`id_ebay_product`),
 //$currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
 // categories
-$category_list = $ebay->getChildCategories(Category::getCategories($ebay_profile->id_lang), version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0);
+$category_list = $ebay->getChildCategories(Category::getCategories($ebay_profile->id_lang, false), version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0);
 
 // eBay categories
 $ebay_categories = EbayCategoryConfiguration::getEbayCategories($ebay_profile->id);
@@ -124,7 +129,6 @@ foreach ($res as &$row) {
     elseif ($row['isMultiSku']
         && !$row['notSetWithMultiSkuCat'] // set as if on a MultiSku category
         && !$row['EbayCategoryIsMultiSku']
-        
         )
         $final_res[] = $row;
     
@@ -132,7 +136,7 @@ foreach ($res as &$row) {
         && $row['EbayCategoryIsMultiSku'])
         $final_res[] = $row;
     
-    elseif (!$row['active'])            
+    elseif (!$row['active'] || $row['blacklisted'])            
         $final_res[] = $row;
     
     elseif (!$row['sync'])
