@@ -79,7 +79,7 @@ $classes_to_load = array(
 	'tabs/EbayOrderLogsTab',
 	'tabs/EbayOrdersSyncTab',
 	'tabs/EbayPrestashopProductsTab',
-	'tabs/EbayOrphanAdsTab'        
+	'tabs/EbayOrphanListingsTab'        
 );
 
 foreach ($classes_to_load as $classname)
@@ -1553,7 +1553,7 @@ class Ebay extends Module
 		$listings_tab = new EbayListingsTab($this, $this->smarty, $this->context);
 		$orders_sync = new EbayOrdersSyncTab($this, $this->smarty, $this->context);
 		$ps_products = new EbayPrestashopProductsTab($this, $this->smarty, $this->context);
-		$orphan_ads = new EbayOrphanAdsTab($this, $this->smarty, $this->context);        
+		$orphan_listings = new EbayOrphanListingsTab($this, $this->smarty, $this->context);        
 		
 		$form_store_category_tab = new EbayFormStoreCategoryTab($this, $this->smarty, $this->context, $this->_path);
 		
@@ -1625,7 +1625,7 @@ class Ebay extends Module
 			'form_store_category' => $form_store_category_tab->getContent(),
 			'orders_sync' => $orders_sync->getContent(),
 			'ps_products' => $ps_products->getContent(),
-			'orphan_ads' => $orphan_ads->getContent(),
+			'orphan_listings' => $orphan_listings->getContent(),
 			'green_message' => isset($green_message) ? $green_message : null,
 			'cron_task'	=> $cron_task,
 			'api_logs' => $api_logs->getContent(),
