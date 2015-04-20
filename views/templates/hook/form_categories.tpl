@@ -39,6 +39,11 @@
 		<form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall'}{else}tab={$tab|escape:'htmlall'}{/if}&configure={$configure|escape:'htmlall'}&token={$token|escape:'htmlall'}&tab_module={$tab_module|escape:'htmlall'}&module_name={$module_name|escape:'htmlall'}&id_tab=2&section=category&action=suggestCategories" method="post" class="form" id="configForm2SuggestedCategories">
 			<input class="button" name="submitSave" type="submit" value="{l s='Suggest eBay categories' mod='ebay'}" data-inlinehelp="{l s='Automatically map your Prestashop categories with the correct eBay category. ' mod='ebay'}" />
 		</form>
+		
+		<div class="warning big tips">
+           	{l s='For your first synchronisation, we advice you to synchronize only a few categories in order to test the link between your shop and eBay. ' mod='ebay'}
+        </div>
+
 	{/if}
 	<!---------------------------->
 	<p>

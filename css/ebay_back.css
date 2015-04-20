@@ -19,6 +19,11 @@ select.ebay_select{
 	width: 800px !important;
 }
 
+.ebay_center
+{
+	text-align: center !important;
+}
+
 #statsForm div.label
 {
 	width:100%;

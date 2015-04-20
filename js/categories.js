@@ -82,9 +82,9 @@ function showProducts(id_category) {
           var str = '<tr class="product-table-row" category="' + id_category + '"><td colspan="7"><table class="table tableDnD" width="80%" style="margin: auto">';
           
           str += '<tr class="product-row" category="' + id_category + '"> \
-            <td class="bold">' + categories_ebay_l['Products'] + '</td> \
-            <td class="center bold">' + categories_ebay_l['Stock'] + '</td> \
-            <td class="center bold">' + categories_ebay_l['Unselect products'] + '</td> \
+            <th class="">' + categories_ebay_l['Products'] + '</th> \
+            <th class="ebay_center ">' + categories_ebay_l['Stock'] + '</th> \
+            <th class="ebay_center ">' + categories_ebay_l['Unselect products'] + '</th> \
           </tr>';     
 
 					for (var i in products)
@@ -93,8 +93,8 @@ function showProducts(id_category) {
 
 						str += '<tr class="product-row ' + (i%2 == 0 ? 'alt_row':'') + '" category="' + id_category + '"> \
 							<td>' + product.name + '</td> \
-							<td class="center">' + (parseInt(product.stock) ? product.stock : '<span class="red">0?</span>') + '</td> \
-							<td class="center"> \
+							<td class="ebay_center">' + (parseInt(product.stock) ? product.stock : '<span class="red">0?</span>') + '</td> \
+							<td class="ebay_center"> \
 								<input name="showed_products[' + product.id + ']" type="hidden" value="1" /> \
 								<input onchange="toggleSyncProduct('+id_category+')" class="sync-product" category="'+id_category+'" name="to_synchronize[' + product.id + ']" type="checkbox" ' + (product.blacklisted == 1 ? '' : 'checked') + ' /> \
 							</td> \
@@ -222,7 +222,7 @@ $(document).ready(function() {
   loadCategories();
   
 	$("#configForm2SuggestedCategories input[type=submit]").click(function(){
-		$('<div class="center"><img src="' + module_path + 'img/loading-small.gif" alt="" />' + categories_ebay_l['thank you for waiting'] + '</div>').insertAfter($(this));
+		$('<div class="ebay_center"><img src="' + module_path + 'img/loading-small.gif" alt="" />' + categories_ebay_l['thank you for waiting'] + '</div>').insertAfter($(this));
 		$(this).fadeOut();
 		$.ajax({
 			type: "POST",
