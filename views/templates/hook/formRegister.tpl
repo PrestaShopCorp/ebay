@@ -126,7 +126,7 @@
             			    <input id="eBayUsernameInput" type="text" name="eBayUsername" class="ebay-float-right" value="" />
                         {/if}
                         <div style="clear:both"></div>  
-                        <div class="txt-right">{l s='eBay User Identifiers only are allowed' mod='ebay'}</div>
+                        <div class="txt-right">{l s='Please use an eBay identifier, not your email address' mod='ebay'}</div>
                         <div style="clear:both"></div>                             
                     </div>
                 

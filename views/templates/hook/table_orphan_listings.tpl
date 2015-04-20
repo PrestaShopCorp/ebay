@@ -26,7 +26,7 @@
 {if $ads === false || sizeof($ads) === 0}
 
 	<tr>
-		<td colspan="3" class="center">{l s='No ad found' mod='ebay'}</td>
+		<td colspan="3" class="center">{l s='No orphan listing' mod='ebay'}</td>
 	</tr>
 
 {else}
@@ -68,13 +68,13 @@
             {/if}
             
             {if $a.exists && $a.id_category_ref}
-                <td class="center">{if $a.sync}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}</td>
+                <td class="center">{if $a.EbayCategoryIsMultiSku}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}</td>
             {else}
                 <td class="center">-</td>
             {/if}
 
             {if $a.exists && $a.id_category_ref}
-                <td class="center">{if $a.EbayCategoryIsMultiSku}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}</td>
+                <td class="center">{if $a.sync}{l s='Yes' mod='ebay'}{else}{l s='No' mod='ebay'}{/if}</td>
             {else}
                 <td class="center">-</td>
             {/if}
@@ -85,7 +85,7 @@
             
             <td>
                 {if !$a.exists}
-                    {l s='Non existing PrestaShop Product' mod='ebay'}
+                    {l s='PrestaShop Product does not exists' mod='ebay'}
                 {/if}
             </td>
             

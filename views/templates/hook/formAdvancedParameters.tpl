@@ -221,11 +221,11 @@
 						url: module_dir + 'ebay/ajax/deleteProductImage.php',
 						data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=delete-all",
 						beforeSend: function() {
-						    $('#reset-image-result').css('color', 'orange').text("{/literal}{l s='Activation is in progress...' mod='ebay'}{literal}");
+						    $('#reset-image-result').css('color', 'orange').text("{/literal}{l s='Activation in progress...' mod='ebay'}{literal}");
 						}
 					}).done(function( data ) {
 						if (data == 'success')
-							$('#reset-image-result').css('color', 'green').text("{/literal}{l s='The new image will be included for the next synchronization.' mod='ebay'}{literal}");
+							$('#reset-image-result').css('color', 'green').text("{/literal}{l s='New images will be included in next synchronization.' mod='ebay'}{literal}");
 						else
 							$('#reset-image-result').css('color', 'red').text("{/literal}{l s='An error has occurred.' mod='ebay'}{literal}");
 					}).fail(function() {

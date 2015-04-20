@@ -61,7 +61,7 @@
 	</p>
     
     <p>
-        <input id="cat-filter" type="search" placeholder="{l s='Filter categories' mod='ebay'}" />
+    	<b>{l s='Filter PrestaShop categories' mod='ebay'}</b> : <input id="cat-filter" type="search" placeholder="{l s='Category name' mod='ebay'}" />
     </p>
 </div>
 <br />
@@ -87,7 +87,7 @@
 					<span data-inlinehelp="{l s='All products with mapped categories will be listed.' mod='ebay'}">{l s='List on eBay' mod='ebay'}</span>
 				</th>
 				<th class="center" colspan="2">
-					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='Nb selected products' mod='ebay'}</span>
+					<span data-inlinehelp="{l s='Number of selected products for synchronisation within the category' mod='ebay'}">{l s='Nb selected products' mod='ebay'}</span>
 				</th>                
 				{*
 				<th class="center">

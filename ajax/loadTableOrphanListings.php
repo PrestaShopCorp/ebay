@@ -153,4 +153,4 @@ $template_vars = array(
 );
 
 $smarty->assign($template_vars);
-echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/table_orphan_ads.tpl');
+echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/table_orphan_listings.tpl');

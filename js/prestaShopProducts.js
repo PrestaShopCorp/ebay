@@ -168,7 +168,7 @@ function showVariations(id_product) {
               <td style="padding-left: 21px">' + product_name + ' ' + variation.name + '</td> \
               <td class="center' + (parseInt(variation.stock) == 0 ? ' red':'') + '">' + variation.stock + '</td> \
 							<td colspan="4"></td> \
-							<td>'+ (variation.id_product_ref ? '<a href="' + variation.link + '" target="_blank">' + products_ebay_l['Link'] + '</a>' : (multi_sku ? products_ebay_l['See main product'] : products_ebay_l['No ad']) ) + '</td> \
+							<td>'+ (variation.id_product_ref ? '<a href="' + variation.link + '" target="_blank">' + products_ebay_l['Link'] + '</a>' : (multi_sku ? products_ebay_l['See main product'] : products_ebay_l['No listing']) ) + '</td> \
               <td>' + feedback + '</td> \
 						</tr>');
 					}

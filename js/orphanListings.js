@@ -27,13 +27,13 @@ function loadOrphans() {
 
 	$.ajax({
 		type: "POST",
-		url: module_dir + "ebay/ajax/loadTableOrphanAds.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile,
+		url: module_dir + "ebay/ajax/loadTableOrphanListings.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile,
 		success : function(data) {
       
       console.log(data);
       
-      $("table#OrphanAds tbody #removeRow").remove();
-      $("table#OrphanAds tbody").html(data);
+      $("table#OrphanListings tbody #removeRow").remove();
+      $("table#OrphanListings tbody").html(data);
       
       $('#orphans-form-view').hide();
       
@@ -41,7 +41,7 @@ function loadOrphans() {
         
         e.preventDefault();
         
-        if (!confirm(orphan_ads_ebay_l['Remove this ad?']))
+        if (!confirm(orphan_listings_ebay_l['Remove this ad?']))
           return;
         
         var lnk = $(this);
@@ -50,7 +50,7 @@ function loadOrphans() {
         
       	$.ajax({
       		type: "POST",
-      		url: module_dir + "ebay/ajax/deleteOrphanAd.php?token=" + ebay_token + "&id_lang=" + id_lang + "&id_product_ref=" + id_product_ref,
+      		url: module_dir + "ebay/ajax/deleteOrphanListing.php?token=" + ebay_token + "&id_lang=" + id_lang + "&id_product_ref=" + id_product_ref,
       		success : function(data) {
       
             if (data == '1')

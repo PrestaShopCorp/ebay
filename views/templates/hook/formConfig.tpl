@@ -63,7 +63,7 @@
 		{if isset($cron_task.orders) && $cron_task.orders.is_active == 1}
 			{if $cron_task.orders.last_sync == 'none'}
 				<div class="alert alert-warning">
-					{l s='The order cron job has never been run.' mod='ebay'}
+					{l s='Order cron job has never been run.' mod='ebay'}
 				</div>
 			{else}
 				<div class="alert alert-{$cron_task.orders.alert}">
@@ -105,11 +105,11 @@
 
 <ul class="visu-menu menuTab ebay_hidden">
     
-    <li id="menuTab15" class="menuTabButton">1. {l s='Prestashop Products' mod='ebay'}</li>
+    <li id="menuTab15" class="menuTabButton">1. {l s='PrestaShop Products' mod='ebay'}</li>
     
-    <li id="menuTab9" class="menuTabButton">2. {l s='Ebay Ads' mod='ebay'}</li>
+    <li id="menuTab9" class="menuTabButton">2. {l s='Ebay Listings' mod='ebay'}</li>
         
-    <li id="menuTab16" class="menuTabButton">3. {l s='Orphan Ads' mod='ebay'}</li>
+    <li id="menuTab16" class="menuTabButton">3. {l s='Orphan Listings' mod='ebay'}</li>
     
     <li id="menuTab6" class="menuTabButton">4. {l s='Order history' mod='ebay'}</li>
 	
@@ -139,7 +139,7 @@
 	<div id="menuTab6Sheet" class="tabItem">{$orders_history}</div>
 	<div id="menuTab14Sheet" class="tabItem">{$orders_sync}</div>
     <div id="menuTab15Sheet" class="tabItem">{$ps_products}</div>
-	<div id="menuTab16Sheet" class="tabItem">{$orphan_ads}</div>
+	<div id="menuTab16Sheet" class="tabItem">{$orphan_listings}</div>
 </div>
 <br clear="left" />
 <br />

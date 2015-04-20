@@ -27,22 +27,18 @@
     
 
 	<p>
-		<b>{l s='The "Prestashop Products" tab displays the status of the products in the categories you have configured.' mod='ebay'} {l s='This tab allows you to check:' mod='ebay'}</b>
+		<b>{l s='The "Prestashop Products" tab displays, for each PrestaShop product, the associated eBay listing.' mod='ebay'}</b><br/>
+        {l s='This tab can also help understanding why a PrestaShop product do not generate an eBay listing.' mod='ebay'}
 	</p>
     
-    <ul>
-        <li>{l s='The product stock left' mod='ebay'}</li>
-        <li>{l s='The affected Prestashop category' mod='ebay'}</li>
-        <li>{l s="The eBay category with which it's synchronised" mod='ebay'}</li>
-    </ul>
-    
     <p>
-       {l s='The synchronization option you have selected is:' mod='ebay'} "{if $ebay_sync_option_resync == 1}{l s='Only synchronise price and quantity' mod='ebay'}{else}{l s='Synchronise everything' mod='ebay'}{/if}"
+       {l s="The synchronization option (in tab 'Synchronisation > 1. List products') you have selected is:" mod='ebay'} "{if $ebay_sync_option_resync == 1}{l s='Only synchronise price and quantity' mod='ebay'}{else}{l s='Synchronise everything' mod='ebay'}{/if}"
     </p>
     
     <p>
+        {l s='Display' mod='ebay'} : 
         <select id="products-mode">
-            <option value="catalogue">{l s='Whole Prestashop catalogue' mod='ebay'}</option>
+            <option value="catalogue">{l s='whole PrestaShop catalog' mod='ebay'}</option>
             <option value="on_ebay">{l s='Synchronizable products' mod='ebay'}</option>
         </select>
         
@@ -51,7 +47,7 @@
     
     <form id="products-form-view" action="{$show_products_url}" method="post" class="form">
         <p class="center">
-            <input class="primary button" name="submitSave" type="submit" value="{l s='View Products' mod='ebay'}" />
+            <input class="primary button" name="submitSave" type="submit" value="{l s='Load Products' mod='ebay'}" />
     	</p>
     </form>
     
@@ -66,35 +62,35 @@
 			<tr class="nodrag nodrop">
 				
                 <th style="width:110px;">
-                    <span data-inlinehelp="{l s='' mod='ebay'}">{l s='ID' mod='ebay'}</span>
+                    <span>{l s='ID' mod='ebay'}</span>
 				</th>
                 
                 <th style="width:110px;">
-                    <span data-inlinehelp="{l s='' mod='ebay'}">{l s='PrestaShop Product' mod='ebay'}</span>
+                    <span>{l s='PrestaShop Product' mod='ebay'}</span>
 				</th>
 				
                 <th>
-					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='Product Stock' mod='ebay'}</span>
+					<span>{l s='Product Stock' mod='ebay'}</span>
 				</th>
                 
 				<th style="width:185px;">
-					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='PrestaShop Category' mod='ebay'}</span>
+					<span data-inlinehelp="{l s='PrestaShop product default category' mod='ebay'}">{l s='PrestaShop Category' mod='ebay'}</span>
 				</th>
 				
+                <th style="width:185px;">
+                    <span data-inlinehelp="{l s="Configured in the 'Parameter > 2.Categories and pricing' tab Vérifier le nom en Anglais" mod='ebay'}">{l s='Associated eBay category' mod='ebay'}</span>
+                </th>
+                
                 <th class="center">
-					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='Corresponding eBay Category' mod='ebay'}</span>
+					<span data-inlinehelp="{l s="If this column is set to 'no', product default category has not been synchronised in 'Synchronisation > 1. List products' tab" mod='ebay'}">{l s='Synchronisation enabled' mod='ebay'}</span>
 				</th>
                 
                 <th class="center">
-					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='Synchronising' mod='ebay'}</span>
+					<span data-inlinehelp="{l s="If this column is set to 'no', product has been unselected in the 'Parameters > 2.Categories and pricing' tab" mod='ebay'}">{l s='Product selected' mod='ebay'}</span>
 				</th>
                 
                 <th class="center">
-					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='Product selected' mod='ebay'}</span>
-				</th>
-                
-                <th class="center">
-					<span data-inlinehelp="{l s='' mod='ebay'}">{l s='eBay Products' mod='ebay'}</span>
+					<span data-inlinehelp="{l s='Display link to associated eBay listing' mod='ebay'}">{l s='eBay listing' mod='ebay'}</span>
 				</th>
                 
                 <th class="center">{l s='Help' mod='ebay'}</th>
@@ -116,9 +112,9 @@
         var products_ebay_l = {ldelim}
     		'Empty stock': "{l s='Empty stock' mod='ebay'}",
     		'Synchronisation disabled' : "{l s='Synchronisation disabled' mod='ebay'}",
-    		'Product not selected'		 : "{l s='Product not selected' mod='ebay'}",
-            'Link': "{l s='Link' mod='ebay'}",
-            'No ad': "{l s='No ad' mod='ebay'}",
+    		'Product not selected'		 : "{l s="Product has been unselected from tab 'Parameters > 2. Categories and pricing'" mod='ebay'}",
+            'Link': "{l s='Access to listing' mod='ebay'}",
+            'No listing': "{l s='No listing yet' mod='ebay'}",
             'See main product': "{l s='See main product' mod='ebay'}",
         {rdelim};   
         var id_employee = {$id_employee};     
