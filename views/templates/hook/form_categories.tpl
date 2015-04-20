@@ -41,7 +41,7 @@
 		</form>
 		
 		<div class="warning big tips">
-           	{l s='For your first synchronisation, we advice you to synchronize only a few categories in order to test the link between your shop and eBay. ' mod='ebay'}
+           	{l s='For your first synchronisation, we advise you to synchronize only a one category in order to test the link between your shop and eBay. And then add more categories progressively.' mod='ebay'}
         </div>
 
 	{/if}

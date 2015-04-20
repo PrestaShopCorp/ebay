@@ -81,7 +81,7 @@
 			{l s='Send new product images on the next synchronization' mod='ebay'}
 		</label>
 		<div class="margin-form">
-			<a id="reset-image" href="#" target="_blank" class="button" data-inlinehelp="{l s='This action will, during the next synchronization, a synchronization of product images' mod='ebay'}">Active</a>
+			<a id="reset-image" href="#" target="_blank" class="button">Active</a>
 			<p id="reset-image-result"></p>
 		</div>
 		<div style="clear:both;"></div>
