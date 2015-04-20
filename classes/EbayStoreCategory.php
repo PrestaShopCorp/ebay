@@ -100,7 +100,6 @@ class EbayStoreCategory extends ObjectModel
         if (count($store_categories) == count($compatible_store_categories))
             $not_compatible_store_categories = array();
         else {
-
             $not_compatible_store_categories = array();
             foreach ($store_categories as $cat) {
                 $is_not_compatible = true;
@@ -135,7 +134,6 @@ class EbayStoreCategory extends ObjectModel
         // make sure that all referenced categories still exists
         EbayStoreCategoryConfiguration::checkExistingCategories($ebay_profile->id);
 
-        $ebay_profile->setConfiguration('EBAY_STORE_CATEGORY_UPDATE', 1);
     }  
     
     private static function _writeStoreCategory($category_data, $id_ebay_profile, $ebay_parent_category_id = null)
@@ -194,7 +192,7 @@ class EbayStoreCategory extends ObjectModel
     
     /*
      *
-     * don't keep subcategories and categories with subcategories
+     * don't keep categories with subcategories
      *
      **/
     private static function _filterCategories($store_categories)
@@ -204,7 +202,6 @@ class EbayStoreCategory extends ObjectModel
         
             if ($cat['ebay_parent_category_id']) {
                 $blacklist_ids[] = $cat['ebay_parent_category_id'];
-                $blacklist_ids[] = $cat['ebay_category_id'];
             }
         
         }
