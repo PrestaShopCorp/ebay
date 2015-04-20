@@ -37,6 +37,16 @@
 				<div class="alert alert-warning">
 					{l s='The product cron job has never been run.' mod='ebay'}
 				</div>
+			{elseif $cron_task.products.last_sync.warning_long_since}
+				<div class="alert alert-danger">
+					{l s='Last product synchronization has been done the ' mod='ebay'}
+					{$cron_task.products.last_sync.date}
+					{l s=' at ' mod='ebay'}
+					{$cron_task.products.last_sync.time}
+					{l s=' and it tried to synchronize ' mod='ebay'}
+					{$cron_task.products.last_sync.nb_products}
+					{l s=' products' mod='ebay'}
+				</div>
 			{else}
 				<div class="alert alert-info">
 					{l s='Last product synchronization has been done the ' mod='ebay'}

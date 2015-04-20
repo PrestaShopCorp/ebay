@@ -1579,7 +1579,12 @@ class Ebay extends Module
 
 			if ($last_sync_datetime = Configuration::get('DATE_LAST_SYNC_PRODUCTS'))
 			{
-				$cron_task['products']['last_sync'] = array('date' => date('Y-m-d', strtotime($last_sync_datetime)), 'time' => date('H:i:s', strtotime($last_sync_datetime)));
+				$warning_date = strtotime(date('Y-m-d').' - 2 days');
+				$cron_task['products']['last_sync'] = array(
+					'date' => date('Y-m-d', strtotime($last_sync_datetime)), 
+					'time' => date('H:i:s', strtotime($last_sync_datetime)),
+					'warning_long_since' =>  (bool)(strtotime($last_sync_datetime) < $warning_date),
+				);
 				$cron_task['products']['last_sync']['nb_products'] = Configuration::get('NB_PRODUCTS_LAST');
 			}
 			else
