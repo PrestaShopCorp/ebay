@@ -116,8 +116,9 @@ foreach ($res as &$row) {
         
     }
     
-    if ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A')
-        $row['sync'] = 1;
+    if ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A') {
+        $row['sync'] = (bool)$row['EbayCategoryExists']; // only true if category synced with an eBay category
+    }
 
     // filtering
     if (!$row['exists'])

@@ -85,8 +85,6 @@ function loadPrestaShopProducts(page) {
       
       $('#products-form-view').hide();
       
-      console.log(data);
-      
       $("table#PrestaShopProducts tbody #removeRow").remove();
       $("table#PrestaShopProducts tbody").html(data);
       
@@ -94,6 +92,8 @@ function loadPrestaShopProducts(page) {
       $('#products-pagination').show();
       
       initProductsPagination();
+      
+      loadedProducts = new Array();
       
     }
 	});  
@@ -113,7 +113,7 @@ $(document).ready(function() {
 });
 
 ///
-var loadedProducts = new Array();
+var loadedProducts;
 function showVariations(id_product) {
   
   var elem = $('#show-vars-' + id_product);
@@ -134,13 +134,9 @@ function showVariations(id_product) {
     var sync = parseInt(elem.attr('sync'));
     var blacklisted = parseInt(elem.attr('blacklisted'));
     
-    console.log(multi_sku);
-    console.log(sync);
-    console.log(blacklisted);
-    
 		elem.attr('showing', 1);
 		elem.html('&#9660;');
-
+    
 		if (loadedProducts[id_product])
 			$('.variations-row[product=' + id_product +']').show();
 		else
