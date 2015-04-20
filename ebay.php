@@ -1154,11 +1154,14 @@ class Ebay extends Module
 			EbayCategory::updateCategoryTable($ebay->getCategoriesSkuCompliancy());
 		}
 		
-		if ($this->ebay_profile && (!$this->ebay_profile->getConfiguration('EBAY_STORE_CATEGORY_UPDATE') || Tools::getValue('refresh_store_cat')))
+		if (Tools::getValue('refresh_store_cat'))
 		{
 			$ebay = new EbayRequest();
 			EbayStoreCategory::updateStoreCategoryTable($ebay->getStoreCategories(), $this->ebay_profile);
 		}        
+
+		if($this->ebay_profile)
+			$this->ebay_profile->loadStoreCategories();
 
 		// Checking Extension
 		if (!extension_loaded('curl') || !ini_get('allow_url_fopen'))
@@ -1201,6 +1204,7 @@ class Ebay extends Module
 
 	private function _displayForm()
 	{
+		
 		$alerts = $this->_getAlerts();
 
 		$stream_context = @stream_context_create(array('http' => array('method' => 'GET', 'timeout' => 2)));

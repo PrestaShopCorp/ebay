@@ -67,6 +67,8 @@ class EbayProfile extends ObjectModel
 
 		return $fields;
 	}    
+
+
 	
 	public function __construct($id = null, $id_lang = null, $id_shop = null) 
 	{
@@ -106,6 +108,21 @@ class EbayProfile extends ObjectModel
 		return $returns_policy_configuration;
 	}
 	
+	public function loadStoreCategories()
+	{
+		
+		if($this->getConfiguration('EBAY_PROFILE_STORE_CAT') || !$this->getToken() || $this->getToken() == null)
+			return;
+
+		$ebay_store_categories = EbayStoreCategory::getStoreCategories($this->id);
+		if(count($ebay_store_categories['compatible']) == 0)
+		{
+			$ebay = new EbayRequest();
+			EbayStoreCategory::updateStoreCategoryTable($ebay->getStoreCategories(), $this);
+		}
+		$this->setConfiguration('EBAY_PROFILE_STORE_CAT', 1);
+	}
+
 	public function setReturnsPolicyConfiguration($within, $who_pays, $description, $accepted_option)
 	{
 		
