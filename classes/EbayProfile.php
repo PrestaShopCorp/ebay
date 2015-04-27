@@ -79,7 +79,7 @@ class EbayProfile extends ObjectModel
 					'fields' => array(
 						'id_lang' =>		array('type' => self::TYPE_INT, 'validate' => 'isInt'),
 						'id_shop' =>		array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-						'ebay_user_identifier' => array('type' => self::TYPE_STRING, 'size' => 32),
+						'ebay_user_identifier' => array('type' => self::TYPE_STRING, 'size' => 255),
 						'ebay_site_id' => array('type' => self::TYPE_STRING, 'size' => 32),
 						'id_ebay_returns_policy_configuration' => array('type' => self::TYPE_INT, 'validate' => 'isInt')
 					),
