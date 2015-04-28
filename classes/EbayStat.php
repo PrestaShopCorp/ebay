@@ -58,6 +58,7 @@ class EbayStat
           'nb_international_shipping_services' => EbayShipping::getNbInternationalShippings($ebay_profile->id),
           'date_add' => date('Y-m-d H:i:s'),
           'Configuration' => EbayConfiguration::getAll($ebay_profile->id, array('EBAY_PAYPAL_EMAIL')),
+          'impact_price' => EbayCategoryConfiguration::getImpactPrices($ebay_profile->id),
           'return_policy' => ($ebay_profile->getReturnsPolicyConfiguration()->ebay_returns_description == '' ? 0 : 1),
           'ps_version' => _PS_VERSION_
         );

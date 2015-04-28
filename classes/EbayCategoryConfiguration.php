@@ -232,4 +232,13 @@ class EbayCategoryConfiguration
 			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile);
 	}    
 
+	public static function getImpactPrices($id_ebay_profile)
+	{
+		return array(
+			'positive_impact' => Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'ebay_category_configuration WHERE percent NOT LIKE "-%" AND percent IS NOT NULL AND percent != "" AND id_ebay_profile = '.(int)$id_ebay_profile),
+			'negative_impact' =>  Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'ebay_category_configuration WHERE percent LIKE "-%" AND id_ebay_profile = '.(int)$id_ebay_profile),
+			'impacts' => Db::getInstance()->ExecuteS('SELECT percent FROM '._DB_PREFIX_.'ebay_category_configuration WHERE percent IS NOT NULL AND percent != "" AND id_ebay_profile = '.(int)$id_ebay_profile),
+		);
+	}
+
 }
