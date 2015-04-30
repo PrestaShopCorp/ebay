@@ -93,7 +93,7 @@ function showProducts(id_category) {
 
 						str += '<tr class="product-row ' + (i%2 == 0 ? 'alt_row':'') + '" category="' + id_category + '"> \
 							<td>' + product.name + '</td> \
-							<td class="ebay_center">' + (parseInt(product.stock) ? product.stock : '<span class="red">0?</span>') + '</td> \
+							<td class="ebay_center">' + (parseInt(product.stock) ? product.stock : '<span class="red">0</span>') + '</td> \
 							<td class="ebay_center"> \
 								<input name="showed_products[' + product.id + ']" type="hidden" value="1" /> \
 								<input onchange="toggleSyncProduct('+id_category+')" class="sync-product" category="'+id_category+'" name="to_synchronize[' + product.id + ']" type="checkbox" ' + (product.blacklisted == 1 ? '' : 'checked') + ' /> \

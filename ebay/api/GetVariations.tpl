@@ -28,7 +28,7 @@
 		<NameValueList>
 			<Name>{$name}</Name>
 			{foreach from=$values item=value}
-				<Value>{$value}</Value>
+				<Value><![CDATA[{$value}]]></Value>
 			{/foreach}
 		</NameValueList>
 	{/foreach}
@@ -44,7 +44,7 @@
 				{foreach from=$variation.variation_specifics key=name item=value}
 					<NameValueList>
 						<Name>{$name}</Name>
-						<Value>{$value}</Value>
+						<Value><![CDATA[{$value}]]></Value>
 					</NameValueList>
 				{/foreach}				
 			</VariationSpecifics>
@@ -62,10 +62,10 @@
 	{foreach from=$variations_pictures item=variations_pictures_list}
 		{foreach from=$variations_pictures_list item=picture}
 			{if isset($picture.name)}
-				<VariationSpecificName>{$picture.name}</VariationSpecificName>
+				<VariationSpecificName><![CDATA[{$picture.name}]]></VariationSpecificName>
 			{/if}
 			<VariationSpecificPictureSet>
-				<VariationSpecificValue>{$picture.value}</VariationSpecificValue>                
+				<VariationSpecificValue><![CDATA[{$picture.value}]]></VariationSpecificValue>                
 				<PictureURL>{$picture.url}</PictureURL>
 			</VariationSpecificPictureSet>
 		{/foreach}
