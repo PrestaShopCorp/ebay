@@ -176,7 +176,7 @@ class EbaySynchronizer
 			'description_short' => $product->description_short,
 			'manufacturer_name' => $product->manufacturer_name,
 			'ean13' => $product->ean13,
-			'titleTemplate' => $ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE'),
+			'titleTemplate' => $ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE')
 		);
 	}
 
