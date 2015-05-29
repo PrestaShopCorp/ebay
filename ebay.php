@@ -979,29 +979,16 @@ class Ebay extends Module
 			return false;
 
 		$sql = array();
-		if ($this->is_multishop)
-		{
-			$sql[] = 'SELECT p.`id_product`,  ep.`id_ebay_profile`
-				FROM `'._DB_PREFIX_.'product` p
-				INNER JOIN `'._DB_PREFIX_.'ebay_product` ep
-				ON p.`id_product` = ep.`id_product`
-				WHERE p.`id_product` = '.$id_product.'
-				AND p.`active` = 1
-				AND p.`id_category_default` IN
-				('.EbayCategoryConfiguration::getCategoriesQuery($this->ebay_profile).')';
-		}
-		else
-		{
-			$ebay_profiles = eBayProfile::getProfilesByIdShop();
-			foreach ($ebay_profiles as $profile) {
-				$sql[] = 'SELECT `id_product`, '.$profile['id_ebay_profile'].' AS `id_ebay_profile`, '.$profile['id_lang'].' AS `id_lang` 
-				FROM `'._DB_PREFIX_.'product`
-				WHERE `id_product` = '.$id_product.'
-				AND `active` = 1
-				AND `id_category_default` IN
-				('.EbayCategoryConfiguration::getCategoriesQuery(new EbayProfile($profile['id_ebay_profile'])).')';	
-			}
-			
+		
+		$ebay_profiles = eBayProfile::getProfilesByIdShop();
+		
+		foreach ($ebay_profiles as $profile) {
+			$sql[] = 'SELECT `id_product`, '.$profile['id_ebay_profile'].' AS `id_ebay_profile`, '.$profile['id_lang'].' AS `id_lang` 
+			FROM `'._DB_PREFIX_.'product`
+			WHERE `id_product` = '.$id_product.'
+			AND `active` = 1
+			AND `id_category_default` IN
+			('.EbayCategoryConfiguration::getCategoriesQuery(new EbayProfile($profile['id_ebay_profile'])).')';	
 		}
 
 		foreach ($sql as $q) {
