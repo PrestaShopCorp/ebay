@@ -101,7 +101,7 @@ class EbayCountrySpec
 			'currency'       => 'EUR',
 			'site_name'      => 'France',
 			'site_extension' => 'fr',
-			'img_stats'      => 'img/ebay_stats.png',
+			'img_stats'      => 'views/img/ebay_stats.png',
 			'iso_code'       => 'fr',
 			'signin'         => 'https://signin.ebay.fr/ws/eBayISAPI.dll',
 			'signin_pro_url' => 'https://scgi.ebay.fr/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2',

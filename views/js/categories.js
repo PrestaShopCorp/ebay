@@ -70,7 +70,7 @@ function showProducts(id_category) {
 			$('.product-table-row[category=' + id_category +']').show();
 		else
 		{
-			$('<img src="' + module_path + 'img/loading-small.gif" id="loading-' + id_category +'" alt="" />').insertAfter(elem);
+			$('<img src="' + module_path + 'views/img/loading-small.gif" id="loading-' + id_category +'" alt="" />').insertAfter(elem);
 
 			$.ajax({
 				dataType: 'json',
@@ -222,7 +222,7 @@ $(document).ready(function() {
   loadCategories();
   
 	$("#configForm2SuggestedCategories input[type=submit]").click(function(){
-		$('<div class="ebay_center"><img src="' + module_path + 'img/loading-small.gif" alt="" />' + categories_ebay_l['thank you for waiting'] + '</div>').insertAfter($(this));
+		$('<div class="ebay_center"><img src="' + module_path + 'views/img/loading-small.gif" alt="" />' + categories_ebay_l['thank you for waiting'] + '</div>').insertAfter($(this));
 		$(this).fadeOut();
 		$.ajax({
 			type: "POST",

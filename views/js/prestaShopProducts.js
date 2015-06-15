@@ -141,7 +141,7 @@ function showVariations(id_product) {
 			$('.variations-row[product=' + id_product +']').show();
 		else
 		{
-			$('<img src="' + module_path + 'img/loading-small.gif" id="loading-' + id_product +'" alt="" />').insertAfter(elem);
+			$('<img src="' + module_path + 'views/img/loading-small.gif" id="loading-' + id_product +'" alt="" />').insertAfter(elem);
 
 			$.ajax({
 				dataType: 'json',

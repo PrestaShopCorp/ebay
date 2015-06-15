@@ -57,7 +57,7 @@
 		<tbody>
 			<tr id="removeRow">
 				<td class="center" colspan="2">
-					<img src="{$_path|escape:'htmlall'}img/loading-small.gif" alt="" />
+					<img src="{$_path|escape:'htmlall'}views/img/loading-small.gif" alt="" />
 				</td>
 			</tr>
 		</tbody>
@@ -72,4 +72,4 @@ var logs_ebay_l = {ldelim}
     'show': "{l s='show' mod='ebay'}"
 {rdelim};
 </script>
-<script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/apiLogs.js?date={$date|escape:'htmlall'}"></script>
+<script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/views/js/apiLogs.js?date={$date|escape:'htmlall'}"></script>

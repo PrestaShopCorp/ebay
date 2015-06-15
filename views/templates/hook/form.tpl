@@ -57,7 +57,7 @@
 
 {if $show_welcome || $show_welcome_stats}
 <div class="ebay-welcome">
-    <img id="ebay-logo" src="{$path|escape:'htmlall'}img/ebay.png" />
+    <img id="ebay-logo" src="{$path|escape:'htmlall'}views/img/ebay.png" />
     <div id="ebay-welcome-top" class="ebay-boxes-2-col-table">
         <div class="ebay-boxes-2-col-cell right">
             <div class="ebay-boxes-2-col-cell-content">
@@ -100,7 +100,7 @@
                             {l s='Begin or boost your activity on eBay, enjoying ' mod='ebay'}<b> {l s='90 free days of subscription' mod='ebay'}</b> {l s='to eBay Shops' mod='ebay'}<br/>
                             <a href="{l s='http://pages.ebay.fr/promos/termsfrstoretrial3months/' mod='ebay'}" target="_blank">{l s='More informations' mod='ebay'}</a>
                         </div>
-                        <img src="../modules/ebay/img/open_your_shop.jpg" alt="" id="open_your_shop">
+                        <img src="../modules/ebay/views/img/open_your_shop.jpg" alt="" id="open_your_shop">
                         <div class="clear clearfix"></div>
                     </div>
                     {/if}
@@ -123,16 +123,16 @@
                     		<p id="ebay-no-profile">{l s='You don\'t have any profile setup yet' mod='ebay'}</p>
                     		{if $is_version_one_dot_five}
                     			{if $is_version_one_dot_five_dot_one}
-                    				<br/><img src="../modules/ebay/img/warn.png" /><strong>{l s='You\'re using version 1.5.1 of PrestaShop. We invite you to upgrade to version 1.5.2  so you can use the eBay module properly.' mod='ebay'}</strong>
+                    				<br/><img src="../modules/ebay/views/img/warn.png" /><strong>{l s='You\'re using version 1.5.1 of PrestaShop. We invite you to upgrade to version 1.5.2  so you can use the eBay module properly.' mod='ebay'}</strong>
                     				<br/><strong>{l s='Please synchronize your eBay sales in your Prestashop front office' mod='ebay'}</strong>
                     			{/if}
                     		{/if}
                     	{else}
-                    		<img src="../modules/ebay/img/warn.png" /><strong>{l s='Please complete the following settings to configure the module' mod='ebay'}</strong>
-                    		<br />{if in_array('registration', $alert)}<img src="../modules/ebay/img/warn.png" />{else}<img src="../modules/ebay/img/valid.png" />{/if} 1) {l s='Register the module on eBay' mod='ebay'}
-                    		<br />{if in_array('allowurlfopen', $alert)}<img src="../modules/ebay/img/warn.png" />{else}<img src="../modules/ebay/img/valid.png" />{/if} 2) {l s='Allow url fopen' mod='ebay'}
-                    		<br />{if in_array('curl', $alert)}<img src="../modules/ebay/img/warn.png" />{else}<img src="../modules/ebay/img/valid.png" />{/if} 3) {l s='Enable cURL' mod='ebay'}
-                    		<br />{if in_array('SellerBusinessType', $alert)}<img src="../modules/ebay/img/warn.png" />{else}<img src="../modules/ebay/img/valid.png" />{/if} 4) {l s='Please register an eBay business seller account to configure the application' mod='ebay'}
+                    		<img src="../modules/ebay/views/img/warn.png" /><strong>{l s='Please complete the following settings to configure the module' mod='ebay'}</strong>
+                    		<br />{if in_array('registration', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 1) {l s='Register the module on eBay' mod='ebay'}
+                    		<br />{if in_array('allowurlfopen', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 2) {l s='Allow url fopen' mod='ebay'}
+                    		<br />{if in_array('curl', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 3) {l s='Enable cURL' mod='ebay'}
+                    		<br />{if in_array('SellerBusinessType', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 4) {l s='Please register an eBay business seller account to configure the application' mod='ebay'}
                     	{/if}
                     </div>
                 {else}
@@ -184,7 +184,7 @@
                     {if $show_seller_tips}
                         <a id="ebay-seller-tips-link" href>{l s='Show seller tips' mod='ebay'}</a>
                     {/if}
-                    <a id="" href="{l s='http://www.202-ecommerce.com/ebay/tuto-en' mod='ebay'}" target="_blank"><img id="ebay-install-pict" src="../modules/ebay/img/{l s='ebay_video_en' mod='ebay'}.png" /></a>
+                    <a id="" href="{l s='http://www.202-ecommerce.com/ebay/tuto-en' mod='ebay'}" target="_blank"><img id="ebay-install-pict" src="../modules/ebay/views/img/{l s='ebay_video_en' mod='ebay'}.png" /></a>
                     <p id="ebay-install-title">{l s='Resources' mod='ebay'}</p>
                     <ul id="ebay-install-ul">
                         <li><a href="http://202-ecommerce.com/d/eBay-doc_{$documentation_lang}.pdf" target="_blank">{l s='Download the add-on installation guide' mod='ebay'}</a></li>
@@ -205,7 +205,7 @@
             <div class="ebay-boxes-2-col-cell right">
                 <div class="ebay-boxes-2-col-cell-content">
                     <div id="ebay-welcome-left-content" style="padding-bottom: 3em">
-                        <img id="ebay-logo" src="../modules/ebay/img/ebay.png" />
+                        <img id="ebay-logo" src="../modules/ebay/views/img/ebay.png" />
                         <p class="title ebay-title">{l s='A PERFECT PARTNER FOR YOUR BUSINESS' mod='ebay'}</p>
                         <p>{{l s='eBay is one of the |b|largest marketplaces in the world that connects buyers and sellers of all sizes around the world|/b|.' mod='ebay'}|replace:'|b|':'<b>'|replace:'|/b|':'</b>'}</p>
 
@@ -285,6 +285,6 @@
         var main_tab = '{$main_tab}';
         var id_tab = '{$id_tab}';
     </script>
-    <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/header.js?date={$date|escape:'htmlall'}"></script>
+    <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/views/js/header.js?date={$date|escape:'htmlall'}"></script>
 {/if}
 <!-- after seller tips -->

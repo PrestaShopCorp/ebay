@@ -101,7 +101,7 @@
 		<tbody>
 			<tr id="removeRow">
 				<td class="center" colspan="3">
-					<img src="{$_path|escape:'htmlall'}img/loading-small.gif" alt="" />
+					<img src="{$_path|escape:'htmlall'}views/img/loading-small.gif" alt="" />
 				</td>
 			</tr>
 		</tbody>
@@ -120,6 +120,6 @@
         var id_employee = {$id_employee};     
     </script>
     
-    <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/prestaShopProducts.js?date={$date|escape:'htmlall'}"></script>
+    <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/views/js/prestaShopProducts.js?date={$date|escape:'htmlall'}"></script>
 
 </div>
