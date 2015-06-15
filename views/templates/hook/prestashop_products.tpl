@@ -78,7 +78,7 @@
 				</th>
 				
                 <th style="width:185px;">
-                    <span data-inlinehelp="{l s="Configured in the 'Parameter > 2.Categories and pricing' tab Vérifier le nom en Anglais" mod='ebay'}">{l s='Associated eBay category' mod='ebay'}</span>
+                    <span data-inlinehelp="{l s="Configured in the 'Parameter > 2.Categories and pricing' tab" mod='ebay'}">{l s='Associated eBay category' mod='ebay'}</span>
                 </th>
                 
                 <th class="center">
