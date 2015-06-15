@@ -213,8 +213,8 @@ class Ebay extends Module
 				else 
 				{
 					
-					$iso_country = strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
-					$iso_lang = strtolower(Language::getIsoById(Configuration::get('PS_LANG_DEFAULT')));
+					$iso_country = Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
+					$iso_lang = Tools::strtolower(Language::getIsoById(Configuration::get('PS_LANG_DEFAULT')));
 					$this->ebay_country = EbayCountrySpec::getInstanceByCountryAndLang($iso_country,$iso_lang);
 
 					return false;
@@ -1706,7 +1706,7 @@ class Ebay extends Module
 		if ($search) {
 			$category_tab_filtered = array();
 			foreach ($category_tab as $c) {
-				if (strpos(strtolower($c['name']), strtolower($search)) !== false)
+				if (strpos(Tools::strtolower($c['name']), Tools::strtolower($search)) !== false)
 					$category_tab_filtered[] = $c;
 			}
 			$category_tab = $category_tab_filtered;

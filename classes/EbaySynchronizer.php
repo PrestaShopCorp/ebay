@@ -1030,7 +1030,7 @@ class EbaySynchronizer
 			$id_product_attribute_fix = (int)Tools::getValue('id_product_attribute');
 			$key = $product_id.'-'.$id_product_attribute_fix;
 
-			if (substr(_PS_VERSION_, 0, 3) == '1.3')
+			if (Tools::substr(_PS_VERSION_, 0, 3) == '1.3')
 			{
 				$quantity_fix = (int)Tools::getValue('attribute_quantity');
 				if ($id_product_attribute_fix > 0 && $quantity_fix > 0)
