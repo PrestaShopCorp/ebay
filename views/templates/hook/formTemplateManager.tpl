@@ -22,7 +22,7 @@
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-<form action="{$action_url|escape:'htmlall'}" method="post" class="form" id="configForm3">
+<form action="{$action_url|escape:'htmlall':'UTF-8'}" method="post" class="form" id="configForm3">
 	<fieldset style="border: 0">
 		<h4>{l s='Optimise your listing titles with tags:' mod='ebay'}</h4>
 		<label style="float:none">{l s='Set up a title format using tags' mod='ebay'}</label>
@@ -33,10 +33,10 @@
 			<option value="{ldelim}REFERENCE{rdelim}">{ldelim}REFERENCE{rdelim}</option>
 			<option value="{ldelim}EAN{rdelim}">{ldelim}EAN{rdelim}</option>
 			{foreach from=$features_product item=feature}
-				<option value="{ldelim}FEATURE_{$feature.name|upper|replace:' ':'_'|trim|escape:'htmlall'}{rdelim}">{ldelim}FEATURE_{$feature.name|upper|replace:' ':'_'|trim|escape:'htmlall'}{rdelim}</option>
+				<option value="{ldelim}FEATURE_{$feature.name|upper|replace:' ':'_'|trim|escape:'htmlall':'UTF-8'}{rdelim}">{ldelim}FEATURE_{$feature.name|upper|replace:' ':'_'|trim|escape:'htmlall':'UTF-8'}{rdelim}</option>
 			{/foreach}
 		</select><br/>
-		<input style="width:296px" placeholder="{l s='{Brand} Shirt, Size' mod='ebay'}" type="text" name="ebay_product_template_title" id="ebay_product_template_title" value="{$ebay_product_template_title|escape:'htmlall'}">
+		<input style="width:296px" placeholder="{l s='{Brand} Shirt, Size' mod='ebay'}" type="text" name="ebay_product_template_title" id="ebay_product_template_title" value="{$ebay_product_template_title|escape:'htmlall':'UTF-8'}">
 		<span>{l s='E.g. Blue Paul Smith Shirt, Size 10' mod='ebay'}</span>
 		<br/>
 		<h4><span data-dialoghelp="#tagsTemplate" data-inlinehelp="{l s='View the list of tags.' mod='ebay'}">{l s='Design an eye-catching template to attract buyers.' mod='ebay'} :</span></h4>
@@ -65,7 +65,7 @@
 		</select>
 		<textarea style="width:100%" class="rte" cols="100" rows="50" name="ebay_product_template">{$ebay_product_template}</textarea><br />
 		{if $is_one_dot_three}
-			<script type="text/javascript" src="{$base_uri|escape:'htmlall'}js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+			<script type="text/javascript" src="{$base_uri|escape:'htmlall':'UTF-8'}js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 			<script type="text/javascript">
 					tinyMCE.init({ldelim}
 						mode : "textareas",
@@ -80,7 +80,7 @@
 						theme_advanced_toolbar_align : "left",
 						theme_advanced_statusbar_location : "bottom",
 						theme_advanced_resizing : false,
-						content_css : "{$base_uri|escape:'htmlall'}themes/{$theme_name|escape:'htmlall'}/css/global.css",
+						content_css : "{$base_uri|escape:'htmlall':'UTF-8'}themes/{$theme_name|escape:'htmlall':'UTF-8'}/css/global.css",
 						document_base_url : "{$base_uri|escape:'urlencode'}",
 						width: "850",
 						height: "800",
@@ -92,7 +92,7 @@
 						media_external_list_url : "lists/media_list.js",
 						elements : "nourlconvert",
 						convert_urls : false,
-						language : "{$language|escape:'htmlall'}", 
+						language : "{$language|escape:'htmlall':'UTF-8'}", 
 						init_instance_callback:function(){
 							$('#selectTagTemplate').appendTo('#ebay_product_template_toolbargroup');
 						}
@@ -100,11 +100,11 @@
 			</script>			
 		{elseif $is_one_dot_five}
 			<script type="text/javascript">	
-				var iso = '{$iso|escape:'htmlall'}';
+				var iso = '{$iso|escape:'htmlall':'UTF-8'}';
 				var pathCSS = '{$theme_css_dir|escape:'urlencode'}';
-				var ad = '{$ad|escape:'htmlall'}';
+				var ad = '{$ad|escape:'htmlall':'UTF-8'}';
 			</script>
-			<script type="text/javascript" src="{$base_uri|escape:'htmlall'}js/tiny_mce/tiny_mce.js"></script>
+			<script type="text/javascript" src="{$base_uri|escape:'htmlall':'UTF-8'}js/tiny_mce/tiny_mce.js"></script>
 			<script type="text/javascript">
 			{literal}
 				if(tinyMCE.majorVersion == 4)
@@ -206,11 +206,11 @@
 			</script>
 		{else}
 			<script type="text/javascript">
-				var iso = '{if isset($iso_type_mce)}{$iso_type_mce|escape:'htmlall'}{else}false{/if}';
-				var pathCSS = '{$theme_css_dir|escape:'htmlall'}';
-				var ad = '{$ad|escape:'htmlall'}';
+				var iso = '{if isset($iso_type_mce)}{$iso_type_mce|escape:'htmlall':'UTF-8'}{else}false{/if}';
+				var pathCSS = '{$theme_css_dir|escape:'htmlall':'UTF-8'}';
+				var ad = '{$ad|escape:'htmlall':'UTF-8'}';
 			</script>
-			<script type="text/javascript" src="{$ps_js_dir|escape:'htmlall'}/tiny_mce/tiny_mce.js"></script>
+			<script type="text/javascript" src="{$ps_js_dir|escape:'htmlall':'UTF-8'}/tiny_mce/tiny_mce.js"></script>
 			<script>
 				tinyMCE.init({
 					mode : "specific_textareas",

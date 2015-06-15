@@ -57,14 +57,14 @@
 		<tbody>
 			<tr id="removeRow">
 				<td class="center" colspan="2">
-					<img src="{$_path|escape:'htmlall'}views/img/loading-small.gif" alt="" />
+					<img src="{$_path|escape:'htmlall':'UTF-8'}views/img/loading-small.gif" alt="" />
 				</td>
 			</tr>
 		</tbody>
 	</table>
 
 <script type="text/javascript">
-var ebay_token = '{$configs.EBAY_SECURITY_TOKEN|escape:'htmlall'}';
+var ebay_token = '{$configs.EBAY_SECURITY_TOKEN|escape:'htmlall':'UTF-8'}';
 var load_api_logs = {if $id_tab == 11}true{else}false{/if};
 var logs_ebay_l = {ldelim}
 	'No logs available' : "{l s='No logs available' mod='ebay'}",
@@ -72,4 +72,4 @@ var logs_ebay_l = {ldelim}
     'show': "{l s='show' mod='ebay'}"
 {rdelim};
 </script>
-<script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/views/js/apiLogs.js?date={$date|escape:'htmlall'}"></script>
+<script type="text/javascript" src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/js/apiLogs.js?date={$date|escape:'htmlall':'UTF-8'}"></script>

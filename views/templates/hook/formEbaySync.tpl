@@ -40,9 +40,9 @@
 	{/literal}
 </style>
 <script>
-	var nbProducts = {$nb_products|escape:'htmlall'};
-	var nbProductsModeA = {$nb_products_mode_a|escape:'htmlall'};
-	var nbProductsModeB = {$nb_products_mode_b|escape:'htmlall'};
+	var nbProducts = {$nb_products|escape:'htmlall':'UTF-8'};
+	var nbProductsModeA = {$nb_products_mode_a|escape:'htmlall':'UTF-8'};
+	var nbProductsModeB = {$nb_products_mode_b|escape:'htmlall':'UTF-8'};
 	{literal}
 	$(document).ready(function() {
 		$(".categorySync").click(function() {
@@ -141,7 +141,7 @@
 
         {if isset($category_alerts) && !empty($category_alerts)}
             <div class="warning big">
-                {$category_alerts|escape:'htmlall'}
+                {$category_alerts|escape:'htmlall':'UTF-8'}
             </div>
         {/if}
 
@@ -179,7 +179,7 @@
 						<tr><td colspan="2">{l s='No category found.' mod='ebay'}</td></tr>
 					{else}
 						{foreach from=$categories item=category}
-							<tr class="{$category.row_class|escape:'htmlall'}"><td><input type="checkbox" class="categorySync" name="category[]" value="{$category.value|escape:'htmlall'}" {$category.checked|escape:'htmlall'} /><td>{$category.name|escape:'htmlall'}</td></tr>
+							<tr class="{$category.row_class|escape:'htmlall':'UTF-8'}"><td><input type="checkbox" class="categorySync" name="category[]" value="{$category.value|escape:'htmlall':'UTF-8'}" {$category.checked|escape:'htmlall':'UTF-8'} /><td>{$category.name|escape:'htmlall':'UTF-8'}</td></tr>
 						{/foreach}
 					{/if}
 				</tbody>
@@ -208,7 +208,7 @@
 			{/if}
 		</div><br />
 		<div>
-			<input type="submit" name="btnSubmitSyncAndPublish" class="primary button" value="{l s='Save and list' mod='ebay'} {$nb_products|escape:'htmlall'} {l s='products' mod='ebay'}" id="save_and_publish"/>
+			<input type="submit" name="btnSubmitSyncAndPublish" class="primary button" value="{l s='Save and list' mod='ebay'} {$nb_products|escape:'htmlall':'UTF-8'} {l s='products' mod='ebay'}" id="save_and_publish"/>
 			<input type="submit" name="btnSubmitSync" class="button" value="{l s='Save' mod='ebay'}" />
 		</div>
 	</fieldset>

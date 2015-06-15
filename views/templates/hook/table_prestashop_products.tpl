@@ -26,7 +26,7 @@
 {if $products === false || sizeof($products) === 0}
 
 	<tr>
-		<td colspan="3" class="center">{$noProductFound|escape:'htmlall'}</td>
+		<td colspan="3" class="center">{$noProductFound|escape:'htmlall':'UTF-8'}</td>
 	</tr>
 
 {else}
@@ -47,29 +47,29 @@
 
 	{foreach from=$products key=k  item=p}
 
-		<tr{if $k % 2 !== 0} class="alt_row"{/if} id="product-{$p.id_product|escape:'htmlall'}">
+		<tr{if $k % 2 !== 0} class="alt_row"{/if} id="product-{$p.id_product|escape:'htmlall':'UTF-8'}">
 
             <td>
                 {if $p.hasAttributes}
-                    <a id="show-vars-{$p.id_product|escape:'htmlall'}"
+                    <a id="show-vars-{$p.id_product|escape:'htmlall':'UTF-8'}"
                         class="show-vars"
-                        product-name="{$p.name|escape:'htmlall'}"
+                        product-name="{$p.name|escape:'htmlall':'UTF-8'}"
                         multi-sku="{if $p.EbayCategoryIsMultiSku}1{else}0{/if}"
                         sync="{if $p.sync}1{else}0{/if}"
                         blacklisted="{if $p.blacklisted}1{else}0{/if}"
-                     href="javascript:showVariations({$p.id_product|escape:'htmlall'})">&#9654;</a>
+                     href="javascript:showVariations({$p.id_product|escape:'htmlall':'UTF-8'})">&#9654;</a>
                      <a href="{$p.link}" target="_blank">{$p.id_product|intval}</a>
                 {else}<span class="left-padded-name"><a href="{$p.link}" target="_blank">{$p.id_product|intval}</a></span>{/if}
             </td>
 
-			<td>{$p.name|escape:'htmlall'}</td>
+			<td>{$p.name|escape:'htmlall':'UTF-8'}</td>
 
             <td class="center{if !$p.stock} red{/if}">{$p.stock}</td>
             
-            <td>{$p.category_full_name|escape:'htmlall'}</td>
+            <td>{$p.category_full_name|escape:'htmlall':'UTF-8'}</td>
 
             {if $p.id_category_ref}
-                <td>{$p.ebay_category_full_name|escape:'htmlall'}</td>
+                <td>{$p.ebay_category_full_name|escape:'htmlall':'UTF-8'}</td>
             {else}
                 <td class="center">-</td>
             {/if}

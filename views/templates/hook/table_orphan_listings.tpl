@@ -37,11 +37,11 @@
 
 			<td>
                 {if $a.id_product_ref}
-                    <a style="display: block;width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis" href="{$a.link|escape:'htmlall'}" target="_blank">{$a.link|escape:'htmlall'}</a>
+                    <a style="display: block;width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis" href="{$a.link|escape:'htmlall':'UTF-8'}" target="_blank">{$a.link|escape:'htmlall':'UTF-8'}</a>
                 {/if} 
 			</td>
 
-            <td>{if $a.exists}{$a.psProductName|escape:'htmlall'}{else}{l s='Product deleted. Id: ' mod='ebay'}{$a.id_product}{/if}</td>
+            <td>{if $a.exists}{$a.psProductName|escape:'htmlall':'UTF-8'}{else}{l s='Product deleted. Id: ' mod='ebay'}{$a.id_product}{/if}</td>
             
             {if $a.exists}
                 <td class="center">{if $a.active && !$a.blacklisted}{l s='No' mod='ebay'}{else}{l s='Yes' mod='ebay'}{/if}</td>

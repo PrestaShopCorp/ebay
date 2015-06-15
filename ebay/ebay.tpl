@@ -22,15 +22,15 @@
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-<link rel="stylesheet" type="text/css" href="{$module_url|escape:'htmlall'}views/css/ebay.css" />
+<link rel="stylesheet" type="text/css" href="{$module_url|escape:'htmlall':'UTF-8'}views/css/ebay.css" />
 <table border="0" cellpadding="0" cellspacing="0" class="ProductPrestashop">
 <tbody>
 	<tr class="headerProductPrestashop">
-		<td class="headerLeftProductPrestashop"><img src="{$shop_logo|escape:'htmlall'}" alt="{$shop_name|escape:'htmlall'}" /></td>
+		<td class="headerLeftProductPrestashop"><img src="{$shop_logo|escape:'htmlall':'UTF-8'}" alt="{$shop_name|escape:'htmlall':'UTF-8'}" /></td>
 		<td class="headerCenterProductPrestashop">{literal}{SLOGAN}{/literal}</td>
 		<td class="headerRightProductPrestashop">
-			<a href="http://feedback.ebay.fr/ws/eBayISAPI.dll?ViewFeedback2&userid={literal}{EBAY_IDENTIFIER}{/literal}&sspagename=VIP:feedback&ftab=FeedbackAsSeller">{l s='See our ratings' mod='ebay'} <img src="{$module_url|escape:'htmlall'}views/img/stats.png" alt="{l s='See our ratings' mod='ebay'}" border="0" /></a><br />
-			<a href="http://my.ebay.fr/ws/eBayISAPI.dll?AcceptSavedSeller&sellerid={literal}{EBAY_IDENTIFIER}{/literal}&ssPageName=STRK:MEFS:ADDSTR">{l s='Add this shop to my favorites' mod='ebay'} <img src="{$module_url|escape:'htmlall'}views/img/favorite.png" alt="{l s='Add this shop to my favorites' mod='ebay'}" border="0" /></a><br /><br />
+			<a href="http://feedback.ebay.fr/ws/eBayISAPI.dll?ViewFeedback2&userid={literal}{EBAY_IDENTIFIER}{/literal}&sspagename=VIP:feedback&ftab=FeedbackAsSeller">{l s='See our ratings' mod='ebay'} <img src="{$module_url|escape:'htmlall':'UTF-8'}views/img/stats.png" alt="{l s='See our ratings' mod='ebay'}" border="0" /></a><br />
+			<a href="http://my.ebay.fr/ws/eBayISAPI.dll?AcceptSavedSeller&sellerid={literal}{EBAY_IDENTIFIER}{/literal}&ssPageName=STRK:MEFS:ADDSTR">{l s='Add this shop to my favorites' mod='ebay'} <img src="{$module_url|escape:'htmlall':'UTF-8'}views/img/favorite.png" alt="{l s='Add this shop to my favorites' mod='ebay'}" border="0" /></a><br /><br />
 			<form action="http://stores.ebay.fr/{literal}{EBAY_SHOP}{/literal}/_i.html" method="GET">
 				<input type="text" name="_nkw" class="headerSearchProductPrestashop" value="" />
 				<input type="hidden" name="_armrs" value="1" />

@@ -44,7 +44,7 @@
 		.ebay_dl > * {float: left; margin: 10px 0 0 10px}
 		.ebay_dl > dt {min-width: 100px; display: block; clear: both; text-align: left}
 		#ebay_label {font-weight: normal; float: none}
-		#button_ebay{background-image:url({/literal}{$path|escape:'htmlall'}{literal}img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:385px;height:191px;cursor:pointer;padding-bottom:70px;font-weight:bold;font-size:22px}
+		#button_ebay{background-image:url({/literal}{$path|escape:'htmlall':'UTF-8'}{literal}img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:385px;height:191px;cursor:pointer;padding-bottom:70px;font-weight:bold;font-size:22px}
 	input.primary {
 		text-shadow: none;
 		background: -webkit-gradient(linear, center top ,center bottom, from(#0055FF), to(#0055AA)) repeat scroll 0 0 transparent;
@@ -117,7 +117,7 @@
                         {if $ebay_user_identifiers|count}
                             <select id="eBayUsernamesList" name="eBayUsernamesList" class="ebay_select ebay-float-right">
                                 {foreach from=$ebay_user_identifiers item='profile'}
-                                    <option value="{$profile.identifier|escape:'htmlall'}">{$profile.identifier|escape:'htmlall'}</option>
+                                    <option value="{$profile.identifier|escape:'htmlall':'UTF-8'}">{$profile.identifier|escape:'htmlall':'UTF-8'}</option>
                                 {/foreach}
                                 <option value="-1">New eBay user</option>
                             </select>
@@ -135,7 +135,7 @@
             			<select name="ebay_country" id="ebay_countries" class="ebay_select ebay-float-right">
             				{if isset($ebay_countries) && $ebay_countries && sizeof($ebay_countries)}
             					{foreach from=$ebay_countries item='country' key='key'}
-            						<option value="{$key|escape:'htmlall'}" data-signin="{$country.signin|escape:'htmlall'}" {if $key == $default_country} selected{/if}>{if $country.subdomain}{$country.subdomain|escape:'htmlall'}.{/if}ebay.{$country.site_extension|escape:'htmlall'}</option>
+            						<option value="{$key|escape:'htmlall':'UTF-8'}" data-signin="{$country.signin|escape:'htmlall':'UTF-8'}" {if $key == $default_country} selected{/if}>{if $country.subdomain}{$country.subdomain|escape:'htmlall':'UTF-8'}.{/if}ebay.{$country.site_extension|escape:'htmlall':'UTF-8'}</option>
             					{/foreach}
             				{/if}
             			</select>
@@ -147,7 +147,7 @@
             			<select name="ebay_language" id="ebay_languages" class="ebay_select ebay-float-right">
             				{if isset($languages) && $languages && sizeof($languages)}
             					{foreach from=$languages item='language' key='key'}
-            						<option value="{$language.id_lang|escape:'htmlall'}">{$language.name|escape:'htmlall'}</option>
+            						<option value="{$language.id_lang|escape:'htmlall':'UTF-8'}">{$language.name|escape:'htmlall':'UTF-8'}</option>
             					{/foreach}
             				{/if}
             			</select>

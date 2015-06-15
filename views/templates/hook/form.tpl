@@ -57,7 +57,7 @@
 
 {if $show_welcome || $show_welcome_stats}
 <div class="ebay-welcome">
-    <img id="ebay-logo" src="{$path|escape:'htmlall'}views/img/ebay.png" />
+    <img id="ebay-logo" src="{$path|escape:'htmlall':'UTF-8'}views/img/ebay.png" />
     <div id="ebay-welcome-top" class="ebay-boxes-2-col-table">
         <div class="ebay-boxes-2-col-cell right">
             <div class="ebay-boxes-2-col-cell-content">
@@ -117,7 +117,7 @@
         <div class="ebay-boxes-2-col-cell-content left">
             <fieldset class="new" style="min-height: 165px">
                 {if $show_welcome}
-                	<legend><img src="{$path|escape:'htmlall'}logo.gif" alt="" />{l s='eBay Module Status' mod='ebay'}</legend>
+                	<legend><img src="{$path|escape:'htmlall':'UTF-8'}logo.gif" alt="" />{l s='eBay Module Status' mod='ebay'}</legend>
                 	<div style="float: left">
                     	{if empty($alert)}
                     		<p id="ebay-no-profile">{l s='You don\'t have any profile setup yet' mod='ebay'}</p>
@@ -152,14 +152,14 @@
                                 </thead>
                                 <tbody>
                         			{foreach from=$profiles item=profile}            
-                                        <tr onclick="document.getElementById('ebay_profile_form_{$profile.id_ebay_profile|escape:'htmlall'}').submit();" style="cursor:pointer{if $current_profile->id == $profile.id_ebay_profile};font-weight:bold{/if}">
-                                                <td><form id="ebay_profile_form_{$profile.id_ebay_profile|escape:'htmlall'}" method="post"><input type="hidden" name="ebay_profile" value="{$profile.id_ebay_profile|escape:'htmlall'}" /><input type="hidden" name="action" value="logged" /></form>{$profile.id_ebay_profile|escape:'htmlall'}</td>                                                
-                                            <td>{$profile.ebay_user_identifier|escape:'htmlall'}</td>
-                                            <td>eBay {$profile.site_name|escape:'htmlall'}</td>
-                                            {if version_compare(_PS_VERSION_, '1.5', '>')}<td>{$profile.name|escape:'htmlall'}</td>{/if}
-                                            <td align="center"><img src="../img/l/{$profile.id_lang|escape:'htmlall'}.jpg" alt="{$profile.language_name|escape:'htmlall'}" title="{$profile.language_name|escape:'htmlall'}"></td>
-                                            <td align="center">{$profile.nb_products|escape:'htmlall'}</td>
-                                            <td align="center"><img src="../img/admin/edit.gif" /><a href class="delete-profile" data-profile="{$profile.id_ebay_profile|escape:'htmlall'}"><img src="../img/admin/delete.gif" /></a></td>     
+                                        <tr onclick="document.getElementById('ebay_profile_form_{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}').submit();" style="cursor:pointer{if $current_profile->id == $profile.id_ebay_profile};font-weight:bold{/if}">
+                                                <td><form id="ebay_profile_form_{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}" method="post"><input type="hidden" name="ebay_profile" value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}" /><input type="hidden" name="action" value="logged" /></form>{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}</td>                                                
+                                            <td>{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</td>
+                                            <td>eBay {$profile.site_name|escape:'htmlall':'UTF-8'}</td>
+                                            {if version_compare(_PS_VERSION_, '1.5', '>')}<td>{$profile.name|escape:'htmlall':'UTF-8'}</td>{/if}
+                                            <td align="center"><img src="../img/l/{$profile.id_lang|escape:'htmlall':'UTF-8'}.jpg" alt="{$profile.language_name|escape:'htmlall':'UTF-8'}" title="{$profile.language_name|escape:'htmlall':'UTF-8'}"></td>
+                                            <td align="center">{$profile.nb_products|escape:'htmlall':'UTF-8'}</td>
+                                            <td align="center"><img src="../img/admin/edit.gif" /><a href class="delete-profile" data-profile="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}"><img src="../img/admin/delete.gif" /></a></td>     
                                         </tr>
                                     {/foreach}
                                 </tbody>
@@ -188,8 +188,8 @@
                     <p id="ebay-install-title">{l s='Resources' mod='ebay'}</p>
                     <ul id="ebay-install-ul">
                         <li><a href="http://202-ecommerce.com/d/eBay-doc_{$documentation_lang}.pdf" target="_blank">{l s='Download the add-on installation guide' mod='ebay'}</a></li>
-                        <li><a href="{$pro_url|escape:'htmlall'}" target="_blank">{l s='eBay Seller center' mod='ebay'}</a></li>
-                        <li><a href="{$fee_url|escape:'htmlall'}" target="_blank">{l s='eBay fees for professional sellers' mod='ebay'}</a></li>
+                        <li><a href="{$pro_url|escape:'htmlall':'UTF-8'}" target="_blank">{l s='eBay Seller center' mod='ebay'}</a></li>
+                        <li><a href="{$fee_url|escape:'htmlall':'UTF-8'}" target="_blank">{l s='eBay fees for professional sellers' mod='ebay'}</a></li>
                         <li><b><a href="{if $site_extension == 'fr'}http://202-ecommerce.com/ebay/{else}http://en.202-ecommerce.com/ebay-en/{/if}"  target="_blank">{l s='Contact us' mod='ebay'}</a></b></li>
                     </ul>
                 </fieldset>
@@ -221,19 +221,19 @@
                                 <p class="ebay-light-gray-box-title">{l s='Tips to sell more on eBay:' mod='ebay'}</p>
                                 <ul class="ebay-light-gray-box-ul">
                                     <li>
-                                        {assign var="link" value="<a href=\"{$title_desc_url|escape:'htmlall'}\" target=\"_blank\">"}
+                                        {assign var="link" value="<a href=\"{$title_desc_url|escape:'htmlall':'UTF-8'}\" target=\"_blank\">"}
                                         <span class="ebay-light-gray-box-number">1</span> <b>{l s='Help buyers to find your product:' mod='ebay'}</b> {{l s='Write good |a|titles and descriptions|/a|' mod='ebay'}|replace:'|a|':$link|replace:'|/a|':'</a>'}</a>
                                     </li>
                                     <li>
-                                        {assign var="link" value="<a href=\"{$similar_items_url|escape:'htmlall'}\" target=\"_blank\">"}
+                                        {assign var="link" value="<a href=\"{$similar_items_url|escape:'htmlall':'UTF-8'}\" target=\"_blank\">"}
                                         <span class="ebay-light-gray-box-number">2</span> <b>{l s='Make your products competitive:' mod='ebay'}</b> {{l s='|a|research on eBay for similar products|/a| to yours and compare with your prices.' mod='ebay'}|replace:'|a|':$link|replace:'|/a|':'</a>'}
     </li>
                                     <li>
-                                        {assign var="link" value="<a href=\"{$picture_url|escape:'htmlall'}\" target=\"_blank\">"}
+                                        {assign var="link" value="<a href=\"{$picture_url|escape:'htmlall':'UTF-8'}\" target=\"_blank\">"}
                                         <span class="ebay-light-gray-box-number">3</span> {{l s='|b|Take special care of your product pictures,|/b| |a|this will help buyers to buy from you.|/a|' mod='ebay'}|replace:'|b|':'</b>'|replace:'|/b|':'</b>'|replace:'|a|':$link|replace:'|/a|':'</a>'}
                                     </li>    
                                     <li>
-                                        {assign var="link" value="<a href=\"{$top_rated_url|escape:'htmlall'}\" target=\"_blank\">"}
+                                        {assign var="link" value="<a href=\"{$top_rated_url|escape:'htmlall':'UTF-8'}\" target=\"_blank\">"}
                                         <span class="ebay-light-gray-box-number">4</span> {{l s='|b|Make buyers to come back|/b| by |a|delivering a great service|/a| and offering free shipping.' mod='ebay'}|replace:'|b|':'</b>'|replace:'|/b|':'</b>'|replace:'|a|':$link|replace:'|/a|':'</a>'}                                                        </li>
                                 </ul>
                             </div>
@@ -259,7 +259,7 @@
     {if $current_profile && !$add_profile}
         <div class="ebay-boxes-2-col-table">
             <div class="ebay-boxes-2-col-cell left ebay_gray_title_box">
-                {assign var="user_identifier" value=$current_profile->ebay_user_identifier|escape:'htmlall'}
+                {assign var="user_identifier" value=$current_profile->ebay_user_identifier|escape:'htmlall':'UTF-8'}
                 {{l s='You are updating the "|profile_identifier| for eBay.|profile_domain|" profile' mod='ebay'}|replace:'|profile_identifier|':$user_identifier|replace:'|profile_domain|':$current_profile_site_extension}
             </div>
             <div class="ebay-boxes-2-col-cell right ebay_gray_title_box">
@@ -280,11 +280,11 @@
           'Are you sure you want to delete the profile number %profile_number%?' : "{l s='Are you sure you want to delete the profile number %profile_number%?' mod='ebay'}"
         };
         
-        var delete_profile_url = '{$delete_profile_url|escape:'htmlall'}';
+        var delete_profile_url = '{$delete_profile_url|escape:'htmlall':'UTF-8'}';
         
         var main_tab = '{$main_tab}';
         var id_tab = '{$id_tab}';
     </script>
-    <script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/views/js/header.js?date={$date|escape:'htmlall'}"></script>
+    <script type="text/javascript" src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/js/header.js?date={$date|escape:'htmlall':'UTF-8'}"></script>
 {/if}
 <!-- after seller tips -->
