@@ -32,7 +32,7 @@
 	</p>
     
     <p>
-       {l s="The synchronization option (in tab 'Synchronisation > 1. List products') you have selected is:" mod='ebay'} "{if $ebay_sync_option_resync == 1}{l s='Only synchronise price and quantity' mod='ebay'}{else}{l s='Synchronise everything' mod='ebay'}{/if}"
+       {l s='The synchronization option (in tab \'Synchronisation > 1. List products\') you have selected is:' mod='ebay'} "{if $ebay_sync_option_resync == 1}{l s='Only synchronise price and quantity' mod='ebay'}{else}{l s='Synchronise everything' mod='ebay'}{/if}"
     </p>
     
     <p>
@@ -78,15 +78,15 @@
 				</th>
 				
                 <th style="width:185px;">
-                    <span data-inlinehelp="{l s="Configured in the 'Parameter > 2.Categories and pricing' tab" mod='ebay'}">{l s='Associated eBay category' mod='ebay'}</span>
+                    <span data-inlinehelp="{l s='Configured in the \'Parameter > 2.Categories and pricing\' tab' mod='ebay'}">{l s='Associated eBay category' mod='ebay'}</span>
                 </th>
                 
                 <th class="center">
-					<span data-inlinehelp="{l s="If this column is set to 'no', product default category has not been synchronised in 'Synchronisation > 1. List products' tab" mod='ebay'}">{l s='Synchronisation enabled' mod='ebay'}</span>
+					<span data-inlinehelp="{l s='If this column is set to \'no\', product default category has not been synchronised in \'Synchronisation > 1. List products\' tab' mod='ebay'}">{l s='Synchronisation enabled' mod='ebay'}</span>
 				</th>
                 
                 <th class="center">
-					<span data-inlinehelp="{l s="If this column is set to 'no', product has been unselected in the 'Parameters > 2.Categories and pricing' tab" mod='ebay'}">{l s='Product selected' mod='ebay'}</span>
+					<span data-inlinehelp="{l s='If this column is set to \'no\', product has been unselected in the \'Parameters > 2.Categories and pricing\' tab' mod='ebay'}">{l s='Product selected' mod='ebay'}</span>
 				</th>
                 
                 <th class="center">
@@ -112,7 +112,7 @@
         var products_ebay_l = {ldelim}
     		'Empty stock': "{l s='Empty stock' mod='ebay'}",
     		'Synchronisation disabled' : "{l s='Synchronisation disabled' mod='ebay'}",
-    		'Product not selected'		 : "{l s="Product has been unselected from tab 'Parameters > 2. Categories and pricing'" mod='ebay'}",
+    		'Product not selected'		 : "{l s='Product has been unselected from tab \'Parameters > 2. Categories and pricing\'' mod='ebay'}",
             'Link': "{l s='Access to listing' mod='ebay'}",
             'No listing': "{l s='No listing yet' mod='ebay'}",
             'See main product': "{l s='See main product' mod='ebay'}",

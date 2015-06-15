@@ -96,7 +96,7 @@
     
     {if $not_compatible_store_categories}
         <div class="warning big tips">
-            {l s="The following categories are not available for they contain subcategories. The eBay API doesn't permit sending products in these categories: " mod='ebay'} {$not_compatible_store_categories}
+            {l s='The following categories are not available for they contain subcategories. The eBay API does not permit sending products in these categories: ' mod='ebay'} {$not_compatible_store_categories}
         </div>
     {/if}
 

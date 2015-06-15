@@ -96,9 +96,9 @@
                 {elseif !$p.is_category_active}
                     {l s='This category is disabled in Prestashop, however the synchronisation will go on' mod='ebay'}
                 {elseif $p.stock && $p.id_category_ref && !$p.sync && !$p.blacklisted}
-                    {l s="Product default category has not been synchronised in 'Synchronisation > 1. List products' tab" mod='ebay'}
+                    {l s='Product default category has not been synchronised in \'Synchronisation > 1. List products\' tab' mod='ebay'}
                 {elseif $p.stock && $p.sync && $p.blacklisted}
-                   {l s="Product has been unselected from tab 'Parameters > 2. Categories and pricing'" mod='ebay'}
+                   {l s='Product has been unselected from tab \'Parameters > 2. Categories and pricing\'' mod='ebay'}
                 {elseif $p.stock && $p.sync && !$p.blacklisted && !$p.EbayProductRef}
                     {l s='Category is not synchronised, or an issue occured during synchronisation of this product' mod='ebay'}
                 {elseif $p.id_category_ref && !$p.EbayCategoryIsMultiSku && $p.hasAttributes && $p.EbayProductRef}                        {l s='eBay category is not multi sku' mod='ebay'}

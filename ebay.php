@@ -2064,6 +2064,5 @@ class Ebay extends Module
 			readfile($full_path);
 			exit;
 		}
-	}
-	
+	}	
 }

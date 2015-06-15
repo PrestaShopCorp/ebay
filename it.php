@@ -527,15 +527,3 @@ $_MODULE['<{ebay}prestashop>table_prestashop_products_d72867c4ffae604a88757c4c25
 $_MODULE['<{ebay}prestashop>table_prestashop_products_44548951e9c6e0cd97093bd5894516d5'] = 'La categoria non è sincronizzata o si è verificato un errore durante la sincronizzazione del prodotto';
 $_MODULE['<{ebay}prestashop>table_prestashop_products_c106ffb3df72a6d20ae1850eedf7cd03'] = 'La categoria eBay è senza codici prodotto multipli';
 $_MODULE['<{ebay}prestashop>table_prestashop_products_48900a6a0a3b3104f52398c08c13cfa1'] = 'Più di un motivo';
-$_MODULE['<{ebay}prestashop>form_85f9d92e0551772437b934b7222d63cb'] = 'Il modulo eBay è configurato e online';
-$_MODULE['<{ebay}prestashop>form_246e92392ccc64afaffd51b1338c0dd2'] = 'Il modulo è aggiornato';
-$_MODULE['<{ebay}prestashop>formconfig_e4128cc5fc4ce419ce74bad86b4b41b9'] = 'inserzioni eBay';
-$_MODULE['<{ebay}prestashop>formparameters_1667ea16fbc468405546a4ae47d26286'] = 'https://scgi.ebay.it/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2';
-$_MODULE['<{ebay}prestashop>formparameters_ac9e1d6e5033dbc057a74fcc19be2a17'] = 'un account di venditore professionale';
-$_MODULE['<{ebay}prestashop>formparameters_be5d5d37542d75f93a87094459f76678'] = 'e';
-$_MODULE['<{ebay}prestashop>formregister_fdc012cc7fec4a7ff26597cb6cf2ebb1'] = 'https://scgi.ebay.it/ws/eBayISAPI.dll?RegisterEnterInfo';
-$_MODULE['<{ebay}prestashop>form_categories_193cfc9be3b995831c6af2fea6650e60'] = 'Pagina';
-$_MODULE['<{ebay}prestashop>form_categories_d9efc413ecd9988caf09c5e921902dfc'] = 'di %s';
-$_MODULE['<{ebay}prestashop>form_categories_dba03ee64be6e500032c6aa0e6621666'] = 'Quantità in magazzino';
-$_MODULE['<{ebay}prestashop>form_store_categories_d492cd5166f77cd57395649b4e49b3b8'] = 'Le seguenti categorie non sono disponibili perché contengono categorie secondarie o sono categorie secondarie. Le API di eBay non consentono di inviare prodotti in queste categorie:';
-$_MODULE['<{ebay}prestashop>table_categories_b1ea27f6292319bd6c3e61b3cea66c42'] = 'Deseleziona i prodotti che NON vuoi mettere in vendita su eBay';

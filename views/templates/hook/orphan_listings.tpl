@@ -71,7 +71,7 @@
 				</th>                
 
                 <th class="center">
-					<span data-inlinehelp="{l s="If this column is set to 'no', product default category has not been synchronised in 'Synchronisation > 1. List products' tab" mod='ebay'}">{l s='Synchronisation Enabled' mod='ebay'}</span>
+					<span data-inlinehelp="{l s='If this column is set to \'no\', product default category has not been synchronised in \'Synchronisation > 1. List products\' tab' mod='ebay'}">{l s='Synchronisation Enabled' mod='ebay'}</span>
 				</th>
                 
                 <th class="center">
