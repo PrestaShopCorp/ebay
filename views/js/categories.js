@@ -276,7 +276,7 @@ function loadCategoriesFromEbay(step, id_category, row) {
 					if (step == 1)
 					{
 						for (var i in data){
-							output +='<tr class="standby" data-id="' + data[i].CategoryID + '"><td></td><td>'+categories_ebay_l['Download subcategories of'] + data[i].CategoryName + '</td><td>' + categories_ebay_l['En attente'] + '</td></tr>';
+							output +='<tr class="standby" data-id="' + data[i].CategoryID + '"><td></td><td>'+categories_ebay_l['Download subcategories of'] + ' ' + data[i].CategoryName + '</td><td>' + categories_ebay_l['En attente'] + '</td></tr>';
 						}
 						var count = $.map(data, function(n, i) { return i; }).length;
 						$('#cat_parent').removeClass('load').addClass('success');
