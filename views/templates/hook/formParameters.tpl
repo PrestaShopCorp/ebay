@@ -211,36 +211,4 @@
 	</div>
 
 	<div id="ebayreturnshide" style="display:none;">{$ebayReturns|escape:'htmlall':'UTF-8'}</div>
-
 </form>
-
-{if $catLoaded}
-	{literal}
-	<script>
-		var percent = 0;
-		function checkCategories()
-		{
-			percent++;
-			if (percent > 100)
-				percent = 100;
-			
-			$("#categoriesProgression").html("{/literal}{l s='Categories loading' mod='ebay'}{literal}  <div>" + percent + " %</div>");
-			if (percent < 100)
-				setTimeout ("checkCategories()", 1000);
-		}
-
-		$(function(){
-			$j("#displayFancybox").fancybox({
-				beforeShow : function(){
-					checkCategories();
-					$("#save_ebay_parameters").parents('form').submit();
-				},
-				onStart : function(){
-					checkCategories();
-					$("#save_ebay_parameters").parents('form').submit();
-				}
-			});
-		});
-	</script>
-	{/literal}
-{/if}

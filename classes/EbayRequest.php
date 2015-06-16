@@ -161,11 +161,19 @@ class EbayRequest
 		return $userProfile;
 	}
 
-	public function getCategories()
+	/**
+	 * $all : true (récupère toutes les catégories)
+	 *      : false (récupère seulement les catégories root)
+	 *      : int (récupère les catégories enfants de l'id catégories)
+	 */
+	public function getCategories($all = true)
 	{
 		$response = $this->_makeRequest('GetCategories', array(
 			'version' => $this->compatibility_level,
 			'category_site_id' => $this->ebay_country->getSiteID(),
+			'all'	=> $all === true ? true : false,
+			'root'  => $all === false ? true : false,
+			'id_category' => is_numeric($all) ? $all : null,
 		));
 
 		if ($response === false)

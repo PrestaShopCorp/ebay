@@ -858,3 +858,39 @@ margin-bottom: 3px;
 .left-padded-name {
   padding-left: 13px;
 }
+
+
+
+
+/*Tab 4 - Category*/
+#load_cat_ebay tr td:nth-child(1){
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: contain;
+}
+#load_cat_ebay tr.wait td{
+	font-weight: normal;
+	color: orange;
+}
+#load_cat_ebay tr.load td{
+	font-weight: bold;
+}
+#load_cat_ebay tr.load td:nth-child(1){
+	background-image: url('../img/loading-small.gif');
+}
+#load_cat_ebay tr.error td:nth-child(1){
+	background-image: url('../img//big-error.png');
+}
+#load_cat_ebay tr.success td:nth-child(1){
+	background-image: url('../img/success.png');
+}
+#load_cat_ebay tr.error td{
+	font-weight: bold;
+	color: red;
+}
+#load_cat_ebay tr.success td{
+	color: green;
+}
+.hidden.importCatEbay{
+	display: none;
+}

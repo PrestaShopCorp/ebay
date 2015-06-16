@@ -30,7 +30,14 @@
 	</RequesterCredentials>
 	<CategorySiteID>{$category_site_id}</CategorySiteID>
 	<DetailLevel>ReturnAll</DetailLevel>
-	<LevelLimit>5</LevelLimit>
+	{if $root == true && $all == false}
+		<LevelLimit>1</LevelLimit>
+	{elseif $root == false && $all == true}
+		<LevelLimit>5</LevelLimit>
+	{else}
+		<LevelLimit>5</LevelLimit>
+		<CategoryParent>{$id_category}</CategoryParent>
+	{/if}
 	<ViewAllNodes>true</ViewAllNodes>
 </GetCategories>
 

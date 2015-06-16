@@ -242,3 +242,74 @@ $(document).ready(function() {
 		//$("#configForm2SuggestedCategories input[type=submit]").trigger("click");
 	}
 });
+
+
+// Import Category From eBay
+function loadCategoriesFromEbay(step, id_category, row) {
+
+		step = typeof step !== 'undefined' ? step : 1;
+   		id_category = typeof id_category !== 'undefined' ? id_category : false;
+   		row = typeof row !== 'undefined' ? row : 2;
+
+		$.ajax({
+			type: "POST",
+			dataType: 'json',
+			url: module_dir + 'ebay/ajax/loadCategoriesFromEbay.php?token=' + ebay_token + "&profile=" + id_ebay_profile + "&step="+step + "&id_category=" + id_category,
+			success: function(data) {
+				if (data == "error")
+				{	
+					if (step == 1)
+					{
+						$('#cat_parent').addClass('error');
+						$('#cat_parent td:nth-child(3)').text(categories_ebay_l['An error has occurred']);
+					}
+					else if (step == 2)
+					{
+						$('#load_cat_ebay tbody tr:nth-child('+row+')').addClass('error');
+					}
+
+				}
+				else
+				{	
+					var output;
+
+					if (step == 1)
+					{
+						for (var i in data){
+							output +='<tr class="standby" data-id="' + data[i].CategoryID + '"><td></td><td>'+categories_ebay_l['Download subcategories of'] + data[i].CategoryName + '</td><td>' + categories_ebay_l['En attente'] + '</td></tr>';
+						}
+						var count = $.map(data, function(n, i) { return i; }).length;
+						$('#cat_parent').removeClass('load').addClass('success');
+						$('#cat_parent td:nth-child(3)').text(categories_ebay_l['Finish']+' - ' + count + ' '+categories_ebay_l['categories loaded success']);
+						$('#load_cat_ebay tbody').append(output);
+
+						$('#load_cat_ebay tbody tr:nth-child(2)').addClass('load');
+						loadCategoriesFromEbay(2, $('#load_cat_ebay tbody tr:nth-child(2)').attr('data-id'), 2);
+					}
+					else if (step == 2)
+					{
+						var count = $.map(data, function(n, i) { return i; }).length;
+						$('#load_cat_ebay tbody tr:nth-child('+row+')').removeClass('load').addClass('success');
+
+						$('#load_cat_ebay tbody tr:nth-child('+row+') td:nth-child(3)').text(categories_ebay_l['Finish']+' - ' + count + ' '+categories_ebay_l['categories loaded success']);
+
+						var next = row+1;
+						if ($('#load_cat_ebay tbody tr:nth-child('+next+')').length > 0){
+							$('#load_cat_ebay tbody tr:nth-child('+next+')').addClass('load');
+							loadCategoriesFromEbay(2, $('#load_cat_ebay tbody tr:nth-child('+next+')').attr('data-id'), next);
+						}
+						else
+						{
+							loadCategoriesFromEbay(3);
+							$('#load_cat_ebay').css('display', 'none');
+							$('.hidden.importCatEbay').removeClass('hidden').removeClass('importCatEbay');
+							return loadCategories();
+
+						}
+					}
+
+				}
+
+			}
+		});
+	}

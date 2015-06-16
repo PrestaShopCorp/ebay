@@ -221,27 +221,45 @@ class EbayCategory
 		{
 			if (version_compare(_PS_VERSION_, '1.5', '<'))
 			{
-				$db->autoExecuteWithNullValues(_DB_PREFIX_.'ebay_category', array(
+				if (!$db->autoExecuteWithNullValues(_DB_PREFIX_.'ebay_category', array(
 					'id_category_ref' => pSQL($category['CategoryID']),
 					'id_category_ref_parent' => pSQL($category['CategoryParentID']),
 					'id_country' => pSQL($ebay_site_id),
 					'level' => pSQL($category['CategoryLevel']),
 					'is_multi_sku' => isset($categories_multi_sku[$category['CategoryID']]) ? pSQL($categories_multi_sku[$category['CategoryID']]) : null,
 					'name' => pSQL($category['CategoryName'])
-				), 'INSERT', '', 0);
+				), 'INSERT', '', 0)){
+
+					$handle = fopen(dirname(__FILE__) . '/../log/import_category_ebay.txt', 'a+');
+					fwrite($handle, print_r($category, true));
+					fwrite($handle, print_r($db->getMsgError(), true));
+					fclose($handle);
+
+					return false;
+				}
 			}
 			else
 			{
-				$db->autoExecute(_DB_PREFIX_.'ebay_category', array(
+				if (!$db->autoExecute(_DB_PREFIX_.'ebay_category', array(
 					'id_category_ref' => pSQL($category['CategoryID']),
 					'id_category_ref_parent' => pSQL($category['CategoryParentID']),
 					'id_country' => pSQL($ebay_site_id),
 					'level' => pSQL($category['CategoryLevel']),
 					'is_multi_sku' => isset($categories_multi_sku[$category['CategoryID']]) ? (int)$categories_multi_sku[$category['CategoryID']] : null,
 					'name' => pSQL($category['CategoryName'])
-				), 'INSERT', '', 0, true, true);
+				), 'INSERT', '', 0, true, true)){
+
+					$handle = fopen(dirname(__FILE__) . '/../log/import_category_ebay.txt', 'a+');
+					fwrite($handle, print_r($category, true));
+					fwrite($handle, print_r($db->getMsgError(), true));
+					fclose($handle);
+
+					return false;
+				}
 			}
 		}
+
+		return true;
 	}
 
 	public static function updateCategoryTable($categories_multi_sku)
