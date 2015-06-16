@@ -44,7 +44,7 @@ $ebay_profile = new EbayProfile($id_ebay_profile);
 $category_config_list = array();
 $category_config_list_tmp = Db::getInstance()->executeS('SELECT *
 	FROM `'._DB_PREFIX_.'ebay_category_configuration` 
-    WHERE `id_ebay_profile` = '.(int)$ebay_profile->id);
+	WHERE `id_ebay_profile` = '.(int)$ebay_profile->id);
 
 foreach ($category_config_list_tmp as $category)
 	$category_config_list[$category['id_category']] = $category;
@@ -76,7 +76,7 @@ foreach ($products as $product)
 /* cats ref */
 $ref_cats = Db::getInstance()->executeS('SELECT `id_ebay_category`, `id_category_ref`
 	FROM `'._DB_PREFIX_.'ebay_category`
-    WHERE `id_country` = '.(int)$ebay->ebay_profile->ebay_site_id);
+	WHERE `id_country` = '.(int)$ebay->ebay_profile->ebay_site_id);
 
 if (!is_array($ref_cats) || !count($ref_cats))
 	return;

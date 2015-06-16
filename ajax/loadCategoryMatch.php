@@ -40,7 +40,7 @@ $current_path = Db::getInstance()->getRow('
 	FROM `'._DB_PREFIX_.'ebay_category_configuration` ecc
 	LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec ON (ec.`id_ebay_category` = ecc.`id_ebay_category`)
 	WHERE ecc.`id_ebay_profile` = '.(int)$id_ebay_profile.' 
-    AND ecc.`id_category` = '.(int)Tools::getValue('id_category'));
+	AND ecc.`id_category` = '.(int)Tools::getValue('id_category'));
 
 for ($levelStart = $current_path['level']; $levelStart > 1; $levelStart--)
 {
@@ -48,9 +48,9 @@ for ($levelStart = $current_path['level']; $levelStart > 1; $levelStart--)
 		SELECT ec.`id_ebay_category`, ec.`id_category_ref`, ec.`id_category_ref_parent`, ec.`level`
 		FROM `'._DB_PREFIX_.'ebay_category` ec
 		LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc ON (ecc.`id_ebay_category` = ec.`id_ebay_category`)
-        WHERE ecc.`id_ebay_profile` = '.(int)$id_ebay_profile.' 
-        AND ec.`id_category_ref` = '.(int)$current_path['id_category_ref_parent'].'
-        AND ec.`id_country` = '.(int)$ebay_profile->ebay_site_id);
+		WHERE ecc.`id_ebay_profile` = '.(int)$id_ebay_profile.' 
+		AND ec.`id_category_ref` = '.(int)$current_path['id_category_ref_parent'].'
+		AND ec.`id_country` = '.(int)$ebay_profile->ebay_site_id);
 }
 
 $level_exists = array();
@@ -63,12 +63,12 @@ for ($level = 0; $level <= 5; $level++)
 				FROM `'._DB_PREFIX_.'ebay_category`
 				WHERE `level` = 1
 				AND `id_category_ref` = `id_category_ref_parent`
-                AND `id_country` = '.(int)$ebay_profile->ebay_site_id);
+				AND `id_country` = '.(int)$ebay_profile->ebay_site_id);
 		else
 			$ebay_category_list_level = Db::getInstance()->ExecuteS('SELECT *
 				FROM `'._DB_PREFIX_.'ebay_category`
 				WHERE `level` = '.(int)($level + 1).'
-                AND `id_country` = '.(int)$ebay_profile->ebay_site_id.'
+				AND `id_country` = '.(int)$ebay_profile->ebay_site_id.'
 				AND `id_category_ref_parent` IN (
 					SELECT `id_category_ref`
 					FROM `'._DB_PREFIX_.'ebay_category`

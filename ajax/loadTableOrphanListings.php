@@ -38,44 +38,44 @@ if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Co
 
 // to check if a product has attributes (multi-variations), we check if it has a "default_on" attribute in the product_attribute table
 $query = 'SELECT DISTINCT(ep.`id_ebay_product`),
-        ep.`id_product_ref`,
-        ep.`id_product`,
-        ep.`id_attribute`                    AS `notSetWithMultiSkuCat`,
-        epc.`blacklisted`,
-        p.`id_product`                       AS `exists`,
-        p.`id_category_default`,   
-        p.`active`,
-        pa.`id_product_attribute`            AS isMultiSku,
-        pl.`name`                            AS psProductName,
-        ecc.`id_ebay_category_configuration` AS EbayCategoryExists,
-        ec.`is_multi_sku`                    AS EbayCategoryIsMultiSku,
-        ecc.`sync`                           AS sync,
-        ec.`id_category_ref`
-    FROM `'._DB_PREFIX_.'ebay_product` ep
+		ep.`id_product_ref`,
+		ep.`id_product`,
+		ep.`id_attribute`                    AS `notSetWithMultiSkuCat`,
+		epc.`blacklisted`,
+		p.`id_product`                       AS `exists`,
+		p.`id_category_default`,   
+		p.`active`,
+		pa.`id_product_attribute`            AS isMultiSku,
+		pl.`name`                            AS psProductName,
+		ecc.`id_ebay_category_configuration` AS EbayCategoryExists,
+		ec.`is_multi_sku`                    AS EbayCategoryIsMultiSku,
+		ecc.`sync`                           AS sync,
+		ec.`id_category_ref`
+	FROM `'._DB_PREFIX_.'ebay_product` ep
 
-    LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
-    ON epc.`id_product` = ep.`id_product`
-    AND epc.`id_ebay_profile` = '.$ebay_profile->id.'
+	LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
+	ON epc.`id_product` = ep.`id_product`
+	AND epc.`id_ebay_profile` = '.$ebay_profile->id.'
 
-    LEFT JOIN `'._DB_PREFIX_.'product` p
-    ON p.`id_product` = ep.`id_product`
-    
-    LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
-    ON pl.`id_product` = p.`id_product`
-    AND pl.`id_lang` = '.$ebay_profile->id_lang.'    
-    
-    LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
-    ON pa.`id_product` = p.`id_product`
-    AND pa.default_on = 1    
-    
-    LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
-    ON ecc.`id_category` = p.`id_category_default`
-    AND ecc.`id_ebay_profile` = '.$ebay_profile->id.'
-    
-    LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
-    ON ec.`id_ebay_category` = ecc.`id_ebay_category`
-    
-    WHERE ep.`id_ebay_profile` = '.$ebay_profile->id;
+	LEFT JOIN `'._DB_PREFIX_.'product` p
+	ON p.`id_product` = ep.`id_product`
+	
+	LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
+	ON pl.`id_product` = p.`id_product`
+	AND pl.`id_lang` = '.$ebay_profile->id_lang.'    
+	
+	LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
+	ON pa.`id_product` = p.`id_product`
+	AND pa.default_on = 1    
+	
+	LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
+	ON ecc.`id_category` = p.`id_category_default`
+	AND ecc.`id_ebay_profile` = '.$ebay_profile->id.'
+	
+	LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
+	ON ec.`id_ebay_category` = ecc.`id_ebay_category`
+	
+	WHERE ep.`id_ebay_profile` = '.$ebay_profile->id;
 
 //$currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
@@ -89,59 +89,59 @@ $res = Db::getInstance()->executeS($query);
 
 $final_res = array();
 foreach ($res as &$row) {
-    
-    if ($row['id_product_ref'])
-        $row['link'] = EbayProduct::getEbayUrl($row['id_product_ref'], $ebay_request->getDev());
-    
-    if ($row['id_category_default']) {
+	
+	if ($row['id_product_ref'])
+		$row['link'] = EbayProduct::getEbayUrl($row['id_product_ref'], $ebay_request->getDev());
+	
+	if ($row['id_category_default']) {
 
-        foreach ($category_list as $cat) {
-            if ($cat['id_category'] == $row['id_category_default']) {
-                $row['category_full_name'] = $cat['name'];
-                break;                
-            }
-        }
-        
-    }
-    
-    if ($row['id_category_ref']) {
+		foreach ($category_list as $cat) {
+			if ($cat['id_category'] == $row['id_category_default']) {
+				$row['category_full_name'] = $cat['name'];
+				break;                
+			}
+		}
+		
+	}
+	
+	if ($row['id_category_ref']) {
 
-        foreach($ebay_categories as $cat) {
-        
-            if ($cat['id'] == $row['id_category_ref']) {
-                $row['ebay_category_full_name'] = $cat['name'];
-                break;                
-            }        
-        }
-        
-    }
-    
-    if ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A') {
-        $row['sync'] = (bool)$row['EbayCategoryExists']; // only true if category synced with an eBay category
-    }
+		foreach($ebay_categories as $cat) {
+		
+			if ($cat['id'] == $row['id_category_ref']) {
+				$row['ebay_category_full_name'] = $cat['name'];
+				break;                
+			}        
+		}
+		
+	}
+	
+	if ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A') {
+		$row['sync'] = (bool)$row['EbayCategoryExists']; // only true if category synced with an eBay category
+	}
 
-    // filtering
-    if (!$row['exists'])
-        $final_res[] = $row;
-    
-    elseif (!$row['EbayCategoryExists'])
-        $final_res[] = $row;
-    
-    elseif ($row['isMultiSku']
-        && !$row['notSetWithMultiSkuCat'] // set as if on a MultiSku category
-        && !$row['EbayCategoryIsMultiSku']
-        )
-        $final_res[] = $row;
-    
-    elseif ($row['notSetWithMultiSkuCat']
-        && $row['EbayCategoryIsMultiSku'])
-        $final_res[] = $row;
-    
-    elseif (!$row['active'] || $row['blacklisted'])            
-        $final_res[] = $row;
-    
-    elseif (!$row['sync'])
-        $final_res[] = $row;
+	// filtering
+	if (!$row['exists'])
+		$final_res[] = $row;
+	
+	elseif (!$row['EbayCategoryExists'])
+		$final_res[] = $row;
+	
+	elseif ($row['isMultiSku']
+		&& !$row['notSetWithMultiSkuCat'] // set as if on a MultiSku category
+		&& !$row['EbayCategoryIsMultiSku']
+		)
+		$final_res[] = $row;
+	
+	elseif ($row['notSetWithMultiSkuCat']
+		&& $row['EbayCategoryIsMultiSku'])
+		$final_res[] = $row;
+	
+	elseif (!$row['active'] || $row['blacklisted'])            
+		$final_res[] = $row;
+	
+	elseif (!$row['sync'])
+		$final_res[] = $row;
 
 }
 
@@ -149,7 +149,7 @@ $smarty = Context::getContext()->smarty;
 
 // Smarty datas
 $template_vars = array(
-    'ads' => $final_res
+	'ads' => $final_res
 );
 
 $smarty->assign($template_vars);

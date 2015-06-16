@@ -44,12 +44,12 @@ for ($level = 0; $level <= 5; $level++)
 				FROM `'._DB_PREFIX_.'ebay_category`
 				WHERE `level` = 1
 				AND `id_category_ref` = `id_category_ref_parent`
-                AND `id_country` = '.(int)$ebay_profile->ebay_site_id);
+				AND `id_country` = '.(int)$ebay_profile->ebay_site_id);
 		else
 			$ebay_category_list_level = Db::getInstance()->executeS('SELECT *
 				FROM `'._DB_PREFIX_.'ebay_category`
 				WHERE `level` = '.(int)($level + 1).'
-                AND `id_country` = '.(int)$ebay_profile->ebay_site_id.'
+				AND `id_country` = '.(int)$ebay_profile->ebay_site_id.'
 				AND `id_category_ref_parent`
 				IN (
 					SELECT `id_category_ref`

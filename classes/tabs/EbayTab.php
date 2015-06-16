@@ -26,27 +26,27 @@
 
 class EbayTab
 {
-    protected $ebay;
-    protected $smarty;
-    protected $ebay_profile;
-    protected $context;
-    protected $path;
-    
-    function __construct($ebay, $smarty, $context = null, $path = null)
-    {
-        $this->ebay = $ebay;
-        $this->ebay_profile = $ebay->ebay_profile;
-        $this->smarty = $smarty;
-        $this->context = $context;
-        $this->path = $path;
-    }
-    
-    protected function display($template, $template_vars)
-    {
+	protected $ebay;
+	protected $smarty;
+	protected $ebay_profile;
+	protected $context;
+	protected $path;
+	
+	function __construct($ebay, $smarty, $context = null, $path = null)
+	{
+		$this->ebay = $ebay;
+		$this->ebay_profile = $ebay->ebay_profile;
+		$this->smarty = $smarty;
+		$this->context = $context;
+		$this->path = $path;
+	}
+	
+	protected function display($template, $template_vars)
+	{
 		$this->smarty->assign($template_vars);
-        return $this->ebay->display(dirname(__FILE__).'/../../ebay.php', '/views/templates/hook/'.$template);
-    }
-    
+		return $this->ebay->display(dirname(__FILE__).'/../../ebay.php', '/views/templates/hook/'.$template);
+	}
+	
 	protected function _getUrl($extra_vars = array())
 	{
 		$url_vars = array(
@@ -63,9 +63,9 @@ class EbayTab
 	 * Returns the module url
 	 *
    **/
-    protected function _getModuleUrl()
+	protected function _getModuleUrl()
 	{
 		return Tools::getShopDomain(true).__PS_BASE_URI__.'modules/ebay/';
 	}
-    
+	
 }

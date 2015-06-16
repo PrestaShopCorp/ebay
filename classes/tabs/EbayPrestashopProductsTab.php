@@ -27,47 +27,47 @@
 class EbayPrestashopProductsTab extends EbayTab
 {
 
-    function getContent()
-    {
+	function getContent()
+	{
 		$is_one_dot_five = version_compare(_PS_VERSION_, '1.5', '>');
-        
-        $controller = Tools::getValue('controller');
-        $tab = Tools::getValue('tab');
-        $configure = Tools::getValue('configure');
-        $token = Tools::getValue('token');
-        $tab_module = Tools::getValue('tab_module');
-        $module_name = Tools::getValue('module_name');
-        
-        $show_products_url = 'index.php?'.
-            ($is_one_dot_five ? 'controller='.urlencode($controller) : 'tab='.urlencode($tab)).
-            '&configure='.urlencode($configure).'&token='.urlencode($token).
-            '&tab_module='.urlencode($tab_module).
-            '&module_name='.urlencode($module_name).
-            '&id_tab=15&section=products';
-        
+		
+		$controller = Tools::getValue('controller');
+		$tab = Tools::getValue('tab');
+		$configure = Tools::getValue('configure');
+		$token = Tools::getValue('token');
+		$tab_module = Tools::getValue('tab_module');
+		$module_name = Tools::getValue('module_name');
+		
+		$show_products_url = 'index.php?'.
+			($is_one_dot_five ? 'controller='.urlencode($controller) : 'tab='.urlencode($tab)).
+			'&configure='.urlencode($configure).'&token='.urlencode($token).
+			'&tab_module='.urlencode($tab_module).
+			'&module_name='.urlencode($module_name).
+			'&id_tab=15&section=products';
+		
 		// Smarty
 		$template_vars = array(
 			'id_ebay_profile' => $this->ebay_profile->id,
-            'ebay_sync_option_resync' => $this->ebay_profile->getConfiguration('EBAY_SYNC_OPTION_RESYNC'),
-            'show_products_url' => $show_products_url,
-            'id_employee' => Context::getContext()->employee->id
+			'ebay_sync_option_resync' => $this->ebay_profile->getConfiguration('EBAY_SYNC_OPTION_RESYNC'),
+			'show_products_url' => $show_products_url,
+			'id_employee' => Context::getContext()->employee->id
 		);
 
 		return $this->display('prestashop_products.tpl', $template_vars);
-    }
-    
+	}
+	
 /*    public function postProcess()
-    {
-        
-    }*/
-    
+	{
+		
+	}*/
+	
 	/*
-     *
-     * Get alert to see if some multi variation product on PrestaShop were added to a non multi sku categorie on ebay
-     *
-     */
+	 *
+	 * Get alert to see if some multi variation product on PrestaShop were added to a non multi sku categorie on ebay
+	 *
+	 */
 /*	private function _getAlertCategories()
 	{
 	}*/    
-    
+	
 }

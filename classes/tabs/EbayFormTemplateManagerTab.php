@@ -27,8 +27,8 @@
 class EbayFormTemplateManagerTab extends EbayTab
 {
 
-    function getContent()
-    {
+	function getContent()
+	{
 		// Check if the module is configured
 		if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))
 			return '<p class="error"><b>'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab').'</b></p><br /><script type="text/javascript">$("#menuTab4").addClass("wrong")</script>';
@@ -83,11 +83,11 @@ class EbayFormTemplateManagerTab extends EbayTab
 		}
 		
 		return $this->display('formTemplateManager.tpl', $smarty_vars);
-    }
-    
-    
-    function postProcess()
-    {
+	}
+	
+	
+	function postProcess()
+	{
 		$ebay_product_template = Tools::getValue('ebay_product_template');
 		$ebay_product_template_title = Tools::getValue('ebay_product_template_title');
 		if (empty($ebay_product_template_title))
@@ -102,7 +102,7 @@ class EbayFormTemplateManagerTab extends EbayTab
 			return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));
 		else
 			return $this->ebay->displayError($this->ebay->l('Settings failed'));    
-    
-    }
-      
+	
+	}
+	  
 }

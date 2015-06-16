@@ -33,15 +33,15 @@ class EbayProductModified extends ObjectModel
 	 * @see ObjectModel::$definition
 	 */
 	public static $definition;
-    
-    // for Prestashop 1.4
+	
+	// for Prestashop 1.4
 	protected $tables;
 	protected $fieldsRequired;
 	protected $fieldsSize;
 	protected $fieldsValidate;
 	protected $table = 'ebay_product_modified';
 	protected $identifier = 'id_ebay_product_modified';    
-    
+	
 	public function getFields()
 	{
 		parent::validateFields();
@@ -53,49 +53,49 @@ class EbayProductModified extends ObjectModel
 
 		return $fields;
 	}        
-    
+	
 
-    public function __construct($id = null, $id_lang = null, $id_shop = null) {
-        if (version_compare(_PS_VERSION_, '1.5', '>'))
-            self::$definition = array(
-            		'table' => 'ebay_product_modified',
-            		'primary' => 'id_ebay_product_modified',
-            		'fields' => array(
-            			'id_product' =>		array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-            			'id_ebay_profile' =>		array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-            		),
-            	);
-        else 
-        {
-        	$tables = array ('ebay_product_modified');
-        	$fieldsRequired = array('id_ebay_profile', 'id_product');
-        	$fieldsValidate = array(
-                'id_ebay_profile' => 'isUnsignedInt',
-                'id_product' => 'isUnsignedInt',        	    
-        	);
-        }
-        return parent::__construct($id, $id_lang, $id_shop); 
-    }    
+	public function __construct($id = null, $id_lang = null, $id_shop = null) {
+		if (version_compare(_PS_VERSION_, '1.5', '>'))
+			self::$definition = array(
+					'table' => 'ebay_product_modified',
+					'primary' => 'id_ebay_product_modified',
+					'fields' => array(
+						'id_product' =>		array('type' => self::TYPE_INT, 'validate' => 'isInt'),
+						'id_ebay_profile' =>		array('type' => self::TYPE_INT, 'validate' => 'isInt'),
+					),
+				);
+		else 
+		{
+			$tables = array ('ebay_product_modified');
+			$fieldsRequired = array('id_ebay_profile', 'id_product');
+			$fieldsValidate = array(
+				'id_ebay_profile' => 'isUnsignedInt',
+				'id_product' => 'isUnsignedInt',        	    
+			);
+		}
+		return parent::__construct($id, $id_lang, $id_shop); 
+	}    
 	
 	public static function addProduct($id_ebay_profile, $id_product)
 	{
 		$product_modified = new EbayProductModified();
-        $product_modified->id_product = (int)$id_product;
-        $product_modified->id_ebay_profile = (int)$id_ebay_profile;
+		$product_modified->id_product = (int)$id_product;
+		$product_modified->id_ebay_profile = (int)$id_ebay_profile;
 
-        return $product_modified->save();
+		return $product_modified->save();
 	}
-    
-    public static function getAll()
-    {
-        $sql = 'SELECT `id_ebay_profile`, `id_product`
-            FROM '._DB_PREFIX_.'ebay_product_modified';
-        return Db::getInstance()->executeS($sql);
-    }
-    
-    public static function truncate()
-    {
-        return Db::getInstance()->execute('TRUNCATE TABLE `'._DB_PREFIX_.'ebay_product_modified`');
-    }
+	
+	public static function getAll()
+	{
+		$sql = 'SELECT `id_ebay_profile`, `id_product`
+			FROM '._DB_PREFIX_.'ebay_product_modified';
+		return Db::getInstance()->executeS($sql);
+	}
+	
+	public static function truncate()
+	{
+		return Db::getInstance()->execute('TRUNCATE TABLE `'._DB_PREFIX_.'ebay_product_modified`');
+	}
 
 }

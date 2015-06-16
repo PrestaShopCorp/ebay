@@ -41,15 +41,15 @@ class EbayConfiguration
 	 */
 	public static function updateAPIToken()
 	{
-        $profile_data = explode('_', Configuration::get('EBAY_CURRENT_PROFILE'));
-        
+		$profile_data = explode('_', Configuration::get('EBAY_CURRENT_PROFILE'));
+		
 		$request = new EbayRequest($profile_data[0]);
 		$ebay_profile = EbayProfile::getCurrent(false);
 
 //		if ($token = $request->fetchToken(Configuration::get('EBAY_API_USERNAME', null, 0, 0), Configuration::get('EBAY_API_SESSION', null, 0, 0)))
 		if ($token = $request->fetchToken($ebay_profile->ebay_user_identifier, Configuration::get('EBAY_API_SESSION', null, 0, 0)))
 		{
-            $ebay_profile->setToken($token);
+			$ebay_profile->setToken($token);
 			//Configuration::updateValue('EBAY_API_TOKEN', $token, false, 0, 0);
 			Configuration::updateValue('EBAY_TOKEN_REGENERATE', false, false, 0, 0);
 
@@ -82,15 +82,15 @@ class EbayConfiguration
 			return Db::getInstance()->insert('ebay_configuration', $datas , false, true, Db::REPLACE);
 	}	
 	
-    public static function getAll($id_ebay_profile, $exceptions = false)
-    {
-        $sql = 'SELECT `name`, `value`
-            FROM `'._DB_PREFIX_.'ebay_configuration`
-            WHERE `id_ebay_profile` = "'.(int)$id_ebay_profile.'" AND name NOT IN ("'.implode('","', array_map('pSQL', $exceptions)).'")';
-        
-        return Db::getInstance()->executeS($sql);
-    }    
-    
+	public static function getAll($id_ebay_profile, $exceptions = false)
+	{
+		$sql = 'SELECT `name`, `value`
+			FROM `'._DB_PREFIX_.'ebay_configuration`
+			WHERE `id_ebay_profile` = "'.(int)$id_ebay_profile.'" AND name NOT IN ("'.implode('","', array_map('pSQL', $exceptions)).'")';
+		
+		return Db::getInstance()->executeS($sql);
+	}    
+	
 	/**
 	 * For upgrade: takes the values in PS Configurations and stores them in Ebay Configurations
 	 *

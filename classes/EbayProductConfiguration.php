@@ -29,13 +29,13 @@ class EbayProductConfiguration
 
 	public static function getByProductIdAndProfile($product_id, $id_ebay_profile)
 	{
-        if (!$product_id)
-            return;
-        
+		if (!$product_id)
+			return;
+		
 		return Db::getInstance()->getRow('SELECT `id_product`, `blacklisted`, `extra_images`
 			FROM `'._DB_PREFIX_.'ebay_product_configuration`
 			WHERE `id_product` = '.(int)$product_id.'
-            AND `id_ebay_profile` = '.(int)$id_ebay_profile);
+			AND `id_ebay_profile` = '.(int)$id_ebay_profile);
 	}
 
 	public static function getBlacklistedProductIdsQuery($id_ebay_profile)
@@ -43,7 +43,7 @@ class EbayProductConfiguration
 		return 'SELECT `id_product`
 			FROM `'._DB_PREFIX_.'ebay_product_configuration`
 			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
-            AND `blacklisted` = 1';
+			AND `blacklisted` = 1';
 	}
 
 	public static function insertOrUpdate($product_id, $data)

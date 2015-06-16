@@ -53,39 +53,39 @@ $ebay_category_list = Db::getInstance()->executeS('SELECT *
 
 if (version_compare(_PS_VERSION_, '1.5', '>'))
 {
-    
+	
 	$rq_products = '
 		SELECT COUNT(DISTINCT(p.`id_product`)) AS nbProducts, 
-            COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts, 
-            p.`id_category_default`
+			COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts, 
+			p.`id_category_default`
 		FROM `'._DB_PREFIX_.'product` AS p
-        
-        INNER JOIN `'._DB_PREFIX_.'product_shop` AS ps 
-        ON p.`id_product` = ps.`id_product`
-        
-        LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` AS epc 
-        ON p.`id_product` = epc.`id_product` 
-        AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.' 
-        AND epc.blacklisted = 1
-        
+		
+		INNER JOIN `'._DB_PREFIX_.'product_shop` AS ps 
+		ON p.`id_product` = ps.`id_product`
+		
+		LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` AS epc 
+		ON p.`id_product` = epc.`id_product` 
+		AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.' 
+		AND epc.blacklisted = 1
+		
 		WHERE 1 '.$ebay->addSqlRestrictionOnLang('ps').'
-        AND ps.`id_shop` = 1
+		AND ps.`id_shop` = 1
 		GROUP BY p.`id_category_default`';
 
 }
 else
 {
-    
+	
 	$rq_products = 'SELECT COUNT(DISTINCT(p.`id_product`)) AS nbProducts, 
-        COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts, `id_category_default`
+		COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts, `id_category_default`
 		FROM `'._DB_PREFIX_.'product` p
-        
-        LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc 
-        ON p.`id_product` = epc.`id_product` 
-        AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.' 
-        AND epc.blacklisted = 1    
+		
+		LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc 
+		ON p.`id_product` = epc.`id_product` 
+		AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.' 
+		AND epc.blacklisted = 1    
 		GROUP BY `id_category_default`';
-        
+		
 }
 
 $get_products = Db::getInstance()->ExecuteS($rq_products);
@@ -93,8 +93,8 @@ $get_cat_nb_products = array();
 $get_cat_nb_sync_products = array();
 
 foreach ($get_products as $data) {
-    $get_cat_nb_products[$data['id_category_default']] = (int)$data['nbProducts'];
-    $get_cat_nb_sync_products[$data['id_category_default']] = (int)$data['nbProducts'] - (int)$data['nbNotSyncProducts'];        
+	$get_cat_nb_products[$data['id_category_default']] = (int)$data['nbProducts'];
+	$get_cat_nb_sync_products[$data['id_category_default']] = (int)$data['nbProducts'] - (int)$data['nbNotSyncProducts'];        
 }
 
 /* Loading categories */
@@ -155,10 +155,10 @@ $template_vars = array(
 	'tabHelp' => '&id_tab=7',
 	'_path' => $ebay->getPath(),
 	'categoryList' => $category_list,
-    'nbCategories' => $nb_categories,
+	'nbCategories' => $nb_categories,
 	'eBayCategoryList' => $ebay_category_list,
 	'getNbProducts' => $get_cat_nb_products,
-    'getNbSyncProducts' => $get_cat_nb_sync_products,
+	'getNbSyncProducts' => $get_cat_nb_sync_products,
 	'categoryConfigList' => $category_config_list,
 	'request_uri' => $_SERVER['REQUEST_URI'],
 	'noCatSelected' => Tools::getValue('ch_cat_str'),

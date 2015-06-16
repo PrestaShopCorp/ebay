@@ -31,8 +31,8 @@ if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get(
 
 $id_ebay_profile = (int)Tools::getValue('profile');
 $sql = 'SELECT * FROM '._DB_PREFIX_.'ebay_shipping_zone_excluded 
-    WHERE `id_ebay_profile` = '.$id_ebay_profile.' 
-    AND region = \''.pSQL(Tools::getValue('region')).'\'';
+	WHERE `id_ebay_profile` = '.$id_ebay_profile.' 
+	AND region = \''.pSQL(Tools::getValue('region')).'\'';
 $countries = Db::getInstance()->ExecuteS($sql);
 
 if (count($countries))

@@ -27,8 +27,8 @@
 class EbayFormCategoryTab extends EbayTab
 {
 
-    function getContent()
-    {
+	function getContent()
+	{
 		$is_one_dot_five = version_compare(_PS_VERSION_, '1.5', '>');
 
 		// Load prestashop ebay's configuration
@@ -56,7 +56,7 @@ class EbayFormCategoryTab extends EbayTab
 		}
 
 		// Display eBay Categories
-        $ebay_site_id = $this->ebay_profile->ebay_site_id;
+		$ebay_site_id = $this->ebay_profile->ebay_site_id;
 		if (!isset($configs['EBAY_CATEGORY_LOADED_'.$ebay_site_id]) || !$configs['EBAY_CATEGORY_LOADED_'.$ebay_site_id] || !EbayCategory::areCategoryLoaded($ebay_site_id))
 		{
 			$ebay_request = new EbayRequest();
@@ -87,11 +87,11 @@ class EbayFormCategoryTab extends EbayTab
 		);
 
 		return $this->display('form_categories.tpl', $template_vars);
-    }
-    
-    public function postProcess()
-    {
-        
+	}
+	
+	public function postProcess()
+	{
+		
 		// Insert and update categories
 		if (($percents = Tools::getValue('percent')) && ($ebay_categories = Tools::getValue('category')))
 		{
@@ -107,7 +107,7 @@ class EbayFormCategoryTab extends EbayTab
 				} 
 				else 
 					$percentValue = null;
-                
+				
 				if (isset($ebay_categories[$id_category]))
 					$data = array(
 						'id_ebay_profile' => (int)$id_ebay_profile,
@@ -147,7 +147,7 @@ class EbayFormCategoryTab extends EbayTab
 			foreach ($product_ids as $product_id)
 				EbayProductConfiguration::insertOrUpdate($product_id, array(
 					'extra_images' => $all_nb_extra_images ? $all_nb_extra_images : 0,
-                    'id_ebay_profile' => $this->ebay_profile->id
+					'id_ebay_profile' => $this->ebay_profile->id
 				));
 		}
 
@@ -166,7 +166,7 @@ class EbayFormCategoryTab extends EbayTab
 
 			foreach ($showed_product_ids as $product_id)
 				EbayProductConfiguration::insertOrUpdate($product_id, array(
-                    'id_ebay_profile' => $this->ebay_profile->id,
+					'id_ebay_profile' => $this->ebay_profile->id,
 					'blacklisted' => in_array($product_id, $to_synchronize_product_ids) ? 0 : 1,
 					'extra_images' => 0,
 				));
@@ -176,18 +176,18 @@ class EbayFormCategoryTab extends EbayTab
 			die('{"valid" : true}');
 
 		return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));        
-    }
-    
+	}
+	
 	/*
-     *
-     * Get alert to see if some multi variation product on PrestaShop were added to a non multi sku categorie on ebay
-     *
-     */
+	 *
+	 * Get alert to see if some multi variation product on PrestaShop were added to a non multi sku categorie on ebay
+	 *
+	 */
 	private function _getAlertCategories()
 	{
 		$alert = '';
-        
-        $cat_with_problem = EbayCategoryConfiguration::getMultiVarToNonMultiSku($this->ebay_profile, $this->context);
+		
+		$cat_with_problem = EbayCategoryConfiguration::getMultiVarToNonMultiSku($this->ebay_profile, $this->context);
 
 		$var = implode(', ', $cat_with_problem);
 
@@ -201,5 +201,5 @@ class EbayFormCategoryTab extends EbayTab
 
 		return $alert;
 	}    
-    
+	
 }
