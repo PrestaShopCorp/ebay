@@ -144,7 +144,7 @@
 <script type="text/javascript">
 		
 	var $selects = false;
-	
+	var admin_path = '{$admin_path|escape:'htmlall':'UTF-8'}'
 	var module_dir = '{$_module_dir_|escape:'htmlall':'UTF-8'}';
 	var ebay_token = '{$configs.EBAY_SECURITY_TOKEN|escape:'htmlall':'UTF-8'}';
 	var module_time = '{$date|escape:'htmlall':'UTF-8'}';

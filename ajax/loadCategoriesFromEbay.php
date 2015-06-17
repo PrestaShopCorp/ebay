@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -24,34 +24,55 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-include(dirname(__FILE__).'/../../../config/config.inc.php');
-include(dirname(__FILE__).'/../ebay.php');
+if (!defined('TMP_DS'))
+	define('TMP_DS', DIRECTORY_SEPARATOR);
 
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN') && Tools::getValue('profile') && Tools::getValue('step') && Tools::getValue('id_category'))
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
+define('_PS_ADMIN_DIR_', _PS_ROOT_DIR_.TMP_DS.Tools::getValue('admin_path').TMP_DS);
+require_once(_PS_ADMIN_DIR_.'functions.php');
+
+if (
+	!Tools::getValue('token')
+	|| Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
 	die('ERROR : INVALID TOKEN');
 
-$ebay_request = new EbayRequest();
-$id_ebay_profile = (int)Tools::getValue('profile');
-$ebay_profile = new EbayProfile($id_ebay_profile);
-$id_category = Tools::getValue('id_category');
+if(
+	! ($id_profile = Tools::getValue('profile') && Validate::isInt(Tools::getValue('profile')))
+	|| !($step = Tools::getValue('step')  && Validate::isInt(Tools::getValue('step')))
+	|| !($cat = Tools::getValue('id_category'))
+	)
+	die('ERROR : INVALID DATA');
 
-// Etape 1 : Récupérer les catégorie root
-if ((int)Tools::getValue('step') == 1)
-{
-	if ($cat_root = $ebay_request->getCategories(false))
-		echo json_encode($cat_root);
+if (Module::isInstalled('ebay'))
+{	
+	$ebay = Module::getInstanceByName('ebay');
+
+	if (version_compare(_PS_VERSION_,'1.5','<'))
+		$enable = $ebay->active;
 	else
-		echo json_encode('error');
-}
-else if ((int)Tools::getValue('step') == 2)
-{
-	$cat = $ebay_request->getCategories((int)Tools::getValue('id_category'));
-	if ($toto = EbayCategory::insertCategories($ebay_profile->ebay_site_id, $cat, $ebay_request->getCategoriesSkuCompliancy()))
-		echo json_encode($cat);
-	else
-		echo json_encode('error');
-}
-else if ((int)Tools::getValue('step') == 3)
-{
-	Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_profile->ebay_site_id, 1);
+		$enable = Module::isEnabled('ebay');
+
+	if($enable)
+	{
+		$ebay_request = new EbayRequest();
+		$ebay_profile = new EbayProfile((int)$id_profile);
+
+		if ($step == 1)
+		{
+			if ($cat_root = $ebay_request->getCategories(false))
+				die(Tools::jsonEncode($cat_root));
+			else
+				die(Tools::jsonEncode('error'));
+		}
+		else if ($step == 2)
+		{
+			$cat = $ebay_request->getCategories((int)$cat);
+			if ($toto = EbayCategory::insertCategories($ebay_profile->ebay_site_id, $cat, $ebay_request->getCategoriesSkuCompliancy()))
+				die(Tools::jsonEncode($cat));
+			else
+				die(Tools::jsonEncode('error'));
+		}
+		else if ($step == 3)
+			Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_profile->ebay_site_id, 1);
+	}
 }

@@ -254,7 +254,7 @@ function loadCategoriesFromEbay(step, id_category, row) {
 		$.ajax({
 			type: "POST",
 			dataType: 'json',
-			url: module_dir + 'ebay/ajax/loadCategoriesFromEbay.php?token=' + ebay_token + "&profile=" + id_ebay_profile + "&step="+step + "&id_category=" + id_category,
+			url: module_dir + 'ebay/ajax/loadCategoriesFromEbay.php?token=' + ebay_token + "&profile=" + id_ebay_profile + "&step="+step + "&id_category=" + id_category + "&admin_path=" + admin_path,
 			success: function(data) {
 				if (data == "error")
 				{	

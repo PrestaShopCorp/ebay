@@ -84,6 +84,7 @@ class EbayFormCategoryTab extends EbayTab
 			'nb_categorie' => count(Category::getCategories($this->context->cookie->id_lang, true, false)),
 			'load_cat' 	=> $load_cat,
 			'launch_load_cat'	=> Tools::getValue('id_tab') == 2 ? true : false,
+			'admin_path'	=> basename(_PS_ADMIN_DIR_)
 		);
 
 		return $this->display('form_categories.tpl', $template_vars);
