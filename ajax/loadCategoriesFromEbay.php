@@ -37,8 +37,8 @@ if (
 	die('ERROR : INVALID TOKEN');
 
 if(
-	! ($id_profile = Tools::getValue('profile') && Validate::isInt(Tools::getValue('profile')))
-	|| !($step = Tools::getValue('step')  && Validate::isInt(Tools::getValue('step')))
+	! ($id_profile = Tools::getValue('profile')) || !Validate::isInt($id_profile)
+	|| !($step = Tools::getValue('step')) || !Validate::isInt($step)
 	|| !($cat = Tools::getValue('id_category'))
 	)
 	die('ERROR : INVALID DATA');
