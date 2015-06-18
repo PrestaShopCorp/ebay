@@ -118,7 +118,7 @@ class Ebay extends Module
 	{
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.11.0';
+		$this->version = '1.12.0';
 		$this->stats_version = '1.0';
 
 		$this->author = 'PrestaShop';
@@ -501,6 +501,8 @@ class Ebay extends Module
 				upgrade_module_1_11($this);
 			}
 		}
+		if (version_compare($version, '1.12', '<'))
+			EbayKb::install();
 	}
 
 	/**
