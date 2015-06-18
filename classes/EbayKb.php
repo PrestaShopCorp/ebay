@@ -107,7 +107,11 @@ class EbayKb extends ObjectModel
 				$this->link = pSQL($result);
 				return $this->save();
 			}
+			else
+				return false;
 		}
+		else
+			return false;
 	}
 
 	public function build()
@@ -140,11 +144,26 @@ class EbayKb extends ObjectModel
 			return false;
 
 		if($this->exist())
-			return $this->link;
+		{
+			$now = new DateTime( date('Y-m-d') );
+			$expire = new DateTime( $this->date_upd );
+			$interval = $now->diff($expire);
+
+			if ($interval->format('%a') > 4)
+			{
+				if($this->call())
+					return $this->link;
+				else
+					return false;
+			}
+			else
+				return $this->link;
+		}
 		else
 		{
 			if ($this->call())
 				return $this->link;
+			return false;
 		}
 	}
 
