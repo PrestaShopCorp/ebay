@@ -79,7 +79,8 @@ $classes_to_load = array(
 	'tabs/EbayOrderLogsTab',
 	'tabs/EbayOrdersSyncTab',
 	'tabs/EbayPrestashopProductsTab',
-	'tabs/EbayOrphanListingsTab'        
+	'tabs/EbayOrphanListingsTab' ,
+	'EbayKb'       
 );
 
 foreach ($classes_to_load as $classname)
@@ -1134,7 +1135,6 @@ class Ebay extends Module
 	*/
 	public function getContent()
 	{
-
 		if ($this->ebay_profile && !Configuration::get('EBAY_CATEGORY_MULTI_SKU_UPDATE'))
 		{
 			$ebay = new EbayRequest();
@@ -1757,7 +1757,6 @@ class Ebay extends Module
 				}
 				
 				echo 'OK|'.$this->displayError($msg);
-
 				if ($itemConditionError)
 				{
 					//Add a specific message for item condition error
@@ -2064,5 +2063,5 @@ class Ebay extends Module
 			readfile($full_path);
 			exit;
 		}
-	}	
+	}
 }

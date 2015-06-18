@@ -85,7 +85,7 @@ class EbaySynchronizer
 
 				if (!empty($ebay->error))
                 {
-					$tab_error = EbaySynchronizer::_updateTabError($ebay->error, str_replace('&', '&amp;', $product->name));
+					$tab_error = EbaySynchronizer::_updateTabError($ebay, str_replace('&', '&amp;', $product->name));
                     if ($log_type)
                         EbayLog::write('Error: '.$ebay->error, $log_type);
                 }
@@ -151,7 +151,8 @@ class EbaySynchronizer
 
 			if (!empty($ebay->error)) // Check for errors
             {
-				$tab_error = EbaySynchronizer::_updateTabError($ebay->error, $data['name']);                
+				$tab_error = EbaySynchronizer::_updateTabError($ebay, $data['name']);
+
                 if ($log_type)
                     EbayLog::write('Error: '.$ebay->error, $log_type);
             } elseif ($log_type)
@@ -165,6 +166,7 @@ class EbaySynchronizer
 		{
 			if (isset($all_error))
 			{
+				
 				foreach ($all_error as $key => $value) 
 				{
 					if (isset($tab_error[$key]))
@@ -340,10 +342,10 @@ class EbaySynchronizer
 		return $ebay;
 	}
 
-	private static function _updateTabError($ebay_error, $name)
+	private static function _updateTabError($ebay, $name)
 	{
-		$error_key = md5($ebay_error);
-		$tab_error[$error_key]['msg'] = '<hr/>'.$ebay_error;
+		$error_key = md5($ebay->error);
+		$tab_error[$error_key]['msg'] = '<hr/>'.$ebay->error;
 
 		if (!isset($tab_error[$error_key]['products']))
 				$tab_error[$error_key]['products'] = array();

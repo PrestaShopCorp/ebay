@@ -917,7 +917,7 @@ class EbayRequest
 
 		if (isset($response->Errors) && isset($response->Ack) && (string)$response->Ack != 'Success' && (string)$response->Ack != 'Warning')
 			foreach ($response->Errors as $e)
-			{
+				{
 				// if product no longer on eBay, we log the error code
 				if ((int)$e->ErrorCode == 291)
 					$this->errorCode = (int)$e->ErrorCode;
@@ -934,6 +934,14 @@ class EbayRequest
 
 					if (isset($e->ErrorParameters->Value))
 						$this->error .= '<br />'.(string)$e->ErrorParameters->Value;
+					
+					if (!Tools::isEmpty($e->ErrorCode))
+					{
+						$this->error .= '<a class="kb-help" data-errorcode="'.(int)$e->ErrorCode.'"';
+						$this->error .= ' data-module="ebay" data-lang="en"';
+						$this->error .= ' module_version="1.11.0" prestashop_version="'._PS_VERSION_.'"></a>';
+					}
+
 				}
 			}
 

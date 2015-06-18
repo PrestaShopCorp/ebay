@@ -894,3 +894,19 @@ margin-bottom: 3px;
 .hidden.importCatEbay{
 	display: none;
 }
+
+
+
+/*KB*/
+.kb-help{
+	display: none;
+}
+.kb-help.active{
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	background-image: url('../img/help.png');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: contain;
+}
