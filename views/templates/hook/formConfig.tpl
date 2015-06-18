@@ -32,6 +32,14 @@
 	&& $shippingValidator.indicator == "success"
 	&& $templateValidator.indicator == "success"}
 	<div class="bootstrap">
+			{if isset($alerts) && $alerts && sizeof($alerts)}
+				{foreach from=$alerts item='alert'}
+					<div class="alert alert-{if $alert.type == 'error'}danger{elseif $alert.type == 'warning'}warning{elseif $alert.type == 'info'}info{/if}">
+						{$alert.message}
+					</div>
+				{/foreach}
+			{/if}
+
 		{if isset($cron_task.products) && $cron_task.products.is_active == 1}
 			{if $cron_task.products.last_sync == 'none'}
 				<div class="alert alert-warning">
