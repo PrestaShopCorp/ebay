@@ -74,7 +74,7 @@
 			{l s='Number of additional pictures (0 will send one picture)' mod='ebay'}
 		</label>
 		<div class="margin-form">
-			<input type="text" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall':'UTF-8'}">
+			<input type="text" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall':'UTF-8'}" onchange="checkInputParameters()">
 		</div>
 		<div style="clear:both;"></div>
 		<label>
@@ -235,5 +235,5 @@
 			});
 		</script>
 	{/literal}    
-    
+<script type="text/javascript" src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/js/advancedParameters.js"></script>
 </form>
