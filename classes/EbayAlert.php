@@ -50,11 +50,15 @@ class EbayAlert
 	}
 
 	private function checkNumberPhoto(){
-		if ($this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING') > 0)
+		if ($this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING') > 0){
+			$link = new EbayCountrySpec();
+			$link->getPictureUrl();
 			$this->warnings[] = array(
 				'type' => 'warning', 
-				'message' => $this->ebay->l('You will send more than one image. This can have financial consequences thank you to verify this link.')
+				'message' => $this->ebay->l('You will send more than one image. This can have financial consequences thank you to verify this link'),
+				'link_warn' => $link->getPictureUrl()
 				);
+		}
 
 		if ($this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING') >= 12)
 			$this->errors[] = array(
