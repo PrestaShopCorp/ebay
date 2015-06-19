@@ -1,0 +1,8 @@
+[{country_name}] eBay order problem in PrestaShop
+
+Hello,
+
+An order was made on your eBay store. ({order_ref})
+However, this order for delivery country is : <strong>{country_name}</strong>,
+This country was not enabled in Prestashop, it can't be imported.
+Please enable this country in Prestashop.

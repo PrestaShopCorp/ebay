@@ -720,6 +720,14 @@ class Ebay extends Module
 				continue;
 			}
 
+			if (!$order->isCountryEnable())
+			{
+				$message = $this->l('Country is not activate');
+				$errors[] = $message;
+				$order->addErrorMessage($message);
+				continue;
+			}
+
 			if (!$order->hasAllProductsWithAttributes())
 			{
 				$message = $this->l('Could not find the products in database');

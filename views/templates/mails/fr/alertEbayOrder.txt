@@ -1,0 +1,8 @@
+[{country_name}] Problème commande eBay dans PrestaShop
+
+Bonjour,
+
+Une commande a été passée sur votre boutique eBay ({order_ref})
+Cependant cette commande a pour pays de livraison : <strong>{country_name}</strong>,
+Ce pays n'étant pas activer, elle ne peut être importé sur Prestashop.
+Veuillez activer ce pays pour que la commande soit importé.
