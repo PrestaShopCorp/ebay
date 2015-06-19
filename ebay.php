@@ -79,7 +79,8 @@ $classes_to_load = array(
 	'tabs/EbayOrderLogsTab',
 	'tabs/EbayOrdersSyncTab',
 	'tabs/EbayPrestashopProductsTab',
-	'tabs/EbayOrphanListingsTab'        
+	'tabs/EbayOrphanListingsTab',
+	'EbayAlert'        
 );
 
 foreach ($classes_to_load as $classname)
@@ -1605,7 +1606,9 @@ class Ebay extends Module
 			else
 				$cron_task['orders']['last_sync'] = 'none';
 		}            
-		
+		// Get all alerts
+		$alert = new EbayAlert($this);
+
 		$smarty_vars = array(
 			'class_general' => version_compare(_PS_VERSION_, '1.5', '>') ? 'uncinq' : 'unquatre',
 			'form_parameters' => $form_parameters_tab->getContent(),
@@ -1625,9 +1628,10 @@ class Ebay extends Module
 			'cron_task'	=> $cron_task,
 			'api_logs' => $api_logs->getContent(),
 			'order_logs' => $order_logs->getContent(),
-			'id_tab' => Tools::getValue('id_tab')
+			'id_tab' => Tools::getValue('id_tab'),
+			'alerts'	=> $alert->getAlerts(),
 		);
-
+		
 		$this->smarty->assign($smarty_vars);
 		
 		return $this->display(__FILE__, 'views/templates/hook/formConfig.tpl');	
