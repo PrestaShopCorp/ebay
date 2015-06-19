@@ -585,15 +585,17 @@ class EbayOrder
 			{
 				if (version_compare(_PS_VERSION_, '1.5', '>'))
 					$res = Db::getInstance()->insert('ebay_order_order', array(
-						'id_ebay_order' => (int)$this->id_ebay_order,
-						'id_order'      => (int)$id_order,
-						'id_shop'       => (int)$id_shop
+						'id_ebay_order' 	=> (int)$this->id_ebay_order,
+						'id_order'      	=> (int)$id_order,
+						'id_shop'       	=> (int)$id_shop,
+						'id_ebay_profile'	=> ($id_ebay_profile === null) ? null : (int)$id_ebay_profile,
 					));
 				else
 					$res = Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_order_order', array(
-						'id_ebay_order' => (int)$this->id_ebay_order,
-						'id_order'      => (int)$id_order,
-						'id_shop'       => (int)$id_shop
+						'id_ebay_order' 	=> (int)$this->id_ebay_order,
+						'id_order'			=> (int)$id_order,
+						'id_shop'       	=> (int)$id_shop,
+						'id_ebay_profile'	=> ($id_ebay_profile === null) ? null : (int)$id_ebay_profile,
 					), 'INSERT');
 
 			}
