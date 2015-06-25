@@ -87,13 +87,15 @@ class EbayOrderErrors extends ObjectModel
 		
 		$result = array();
 
-		$rows = Db::getInstance()->ExecuteS($q);
+		if ($rows = Db::getInstance()->ExecuteS($q))
 		foreach ($rows as $row){
 			$error = Tools::jsonDecode($row['error']);
 			if ($error->type == 'country')
 				$result[$error->iso_code][] = $row;
+			return $result;
 		}
+		else
+			return false;
 
-		return $result;
 	}
 }

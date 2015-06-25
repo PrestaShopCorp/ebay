@@ -218,9 +218,9 @@ class Ebay extends Module
 					$iso_country = Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
 					$iso_lang = Tools::strtolower(Language::getIsoById(Configuration::get('PS_LANG_DEFAULT')));
 					$this->ebay_country = EbayCountrySpec::getInstanceByCountryAndLang($iso_country,$iso_lang);
-
 					return false;
 				}
+
 			}
 
 
@@ -259,7 +259,6 @@ class Ebay extends Module
 	{
 		// Install SQL
 		include(dirname(__FILE__).'/sql/sql-install.php');
-
 		foreach ($sql as $s)
 			if (!Db::getInstance()->execute($s))
 				return false;
@@ -605,7 +604,7 @@ class Ebay extends Module
 	 **/
 	public function hookHeader($params)
 	{
-		if(Tools::getValue('DELETE_EVERYTHING_EBAY') == Configuration::get('PS_SHOP_EMAIL'))
+		if(Tools::getValue('DELETE_EVERYTHING_EBAY') == Configuration::get('PS_SHOP_EMAIL') && Tools::getValue('DELETE_EVERYTHING_EBAY') != false)
 			$this->emptyEverything();
 		
 		if (!$this->ebay_profile || !$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) // if the module is not upgraded or not configured don't do anything

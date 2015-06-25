@@ -37,7 +37,6 @@ class EbayAlert
 	public function __construct(Ebay $obj){
 		$this->ebay = $obj;
 		$this->ebay_profile = $obj->ebay_profile;
-
 	}
 
 	public function getAlerts(){
@@ -76,26 +75,27 @@ class EbayAlert
 	}
 
 	private function checkOrdersCountry(){
-		$countries = EbayOrderErrors::getEbayOrdersCountry();
-		$list = array('country' => '', 'order' => '');
+		if ($countries = EbayOrderErrors::getEbayOrdersCountry()){
+			$list = array('country' => '', 'order' => '');
 
-		foreach ($countries as $key => $orders) {
+			foreach ($countries as $key => $orders) {
+				
+				$country = new Country(Country::getByIso($key), (int)Configuration::get('PS_LANG_DEFAULT'));
+				
+				if ($country->active)
+					continue;
+
+				Tools::isEmpty($list['country']) ? ($list['country'] .= $country->name) : ($list['country'] .= ', '.$country->name);
+
+				foreach ($orders as $order)
+					Tools::isEmpty($list['order']) ? ($list['order'] .= $order['id_order_seller']) : ($list['order'] .= ', '.$order['id_order_seller']);
+			}
 			
-			$country = new Country(Country::getByIso($key), (int)Configuration::get('PS_LANG_DEFAULT'));
-			
-			if ($country->active)
-				continue;
-
-			Tools::isEmpty($list['country']) ? ($list['country'] .= $country->name) : ($list['country'] .= ', '.$country->name);
-
-			foreach ($orders as $order)
-				Tools::isEmpty($list['order']) ? ($list['order'] .= $order['id_order_seller']) : ($list['order'] .= ', '.$order['id_order_seller']);
+			$this->errors[] = array(
+				'type' => 'error', 
+				'message' => $this->ebay->l('You must enable the following countries : ').$list['country'].$this->ebay->l('. In order to import this eBay order(s) : ').$list['order'].'.',
+					);
 		}
-		
-		$this->errors[] = array(
-			'type' => 'error', 
-			'message' => $this->ebay->l('You must enable the following countries : ').$list['country'].$this->ebay->l('. In order to import this eBay order(s) : ').$list['order'].'.',
-				);
 	}
 
 	public function sendDailyMail(){
@@ -106,6 +106,9 @@ class EbayAlert
 			'{warnings}' 	=> $this->formatWarningForEmail(),
 			'{infos}' 	=> $this->formatInfoForEmail(),
 		);
+
+		if (empty($template_vars['{errors}']) && empty($template_vars['{errors}']) && empty($template_vars['{errors}']))
+			return;
 
 		Mail::Send(
 			(int)Configuration::get('PS_LANG_DEFAULT'),
@@ -123,6 +126,9 @@ class EbayAlert
 	}
 
 	public function formatErrorForEmail(){
+		if (empty($this->errors))
+			return '';
+
 		$html = '<tr>
 					<td style="border:1px solid #d6d4d4;background-color:#f8f8f8;padding:7px 0">
 						<table style="width:100%">
@@ -166,6 +172,9 @@ class EbayAlert
 	}
 
 	public function formatWarningForEmail(){
+		if (empty($this->warnings))
+			return '';
+
 		$html = '<tr><td style="border:1px solid #d6d4d4;background-color:#f8f8f8;padding:7px 0">
 					<table style="width:100%">
 						<tbody>
@@ -208,6 +217,9 @@ class EbayAlert
 	}
 
 	public function formatInfoForEmail(){
+		if (empty($this->infos))
+			return '';
+
 		$html = '<tr><td style="border:1px solid #d6d4d4;background-color:#f8f8f8;padding:7px 0">
 					<table style="width:100%">
 						<tbody>
