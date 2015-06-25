@@ -100,7 +100,6 @@ class EbayFormParametersTab extends EbayTab
 			'ebay_paypal_email' => $ebay_paypal_email,
 			'returnsConditionAccepted' => $returnsConditionAccepted,
 			'ebayListingDuration' => $ebayListingDuration,
-			'automaticallyRelist' => Configuration::get('EBAY_AUTOMATICALLY_RELIST'),
 			'is_multishop'  => $is_multishop,
 			'within_values' => unserialize(Configuration::get('EBAY_RETURNS_WITHIN_VALUES')),
 			'within' => $returns_policy_configuration->ebay_returns_within,

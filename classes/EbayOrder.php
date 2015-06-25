@@ -121,29 +121,19 @@ class EbayOrder
 
 	public function isCountryEnable(){
 		if (!Tools::isEmpty($this->country_iso_code)){
+
 			$country = new Country(Country::getByIso($this->country_iso_code), (int)Configuration::get('PS_LANG_DEFAULT'));
+			
 			if ($country->active)
 				return true;
 			else
 			{
-				$template_vars = array(
-					'{country_name}' 	=> $country->name,
-					'{order_ref}'		=> $this->id_order_seller,
-				);
+				$order_error = new EbayOrderErrors();
+				$order_error->id_order_seller = (int)$this->id_order_seller;
+				
+				$order_error->error = Tools::jsonEncode(array('type' => 'country', 'iso_code' => $this->country_iso_code));
+				$order_error->save();
 
-				Mail::Send(
-							(int)Configuration::get('PS_LANG_DEFAULT'),
-							'alertEbayOrder',
-							Mail::l('Country not active for orders', (int)Configuration::get('PS_LANG_DEFAULT')),
-							$template_vars,
-							strval(Configuration::get('PS_SHOP_EMAIL')),
-							null,
-							strval(Configuration::get('PS_SHOP_EMAIL')),
-							strval(Configuration::get('PS_SHOP_NAME')),
-							null,
-							null,
-							dirname(__FILE__).'/../views/templates/mails/'
-						);
 				return false;
 			}
 		}

@@ -80,7 +80,8 @@ $classes_to_load = array(
 	'tabs/EbayOrdersSyncTab',
 	'tabs/EbayPrestashopProductsTab',
 	'tabs/EbayOrphanListingsTab',
-	'EbayAlert'        
+	'EbayAlert',
+	'EbayOrderErrors'       
 );
 
 foreach ($classes_to_load as $classname)
@@ -118,7 +119,7 @@ class Ebay extends Module
 	{
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.11.0';
+		$this->version = '1.12.0';
 		$this->stats_version = '1.0';
 
 		$this->author = 'PrestaShop';
@@ -501,6 +502,9 @@ class Ebay extends Module
 				upgrade_module_1_11($this);
 			}
 		}
+		if (version_compare($version, '1.11', '<')) {
+			EbayOrderErrors::install();
+		}
 	}
 
 	/**
@@ -623,6 +627,9 @@ class Ebay extends Module
 			($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')).'.000Z')
 			|| Tools::getValue('EBAY_SYNC_ORDERS') == 1)
 		{
+			
+			EbayOrderErrors::truncate();
+
 			$current_date = date('Y-m-d\TH:i:s').'.000Z';
 			// we set the new last update date after retrieving the last orders
 			$this->ebay_profile->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date);
@@ -678,6 +685,7 @@ class Ebay extends Module
 	
 	public function cronOrdersSync()
 	{
+		EbayOrderErrors::truncate();
 		$current_date = date('Y-m-d\TH:i:s').'.000Z';
 
 		if ($orders = $this->_getEbayLastOrders($current_date))
@@ -1143,7 +1151,6 @@ class Ebay extends Module
 	*/
 	public function getContent()
 	{
-
 		if ($this->ebay_profile && !Configuration::get('EBAY_CATEGORY_MULTI_SKU_UPDATE'))
 		{
 			$ebay = new EbayRequest();
@@ -1608,7 +1615,7 @@ class Ebay extends Module
 		}            
 		// Get all alerts
 		$alert = new EbayAlert($this);
-
+		$alert->sendDailyMail();
 		$smarty_vars = array(
 			'class_general' => version_compare(_PS_VERSION_, '1.5', '>') ? 'uncinq' : 'unquatre',
 			'form_parameters' => $form_parameters_tab->getContent(),
