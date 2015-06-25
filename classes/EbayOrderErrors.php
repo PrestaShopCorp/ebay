@@ -27,7 +27,7 @@
 class EbayOrderErrors extends ObjectModel
 {
 
-	public  $error, $id_order_seller, $id_ebay_profile, $date_add, $date_upd;
+	public  $error, $id_order_seller, $date_add, $date_upd;
 
 	static public $definition = array(
 		'table' => 'ebay_order_errors',
@@ -35,7 +35,6 @@ class EbayOrderErrors extends ObjectModel
 		'fields' => array(
 		 	'error' => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
 		 	'id_order_seller' => array('type' => 'TYPE_INT', 'validate' => 'isInt'),
-		 	'id_ebay_profile' => array('type' => 'TYPE_INT', 'validate' => 'isInt'),
 		 	'date_add' => array('type' => 'TYPE_DATE', 'validate' => 'isDateFormat'),
 		 	'date_upd' => array('type' => 'TYPE_DATE', 'validate' => 'isDateFormat'),
 		),
@@ -56,7 +55,6 @@ class EbayOrderErrors extends ObjectModel
 				  	`'.self::$definition['primary'].'` int(16) NOT NULL AUTO_INCREMENT,
 				 	`error` varchar(255) NOT NULL,
 				 	`id_order_seller` int(16) NOT NULL,
-				 	`id_ebay_profile` int(16) NOT NULL,
 				 	date_add datetime NOT NULL,
 					date_upd datetime NOT NULL,
 					UNIQUE(`'.self::$definition['primary'].'`),
