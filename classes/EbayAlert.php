@@ -100,16 +100,17 @@ class EbayAlert
 
 	public function sendDailyMail(){
 		$this->getAlerts();
-var_dump($this->alerts);die;
+
 		$template_vars = array(
-			'{country_name}' 	=> $country->name,
-			'{order_ref}'		=> $this->id_order_seller,
+			'{errors}' 	=> $this->formatErrorForEmail(),
+			'{warnings}' 	=> $this->formatWarningForEmail(),
+			'{infos}' 	=> $this->formatInfoForEmail(),
 		);
 
 		Mail::Send(
 			(int)Configuration::get('PS_LANG_DEFAULT'),
-			'alertEbayOrder',
-			Mail::l('Country not active for orders', (int)Configuration::get('PS_LANG_DEFAULT')),
+			'ebayAlert',
+			Mail::l('Recap of your eBay module', (int)Configuration::get('PS_LANG_DEFAULT')),
 			$template_vars,
 			strval(Configuration::get('PS_SHOP_EMAIL')),
 			null,
@@ -119,6 +120,133 @@ var_dump($this->alerts);die;
 			null,
 			dirname(__FILE__).'/../views/templates/mails/'
 		);
-		die;
 	}
+
+	public function formatErrorForEmail(){
+		$html = '<tr>
+					<td style="border:1px solid #d6d4d4;background-color:#f8f8f8;padding:7px 0">
+						<table style="width:100%">
+							<tbody>
+								<tr>
+									<td width="10" style="padding:7px 0">&nbsp;</td>
+									<td style="padding:7px 0">
+										<font size="2" face="Open-sans, sans-serif" color="#555454">
+											<p style="border-bottom:1px solid #d6d4d4;margin:3px 0 7px;text-transform:uppercase;font-weight:500;font-size:18px;padding-bottom:10px">';
+
+		$html .= $this->ebay->l('Erreur(s)');
+
+		$html .= 							'</p>';
+
+		foreach ($this->errors as $key => $error) {
+			$html .=	'<p style="color:#333;padding-bottom:10px;';
+
+			if (array_key_exists($key+1, $this->errors))
+				$html .= 'border-bottom:1px solid #d6d4d4;';
+
+			$html .= '">
+							<strong>'.$error['message'].'</strong>
+						</p>';
+		}
+
+		$html .= '
+										
+									</font>
+								</td>
+								<td width="10" style="padding:7px 0">&nbsp;</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding:0!important">&nbsp;</td>
+			</tr>';
+
+		return $html;
+	}
+
+	public function formatWarningForEmail(){
+		$html = '<tr><td style="border:1px solid #d6d4d4;background-color:#f8f8f8;padding:7px 0">
+					<table style="width:100%">
+						<tbody>
+							<tr>
+								<td width="10" style="padding:7px 0">&nbsp;</td>
+								<td style="padding:7px 0">
+									<font size="2" face="Open-sans, sans-serif" color="#555454">
+										<p style="border-bottom:1px solid #d6d4d4;margin:3px 0 7px;text-transform:uppercase;font-weight:500;font-size:18px;padding-bottom:10px">';
+
+		$html .= $this->ebay->l('Warning(s)');
+
+		$html .= 						'</p>';
+
+		foreach ($this->warnings as $key => $warning) {
+			$html .=	'<p style="color:#333;padding-bottom:10px;';
+
+			if (array_key_exists($key+1, $this->warnings))
+				$html .= 'border-bottom:1px solid #d6d4d4;';
+
+			$html .= '">
+							<strong>'.$warning['message'].'</strong>
+						</p>';
+		}
+
+		$html .= '
+										
+									</font>
+								</td>
+								<td width="10" style="padding:7px 0">&nbsp;</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding:0!important">&nbsp;</td>
+			</tr>';
+
+		return $html;
+	}
+
+	public function formatInfoForEmail(){
+		$html = '<tr><td style="border:1px solid #d6d4d4;background-color:#f8f8f8;padding:7px 0">
+					<table style="width:100%">
+						<tbody>
+							<tr>
+								<td width="10" style="padding:7px 0">&nbsp;</td>
+								<td style="padding:7px 0">
+									<font size="2" face="Open-sans, sans-serif" color="#555454">
+										<p style="border-bottom:1px solid #d6d4d4;margin:3px 0 7px;text-transform:uppercase;font-weight:500;font-size:18px;padding-bottom:10px">';
+
+		$html .= $this->ebay->l('Information(s)');
+
+		$html .= 						'</p>';
+
+		foreach ($this->infos as $key => $info) {
+			$html .=	'<p style="color:#333;padding-bottom:10px;';
+
+			if (array_key_exists($key+1, $this->infos))
+				$html .= 'border-bottom:1px solid #d6d4d4;';
+
+			$html .= '">
+							<strong>'.$info['message'].'</strong>
+						</p>';
+		}
+
+		$html .= '
+										
+									</font>
+								</td>
+								<td width="10" style="padding:7px 0">&nbsp;</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding:0!important">&nbsp;</td>
+			</tr>';
+
+		return $html;
+	}
+
 }
