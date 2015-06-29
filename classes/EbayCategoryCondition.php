@@ -33,10 +33,15 @@ class EbayCategoryCondition
 	 *
 	 * Parse the data returned by the API for the eBay Category Conditions
 	 **/
-	public static function loadCategoryConditions($id_ebay_profile)
+	public static function loadCategoryConditions($id_ebay_profile, $id_category = false)
 	{
 		$request = new EbayRequest($id_ebay_profile);
-		$ebay_category_ids = EbayCategoryConfiguration::getEbayCategoryIds((int)$id_ebay_profile);
+
+		if ($id_category)
+			$ebay_category_ids = array($id_category);
+		else
+			$ebay_category_ids = EbayCategoryConfiguration::getEbayCategoryIds((int)$id_ebay_profile);
+		
 		$conditions = array();
 		
 		foreach ($ebay_category_ids as $category_id)
