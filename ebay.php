@@ -1643,7 +1643,8 @@ class Ebay extends Module
 			'api_logs' => $api_logs->getContent(),
 			'order_logs' => $order_logs->getContent(),
 			'id_tab' => Tools::getValue('id_tab'),
-			'alerts'	=> $alert->getAlerts(),
+			'alerts'		=> $alert->getAlerts(),
+			'ps_version'	=> _PS_VERSION_,
 		);
 		
 		$this->smarty->assign($smarty_vars);

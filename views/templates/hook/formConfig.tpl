@@ -34,7 +34,7 @@
 	<div class="bootstrap">
 			{if isset($alerts) && $alerts && sizeof($alerts)}
 				{foreach from=$alerts item='alert'}
-					<div class="alert alert-{if $alert.type == 'error'}danger{elseif $alert.type == 'warning'}warning{elseif $alert.type == 'info'}info{/if}">
+					<div class="{if $ps_version > '1.5'}alert {/if}alert-{if $alert.type == 'error'}danger{if $ps_version < '1.5'} error{/if}{elseif $alert.type == 'warning'}warning{if $ps_version < '1.5'} warn{/if}{elseif $alert.type == 'info'}info{if $ps_version < '1.5'} conf{/if}{/if}">
 						{$alert.message|escape:'htmlall':'UTF-8'}{if isset($alert.link_warn)} <a href="{$alert.link_warn|escape:'URL':'UTF-8'}">{$alert.link_warn|escape:'URL':'UTF-8'}</a>{/if}
 					</div>
 				{/foreach}

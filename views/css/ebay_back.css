@@ -858,3 +858,7 @@ margin-bottom: 3px;
 .left-padded-name {
   padding-left: 13px;
 }
+#content .conf.info{
+	background-color: #d3f1f7;
+	border: 1px solid rgb(23, 119, 182);
+}
