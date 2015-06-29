@@ -376,7 +376,9 @@
 	{literal}{{/literal}
 		/* INIT */
 		{foreach from=$existingNationalCarrier item=nationalCarrier}
-			addShippingFee(1, 0, '{$nationalCarrier.ebay_carrier|escape:'htmlall':'UTF-8'}', '{$nationalCarrier.ps_carrier|escape:'htmlall':'UTF-8'}', '{$nationalCarrier.extra_fee|escape:'htmlall':'UTF-8'}');
+			{if isset($nationalCarrier.ps_carrier) && isset($nationalCarrier.ebay_carrier)}
+				addShippingFee(1, 0, '{$nationalCarrier.ebay_carrier|escape:'htmlall':'UTF-8'}', '{$nationalCarrier.ps_carrier|escape:'htmlall':'UTF-8'}', '{$nationalCarrier.extra_fee|escape:'htmlall':'UTF-8'}');
+			{/if}
 		{/foreach}
 		{literal}
 		var zone = new Array();
@@ -395,7 +397,9 @@
 		showExcludeLocation();
 
 		{foreach from=$existingNationalCarrier item=nationalCarrier key=i}
+			{if isset($nationalCarrier.ps_carrier) && isset($nationalCarrier.ebay_carrier)}
 			addShipping('domesticShipping', '{$nationalCarrier.ps_carrier|escape:'htmlall':'UTF-8'}', '{$nationalCarrier.ebay_carrier|escape:'htmlall':'UTF-8'}', '{$nationalCarrier.extra_fee|escape:'htmlall':'UTF-8'}', '{$i}', '{$nationalCarrier.id_zone|escape:'htmlall':'UTF-8'}');
+			{/if}
 		{foreachelse}
 			addShipping('domesticShipping');
 		{/foreach}
@@ -406,7 +410,9 @@
 			{foreach from=$internationalCarrier.shippingLocation item=shippingLocation}
 				zone.push('{$shippingLocation.id_ebay_zone|escape:'htmlall':'UTF-8'}');
 			{/foreach}
-			addShipping('internationalShipping', {$internationalCarrier.ps_carrier|escape:'htmlall':'UTF-8'}, '{$internationalCarrier.ebay_carrier|escape:'htmlall':'UTF-8'}', {$internationalCarrier.extra_fee|escape:'htmlall':'UTF-8'}, {$i}, {$internationalCarrier.id_zone|escape:'htmlall':'UTF-8'}, zone);
+			{if isset($internationalCarrier.ebay_carrier) && isset($internationalCarrier.ps_carrier)}
+				addShipping('internationalShipping', {$internationalCarrier.ps_carrier|escape:'htmlall':'UTF-8'}, '{$internationalCarrier.ebay_carrier|escape:'htmlall':'UTF-8'}', {$internationalCarrier.extra_fee|escape:'htmlall':'UTF-8'}, {$i}, {$internationalCarrier.id_zone|escape:'htmlall':'UTF-8'}, zone);
+			{/if}
 		{foreachelse}
 			addShipping('internationalShipping');
 		{/foreach}
