@@ -214,7 +214,7 @@
             });
 
             $(function() {
-				$('#reset-image').on('click', function(e){
+				$('#reset-image').click(function(e){
 					e.preventDefault();
 					$.ajax({
 						type: 'POST',

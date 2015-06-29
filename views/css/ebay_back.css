@@ -876,13 +876,14 @@ margin-bottom: 3px;
 	font-weight: bold;
 }
 #load_cat_ebay tr.load td:nth-child(1){
-	background-image: url('../img/loading-small.gif');
+	background-image: url('../img/ajax-loader-small.gif');
 }
 #load_cat_ebay tr.error td:nth-child(1){
 	background-image: url('../img//big-error.png');
 }
 #load_cat_ebay tr.success td:nth-child(1){
-	background-image: url('../img/success.png');
+	background-image: url('../img/bg-li-tabs-finished.png');
+	background-size: 14px 12px;
 }
 #load_cat_ebay tr.error td{
 	font-weight: bold;

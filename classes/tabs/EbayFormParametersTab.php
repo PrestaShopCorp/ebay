@@ -167,10 +167,14 @@ class EbayFormParametersTab extends EbayTab
             && $this->ebay_profile->setConfiguration('EBAY_SHIPPED_ORDER_STATE', (int)Tools::getValue('shipped_order_state'))
             && $this->ebay_profile->setConfiguration('EBAY_IMMEDIATE_PAYMENT', (int)Tools::getValue('immediate_payment'))                                
 		){
-			$link = new Link();
-			$url = $link->getAdminLink('AdminModules');
+			if (version_compare(_PS_VERSION_, '1.5', '>')){
+				$link = new Link();
+				$url = $link->getAdminLink('AdminModules');
+			}
+			else
+				$url = 'index.php?tab_module=market_place&section=parameters&tab=AdminModules&token='.Tools::getAdminTokenLite('AdminModules');
+
 			Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=2');
-			return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));
 		}
 		else
 			return $this->ebay->displayError($this->ebay->l('Settings failed'));        

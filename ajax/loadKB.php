@@ -28,8 +28,13 @@ if (!defined('TMP_DS'))
 	define('TMP_DS', DIRECTORY_SEPARATOR);
 
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
-define('_PS_ADMIN_DIR_', _PS_ROOT_DIR_.TMP_DS.Tools::getValue('admin_path').TMP_DS);
-require_once(_PS_ADMIN_DIR_.'init.php');
+
+if (version_compare(_PS_VERSION_, '1.5', '>=')){
+	define('_PS_ADMIN_DIR_', _PS_ROOT_DIR_.TMP_DS.Tools::getValue('admin_path').TMP_DS);
+	require_once(_PS_ADMIN_DIR_.'init.php');
+}
+else
+	require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php');
 
 if (
 	!Tools::getValue('token')
