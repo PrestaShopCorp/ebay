@@ -271,7 +271,9 @@ class Ebay extends Module
 			|| !$this->registerHook('deleteProduct')
 			|| !$this->registerHook('newOrder')
 			|| !$this->registerHook('backOfficeTop')
-			|| !$this->registerHook('header'))
+			|| !$this->registerHook('header')
+			|| !$this->registerHook('updateCarrier'),
+			|| !$this->registerHook('actionCarrierUpdate'))
 			return false;
 
 		$hook_update_quantity = version_compare(_PS_VERSION_, '1.5', '>') ? 'actionUpdateQuantity' : 'updateQuantity';
@@ -420,7 +422,9 @@ class Ebay extends Module
 			|| !$this->unregisterHook('deleteProduct')
 			|| !$this->unregisterHook('newOrder')
 			|| !$this->unregisterHook('backOfficeTop')
-			|| !$this->unregisterHook('header'))
+			|| !$this->unregisterHook('header'),
+			|| !$this->unregisterHook('updateCarrier')
+			|| !$this->unregisterHook('actionCarrierUpdate'))
 			return false;
 
 		// Clean Cookie
@@ -598,6 +602,12 @@ class Ebay extends Module
 		}
 	}
 
+	public function hookActionCarrierUpdate($params){
+		$this->hookUpdateCarrier($params);
+	}
+	public function hookUpdateCarrier($params){
+		EbayShipping::updatePsCarrier($params['id_carrier'], $params['carrier']->id);
+	}
 	/**
 	 *
 	 *

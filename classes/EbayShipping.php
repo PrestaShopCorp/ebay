@@ -202,4 +202,10 @@ class EbayShipping
 			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
 			ORDER BY id_ebay_shipping DESC');
 	}
+
+	public static function updatePsCarrier($old_ps_carrier, $new_ps_carrier){
+		return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'ebay_shipping` 
+				SET `ps_carrier` = '.(int)$new_ps_carrier.'
+				WHERE `ps_carrier` = '.(int)$old_ps_carrier);
+	}
 }
