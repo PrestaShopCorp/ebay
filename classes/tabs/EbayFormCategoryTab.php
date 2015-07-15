@@ -63,7 +63,7 @@ class EbayFormCategoryTab extends EbayTab
 			EbayCategory::insertCategories($ebay_site_id, $ebay_request->getCategories(), $ebay_request->getCategoriesSkuCompliancy());
 			Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_site_id, 1);
 		}
-		
+
 		// Smarty
 		$template_vars = array(
 			'alerts' => $this->_getAlertCategories(),
@@ -83,7 +83,9 @@ class EbayFormCategoryTab extends EbayTab
 			'module_name' => Tools::getValue('module_name'),
 			'date' => pSQL(date('Ymdhis')),
 			'form_categories' => EbaySynchronizer::getNbSynchronizableEbayCategorie($this->ebay_profile->id),
-			'nb_categorie' => count(Category::getCategories($this->context->cookie->id_lang, true, false))
+			'nb_categorie' => count(Category::getCategories($this->context->cookie->id_lang, true, false)),
+			'admin_path'	=> basename(_PS_ADMIN_DIR_),
+			'id_shop' => $this->context->shop->id
 		);
 
 		return $this->display('form_categories.tpl', $template_vars);
