@@ -61,7 +61,7 @@ $query = 'SELECT p.`id_product`,
 				ep.`id_product_ref`                          AS EbayProductRef,
 				ec.`id_category_ref`,';
 
-if (version_compare(_PS_VERSION_, '1.5', '>'))
+if (version_compare(_PS_VERSION_, '1.5', '>='))
 	$query .= ' ps.`active` AS active 
 		INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
 		ON p.id_product = ps.id_product 

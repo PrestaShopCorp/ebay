@@ -104,12 +104,14 @@
 		
 	var $selects = false;
 	
+	var admin_path = '{$admin_path|escape:'htmlall':'UTF-8'}';
 	var module_dir = '{$_module_dir_|escape:'htmlall':'UTF-8'}';
 	var ebay_token = '{$configs.EBAY_SECURITY_TOKEN|escape:'htmlall':'UTF-8'}';
 	var module_time = '{$date|escape:'htmlall':'UTF-8'}';
 	var module_path = '{$_path|escape:'htmlall':'UTF-8'}';
 	var id_lang = '{$id_lang|escape:'htmlall':'UTF-8'}';
 	var id_ebay_profile = '{$id_ebay_profile|escape:'htmlall':'UTF-8'}';
+	var id_shop = '{$id_shop|escape:'htmlall'}';
 	var store_categories_ebay_l = {ldelim}
 		'No category found'		 : "{l s='No category found' mod='ebay'}",
 		'You are not logged in': "{l s='You are not logged in' mod='ebay'}",

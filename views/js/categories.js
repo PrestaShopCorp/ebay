@@ -189,7 +189,7 @@ function initCategoriesPagination() {
 
 function loadCategories(page, search) {
  
-  var url = module_dir + "ebay/ajax/loadTableCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&ch_cat_str=' + categories_ebay_l['no category selected'] + '&ch_no_cat_str=' + categories_ebay_l['no category found'] + '&not_logged_str=' + categories_ebay_l['You are not logged in'] + '&unselect_product=' + categories_ebay_l['Unselect products']+'&id_shop='+id_shop;
+  var url = module_dir + "ebay/ajax/loadTableCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&ch_cat_str=' + categories_ebay_l['no category selected'] + '&ch_no_cat_str=' + categories_ebay_l['no category found'] + '&not_logged_str=' + categories_ebay_l['You are not logged in'] + '&unselect_product=' + categories_ebay_l['Unselect products']+'&id_shop='+id_shop+'&admin_path='+admin_path;
 
   if (page != undefined)
     url += "&p=" + page;
