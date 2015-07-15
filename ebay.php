@@ -1564,45 +1564,6 @@ class Ebay extends Module
 
 		 }
 
-		$cron_task = array();
-
-		if ((int)Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON') == 1)
-		{
-			$cron_task['products']['is_active'] = 1;
-
-			if ($last_sync_datetime = Configuration::get('DATE_LAST_SYNC_PRODUCTS'))
-			{
-				$warning_date = strtotime(date('Y-m-d').' - 2 days');
-				$cron_task['products']['last_sync'] = array(
-					'date' => date('Y-m-d', strtotime($last_sync_datetime)), 
-					'time' => date('H:i:s', strtotime($last_sync_datetime)),
-					'warning_long_since' =>  (bool)(strtotime($last_sync_datetime) < $warning_date),
-				);
-				$cron_task['products']['last_sync']['nb_products'] = Configuration::get('NB_PRODUCTS_LAST');
-			}
-			else
-				$cron_task['products']['last_sync'] = 'none';
-		}
-
-		if ((int)Configuration::get('EBAY_SYNC_ORDERS_BY_CRON') == 1)
-		{
-			$cron_task['orders']['is_active'] = 1;
-
-			if ($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE') != null)
-			{
-				$datetime = new DateTime($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE'));
-
-				$cron_task['orders']['last_sync'] = array('date' => date('Y-m-d', strtotime($datetime->format('Y-m-d H:i:s'))), 'time' => date('H:i:s', strtotime($datetime->format('Y-m-d H:i:s'))));
-
-				$datetime2 = new DateTime();
-				
-				$interval = $datetime->diff($datetime2);
-
-				$cron_task['orders']['alert'] = ($interval->format('%a') >= 1 ? 'danger' : 'info');
-			}
-			else
-				$cron_task['orders']['last_sync'] = 'none';
-		}            
 		// Get all alerts
 		$alert = new EbayAlert($this);
 
@@ -1630,7 +1591,6 @@ class Ebay extends Module
 			'ps_products' => $ps_products->getContent(),
 			'orphan_listings' => $orphan_listings->getContent(),
 			'green_message' => isset($green_message) ? $green_message : null,
-			'cron_task'	=> $cron_task,
 			'api_logs' => $api_logs->getContent(),
 			'order_logs' => $order_logs->getContent(),
 			'id_tab' => Tools::getValue('id_tab'),

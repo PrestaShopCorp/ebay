@@ -43,6 +43,7 @@ class EbayAlert
 		$this->checkNumberPhoto();
 		$this->checkOrders();
 		$this->checkUrlDomain();
+		$this->checkCronTask();
 
 		$this->build();
 
@@ -270,7 +271,7 @@ class EbayAlert
 
 		} else
 			$wrong_domain = ($_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN') && $_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN_SSL'));
-			
+
 		if ($wrong_domain) {
 			$url_vars = array();
 			if (version_compare(_PS_VERSION_, '1.5', '>'))
@@ -298,6 +299,77 @@ class EbayAlert
 		);
 
 		return 'index.php?'.http_build_query(array_merge($url_vars, $extra_vars));
+	}
+
+	private function checkCronTask(){
+		$cron_task = array();
+
+		// PRODUCTS
+		if ((int)Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON') == 1)
+		{
+			if ($last_sync_datetime = Configuration::get('DATE_LAST_SYNC_PRODUCTS'))
+			{
+				$warning_date = strtotime(date('Y-m-d').' - 2 days');
+
+				$date = date('Y-m-d', strtotime($last_sync_datetime));
+				$time =date('H:i:s', strtotime($last_sync_datetime));
+				$msg = $this->ebay->l('Last product synchronization has been done the ').$date.$this->ebay->l(' at ').$time.$this->ebay->l(' and it tried to synchronize ').Configuration::get('NB_PRODUCTS_LAST');
+
+				if (strtotime($last_sync_datetime) < $warning_date)
+					$this->warnings[] = array(
+						'type' => 'warning',
+						'message' => $msg,
+						);
+				else
+					$this->infos[] = array(
+						'type' => 'info',
+						'message' => $msg,
+						);
+			}
+			else
+			{
+				$this->errors[] = array(
+					'type' => 'error',
+					'message' => $this->ebay->l('The product cron job has never been run.'),
+					);
+			}
+
+			
+		}
+
+		// ORDERS
+		if ((int)Configuration::get('EBAY_SYNC_ORDERS_BY_CRON') == 1)
+		{
+			if ($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE') != null)
+			{
+				$datetime = new DateTime($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE'));
+
+				$date = date('Y-m-d', strtotime($datetime->format('Y-m-d H:i:s'))); 
+				$time = date('H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
+
+				$datetime2 = new DateTime();
+				
+				$interval = $datetime->diff($datetime2);
+
+				if ($interval->format('%a') >= 1)
+					$this->errors[] = array(
+						'type' => 'error', 
+						'message' => $this->ebay->l('Last order synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
+						);
+				else
+					$this->infos[] = array(
+						'type' => 'info', 
+						'message' => $this->ebay->l('Last order synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
+						);
+
+			}
+			else
+				$this->errors[] = array(
+					'type' => 'error', 
+					'message' => $this->ebay->l('Order cron job has never been run.'),
+					);
+		}   
+
 	}
 
 }

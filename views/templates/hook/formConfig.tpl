@@ -40,55 +40,6 @@
 			</div>
 		{/foreach}
 	{/if}
-{if $parametersValidator.indicator == "success" 
-	&& $itemSpecificValidator.indicator == "success"
-	&& $shippingValidator.indicator == "success"
-	&& $templateValidator.indicator == "success"}
-			
-		{if isset($cron_task.products) && $cron_task.products.is_active == 1}
-			{if $cron_task.products.last_sync == 'none'}
-				<div class="alert alert-warning">
-					{l s='The product cron job has never been run.' mod='ebay'}
-				</div>
-			{elseif $cron_task.products.last_sync.warning_long_since}
-				<div class="alert alert-danger">
-					{l s='Last product synchronization has been done the ' mod='ebay'}
-					{$cron_task.products.last_sync.date}
-					{l s=' at ' mod='ebay'}
-					{$cron_task.products.last_sync.time}
-					{l s=' and it tried to synchronize ' mod='ebay'}
-					{$cron_task.products.last_sync.nb_products}
-					{l s=' products' mod='ebay'}
-				</div>
-			{else}
-				<div class="alert alert-info">
-					{l s='Last product synchronization has been done the ' mod='ebay'}
-					{$cron_task.products.last_sync.date}
-					{l s=' at ' mod='ebay'}
-					{$cron_task.products.last_sync.time}
-					{l s=' and it tried to synchronize ' mod='ebay'}
-					{$cron_task.products.last_sync.nb_products}
-					{l s=' products' mod='ebay'}
-				</div>
-			{/if}
-			
-		{/if}
-		{if isset($cron_task.orders) && $cron_task.orders.is_active == 1}
-			{if $cron_task.orders.last_sync == 'none'}
-				<div class="alert alert-warning">
-					{l s='Order cron job has never been run.' mod='ebay'}
-				</div>
-			{else}
-				<div class="alert alert-{$cron_task.orders.alert}">
-					{l s='Last order synchronization has been done the ' mod='ebay'}
-					{$cron_task.orders.last_sync.date}
-					{l s=' at ' mod='ebay'}
-					{$cron_task.orders.last_sync.time}
-				</div>
-			{/if}
-			
-		{/if}
-	{/if}
 </div>
 <ul class="settings-menu menuTab">
     
