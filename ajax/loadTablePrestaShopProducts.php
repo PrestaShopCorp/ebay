@@ -61,17 +61,22 @@ $query = 'SELECT p.`id_product`,
 				ep.`id_product_ref`                          AS EbayProductRef,
 				ec.`id_category_ref`,';
 
-if (version_compare(_PS_VERSION_, '1.5', '>='))
-	$query .= ' ps.`active` AS active 
+if ($is_one_five)  
+	$query .= ' ps.`active` AS active ';
+else
+	$query .= ' p.`active` AS active';
+
+
+$query .=	' FROM `'._DB_PREFIX_.'product` p';
+
+if ($is_one_five)  
+	$query .= ' 
 		INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
 		ON p.id_product = ps.id_product 
 		AND ps.id_shop = '.(int)$ebay_profile->id_shop;
-else
-	$query .= '  p.`active` AS active';
 
-$query .=	' FROM `'._DB_PREFIX_.'product` p
 	
-	INNER JOIN `'._DB_PREFIX_.'product_lang` pl
+	$query .= ' INNER JOIN `'._DB_PREFIX_.'product_lang` pl
 	ON pl.`id_product` = p.`id_product`
 	AND pl.`id_lang` = '.$ebay_profile->id_lang.'
 	

@@ -90,7 +90,7 @@
 				</th>
 
                 <th class="center">
-                    <span data-inlinehelp="{l s='If this column is set to \'Yes\', product has been disabled' mod='ebay'}">{l s='Product dissable' mod='ebay'}</span>
+                    <span data-inlinehelp="{l s='If this column is set to \'Yes\', product has been disabled' mod='ebay'}">{l s='Product disable' mod='ebay'}</span>
                 </th>
 
                 <th class="center">
