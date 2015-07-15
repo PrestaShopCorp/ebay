@@ -119,7 +119,7 @@ $category_list = $ebay->getChildCategories(Category::getCategories($ebay_profile
 // eBay categories
 $ebay_categories = EbayCategoryConfiguration::getEbayCategories($ebay_profile->id);
 
-$content = Context::getContext();
+$context = Context::getContext();
 $employee = new Employee((int)Tools::getValue('id_employee'));
 $context->employee = $employee;
 

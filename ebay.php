@@ -81,7 +81,8 @@ $classes_to_load = array(
 	'tabs/EbayPrestashopProductsTab',
 	'tabs/EbayOrphanListingsTab',
 	'EbayAlert',
-	'EbayOrderErrors'       
+	'EbayOrderErrors',
+	'EbayDbValidator'      
 );
 
 foreach ($classes_to_load as $classname)
