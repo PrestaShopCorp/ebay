@@ -272,7 +272,7 @@ class Ebay extends Module
 			|| !$this->registerHook('newOrder')
 			|| !$this->registerHook('backOfficeTop')
 			|| !$this->registerHook('header')
-			|| !$this->registerHook('updateCarrier'),
+			|| !$this->registerHook('updateCarrier')
 			|| !$this->registerHook('actionCarrierUpdate'))
 			return false;
 
@@ -422,7 +422,7 @@ class Ebay extends Module
 			|| !$this->unregisterHook('deleteProduct')
 			|| !$this->unregisterHook('newOrder')
 			|| !$this->unregisterHook('backOfficeTop')
-			|| !$this->unregisterHook('header'),
+			|| !$this->unregisterHook('header')
 			|| !$this->unregisterHook('updateCarrier')
 			|| !$this->unregisterHook('actionCarrierUpdate'))
 			return false;
@@ -505,9 +505,9 @@ class Ebay extends Module
 				include_once(dirname(__FILE__).'/upgrade/Upgrade-1.11.php');
 				upgrade_module_1_11($this);
 			}
-		}
-		if (version_compare($version, '1.11', '<')) {
 			EbayOrderErrors::install();
+			$this->registerHook('updateCarrier');
+			$this->registerHook('actionCarrierUpdate'));
 		}
 	}
 
