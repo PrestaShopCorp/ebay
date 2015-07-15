@@ -42,6 +42,7 @@ class EbayAlert
 	public function getAlerts(){
 		$this->checkNumberPhoto();
 		$this->checkOrders();
+		$this->checkUrlDomain();
 
 		$this->build();
 
@@ -58,7 +59,7 @@ class EbayAlert
 			$link->getPictureUrl();
 			$this->warnings[] = array(
 				'type' => 'warning', 
-				'message' => $this->ebay->l('You will send more than one image. This can have financial consequences. Please verify this link'),
+				'message' => $this->ebay->l('You will send more than one image. This can have financial consequences. Please verify @link@this link@/link@'),
 				'link_warn' => $link->getPictureUrl()
 				);
 		}
@@ -259,6 +260,44 @@ class EbayAlert
 			</tr>';
 
 		return $html;
+	}
+
+	public function checkUrlDomain(){
+		// check domain
+		if (version_compare(_PS_VERSION_, '1.5', '>')) {
+			$shop = $this->ebay_profile instanceof EbayProfile ? new Shop($this->ebay_profile->id_shop) : new Shop();
+			$wrong_domain = ($_SERVER['HTTP_HOST'] != $shop->domain && $_SERVER['HTTP_HOST'] != $shop->domain_ssl && Tools::getValue('ajax') == false);
+
+		} else
+			$wrong_domain = ($_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN') && $_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN_SSL'));
+			
+		if ($wrong_domain) {
+			$url_vars = array();
+			if (version_compare(_PS_VERSION_, '1.5', '>'))
+				$url_vars['controller'] = 'AdminMeta';
+			else
+				$url_vars['tab'] = 'AdminMeta';
+			$warning_url = $this->_getUrl($url_vars);
+
+			$this->warnings[] = array(
+				'type' => 'warning', 
+				'message' => $this->ebay->l('You are currently connected to the Prestashop Back Office using a different URL @link@ than set up@/link@, this module will not work properly. Please login in using URL_Back_Office'),
+				'link_warn' => $warning_url
+				);
+
+		}
+	}
+
+	private function _getUrl($extra_vars = array())
+	{
+		$url_vars = array(
+			'configure' => Tools::getValue('configure'),
+			'token' => version_compare(_PS_VERSION_, '1.5', '>') ? Tools::getAdminTokenLite($extra_vars['controller']) : Tools::getAdminTokenLite($extra_vars['tab']),
+			'tab_module' => Tools::getValue('tab_module'),
+			'module_name' => Tools::getValue('module_name'),
+		);
+
+		return 'index.php?'.http_build_query(array_merge($url_vars, $extra_vars));
 	}
 
 }

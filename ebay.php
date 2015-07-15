@@ -507,7 +507,7 @@ class Ebay extends Module
 			}
 			EbayOrderErrors::install();
 			$this->registerHook('updateCarrier');
-			$this->registerHook('actionCarrierUpdate'));
+			$this->registerHook('actionCarrierUpdate');
 		}
 	}
 
@@ -1281,25 +1281,6 @@ class Ebay extends Module
 			$main_tab = 'settings';            
 		}
 		
-		
-		// check domain
-		if (version_compare(_PS_VERSION_, '1.5', '>')) {
-			$shop = $this->ebay_profile instanceof EbayProfile ? new Shop($this->ebay_profile->id_shop) : new Shop();
-			$wrong_domain = ($_SERVER['HTTP_HOST'] != $shop->domain && $_SERVER['HTTP_HOST'] != $shop->domain_ssl && Tools::getValue('ajax') == false);
-
-		} else
-			$wrong_domain = ($_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN') && $_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN_SSL'));
-		
-		if ($wrong_domain) {
-			$url_vars = array();
-			if (version_compare(_PS_VERSION_, '1.5', '>'))
-				$url_vars['controller'] = 'AdminMeta';
-			else
-				$url_vars['tab'] = 'AdminMeta';
-			$warning_url = $this->_getUrl($url_vars);
-		}
-
-	
 		$this->smarty->assign(array(
 			'img_stats' => ($this->ebay_country->getImgStats()),
 			'alert' => $alerts,
@@ -1343,8 +1324,7 @@ class Ebay extends Module
 			'title_desc_url' => $this->ebay_country->getTitleDescUrl(),                        
 			'picture_url' => $this->ebay_country->getPictureUrl(),                        
 			'similar_items_url' => $this->ebay_country->getSimilarItemsUrl(),                        
-			'top_rated_url' => $this->ebay_country->getTopRatedUrl(),                        
-			'warning_url' => isset($warning_url) ? $warning_url : null,
+			'top_rated_url' => $this->ebay_country->getTopRatedUrl(),   
 			'_module_dir_' => _MODULE_DIR_,
 			'date' => pSQL(date('Ymdhis')),         
 		));
@@ -1657,7 +1637,7 @@ class Ebay extends Module
 			'alerts'		=> $alert->getAlerts(),
 			'ps_version'	=> _PS_VERSION_,
 		);
-		
+
 		$this->smarty->assign($smarty_vars);
 		
 		return $this->display(__FILE__, 'views/templates/hook/formConfig.tpl');	

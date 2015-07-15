@@ -245,17 +245,6 @@
         </div>
     </div>
     
-    {if isset($warning_url) && $warning_url}
-        <div class="warn">
-		    <span style="float:right">
-			    <a id="hideWarn" href=""><img alt="X" src="../img/admin/close.png" /></a>
-		    </span>
-            <ul style="margin-top: 3px">
-                <li>You are currently connected to the Prestashop Back Office using a different URL <a href="{$warning_url|escape:'urlencode'}">than set up</a>, this module will not work properly. Please login in using URL_Back_Office</li>
-            </ul>
-        </div>
-    {/if}
-
     {if $current_profile && !$add_profile}
         <div class="ebay-boxes-2-col-table">
             <div class="ebay-boxes-2-col-cell left ebay_gray_title_box">
