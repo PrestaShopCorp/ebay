@@ -59,9 +59,17 @@ $query = 'SELECT p.`id_product`,
 				ecc.`sync`                                   AS sync,
 				epc.`blacklisted`                            AS blacklisted,
 				ep.`id_product_ref`                          AS EbayProductRef,
-				ec.`id_category_ref`
+				ec.`id_category_ref`,';
 
-	FROM `'._DB_PREFIX_.'product` p
+if (version_compare(_PS_VERSION_, '1.5', '>'))
+	$query .= ' ps.`active` AS active 
+		INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
+		ON p.id_product = ps.id_product 
+		AND ps.id_shop = '.(int)$ebay_profile->id_shop;
+else
+	$query .= '  p.`active` AS active';
+
+$query .=	' FROM `'._DB_PREFIX_.'product` p
 	
 	INNER JOIN `'._DB_PREFIX_.'product_lang` pl
 	ON pl.`id_product` = p.`id_product`
@@ -167,4 +175,5 @@ $template_vars = array(
 );
 
 $smarty->assign($template_vars);
+
 echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/table_prestashop_products.tpl');
