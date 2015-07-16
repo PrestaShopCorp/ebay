@@ -35,7 +35,7 @@ $ebay_request = new EbayRequest();
 $id_product_ref = Tools::getValue('id_product_ref');
 
 if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
-	return Tools::safeOutput(Tools::getValue('not_logged_str'));
+    return Tools::safeOutput(Tools::getValue('not_logged_str'));
 
 
 EbayProduct::deleteByIdProductRef($id_product_ref);

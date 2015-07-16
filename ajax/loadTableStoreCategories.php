@@ -24,95 +24,95 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 if (!defined('TMP_DS'))
-	define('TMP_DS', DIRECTORY_SEPARATOR);
+    define('TMP_DS', DIRECTORY_SEPARATOR);
 
 $base_path = dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS;
 
 if (array_key_exists('admin_path', $_GET) && !empty($_GET['admin_path']) && is_dir($base_path.$_GET['admin_path'].TMP_DS))
-	define('_PS_ADMIN_DIR_', $base_path.$_GET['admin_path'].TMP_DS);
+    define('_PS_ADMIN_DIR_', $base_path.$_GET['admin_path'].TMP_DS);
 
 require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php');
 
 if (version_compare(_PS_VERSION_, '1.5', '>'))
-	require_once(_PS_ADMIN_DIR_.'init.php');
+    require_once(_PS_ADMIN_DIR_.'init.php');
 else
-	require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php');
+    require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php');
 
 if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
-	return Tools::safeOutput(Tools::getValue('not_logged_str'));
+    return Tools::safeOutput(Tools::getValue('not_logged_str'));
 
 if (Module::isInstalled('ebay'))
 {
-	$ebay = Module::getInstanceByName('ebay');
+    $ebay = Module::getInstanceByName('ebay');
 
-	if (version_compare(_PS_VERSION_,'1.5','<'))
-		$enable = $ebay->active;
-	else
-		$enable = Module::isEnabled('ebay');
+    if (version_compare(_PS_VERSION_,'1.5','<'))
+        $enable = $ebay->active;
+    else
+        $enable = Module::isEnabled('ebay');
 
-	if($enable)
-	{
-		$context = Context::getContext();
-		$context->shop = new Shop(Tools::getValue('id_shop'));
+    if($enable)
+    {
+        $context = Context::getContext();
+        $context->shop = new Shop(Tools::getValue('id_shop'));
 
-		$ebay = new Ebay();
+        $ebay = new Ebay();
 
-		$ebay_profile = new EbayProfile((int)Tools::getValue('profile'));
+        $ebay_profile = new EbayProfile((int)Tools::getValue('profile'));
 
 
-		$root_category = Category::getRootCategory();
-		$categories = Category::getCategories(Tools::getValue('id_lang'));
-		$category_list = $ebay->getChildCategories($categories, $root_category->id_parent, array(), '', Tools::getValue('s'));
-		
-		$offset = 20;
-		$page = (int)Tools::getValue('p', 0);
-		if ($page < 2)
-			$page = 1;
-		$limit = $offset * ($page - 1);
-		$category_list = array_slice($category_list, $limit, $offset);
+        $root_category = Category::getRootCategory();
+        $categories = Category::getCategories(Tools::getValue('id_lang'));
+        $category_list = $ebay->getChildCategories($categories, $root_category->id_parent, array(), '', Tools::getValue('s'));
+        
+        $offset = 20;
+        $page = (int)Tools::getValue('p', 0);
+        if ($page < 2)
+            $page = 1;
+        $limit = $offset * ($page - 1);
+        $category_list = array_slice($category_list, $limit, $offset);
 
-		$ebay_store_category_list = EbayStoreCategory::getCategoriesWithConfiguration($ebay_profile->id);
+        $ebay_store_category_list = EbayStoreCategory::getCategoriesWithConfiguration($ebay_profile->id);
 
-		$smarty = $context->smarty;
+        $smarty = $context->smarty;
 
-		/* Smarty datas */
-		$template_vars = array(
-			'tabHelp' => '&id_tab=7',
-			'_path' => $ebay->getPath(),
-			'categoryList' => $category_list,
-			'eBayStoreCategoryList' => $ebay_store_category_list,
-			'request_uri' => $_SERVER['REQUEST_URI'],
-			'noCatFound' => Tools::getValue('ch_no_cat_str'),
-			'p' => $page
-		);
+        /* Smarty datas */
+        $template_vars = array(
+            'tabHelp' => '&id_tab=7',
+            '_path' => $ebay->getPath(),
+            'categoryList' => $category_list,
+            'eBayStoreCategoryList' => $ebay_store_category_list,
+            'request_uri' => $_SERVER['REQUEST_URI'],
+            'noCatFound' => Tools::getValue('ch_no_cat_str'),
+            'p' => $page
+        );
 
-		$smarty->assign($template_vars);
+        $smarty->assign($template_vars);
 
-		echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/table_store_categories.tpl');
-	}
+        echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/table_store_categories.tpl');
+    }
 }
 
 
 
 function array_insert_after($key, array &$array, $new_key, $new_value) 
 {
-	if (array_key_exists($key, $array)) 
-	{
-			
-		$new = array();
+    if (array_key_exists($key, $array)) 
+    {
+            
+        $new = array();
 
-		foreach ($array as $k => $value) 
-		{
-		
-			$new[$k] = $value;
-			if ($k === $key)
-				$new[$new_key] = $new_value;
-		
-		}
-		
-		return $new;
+        foreach ($array as $k => $value) 
+        {
+        
+            $new[$k] = $value;
+            if ($k === $key)
+                $new[$new_key] = $new_value;
+        
+        }
+        
+        return $new;
 
-	}
+    }
 
-	return false;
+    return false;
 }

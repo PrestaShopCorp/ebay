@@ -29,7 +29,7 @@ require_once(dirname(__FILE__).'/../../../init.php');
 include('../ebay.php');
 
 if (Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
-	die('ERROR: Invalid Token');
+    die('ERROR: Invalid Token');
 
 $ebay = new eBay();
 $context = Context::getContext();

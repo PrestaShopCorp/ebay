@@ -28,7 +28,7 @@ include(dirname(__FILE__).'/../../../config/config.inc.php');
 include('../ebay.php');
 
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
-	die('ERROR: Invalid Token');
+    die('ERROR: Invalid Token');
 
 $id_ebay_profile = (int)Tools::getValue('profile');
 $ebay_profile = new EbayProfile($id_ebay_profile);
@@ -37,43 +37,43 @@ $levelExists = array();
 
 for ($level = 0; $level <= 5; $level++)
 {
-	if (Tools::getValue('level') >= $level)
-	{
-		if ($level == 0)
-			$ebay_category_list_level = Db::getInstance()->executeS('SELECT *
-				FROM `'._DB_PREFIX_.'ebay_category`
-				WHERE `level` = 1
-				AND `id_category_ref` = `id_category_ref_parent`
-				AND `id_country` = '.(int)$ebay_profile->ebay_site_id);
-		else
-			$ebay_category_list_level = Db::getInstance()->executeS('SELECT *
-				FROM `'._DB_PREFIX_.'ebay_category`
-				WHERE `level` = '.(int)($level + 1).'
-				AND `id_country` = '.(int)$ebay_profile->ebay_site_id.'
-				AND `id_category_ref_parent`
-				IN (
-					SELECT `id_category_ref`
-					FROM `'._DB_PREFIX_.'ebay_category`
-					WHERE `id_ebay_category` = '.(int)(Tools::getValue('level'.$level)).')');
+    if (Tools::getValue('level') >= $level)
+    {
+        if ($level == 0)
+            $ebay_category_list_level = Db::getInstance()->executeS('SELECT *
+                FROM `'._DB_PREFIX_.'ebay_category`
+                WHERE `level` = 1
+                AND `id_category_ref` = `id_category_ref_parent`
+                AND `id_country` = '.(int)$ebay_profile->ebay_site_id);
+        else
+            $ebay_category_list_level = Db::getInstance()->executeS('SELECT *
+                FROM `'._DB_PREFIX_.'ebay_category`
+                WHERE `level` = '.(int)($level + 1).'
+                AND `id_country` = '.(int)$ebay_profile->ebay_site_id.'
+                AND `id_category_ref_parent`
+                IN (
+                    SELECT `id_category_ref`
+                    FROM `'._DB_PREFIX_.'ebay_category`
+                    WHERE `id_ebay_category` = '.(int)(Tools::getValue('level'.$level)).')');
 
-		if ($ebay_category_list_level)
-		{
-			$levelExists[$level + 1] = true;
-			echo '<select name="category['.(int)Tools::getValue('id_category').']" id="categoryLevel'.(int)($level + 1).'-'.(int)Tools::getValue('id_category').'" rel="'.(int)Tools::getValue('id_category').'"
-				style="font-size: 12px; width: 160px;" OnChange="changeCategoryMatch('.(int)($level + 1).', '.(int)Tools::getValue('id_category').');">
-				<option value="0">'.Tools::safeOutput(Tools::getValue('ch_cat_str')).'</option>';
+        if ($ebay_category_list_level)
+        {
+            $levelExists[$level + 1] = true;
+            echo '<select name="category['.(int)Tools::getValue('id_category').']" id="categoryLevel'.(int)($level + 1).'-'.(int)Tools::getValue('id_category').'" rel="'.(int)Tools::getValue('id_category').'"
+                style="font-size: 12px; width: 160px;" OnChange="changeCategoryMatch('.(int)($level + 1).', '.(int)Tools::getValue('id_category').');">
+                <option value="0">'.Tools::safeOutput(Tools::getValue('ch_cat_str')).'</option>';
 
-			foreach ($ebay_category_list_level as $ebay_category)
-			{
-				$selected = (Tools::getValue('level'.($level + 1)) && Tools::getValue('level'.($level + 1)) == $ebay_category['id_ebay_category']) ? 'selected="selected"' : '';
-				echo '<option value="'.(int)$ebay_category['id_ebay_category'].'" '.$selected.'>'.Tools::safeOutput($ebay_category['name']).((int)$ebay_category['is_multi_sku'] === 1 ? ' *' : '').'</option>';				
-			}
+            foreach ($ebay_category_list_level as $ebay_category)
+            {
+                $selected = (Tools::getValue('level'.($level + 1)) && Tools::getValue('level'.($level + 1)) == $ebay_category['id_ebay_category']) ? 'selected="selected"' : '';
+                echo '<option value="'.(int)$ebay_category['id_ebay_category'].'" '.$selected.'>'.Tools::safeOutput($ebay_category['name']).((int)$ebay_category['is_multi_sku'] === 1 ? ' *' : '').'</option>';                
+            }
 
 
-			echo '</select> ';
-		}
-	}
+            echo '</select> ';
+        }
+    }
 }
 
 if (!isset($levelExists[Tools::getValue('level') + 1]))
-	echo '<input type="hidden" name="category['.(int)Tools::getValue('id_category').']" value="'.(int)Tools::getValue('level'.Tools::getValue('level')).'" />';
+    echo '<input type="hidden" name="category['.(int)Tools::getValue('id_category').']" value="'.(int)Tools::getValue('level'.Tools::getValue('level')).'" />';

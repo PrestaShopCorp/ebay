@@ -29,19 +29,19 @@ include_once dirname(__FILE__).'/../../../init.php';
 include_once dirname(__FILE__).'/../ebay.php';
 
 // if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
-// 	die('INVALID TOKEN');
+//  die('INVALID TOKEN');
 
 $validator = new EbayDbValidator();
 
 if (Tools::getValue('action') == 'getNbTable')
-	echo (int)$validator->getNbTable();
+    echo (int)$validator->getNbTable();
 else if (Tools::getValue('action') == 'checkSpecific' && Tools::getValue('value')) {
-	if ($validator->checkSpecificTable((int)Tools::getValue('value')))
-		echo Tools::jsonEncode($validator->getLog());
-	else
-		echo Tools::jsonEncode(array( 'finish' => array(array('status' => 'stop', 'action' => 'End of checking'))));
+    if ($validator->checkSpecificTable((int)Tools::getValue('value')))
+        echo Tools::jsonEncode($validator->getLog());
+    else
+        echo Tools::jsonEncode(array( 'finish' => array(array('status' => 'stop', 'action' => 'End of checking'))));
 }
 else if (Tools::getValue('action') == 'checkAll'){
-	$validator->checkDatabase();
-	echo Tools::jsonEncode($validator->getLog());
+    $validator->checkDatabase();
+    echo Tools::jsonEncode($validator->getLog());
 }

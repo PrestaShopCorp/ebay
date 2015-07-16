@@ -29,7 +29,7 @@ include(dirname(__FILE__).'/../classes/EbayCategorySpecific.php');
 include(dirname(__FILE__).'/../classes/EbayCategoryCondition.php');
 
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
-	die('ERROR : INVALID TOKEN');
+    die('ERROR : INVALID TOKEN');
 
 
 $id_ebay_profile = (int)Tools::getValue('profile');
@@ -37,7 +37,7 @@ $ebay_profile = new EbayProfile($id_ebay_profile);
 
 function loadItemsMap($row)
 {
-	return $row['id'];
+    return $row['id'];
 }
 
 /* Fix for limit db sql request in time */
@@ -50,27 +50,27 @@ $last_upd = $ebay_profile->getConfiguration('EBAY_SPECIFICS_LAST_UPDATE');
 $update = false;
 
 if (Tools::jsonDecode($last_upd) === null){
-	$last_update = array();
-	$update = true;
+    $last_update = array();
+    $update = true;
 }
 else{
-	
-	$last_update = get_object_vars(Tools::jsonDecode($last_upd));
+    
+    $last_update = get_object_vars(Tools::jsonDecode($last_upd));
 
-	if (!isset($last_update[$category->getIdCategoryRef()])
-		|| ($last_update[$category->getIdCategoryRef()] < date('Y-m-d\TH:i:s', strtotime('-3 days')).'.000Z'))
-		$update = true;
+    if (!isset($last_update[$category->getIdCategoryRef()])
+        || ($last_update[$category->getIdCategoryRef()] < date('Y-m-d\TH:i:s', strtotime('-3 days')).'.000Z'))
+        $update = true;
 }
 
 if ($update){
-	$time = time();
-	$res = EbayCategorySpecific::loadCategorySpecifics($id_ebay_profile, $category->getIdCategoryRef());
-	$res &= EbayCategoryCondition::loadCategoryConditions($id_ebay_profile, $category->getIdCategoryRef());
+    $time = time();
+    $res = EbayCategorySpecific::loadCategorySpecifics($id_ebay_profile, $category->getIdCategoryRef());
+    $res &= EbayCategoryCondition::loadCategoryConditions($id_ebay_profile, $category->getIdCategoryRef());
 
-	if ($res){
-		$last_update[$category->getIdCategoryRef()] = date('Y-m-d\TH:i:s.000\Z');
-		$ebay_profile->setConfiguration('EBAY_SPECIFICS_LAST_UPDATE', Tools::jsonEncode($last_update), false);
-	}
+    if ($res){
+        $last_update[$category->getIdCategoryRef()] = date('Y-m-d\TH:i:s.000\Z');
+        $ebay_profile->setConfiguration('EBAY_SPECIFICS_LAST_UPDATE', Tools::jsonEncode($last_update), false);
+    }
 
 }
 
@@ -79,22 +79,22 @@ $item_specifics_ids = array_map('loadItemsMap', $item_specifics);
 
 if (count($item_specifics_ids))
 {
-	$sql = 'SELECT `id_ebay_category_specific_value` as id, `id_ebay_category_specific` as specific_id, `value`
-		FROM `'._DB_PREFIX_.'ebay_category_specific_value`
-		WHERE `id_ebay_category_specific` in ('.implode(',', $item_specifics_ids).')';
-	
-	$item_specifics_values = DB::getInstance()->executeS($sql);
+    $sql = 'SELECT `id_ebay_category_specific_value` as id, `id_ebay_category_specific` as specific_id, `value`
+        FROM `'._DB_PREFIX_.'ebay_category_specific_value`
+        WHERE `id_ebay_category_specific` in ('.implode(',', $item_specifics_ids).')';
+    
+    $item_specifics_values = DB::getInstance()->executeS($sql);
 }
 else
-	$item_specifics_values = array();
+    $item_specifics_values = array();
 
 foreach ($item_specifics as &$item_specific)
-	foreach ($item_specifics_values as $value)
-		if ($item_specific['id'] == $value['specific_id'])
-			$item_specific['values'][$value['id']] = Tools::safeOutput($value['value']);
+    foreach ($item_specifics_values as $value)
+        if ($item_specific['id'] == $value['specific_id'])
+            $item_specific['values'][$value['id']] = Tools::safeOutput($value['value']);
 
 echo Tools::jsonEncode(array(
-	'specifics' => $item_specifics,
-	'conditions' => $category->getConditionsWithConfiguration($id_ebay_profile),
-	'is_multi_sku' => $category->isMultiSku()
+    'specifics' => $item_specifics,
+    'conditions' => $category->getConditionsWithConfiguration($id_ebay_profile),
+    'is_multi_sku' => $category->isMultiSku()
 ));

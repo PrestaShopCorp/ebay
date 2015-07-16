@@ -30,17 +30,17 @@ include_once dirname(__FILE__).'/../ebay.php';
 
 class EbayLoadOrderLogs extends EbayLoadLogs {
 
-	protected $file = '/views/templates/hook/table_order_logs.tpl';
+    protected $file = '/views/templates/hook/table_order_logs.tpl';
 
-	protected function getDatas($offset, $nb_results)
-	{
-		$logs = EbayOrderLog::get($offset, $nb_results);
-		
-		foreach ($logs as &$log)
-			$log['data'] = nl2br(TotFormat::prettyPrint($log['data']));
+    protected function getDatas($offset, $nb_results)
+    {
+        $logs = EbayOrderLog::get($offset, $nb_results);
+        
+        foreach ($logs as &$log)
+            $log['data'] = nl2br(TotFormat::prettyPrint($log['data']));
 
-		return $logs;
-	}
+        return $logs;
+    }
 }
 
 

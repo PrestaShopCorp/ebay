@@ -24,47 +24,47 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 if (!defined('TMP_DS'))
-	define('TMP_DS', DIRECTORY_SEPARATOR);
+    define('TMP_DS', DIRECTORY_SEPARATOR);
 
 $base_path = dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS;
 
 if (array_key_exists('admin_path', $_GET) && !empty($_GET['admin_path']) && is_dir($base_path.$_GET['admin_path'].TMP_DS))
-	define('_PS_ADMIN_DIR_', $base_path.$_GET['admin_path'].TMP_DS);
+    define('_PS_ADMIN_DIR_', $base_path.$_GET['admin_path'].TMP_DS);
 
 require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php');
 
 if (version_compare(_PS_VERSION_, '1.5', '>'))
-	require_once(_PS_ADMIN_DIR_.'init.php');
+    require_once(_PS_ADMIN_DIR_.'init.php');
 else
-	require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php');
+    require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php');
 
 if (
-	!Tools::getValue('token')
-	|| Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
-	die('ERROR : INVALID TOKEN');
+    !Tools::getValue('token')
+    || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+    die('ERROR : INVALID TOKEN');
 
 if(
-	! ($errorcode = Tools::getValue('errorcode'))
-	|| !($lang = Tools::getValue('lang'))
-	)
-	die('ERROR : INVALID DATA');
+    ! ($errorcode = Tools::getValue('errorcode'))
+    || !($lang = Tools::getValue('lang'))
+    )
+    die('ERROR : INVALID DATA');
 
 $name_module = basename(realpath(dirname(__FILE__).TMP_DS.'..'.TMP_DS));
 $module_kb = Tools::ucfirst(Tools::strtolower($name_module)).'Kb';
 
 if (Validate::isString($name_module) && Module::isInstalled($name_module))
-{	
-	$module = Module::getInstanceByName($name_module);
+{   
+    $module = Module::getInstanceByName($name_module);
 
-	if (version_compare(_PS_VERSION_,'1.5','<'))
-		$enable = $module->active;
-	else
-		$enable = Module::isEnabled($name_module);
+    if (version_compare(_PS_VERSION_,'1.5','<'))
+        $enable = $module->active;
+    else
+        $enable = Module::isEnabled($name_module);
 
-	if($enable)
-	{
-		$kb = new $module_kb();
-		$kb->setErrorCode(Tools::getValue('errorcode'));
-		echo $kb->getLink();
-	}
+    if($enable)
+    {
+        $kb = new $module_kb();
+        $kb->setErrorCode(Tools::getValue('errorcode'));
+        echo $kb->getLink();
+    }
 }
