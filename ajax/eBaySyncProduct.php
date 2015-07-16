@@ -23,17 +23,47 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
+if (!defined('TMP_DS'))
+	define('TMP_DS', DIRECTORY_SEPARATOR);
 
-include(dirname(__FILE__).'/../../../config/config.inc.php');
-include('../../../init.php');
-include('../../../modules/ebay/ebay.php');
+$base_path = dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS;
 
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+if (array_key_exists('admin', $_GET) && !empty($_GET['admin']) && is_dir($base_path.$_GET['admin'].TMP_DS)){
+	define('_PS_ADMIN_DIR_', $base_path.$_GET['admin'].TMP_DS);
+	define('PS_ADMIN_DIR', _PS_ADMIN_DIR_);
+}
+
+require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php');
+
+if (Tools::getValue('admin'))
+	require_once(_PS_ADMIN_DIR_.TMP_DS.'functions.php');
+else
+	require_once(_PS_ROOT_DIR_.TMP_DS.'init.php');
+
+require_once('..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'modules'.TMP_DS.'ebay'.TMP_DS.'ebay.php');
+
+if (!Tools::getValue('token') 
+	|| Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')
+	)
 	die('ERROR: Invalid Token');
 
-$cookie = new Cookie('psEbay', '', 3600);
+if (Module::isInstalled('ebay'))
+{	
+	$ebay = Module::getInstanceByName('ebay');
 
-$ebay = new eBay((int)Tools::getValue('profile'));
-$ebay->ajaxProductSync();
+	if (version_compare(_PS_VERSION_,'1.5','<'))
+		$enable = $ebay->active;
+	else
+		$enable = Module::isEnabled('ebay');
 
-unset($cookie);
+	if($enable)
+	{
+		global $cookie;
+		$cookie = new Cookie('psEbay', '', 3600);
+
+		$ebay = new eBay((int)Tools::getValue('profile'));
+		$ebay->ajaxProductSync();
+
+		unset($cookie);
+	}
+}
