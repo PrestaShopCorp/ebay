@@ -1161,6 +1161,11 @@ class Ebay extends Module
 	*/
 	public function getContent()
 	{
+		if (version_compare(_PS_VERSION_, '1.5', '>') && Shop::getContext() != Shop::CONTEXT_SHOP) {
+			$this->bootstrap = true;
+			return $this->display(__FILE__, 'views/templates/hook/alert_multishop.tpl');		
+		}
+
 		if ($this->ebay_profile && !Configuration::get('EBAY_CATEGORY_MULTI_SKU_UPDATE'))
 		{
 			$ebay = new EbayRequest();
