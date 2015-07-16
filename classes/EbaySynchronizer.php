@@ -862,9 +862,8 @@ class EbaySynchronizer
 				SELECT p.`id_product`, '.(int)$ebay_profile->id.' AS `id_ebay_profile`
 				FROM  `'._DB_PREFIX_.'product` AS p
                 INNER JOIN  `'._DB_PREFIX_.'stock_available` AS s 
-                ON p.id_product = s.id_product';
-            if (version_compare(_PS_VERSION_, '1.5', '>'))
-                $sql .= ' INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
+                ON p.id_product = s.id_product
+                INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
                 ON p.id_product = ps.id_product 
                 AND ps.id_shop = '.(int)$ebay_profile->id_shop;
             $sql .= ' WHERE s.`quantity` > 0
@@ -888,10 +887,6 @@ class EbaySynchronizer
 			$sql = '
 				SELECT `id_product`, '.(int)$ebay_profile->id.' AS `id_ebay_profile`
 				FROM `'._DB_PREFIX_.'product` AS p';
-            if (version_compare(_PS_VERSION_, '1.5', '>'))
-                $sql .= ' INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
-                ON p.id_product = ps.id_product 
-                AND ps.id_shop = '.(int)$ebay_profile->id_shop;
             $sql .= ' WHERE p.`quantity` > 0
 				AND p.`id_category_default` IN (
 					SELECT `id_category`
