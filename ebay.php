@@ -1663,7 +1663,7 @@ class Ebay extends Module
 			$cats = reset($categories); // fix to deal with the case where the first element of categories has no key
 		}
 
-		if (isset($cats))
+		if (isset($cats) && $cats)
 			foreach ($cats as $idc => $cc)
 			{
 				$name = '';
