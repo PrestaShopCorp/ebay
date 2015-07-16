@@ -28,19 +28,15 @@ if (!defined('TMP_DS'))
 
 $base_path = dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS;
 
-if (array_key_exists('admin', $_GET) && !empty($_GET['admin']) && is_dir($base_path.$_GET['admin'].TMP_DS)){
-	define('_PS_ADMIN_DIR_', $base_path.$_GET['admin'].TMP_DS);
-	define('PS_ADMIN_DIR', _PS_ADMIN_DIR_);
-}
+if (array_key_exists('admin_path', $_GET) && !empty($_GET['admin_path']) && is_dir($base_path.$_GET['admin_path'].TMP_DS))
+	define('_PS_ADMIN_DIR_', $base_path.$_GET['admin_path'].TMP_DS);
 
 require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php');
 
-if (Tools::getValue('admin'))
-	require_once(_PS_ADMIN_DIR_.TMP_DS.'functions.php');
+if (version_compare(_PS_VERSION_, '1.5', '>'))
+	require_once(_PS_ADMIN_DIR_.'init.php');
 else
-	require_once(_PS_ROOT_DIR_.TMP_DS.'init.php');
-
-require_once('..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'modules'.TMP_DS.'ebay'.TMP_DS.'ebay.php');
+	require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php');
 
 if (!Tools::getValue('token') 
 	|| Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')

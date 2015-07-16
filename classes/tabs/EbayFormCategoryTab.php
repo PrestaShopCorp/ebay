@@ -59,9 +59,6 @@ class EbayFormCategoryTab extends EbayTab
 		$ebay_site_id = $this->ebay_profile->ebay_site_id;
 		if (!isset($configs['EBAY_CATEGORY_LOADED_'.$ebay_site_id]) || !$configs['EBAY_CATEGORY_LOADED_'.$ebay_site_id] || !EbayCategory::areCategoryLoaded($ebay_site_id))
 		{
-			$ebay_request = new EbayRequest();
-			EbayCategory::insertCategories($ebay_site_id, $ebay_request->getCategories(), $ebay_request->getCategoriesSkuCompliancy());
-			Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_site_id, 1);
 			$load_cat = true;
 		}
 		else
