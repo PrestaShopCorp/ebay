@@ -45,14 +45,33 @@ sleep(1);
 
 $category = new EbayCategory($ebay_profile, (int)Tools::getValue('ebay_category'));
 
+$last_upd = $ebay_profile->getConfiguration('EBAY_SPECIFICS_LAST_UPDATE');
 
-if (!$ebay_profile->getConfiguration('EBAY_SPECIFICS_LAST_UPDATE') || ($ebay_profile->getConfiguration('EBAY_SPECIFICS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-3 days')).'.000Z'))
-{
+$update = false;
+
+if (Tools::jsonDecode($last_upd) === null){
+	$last_update = array();
+	$update = true;
+}
+else{
+	
+	$last_update = get_object_vars(Tools::jsonDecode($last_upd));
+
+	if (!isset($last_update[$category->getIdCategoryRef()])
+		|| ($last_update[$category->getIdCategoryRef()] < date('Y-m-d\TH:i:s', strtotime('-3 days')).'.000Z'))
+		$update = true;
+}
+
+if ($update){
 	$time = time();
-	$res = EbayCategorySpecific::loadCategorySpecifics($id_ebay_profile);
-	$res &= EbayCategoryCondition::loadCategoryConditions($id_ebay_profile);
-	if ($res)
-		$ebay_profile->setConfiguration('EBAY_SPECIFICS_LAST_UPDATE', date('Y-m-d\TH:i:s.000\Z'), false);
+	$res = EbayCategorySpecific::loadCategorySpecifics($id_ebay_profile, $category->getIdCategoryRef());
+	$res &= EbayCategoryCondition::loadCategoryConditions($id_ebay_profile, $category->getIdCategoryRef());
+
+	if ($res){
+		$last_update[$category->getIdCategoryRef()] = date('Y-m-d\TH:i:s.000\Z');
+		$ebay_profile->setConfiguration('EBAY_SPECIFICS_LAST_UPDATE', Tools::jsonEncode($last_update), false);
+	}
+
 }
 
 $item_specifics = $category->getItemsSpecifics();

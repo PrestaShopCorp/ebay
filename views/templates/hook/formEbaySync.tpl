@@ -110,6 +110,9 @@
 		$("#button_ebay_sync1").css("background-color", "#FFFAC6");
 		$("#button_ebay_sync2").removeAttr("disabled", "disabled");
 		$("#button_ebay_sync2").css("background-color", "#FFFAC6");
+
+		// Launch the KB
+		getKb();
 	}
 	
 	var counter = 0;
@@ -127,6 +130,30 @@
 					eBaySyncProduct(option);
 				else
 					reableSyncProduct();
+			}
+		});
+	}
+	function getKb(item){
+		item = typeof item !== 'undefined' ? item : 0;
+		
+		var that = $("a.kb-help:eq("+ item +")");
+
+		$.ajax({
+			type: "POST",
+			url: '{/literal}{$load_kb_path}{literal}',
+			data: {errorcode: $( that ).attr('data-errorcode'), lang: $( that ).attr('data-lang'), token: ebay_token, admin_path: "{/literal}{$admin_path|escape:'urlencode'}{literal}"},
+			success: function(data)
+			{
+
+				if (data != 'false' && data != 'error')
+				{
+					$( that ).addClass('active');
+					$( that ).attr('href', data);
+					$( that ).attr('target', '_blank');
+				}
+				var next = item + 1;
+				if ($("a.kb-help:eq("+ next +")").length > 0)
+					getKb(next);
 			}
 		});
 	}

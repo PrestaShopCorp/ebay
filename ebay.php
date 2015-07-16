@@ -1133,7 +1133,7 @@ class Ebay extends Module
 	*
 	*/
 	public function getContent()
-	{		
+	{
 		if ($this->ebay_profile && !Configuration::get('EBAY_CATEGORY_MULTI_SKU_UPDATE'))
 		{
 			$ebay = new EbayRequest();

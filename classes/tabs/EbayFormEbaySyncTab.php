@@ -188,7 +188,9 @@ class EbayFormEbaySyncTab extends EbayTab
 			'sync_2' => (Tools::getValue('section') == 'sync' && Tools::getValue('ebay_sync_mode') == "2" && Tools::getValue('btnSubmitSyncAndPublish')),
 			'is_sync_mode_b' => ($this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'B'),
 			'ebay_sync_mode' => (int)($this->ebay_profile->getConfiguration('EBAY_SYNC_MODE') ? $this->ebay_profile->getConfiguration('EBAY_SYNC_MODE') : 2),
-			'prod_str' => $nb_products >= 2 ? $this->ebay->l('products') : $this->ebay->l('product')
+			'prod_str' => $nb_products >= 2 ? $this->ebay->l('products') : $this->ebay->l('product'),
+			'admin_path'	=> basename(_PS_ADMIN_DIR_),
+			'load_kb_path'	=> _MODULE_DIR_.'ebay/ajax/loadKB.php',
 		);
 
 		return $this->display('formEbaySync.tpl', $smarty_vars);

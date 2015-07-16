@@ -161,11 +161,19 @@ class EbayRequest
 		return $userProfile;
 	}
 
-	public function getCategories()
+	/**
+	 * $all : true (récupère toutes les catégories)
+	 *      : false (récupère seulement les catégories root)
+	 *      : int (récupère les catégories enfants de l'id catégories)
+	 */
+	public function getCategories($all = true)
 	{
 		$response = $this->_makeRequest('GetCategories', array(
 			'version' => $this->compatibility_level,
 			'category_site_id' => $this->ebay_country->getSiteID(),
+			'all'	=> $all === true ? true : false,
+			'root'  => $all === false ? true : false,
+			'id_category' => is_numeric($all) ? $all : null,
 		));
 
 		if ($response === false)
@@ -909,7 +917,7 @@ class EbayRequest
 
 		if (isset($response->Errors) && isset($response->Ack) && (string)$response->Ack != 'Success' && (string)$response->Ack != 'Warning')
 			foreach ($response->Errors as $e)
-			{
+				{
 				// if product no longer on eBay, we log the error code
 				if ((int)$e->ErrorCode == 291)
 					$this->errorCode = (int)$e->ErrorCode;
@@ -926,6 +934,14 @@ class EbayRequest
 
 					if (isset($e->ErrorParameters->Value))
 						$this->error .= '<br />'.(string)$e->ErrorParameters->Value;
+					
+					if (!Tools::isEmpty($e->ErrorCode))
+					{
+						$this->error .= '<a class="kb-help" data-errorcode="'.(int)$e->ErrorCode.'"';
+						$this->error .= ' data-module="ebay" data-lang="en"';
+						$this->error .= ' module_version="1.11.0" prestashop_version="'._PS_VERSION_.'"></a>';
+					}
+
 				}
 			}
 
