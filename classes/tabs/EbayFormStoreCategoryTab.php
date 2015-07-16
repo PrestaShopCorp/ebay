@@ -55,7 +55,9 @@ class EbayFormStoreCategoryTab extends EbayTab
 			'has_store_categories' => (count($store_categories['compatible']) > 1),
 			'not_compatible_store_categories' => implode(', ', $not_compatible_names),
 			'has_ebay_shop' => (bool)($user_profile && $user_profile['StoreUrl']),
-			'ebay_store_url' => EbayCountrySpec::getProUrlBySiteId($this->ebay_profile->ebay_site_id)
+			'ebay_store_url' => EbayCountrySpec::getProUrlBySiteId($this->ebay_profile->ebay_site_id),
+			'admin_path'	=> basename(_PS_ADMIN_DIR_),
+			'id_shop' => $this->context->shop->id
 		);
 
 		return $this->display('form_store_categories.tpl', $template_vars);

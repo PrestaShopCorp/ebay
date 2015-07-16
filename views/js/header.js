@@ -48,7 +48,7 @@ $(document).ready(function() {
                 url: delete_profile_url + '&profile='+profileId,
                 cache: false,
                 success: function(data) {
-                    location.reload();
+                    window.location.replace(window.location.href.replace("&action=logged", ""));
                 }
             });
         }

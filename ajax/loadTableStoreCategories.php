@@ -23,10 +23,73 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
+if (!defined('TMP_DS'))
+	define('TMP_DS', DIRECTORY_SEPARATOR);
 
-include_once dirname(__FILE__).'/../../../config/config.inc.php';
-include_once dirname(__FILE__).'/../../../init.php';
-include_once dirname(__FILE__).'/../ebay.php';
+define('_PS_ADMIN_DIR_', realpath(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS).TMP_DS.$_GET['admin_path'].TMP_DS);
+
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
+
+if (version_compare(_PS_VERSION_, '1.5', '>='))
+	require_once(_PS_ADMIN_DIR_.'init.php');
+else
+	require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php');
+
+if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+	return Tools::safeOutput(Tools::getValue('not_logged_str'));
+
+if (Module::isInstalled('ebay'))
+{
+	$ebay = Module::getInstanceByName('ebay');
+
+	if (version_compare(_PS_VERSION_,'1.5','<'))
+		$enable = $ebay->active;
+	else
+		$enable = Module::isEnabled('ebay');
+
+	if($enable)
+	{
+		$context = Context::getContext();
+		$context->shop = new Shop(Tools::getValue('id_shop'));
+
+		$ebay = new Ebay();
+
+		$ebay_profile = new EbayProfile((int)Tools::getValue('profile'));
+
+
+		$root_category = Category::getRootCategory();
+		$categories = Category::getCategories(Tools::getValue('id_lang'));
+		$category_list = $ebay->getChildCategories($categories, $root_category->id_parent, array(), '', Tools::getValue('s'));
+		
+		$offset = 20;
+		$page = (int)Tools::getValue('p', 0);
+		if ($page < 2)
+			$page = 1;
+		$limit = $offset * ($page - 1);
+		$category_list = array_slice($category_list, $limit, $offset);
+
+		$ebay_store_category_list = EbayStoreCategory::getCategoriesWithConfiguration($ebay_profile->id);
+
+		$smarty = $context->smarty;
+
+		/* Smarty datas */
+		$template_vars = array(
+			'tabHelp' => '&id_tab=7',
+			'_path' => $ebay->getPath(),
+			'categoryList' => $category_list,
+			'eBayStoreCategoryList' => $ebay_store_category_list,
+			'request_uri' => $_SERVER['REQUEST_URI'],
+			'noCatFound' => Tools::getValue('ch_no_cat_str'),
+			'p' => $page
+		);
+
+		$smarty->assign($template_vars);
+
+		echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/table_store_categories.tpl');
+	}
+}
+
+
 
 function array_insert_after($key, array &$array, $new_key, $new_value) 
 {
@@ -50,37 +113,3 @@ function array_insert_after($key, array &$array, $new_key, $new_value)
 
 	return false;
 }
-
-$ebay = new Ebay();
-
-$ebay_profile = new EbayProfile((int)Tools::getValue('profile'));
-
-if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
-	return Tools::safeOutput(Tools::getValue('not_logged_str'));
-
-$category_list = $ebay->getChildCategories(Category::getCategories(Tools::getValue('id_lang')), version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0);
-
-$offset = 20;
-$page = (int)Tools::getValue('p', 0);
-if ($page < 2)
-	$page = 1;
-$limit = $offset * ($page - 1);
-$category_list = array_slice($category_list, $limit, $offset);
-
-$ebay_store_category_list = EbayStoreCategory::getCategoriesWithConfiguration($ebay_profile->id);
-
-$smarty = Context::getContext()->smarty;
-
-/* Smarty datas */
-$template_vars = array(
-	'tabHelp' => '&id_tab=7',
-	'_path' => $ebay->getPath(),
-	'categoryList' => $category_list,
-	'eBayStoreCategoryList' => $ebay_store_category_list,
-	'request_uri' => $_SERVER['REQUEST_URI'],
-	'noCatFound' => Tools::getValue('ch_no_cat_str'),
-	'p' => $page
-);
-
-$smarty->assign($template_vars);
-echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/table_store_categories.tpl');

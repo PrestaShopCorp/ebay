@@ -119,6 +119,26 @@ class EbayOrder
 			&& !empty($this->product_list);
 	}
 
+	public function isCountryEnable(){
+		if (!Tools::isEmpty($this->country_iso_code)){
+
+			$country = new Country(Country::getByIso($this->country_iso_code), (int)Configuration::get('PS_LANG_DEFAULT'));
+			
+			if ($country->active)
+				return true;
+			else
+			{
+				$order_error = new EbayOrderErrors();
+				$order_error->id_order_seller = (int)$this->id_order_seller;
+				
+				$order_error->error = Tools::jsonEncode(array('type' => 'country', 'iso_code' => $this->country_iso_code));
+				$order_error->save();
+
+				return false;
+			}
+		}
+	}
+
 	public function exists()
 	{
 		return (boolean)Db::getInstance()->getValue('SELECT `id_ebay_order`

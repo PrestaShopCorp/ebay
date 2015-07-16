@@ -61,7 +61,7 @@ $(document).ready(function() {
         {
 					$.ajax({
 						type: "POST",
-						url: module_dir + "ebay/ajax/loadTableStoreCategories.php?token=" + ebay_token + "&p=" + p + "&profile=" + id_ebay_profile + "&id_lang=" + id_lang + "&ch_no_cat_str=" + store_categories_ebay_l["no category found"] + "&not_logged_str=" + store_categories_ebay_l["You are not logged in"] + "&unselect_product=" + store_categories_ebay_l["Unselect products"]  ,
+						url: module_dir + "ebay/ajax/loadTableStoreCategories.php?token=" + ebay_token + "&p=" + p + "&profile=" + id_ebay_profile + "&id_lang=" + id_lang + "&ch_no_cat_str=" + store_categories_ebay_l["no category found"] + "&not_logged_str=" + store_categories_ebay_l["You are not logged in"] + "&unselect_product=" + store_categories_ebay_l["Unselect products"]+'&id_shop='+id_shop+'&admin_path='+admin_path,
 						success : function(data) {
 							$("form#configFormStoreCategories table tbody #removeRow").remove(); $("form#configFormStoreCategories table tbody").html(data);
 						}
@@ -74,7 +74,7 @@ $(document).ready(function() {
   
 	$.ajax({
 		type: "POST",
-		url: module_dir + "ebay/ajax/loadTableStoreCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&ch_no_cat_str=' + store_categories_ebay_l['no category found'] + '&not_logged_str=' + store_categories_ebay_l['You are not logged in'] + '&unselect_product=' + store_categories_ebay_l['Unselect products'],
+		url: module_dir + "ebay/ajax/loadTableStoreCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&ch_no_cat_str=' + store_categories_ebay_l['no category found'] + '&not_logged_str=' + store_categories_ebay_l['You are not logged in'] + '&unselect_product=' + store_categories_ebay_l['Unselect products']+'&id_shop='+id_shop+'&admin_path='+admin_path,
 		success : function(data) { $("form#configFormStoreCategories table tbody #removeRow").remove(); $("form#configFormStoreCategories table tbody").html(data); }
 	});
   

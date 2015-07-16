@@ -88,7 +88,11 @@
                 <th class="center">
 					<span data-inlinehelp="{l s='If this column is set to \'no\', product has been unselected in the \'Parameters > 2.Categories and pricing\' tab' mod='ebay'}">{l s='Product selected' mod='ebay'}</span>
 				</th>
-                
+
+                <th class="center">
+                    <span data-inlinehelp="{l s='If this column is set to \'Yes\', product has been disabled' mod='ebay'}">{l s='Product disable' mod='ebay'}</span>
+                </th>
+
                 <th class="center">
 					<span data-inlinehelp="{l s='Display link to associated eBay listing' mod='ebay'}">{l s='eBay listing' mod='ebay'}</span>
 				</th>

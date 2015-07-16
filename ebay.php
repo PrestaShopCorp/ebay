@@ -80,7 +80,9 @@ $classes_to_load = array(
 	'tabs/EbayOrdersSyncTab',
 	'tabs/EbayPrestashopProductsTab',
 	'tabs/EbayOrphanListingsTab',
-	'EbayAlert'        
+	'EbayAlert',
+	'EbayOrderErrors',
+	'EbayDbValidator'      
 );
 
 foreach ($classes_to_load as $classname)
@@ -118,7 +120,7 @@ class Ebay extends Module
 	{
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.11.0';
+		$this->version = '1.12.0';
 		$this->stats_version = '1.0';
 
 		$this->author = 'PrestaShop';
@@ -217,9 +219,9 @@ class Ebay extends Module
 					$iso_country = Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
 					$iso_lang = Tools::strtolower(Language::getIsoById(Configuration::get('PS_LANG_DEFAULT')));
 					$this->ebay_country = EbayCountrySpec::getInstanceByCountryAndLang($iso_country,$iso_lang);
-
 					return false;
 				}
+
 			}
 
 
@@ -258,7 +260,6 @@ class Ebay extends Module
 	{
 		// Install SQL
 		include(dirname(__FILE__).'/sql/sql-install.php');
-
 		foreach ($sql as $s)
 			if (!Db::getInstance()->execute($s))
 				return false;
@@ -270,7 +271,9 @@ class Ebay extends Module
 			|| !$this->registerHook('deleteProduct')
 			|| !$this->registerHook('newOrder')
 			|| !$this->registerHook('backOfficeTop')
-			|| !$this->registerHook('header'))
+			|| !$this->registerHook('header')
+			|| !$this->registerHook('updateCarrier')
+			|| !$this->registerHook('actionCarrierUpdate'))
 			return false;
 
 		$hook_update_quantity = version_compare(_PS_VERSION_, '1.5', '>') ? 'actionUpdateQuantity' : 'updateQuantity';
@@ -419,7 +422,9 @@ class Ebay extends Module
 			|| !$this->unregisterHook('deleteProduct')
 			|| !$this->unregisterHook('newOrder')
 			|| !$this->unregisterHook('backOfficeTop')
-			|| !$this->unregisterHook('header'))
+			|| !$this->unregisterHook('header')
+			|| !$this->unregisterHook('updateCarrier')
+			|| !$this->unregisterHook('actionCarrierUpdate'))
 			return false;
 
 		// Clean Cookie
@@ -500,6 +505,9 @@ class Ebay extends Module
 				include_once(dirname(__FILE__).'/upgrade/Upgrade-1.11.php');
 				upgrade_module_1_11($this);
 			}
+			EbayOrderErrors::install();
+			$this->registerHook('updateCarrier');
+			$this->registerHook('actionCarrierUpdate');
 		}
 	}
 
@@ -594,6 +602,12 @@ class Ebay extends Module
 		}
 	}
 
+	public function hookActionCarrierUpdate($params){
+		$this->hookUpdateCarrier($params);
+	}
+	public function hookUpdateCarrier($params){
+		EbayShipping::updatePsCarrier($params['id_carrier'], $params['carrier']->id);
+	}
 	/**
 	 *
 	 *
@@ -601,7 +615,7 @@ class Ebay extends Module
 	 **/
 	public function hookHeader($params)
 	{
-		if(Tools::getValue('DELETE_EVERYTHING_EBAY') == Configuration::get('PS_SHOP_EMAIL'))
+		if(Tools::getValue('DELETE_EVERYTHING_EBAY') == Configuration::get('PS_SHOP_EMAIL') && Tools::getValue('DELETE_EVERYTHING_EBAY') != false)
 			$this->emptyEverything();
 		
 		if (!$this->ebay_profile || !$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) // if the module is not upgraded or not configured don't do anything
@@ -623,6 +637,9 @@ class Ebay extends Module
 			($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 minutes')).'.000Z')
 			|| Tools::getValue('EBAY_SYNC_ORDERS') == 1)
 		{
+			
+			EbayOrderErrors::truncate();
+
 			$current_date = date('Y-m-d\TH:i:s').'.000Z';
 			// we set the new last update date after retrieving the last orders
 			$this->ebay_profile->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date);
@@ -678,6 +695,7 @@ class Ebay extends Module
 	
 	public function cronOrdersSync()
 	{
+		EbayOrderErrors::truncate();
 		$current_date = date('Y-m-d\TH:i:s').'.000Z';
 
 		if ($orders = $this->_getEbayLastOrders($current_date))
@@ -716,6 +734,14 @@ class Ebay extends Module
 			if (!$order->hasValidContact())
 			{
 				$message = $this->l('Invalid e-mail');
+				$errors[] = $message;
+				$order->addErrorMessage($message);
+				continue;
+			}
+
+			if (!$order->isCountryEnable())
+			{
+				$message = $this->l('Country is not activate');
 				$errors[] = $message;
 				$order->addErrorMessage($message);
 				continue;
@@ -1255,25 +1281,6 @@ class Ebay extends Module
 			$main_tab = 'settings';            
 		}
 		
-		
-		// check domain
-		if (version_compare(_PS_VERSION_, '1.5', '>')) {
-			$shop = $this->ebay_profile instanceof EbayProfile ? new Shop($this->ebay_profile->id_shop) : new Shop();
-			$wrong_domain = ($_SERVER['HTTP_HOST'] != $shop->domain && $_SERVER['HTTP_HOST'] != $shop->domain_ssl && Tools::getValue('ajax') == false);
-
-		} else
-			$wrong_domain = ($_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN') && $_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN_SSL'));
-		
-		if ($wrong_domain) {
-			$url_vars = array();
-			if (version_compare(_PS_VERSION_, '1.5', '>'))
-				$url_vars['controller'] = 'AdminMeta';
-			else
-				$url_vars['tab'] = 'AdminMeta';
-			$warning_url = $this->_getUrl($url_vars);
-		}
-
-	
 		$this->smarty->assign(array(
 			'img_stats' => ($this->ebay_country->getImgStats()),
 			'alert' => $alerts,
@@ -1317,8 +1324,7 @@ class Ebay extends Module
 			'title_desc_url' => $this->ebay_country->getTitleDescUrl(),                        
 			'picture_url' => $this->ebay_country->getPictureUrl(),                        
 			'similar_items_url' => $this->ebay_country->getSimilarItemsUrl(),                        
-			'top_rated_url' => $this->ebay_country->getTopRatedUrl(),                        
-			'warning_url' => isset($warning_url) ? $warning_url : null,
+			'top_rated_url' => $this->ebay_country->getTopRatedUrl(),   
 			'_module_dir_' => _MODULE_DIR_,
 			'date' => pSQL(date('Ymdhis')),         
 		));
@@ -1558,47 +1564,16 @@ class Ebay extends Module
 
 		 }
 
-		$cron_task = array();
-
-		if ((int)Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON') == 1)
-		{
-			$cron_task['products']['is_active'] = 1;
-
-			if ($last_sync_datetime = Configuration::get('DATE_LAST_SYNC_PRODUCTS'))
-			{
-				$warning_date = strtotime(date('Y-m-d').' - 2 days');
-				$cron_task['products']['last_sync'] = array(
-					'date' => date('Y-m-d', strtotime($last_sync_datetime)), 
-					'time' => date('H:i:s', strtotime($last_sync_datetime)),
-					'warning_long_since' =>  (bool)(strtotime($last_sync_datetime) < $warning_date),
-				);
-				$cron_task['products']['last_sync']['nb_products'] = Configuration::get('NB_PRODUCTS_LAST');
-			}
-			else
-				$cron_task['products']['last_sync'] = 'none';
-		}
-
-		if ((int)Configuration::get('EBAY_SYNC_ORDERS_BY_CRON') == 1)
-		{
-			$cron_task['orders']['is_active'] = 1;
-
-			if ($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE') != null)
-			{
-				$datetime = new DateTime($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE'));
-
-				$cron_task['orders']['last_sync'] = array('date' => date('Y-m-d', strtotime($datetime->format('Y-m-d H:i:s'))), 'time' => date('H:i:s', strtotime($datetime->format('Y-m-d H:i:s'))));
-
-				$datetime2 = new DateTime();
-				
-				$interval = $datetime->diff($datetime2);
-
-				$cron_task['orders']['alert'] = ($interval->format('%a') >= 1 ? 'danger' : 'info');
-			}
-			else
-				$cron_task['orders']['last_sync'] = 'none';
-		}            
 		// Get all alerts
 		$alert = new EbayAlert($this);
+
+		if ($this->ebay_profile->getConfiguration('EBAY_LAST_ALERT_MAIL') === null
+			|| $this->ebay_profile->getConfiguration('EBAY_LAST_ALERT_MAIL') < date('Y-m-d\TH:i:s', strtotime('-1 day')).'.000Z'
+			){
+				$alert->sendDailyMail();
+				$this->ebay_profile->setConfiguration('EBAY_LAST_ALERT_MAIL', date('Y-m-d\TH:i:s').'.000Z');
+			}
+
 
 		$smarty_vars = array(
 			'class_general' => version_compare(_PS_VERSION_, '1.5', '>') ? 'uncinq' : 'unquatre',
@@ -1616,13 +1591,13 @@ class Ebay extends Module
 			'ps_products' => $ps_products->getContent(),
 			'orphan_listings' => $orphan_listings->getContent(),
 			'green_message' => isset($green_message) ? $green_message : null,
-			'cron_task'	=> $cron_task,
 			'api_logs' => $api_logs->getContent(),
 			'order_logs' => $order_logs->getContent(),
 			'id_tab' => Tools::getValue('id_tab'),
-			'alerts'	=> $alert->getAlerts(),
+			'alerts'		=> $alert->getAlerts(),
+			'ps_version'	=> _PS_VERSION_,
 		);
-		
+
 		$this->smarty->assign($smarty_vars);
 		
 		return $this->display(__FILE__, 'views/templates/hook/formConfig.tpl');	

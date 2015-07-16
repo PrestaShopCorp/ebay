@@ -859,9 +859,6 @@ margin-bottom: 3px;
   padding-left: 13px;
 }
 
-
-
-
 /*Tab 4 - Category*/
 #load_cat_ebay tr td:nth-child(1){
 	background-repeat: no-repeat;
@@ -910,4 +907,23 @@ margin-bottom: 3px;
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: contain;
+}
+
+#content .conf.info{
+	background-color: #d3f1f7;
+	border: 1px solid rgb(23, 119, 182);
+}
+
+#check_database_logs tr.success{
+	background: #DFF2BF;
+}
+#check_database_logs td{
+	color: #333;
+}
+#check_database_logs tr.success td:nth-child(1){
+	background-image: url('../img/bg-li-tabs-finished.png');
+    background-size: 14px 12px;
+    background-repeat: no-repeat;
+    background-position: center center;
+
 }

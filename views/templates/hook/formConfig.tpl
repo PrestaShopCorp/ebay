@@ -27,64 +27,20 @@
     <div class="module_confirmation conf confirm settings-menu menu-msg">{$green_message|escape:'htmlall':'UTF-8'}</div>
 {/if}
 
-{if $parametersValidator.indicator == "success" 
-	&& $itemSpecificValidator.indicator == "success"
-	&& $shippingValidator.indicator == "success"
-	&& $templateValidator.indicator == "success"}
-	<div class="bootstrap">
-			{if isset($alerts) && $alerts && sizeof($alerts)}
-				{foreach from=$alerts item='alert'}
-					<div class="alert alert-{if $alert.type == 'error'}danger{elseif $alert.type == 'warning'}warning{elseif $alert.type == 'info'}info{/if}">
-						{$alert.message|escape:'htmlall':'UTF-8'}{if isset($alert.link_warn)} <a href="{$alert.link_warn|escape:'URL':'UTF-8'}">{$alert.link_warn|escape:'URL':'UTF-8'}</a>{/if}
-					</div>
-				{/foreach}
-			{/if}
-
-		{if isset($cron_task.products) && $cron_task.products.is_active == 1}
-			{if $cron_task.products.last_sync == 'none'}
-				<div class="alert alert-warning">
-					{l s='The product cron job has never been run.' mod='ebay'}
-				</div>
-			{elseif $cron_task.products.last_sync.warning_long_since}
-				<div class="alert alert-danger">
-					{l s='Last product synchronization has been done the ' mod='ebay'}
-					{$cron_task.products.last_sync.date}
-					{l s=' at ' mod='ebay'}
-					{$cron_task.products.last_sync.time}
-					{l s=' and it tried to synchronize ' mod='ebay'}
-					{$cron_task.products.last_sync.nb_products}
-					{l s=' products' mod='ebay'}
-				</div>
-			{else}
-				<div class="alert alert-info">
-					{l s='Last product synchronization has been done the ' mod='ebay'}
-					{$cron_task.products.last_sync.date}
-					{l s=' at ' mod='ebay'}
-					{$cron_task.products.last_sync.time}
-					{l s=' and it tried to synchronize ' mod='ebay'}
-					{$cron_task.products.last_sync.nb_products}
-					{l s=' products' mod='ebay'}
-				</div>
-			{/if}
-			
-		{/if}
-		{if isset($cron_task.orders) && $cron_task.orders.is_active == 1}
-			{if $cron_task.orders.last_sync == 'none'}
-				<div class="alert alert-warning">
-					{l s='Order cron job has never been run.' mod='ebay'}
-				</div>
-			{else}
-				<div class="alert alert-{$cron_task.orders.alert}">
-					{l s='Last order synchronization has been done the ' mod='ebay'}
-					{$cron_task.orders.last_sync.date}
-					{l s=' at ' mod='ebay'}
-					{$cron_task.orders.last_sync.time}
-				</div>
-			{/if}
-			
-		{/if}
-	</div>
-{/if}
+<div class="bootstrap">
+	{if isset($alerts) && $alerts && sizeof($alerts)}
+		{foreach from=$alerts item='alert'}
+				<div class="{if $ps_version > '1.5'}alert {/if}alert-{if $alert.type == 'error'}danger{if $ps_version < '1.5'} error{/if}{elseif $alert.type == 'warning'}warning{if $ps_version < '1.5'} warn{/if}{elseif $alert.type == 'info'}info{if $ps_version < '1.5'} conf{/if}{/if}"><button type="button" class="close" data-dismiss="alert">×</button>
+				{if isset($alert.link_warn)}
+					{assign var="link" value='<a href="'|cat:$alert.link_warn|cat:'" target="_blank">'}
+					{$alert.message|regex_replace:"/@link@/":$link|regex_replace:"/@\/link@/":"</a >"}
+				{else}
+					{$alert.message|escape:'htmlall':'UTF-8'}
+				{/if}
+			</div>
+		{/foreach}
+	{/if}
+</div>
 <ul class="settings-menu menuTab">
     
 	<li id="menuTab1" class="menuTabButton selected {$parametersValidator.indicator|escape:'htmlall':'UTF-8'}">1. {l s='Account settings' mod='ebay'}</li>

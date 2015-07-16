@@ -78,6 +78,8 @@
 
             <td class="center">{if $p.id_category_ref && !$p.blacklisted}{l s='Yes' mod='ebay'}{else}<span class="red">{l s='No' mod='ebay'}</span>{/if}</td>
             
+            <td>{if $p.active == 1}{l s='No' mod='ebay'}{else}<span class="red">{l s='Yes' mod='ebay'}</span>{/if}</td>
+
             <td>
                 {if $p.id_category_ref && !$p.EbayCategoryIsMultiSku && $p.hasAttributes && !$p.EbayProductRef}
                     {l s='Non multi-sku category' mod='ebay'}
