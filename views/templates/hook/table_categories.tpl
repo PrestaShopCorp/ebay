@@ -25,39 +25,58 @@
 
 {if $categoryList === false || sizeof($categoryList) === 0}
 	<tr>
-		<td colspan="3" class="center">{$noCatFound|escape:'htmlall'}</td>
+		<td colspan="3" class="center">{$noCatFound|escape:'htmlall':'UTF-8'}</td>
 	</tr>
 {else}
+
+    {if $nbCategories > 20}
+        <div id="cat-pagination" style="display:none">
+        	<p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nbCategories / 20)|round:"0") mod='ebay'}</p>
+        	<ul id="pagination" class="pagination">
+        		<li class="prev"><</li>
+        		{math equation="floor(x/20)" x=$nbCategories assign=nb_pages} 
+        		{for $i=1 to ($nb_pages)}
+        			<li{if $i == $p} class="current"{/if}>{$i}</li>
+        		{/for}
+        		<li class="next">></li>
+        	</ul>
+        </div>
+    {/if}
+
 	{foreach from=$categoryList key=k  item=c}
-		<tr{if $k % 2 !== 0} class="alt_row"{/if} id="category-{$c.id_category|escape:'htmlall'}">
-			<td><a id="show-products-switch-{$c.id_category|escape:'htmlall'}" showing="0" class="show-products" href="javascript:showProducts({$c.id_category|escape:'htmlall'})">&#9654;</a> {$c.name|escape:'htmlall'} ({if isset($getCatInStock[$c.id_category])}
-				{$getCatInStock[$c.id_category]|escape:'htmlall'}
-				{else}0{/if})
+		<tr{if $k % 2 !== 0} class="alt_row"{/if} id="category-{$c.id_category|escape:'htmlall':'UTF-8'}">
+			<td><a id="show-products-switch-{$c.id_category|escape:'htmlall':'UTF-8'}" showing="0" class="show-products" href="javascript:showProducts({$c.id_category|escape:'htmlall':'UTF-8'})">&#9654;</a> {$c.name|escape:'htmlall':'UTF-8'}
 			</td>
-			<td id="categoryPath{$c.id_category|escape:'htmlall'}">
+			<td id="categoryPath{$c.id_category|escape:'htmlall':'UTF-8'}">
 				{if isset($categoryConfigList[$c.id_category]) && isset($categoryConfigList[$c.id_category].var)}
 					{$categoryConfigList[$c.id_category].var}
 				{else}
-					<select name="category[{$c.id_category|escape:'htmlall'}]" id="categoryLevel1-{$c.id_category|escape:'htmlall'}" rel="{$c.id_category|escape:'htmlall'}" style="font-size: 12px; width: 160px;" OnChange="changeCategoryMatch(1, {$c.id_category|escape:'htmlall'});" class="ebay_select">
-						<option value="0">{$noCatSelected|escape:'htmlall'}</option>
+					<select name="category[{$c.id_category|escape:'htmlall':'UTF-8'}]" id="categoryLevel1-{$c.id_category|escape:'htmlall':'UTF-8'}" rel="{$c.id_category|escape:'htmlall':'UTF-8'}" style="font-size: 12px; width: 160px;" OnChange="changeCategoryMatch(1, {$c.id_category|escape:'htmlall':'UTF-8'});" class="ebay_select">
+						<option value="0">{$noCatSelected|escape:'htmlall':'UTF-8'}</option>
 						{foreach from=$eBayCategoryList item=ec}
-							<option value="{$ec.id_ebay_category|escape:'htmlall'}">{$ec.name|escape:'htmlall'}{if $ec.is_multi_sku == 1} *{/if}</option>
+							<option value="{$ec.id_ebay_category|escape:'htmlall':'UTF-8'}">{$ec.name|escape:'htmlall':'UTF-8'}{if $ec.is_multi_sku == 1} *{/if}</option>
 						{/foreach}
 					</select>
 				{/if}
 			</td>
+            <td class="center">{if isset($getNbProducts[$c.id_category])}
+				{$getNbProducts[$c.id_category]|escape:'htmlall':'UTF-8'}
+				{else}0{/if}</td>
 			<td>
-				<select name="percent[{$c.id_category|escape:'htmlall'}][sign]" class="ebay_select">
+				<select name="percent[{$c.id_category|escape:'htmlall':'UTF-8'}][sign]" class="ebay_select">
 					<option{if isset($categoryConfigList[$c.id_category].percent.sign) && $categoryConfigList[$c.id_category].percent.sign == ''} selected{/if}>+</option>
 					<option{if isset($categoryConfigList[$c.id_category].percent.sign) && $categoryConfigList[$c.id_category].percent.sign == '-'} selected{/if}>-</option>
 				</select>
-				<input type="text" size="3" maxlength="3" name="percent[{$c.id_category|escape:'htmlall'}][value]" id="percent{$c.id_category|escape:'htmlall'}" rel="{$c.id_category|escape:'htmlall'}" style="font-size: 12px;" value="{if isset($categoryConfigList[$c.id_category]) && isset($categoryConfigList[$c.id_category].var)}{$categoryConfigList[$c.id_category].percent.value|escape:'htmlall'}{/if}" />
-				<select name="percent[{$c.id_category|escape:'htmlall'}][type]" class="ebay_select">
+				<input type="text" size="3" maxlength="3" name="percent[{$c.id_category|escape:'htmlall':'UTF-8'}][value]" id="percent{$c.id_category|escape:'htmlall':'UTF-8'}" rel="{$c.id_category|escape:'htmlall':'UTF-8'}" style="font-size: 12px;" value="{if isset($categoryConfigList[$c.id_category]) && isset($categoryConfigList[$c.id_category].var)}{$categoryConfigList[$c.id_category].percent.value|escape:'htmlall':'UTF-8'}{/if}" />
+				<select name="percent[{$c.id_category|escape:'htmlall':'UTF-8'}][type]" class="ebay_select">
 					<option value="currency"{if isset($categoryConfigList[$c.id_category].percent.type) && $categoryConfigList[$c.id_category].percent.type == ''} selected{/if}>{$currencySign|html_entity_decode:2:"UTF-8"}</option>
 					<option value="percent"{if isset($categoryConfigList[$c.id_category].percent.type) && $categoryConfigList[$c.id_category].percent.type == '%'} selected{/if}>%</option>
 				</select>
 			</td>
-			<td colspan="2" class="show-products" style="text-align:center"><a  id="show-products-switch-string{$c.id_category|escape:'htmlall'}" href="javascript:showProducts({$c.id_category|escape:'htmlall'})">{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}</a></td>			
+			<td colspan="2" class="show-products" style="text-align:center"><a  id="show-products-switch-string{$c.id_category|escape:'htmlall':'UTF-8'}" href="javascript:showProducts({$c.id_category|escape:'htmlall':'UTF-8'})">{l s='Choose products' mod='ebay'}</a></td>
+            <td class="cat-nb-products center" category="{$c.id_category|escape:'htmlall':'UTF-8'}">{if isset($getNbSyncProducts[$c.id_category])}
+				{$getNbSyncProducts[$c.id_category]|escape:'htmlall':'UTF-8'}
+				{else}0{/if}</td>			
 		</tr>
 	{/foreach}
 {/if}

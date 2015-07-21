@@ -44,7 +44,7 @@
 		.ebay_dl > * {float: left; margin: 10px 0 0 10px}
 		.ebay_dl > dt {min-width: 100px; display: block; clear: both; text-align: left}
 		#ebay_label {font-weight: normal; float: none}
-		#button_ebay{background-image:url({/literal}{$path|escape:'htmlall'}{literal}img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:385px;height:191px;cursor:pointer;padding-bottom:70px;font-weight:bold;font-size:22px}
+		#button_ebay{background-image:url({/literal}{$path|escape:'htmlall':'UTF-8'}{literal}img/ebay.png);background-repeat:no-repeat;background-position:center 90px;width:385px;height:191px;cursor:pointer;padding-bottom:70px;font-weight:bold;font-size:22px}
 	input.primary {
 		text-shadow: none;
 		background: -webkit-gradient(linear, center top ,center bottom, from(#0055FF), to(#0055AA)) repeat scroll 0 0 transparent;
@@ -68,6 +68,11 @@
 					alert("{/literal}{l s='Please enter your eBay user ID' mod='ebay'}{literal}");
 					return false;
 				}
+                else if(validateEmail($('#eBayUsernameInput').val()))
+                {   
+                    alert("{/literal}{l s="Only eBay user identifiers can be used to log in. Please do not use your email address" mod="ebay"}{literal}");
+                    return false;
+                }
 				else{
                     
 					var country = $("#ebay_countries").val();
@@ -100,7 +105,7 @@
 		});
 		{/literal}
 	</script>
-	<form action="{$action_url|escape:'urlencode'}" method="post">
+	<form action="{$action_url|escape:'urlencode'}" method="post" id="ebay_register_form">
         <div id="ebay-register-content">
             <div id="ebay-register-left-col">
                 <div id="ebay-register-left-col-content">
@@ -112,7 +117,7 @@
                         {if $ebay_user_identifiers|count}
                             <select id="eBayUsernamesList" name="eBayUsernamesList" class="ebay_select ebay-float-right">
                                 {foreach from=$ebay_user_identifiers item='profile'}
-                                    <option value="{$profile.identifier|escape:'htmlall'}">{$profile.identifier|escape:'htmlall'}</option>
+                                    <option value="{$profile.identifier|escape:'htmlall':'UTF-8'}">{$profile.identifier|escape:'htmlall':'UTF-8'}</option>
                                 {/foreach}
                                 <option value="-1">New eBay user</option>
                             </select>
@@ -121,7 +126,7 @@
             			    <input id="eBayUsernameInput" type="text" name="eBayUsername" class="ebay-float-right" value="" />
                         {/if}
                         <div style="clear:both"></div>  
-                        <div class="txt-right">{l s='eBay User Identifiers only are allowed' mod='ebay'}</div>
+                        <div class="txt-right">{l s='Please use an eBay identifier, not your email address' mod='ebay'}</div>
                         <div style="clear:both"></div>                             
                     </div>
                 
@@ -130,7 +135,7 @@
             			<select name="ebay_country" id="ebay_countries" class="ebay_select ebay-float-right">
             				{if isset($ebay_countries) && $ebay_countries && sizeof($ebay_countries)}
             					{foreach from=$ebay_countries item='country' key='key'}
-            						<option value="{$key|escape:'htmlall'}" data-signin="{$country.signin|escape:'htmlall'}" {if $key == $default_country} selected{/if}>{if $country.subdomain}{$country.subdomain|escape:'htmlall'}.{/if}ebay.{$country.site_extension|escape:'htmlall'}</option>
+            						<option value="{$key|escape:'htmlall':'UTF-8'}" data-signin="{$country.signin|escape:'htmlall':'UTF-8'}" {if $key == $default_country} selected{/if}>{if $country.subdomain}{$country.subdomain|escape:'htmlall':'UTF-8'}.{/if}ebay.{$country.site_extension|escape:'htmlall':'UTF-8'}</option>
             					{/foreach}
             				{/if}
             			</select>
@@ -142,7 +147,7 @@
             			<select name="ebay_language" id="ebay_languages" class="ebay_select ebay-float-right">
             				{if isset($languages) && $languages && sizeof($languages)}
             					{foreach from=$languages item='language' key='key'}
-            						<option value="{$language.id_lang|escape:'htmlall'}">{$language.name|escape:'htmlall'}</option>
+            						<option value="{$language.id_lang|escape:'htmlall':'UTF-8'}">{$language.name|escape:'htmlall':'UTF-8'}</option>
             					{/foreach}
             				{/if}
             			</select>
@@ -158,7 +163,7 @@
             <div id="ebay-register-right-col">
                 <div id="ebay-register-right-col-content">
                     <div id="ebay-register-div">
-                        <a id="ebay-register-link" href="{l s='https://scgi.ebay.com/ws/eBayISAPI.dll?RegisterEnterInfo' mod='ebay'}" class="ebay-primary primary button" target="_blank">{l s='Register' mod='ebay'}</a>
+                        <a id="ebay-register-link" href="{$signin_pro_url}" class="ebay-primary primary button" target="_blank">{l s='Register' mod='ebay'}</a>
                 		<strong>{l s='New to eBay?' mod='ebay'}</strong><br />
                         {l s='Get started now, Its fast and easy.' mod='ebay'}
                     </div>
@@ -201,14 +206,20 @@
         if (validateEmail($('#eBayUsernameInput').val()) || $('#eBayUsernameInput').val() == '')
         {
             $('#eBayUsernameInput').css('border', '2px solid #a94442');
-            $('#ebayRegisterButton').attr('disabled', true);
         }
         else
         {
             $('#eBayUsernameInput').css('border', '1px solid #ccc');
-            $('#ebayRegisterButton').removeAttr('disabled');
         }
     });
+
+    $('#ebay_register_form').submit(function(){
+        if(validateEmail($('#eBayUsernameInput').val()))
+        {   
+            alert("{l s="Only eBay user identifiers can be used to log in. Please do not use your email address" mod="ebay"}");
+            return false;
+        }
+    })
 
 {literal}  
 /**

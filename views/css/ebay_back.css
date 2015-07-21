@@ -19,6 +19,11 @@ select.ebay_select{
 	width: 800px !important;
 }
 
+.ebay_center
+{
+	text-align: center !important;
+}
+
 #statsForm div.label
 {
 	width:100%;
@@ -846,3 +851,10 @@ margin-bottom: 3px;
 	margin:0 0 10px 0;
 }
 
+.red {
+  color: red !important;
+}
+
+.left-padded-name {
+  padding-left: 13px;
+}

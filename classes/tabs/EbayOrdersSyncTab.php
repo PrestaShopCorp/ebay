@@ -27,9 +27,9 @@
 class EbayOrdersSyncTab extends EbayTab
 {
 
-    function getContent()
-    {
-        
+	function getContent()
+	{
+		
 		$url_vars = array(
 			'id_tab' => '14',
 			'section' => 'parameters'
@@ -41,9 +41,9 @@ class EbayOrdersSyncTab extends EbayTab
 			$url_vars['tab'] = Tools::getValue('tab');
 
 		$url = $this->_getUrl($url_vars);        
-        
+		
 		return $this->display('orders_sync.tpl', array('url' => $url));
-    }
-    
+	}
+	
 }
 

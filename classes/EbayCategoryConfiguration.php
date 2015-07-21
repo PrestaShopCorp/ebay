@@ -42,7 +42,7 @@ class EbayCategoryConfiguration
 				FROM `'._DB_PREFIX_.'ebay_category_configuration`
 				WHERE `id_category` > 0
 				AND `id_ebay_category` > 0
-                AND `id_ebay_profile` = '.(int)$ebay_profile->id;
+				AND `id_ebay_profile` = '.(int)$ebay_profile->id;
 
 		if ($sync_mode == 'B')
 			$sql .= ' AND `sync` = 1';
@@ -103,9 +103,9 @@ class EbayCategoryConfiguration
 	 **/
 	public static function getEbayCategories($id_ebay_profile)
 	{
-        $ebay_profile = new EbayProfile($id_ebay_profile);
-        $ebay_site_id = $ebay_profile->ebay_site_id;
-            
+		$ebay_profile = new EbayProfile($id_ebay_profile);
+		$ebay_site_id = $ebay_profile->ebay_site_id;
+			
 		$sql = 'SELECT
 			DISTINCT(ec1.`id_category_ref`) as id,
 			CONCAT(
@@ -122,30 +122,30 @@ class EbayCategoryConfiguration
 			ON ec1.`id_category_ref_parent` = ec2.`id_category_ref`
 			AND ec1.`id_category_ref_parent` <> \'1\'
 			AND ec1.level <> 1
-            AND ec2.`id_country` = '.(int)$ebay_site_id.'
+			AND ec2.`id_country` = '.(int)$ebay_site_id.'
 			LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec3
 			ON ec2.`id_category_ref_parent` = ec3.`id_category_ref`
 			AND ec2.`id_category_ref_parent` <> \'1\'
 			AND ec2.level <> 1
-            AND ec3.`id_country` = '.(int)$ebay_site_id.'            
+			AND ec3.`id_country` = '.(int)$ebay_site_id.'            
 			WHERE e.`id_ebay_profile` = '.(int)$id_ebay_profile.'
 			AND ec1.`id_category_ref` is not null';
 			
 		return Db::getInstance()->executeS($sql);
 	}
-    
-    /*
-     *
-     * get categories for which some multi variation product on PS were added to a non multi sku categorie on ebay
-     *
-     **/
-    public static function getMultiVarToNonMultiSku($ebay_profile, $context)
-    {
+	
+	/*
+	 *
+	 * get categories for which some multi variation product on PS were added to a non multi sku categorie on ebay
+	 *
+	 **/
+	public static function getMultiVarToNonMultiSku($ebay_profile, $context)
+	{
 		$cat_with_problem = array();
 
 		$sql_get_cat_non_multi_sku = 'SELECT * FROM '._DB_PREFIX_.'ebay_category_configuration AS ecc
 			INNER JOIN '._DB_PREFIX_.'ebay_category AS ec ON ecc.id_ebay_category = ec.id_ebay_category
-			WHERE ecc.id_ebay_profile = '.(int)$ebay_profile->id;
+			WHERE ecc.id_ebay_profile = '.(int)$ebay_profile->id.' GROUP BY name';
 
 		foreach (Db::getInstance()->ExecuteS($sql_get_cat_non_multi_sku) as $cat)
 		{
@@ -153,7 +153,7 @@ class EbayCategoryConfiguration
 			{
 				$catProblem = 0;
 				$category = new Category($cat['id_category']);
-                $ebay_country = EbayCountrySpec::getInstanceByKey($ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'));
+				$ebay_country = EbayCountrySpec::getInstanceByKey($ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'));
 				$products = $category->getProductsWs($ebay_country->getIdLang(), 0, 300);
 
 				foreach ($products as $product_ar)
@@ -169,10 +169,10 @@ class EbayCategoryConfiguration
 				}
 			}
 		}
-        
-        return $cat_with_problem;
-        
-    }
+		
+		return $cat_with_problem;
+		
+	}
 
 
 	public static function add($data)
@@ -217,7 +217,7 @@ class EbayCategoryConfiguration
 			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
 			AND `id_category` = '.(int)$id_category);
 	}
-    
+	
 	public static function getNbPrestashopCategories($id_ebay_profile)
 	{
 		return Db::getInstance()->getValue('SELECT count(*)
@@ -231,5 +231,14 @@ class EbayCategoryConfiguration
 			FROM `'._DB_PREFIX_.'ebay_category_configuration`
 			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile);
 	}    
+
+	public static function getImpactPrices($id_ebay_profile)
+	{
+		return array(
+			'positive_impact' => Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'ebay_category_configuration WHERE percent NOT LIKE "-%" AND percent IS NOT NULL AND percent != "" AND id_ebay_profile = '.(int)$id_ebay_profile),
+			'negative_impact' =>  Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'ebay_category_configuration WHERE percent LIKE "-%" AND id_ebay_profile = '.(int)$id_ebay_profile),
+			'impacts' => Db::getInstance()->ExecuteS('SELECT percent FROM '._DB_PREFIX_.'ebay_category_configuration WHERE percent IS NOT NULL AND percent != "" AND id_ebay_profile = '.(int)$id_ebay_profile),
+		);
+	}
 
 }

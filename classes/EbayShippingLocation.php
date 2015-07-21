@@ -42,7 +42,7 @@ class EbayShippingLocation
 	{
 		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_location', $data, 'INSERT');
 	}
-    
+	
 	public static function getInternationalShippingLocations()
 	{
 		if (EbayShippingLocation::getTotal())
@@ -57,5 +57,5 @@ class EbayShippingLocation
 		return $locations;
 	}
 
-    
+	
 }

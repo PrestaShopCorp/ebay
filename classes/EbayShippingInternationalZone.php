@@ -31,7 +31,7 @@ class EbayShippingInternationalZone
 		return Db::getInstance()->ExecuteS('SELECT id_ebay_zone
 			FROM '._DB_PREFIX_.'ebay_shipping_international_zone
 			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.' 
-            AND id_ebay_shipping = "'.(int)$id_ebay_shipping.'"');
+			AND id_ebay_shipping = "'.(int)$id_ebay_shipping.'"');
 	}
 
 	public static function insert($id_ebay_profile, $id_ebay_shipping, $id_ebay_zone)
@@ -41,7 +41,7 @@ class EbayShippingInternationalZone
 			
 		DB::getInstance()->Execute($sql);
 	}
-    
+	
 	public static function getExistingInternationalCarrier($id_ebay_profile)
 	{
 		$existing_international_carriers = EbayShipping::getInternationalShippings($id_ebay_profile);

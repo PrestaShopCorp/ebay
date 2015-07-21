@@ -24,11 +24,7 @@
 *}
 
 <div>
-	{if isset($alerts) && !empty($alerts)}
-	<div class="warning big">
-		{$alerts|escape:'htmlall'}
-	</div>
-	{/if}
+	
     
     {if $has_ebay_shop}
     
@@ -71,7 +67,7 @@
 	</ul>
 {/if}
 
-<form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall'}{else}tab={$tab|escape:'htmlall'}{/if}&configure={$configure|escape:'htmlall'}&token={$token|escape:'htmlall'}&tab_module={$tab_module|escape:'htmlall'}&module_name={$module_name|escape:'htmlall'}&id_tab=10&section=store_category" method="post" class="form" id="configFormStoreCategories"><table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
+<form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall':'UTF-8'}{else}tab={$tab|escape:'htmlall':'UTF-8'}{/if}&configure={$configure|escape:'htmlall':'UTF-8'}&token={$token|escape:'htmlall':'UTF-8'}&tab_module={$tab_module|escape:'htmlall':'UTF-8'}&module_name={$module_name|escape:'htmlall':'UTF-8'}&id_tab=10&section=store_category" method="post" class="form" id="configFormStoreCategories"><table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
 		<thead>
 			<tr class="nodrag nodrop">
 				<th style="width:110px;">
@@ -85,7 +81,7 @@
 		<tbody>
 			<tr id="removeRow">
 				<td class="center" colspan="2">
-					<img src="{$_path|escape:'htmlall'}img/loading-small.gif" alt="" />
+					<img src="{$_path|escape:'htmlall':'UTF-8'}views/img/loading-small.gif" alt="" />
 				</td>
 			</tr>
 		</tbody>
@@ -93,7 +89,7 @@
 	<div style="margin-top: 5px;">
 		<input class="primary button" name="submitSave" type="submit" value="{l s='Save and continue' mod='ebay'}" />
         </form>
-        <form method="post" style="float: left" action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall'}{else}tab={$tab|escape:'htmlall'}{/if}&configure={$configure|escape:'htmlall'}&token={$token|escape:'htmlall'}&tab_module={$tab_module|escape:'htmlall'}&module_name={$module_name|escape:'htmlall'}&id_tab=10&section=store_category">
+        <form method="post" style="float: left" action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall':'UTF-8'}{else}tab={$tab|escape:'htmlall':'UTF-8'}{/if}&configure={$configure|escape:'htmlall':'UTF-8'}&token={$token|escape:'htmlall':'UTF-8'}&tab_module={$tab_module|escape:'htmlall':'UTF-8'}&module_name={$module_name|escape:'htmlall':'UTF-8'}&id_tab=10&section=store_category">
             <input type="hidden" name="refresh_store_cat" value="1" />
             <input class="button" type="submit" value="{l s='Reload store categories' mod='ebay'}" />
         </form>
@@ -101,7 +97,7 @@
     
     {if $not_compatible_store_categories}
         <div class="warning big tips">
-            {l s="The following categories are not available for they contain subcategories or are subcategories themselves. The eBay API doesn't permit sending products in these categories: " mod='ebay'} {$not_compatible_store_categories}
+            {l s='The following categories are not available for they contain subcategories. The eBay API does not permit sending products in these categories: ' mod='ebay'} {$not_compatible_store_categories}
         </div>
     {/if}
 
@@ -109,16 +105,16 @@
 		
 	var $selects = false;
 	
-	var module_dir = '{$_module_dir_|escape:'htmlall'}';
-	var ebay_token = '{$configs.EBAY_SECURITY_TOKEN|escape:'htmlall'}';
-	var module_time = '{$date|escape:'htmlall'}';
-	var module_path = '{$_path|escape:'htmlall'}';
-	var id_lang = '{$id_lang|escape:'htmlall'}';
-	var id_ebay_profile = '{$id_ebay_profile|escape:'htmlall'}';
+	var module_dir = '{$_module_dir_|escape:'htmlall':'UTF-8'}';
+	var ebay_token = '{$configs.EBAY_SECURITY_TOKEN|escape:'htmlall':'UTF-8'}';
+	var module_time = '{$date|escape:'htmlall':'UTF-8'}';
+	var module_path = '{$_path|escape:'htmlall':'UTF-8'}';
+	var id_lang = '{$id_lang|escape:'htmlall':'UTF-8'}';
+	var id_ebay_profile = '{$id_ebay_profile|escape:'htmlall':'UTF-8'}';
 	var store_categories_ebay_l = {ldelim}
 		'No category found'		 : "{l s='No category found' mod='ebay'}",
 		'You are not logged in': "{l s='You are not logged in' mod='ebay'}",
 		'Settings updated'		 : "{l s='Settings updated' mod='ebay'}",
 	{rdelim};
 </script>
-<script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/storeCategories.js?date={$date|escape:'htmlall'}"></script>
+<script type="text/javascript" src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/js/storeCategories.js?date={$date|escape:'htmlall':'UTF-8'}"></script>

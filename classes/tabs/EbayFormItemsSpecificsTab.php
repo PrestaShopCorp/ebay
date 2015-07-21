@@ -27,8 +27,8 @@
 class EbayFormItemsSpecificsTab extends EbayTab
 {
 
-    function getContent()
-    {
+	function getContent()
+	{
 		$is_one_dot_five = version_compare(_PS_VERSION_, '1.5', '>');
 
 		// Smarty
@@ -56,10 +56,10 @@ class EbayFormItemsSpecificsTab extends EbayTab
 		);
 
 		return $this->display('formItemsSpecifics.tpl', $template_vars);
-    }
-    
-    function postProcess()
-    {
+	}
+	
+	function postProcess()
+	{
 		// Save specifics
 		if(Tools::getValue('specific'))
 		{
@@ -89,8 +89,8 @@ class EbayFormItemsSpecificsTab extends EbayTab
 				EbayCategoryConditionConfiguration::replace(array('id_ebay_profile' => $this->ebay_profile->id, 'id_condition_ref' => $condition_ref, 'id_category_ref' => $category_id, 'condition_type' => $type));
 
 		return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));       
-    }    
-    
+	}    
+	
 	/*
 	 * Method to call the translation tool properly on every version to translate the PrestaShop conditions
 	 *
@@ -116,6 +116,6 @@ class EbayFormItemsSpecificsTab extends EbayTab
 		return $ps_conditions;
 	}
 
-    
-        
+	
+		
 }

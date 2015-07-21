@@ -25,7 +25,6 @@
  */
 
 require_once(dirname(__FILE__).'/EbayRequest.php');
-require_once(dirname(__FILE__).'/EbayProductImage.php');
 
 class EbayProductImage
 {
@@ -57,5 +56,10 @@ class EbayProductImage
 		}
 
 		return $ebay_url;
+	}
+
+	public static function removeAllProductImage()
+	{
+		return Db::getInstance()->Execute('TRUNCATE '._DB_PREFIX_.'ebay_product_image');
 	}
 }

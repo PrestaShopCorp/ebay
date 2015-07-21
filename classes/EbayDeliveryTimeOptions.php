@@ -47,7 +47,7 @@ class EbayDeliveryTimeOptions
 
 		Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_delivery_time_options', $to_insert, 'INSERT');
 	}
-    
+	
 	public static function getDeliveryTimeOptions()
 	{
 		if (EbayDeliveryTimeOptions::getTotal())
@@ -62,5 +62,5 @@ class EbayDeliveryTimeOptions
 		return $delivery_time_options;
 	}
 
-    
+	
 }

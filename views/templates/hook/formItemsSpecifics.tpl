@@ -24,11 +24,6 @@
 *}
 
 <div>
-	{if isset($alerts) && !empty($alerts)}
-	<div class="warning big">
-		{$alerts|escape:'htmlall'}
-	</div>
-	{/if}
 	<!---------------------------->
 	<p>
 		{l s='Item specifics are the details that buyers use to search for products, such as brand, size, colour and are category specific. The more item specifics you add, the easier it is for buyers to find your products. Please also specify the item condition from the options.' mod='ebay'}
@@ -40,7 +35,7 @@
 		</b>
 	</p>
 </div>
-<form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall'}{else}tab={$tab|escape:'htmlall'}{/if}&configure={$configure|escape:'htmlall'}&token={$token|escape:'htmlall'}&tab_module={$tab_module|escape:'htmlall'}&module_name={$module_name|escape:'htmlall'}&id_tab=8&section=specifics" method="post" class="form" id="configForm8">
+<form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall':'UTF-8'}{else}tab={$tab|escape:'htmlall':'UTF-8'}{/if}&configure={$configure|escape:'htmlall':'UTF-8'}&token={$token|escape:'htmlall':'UTF-8'}&tab_module={$tab_module|escape:'htmlall':'UTF-8'}&module_name={$module_name|escape:'htmlall':'UTF-8'}&id_tab=8&section=specifics" method="post" class="form" id="configForm8">
 	<table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
 		<thead>
 			<tr class="nodrag nodrop">
@@ -57,10 +52,10 @@
 		</thead>
 		<tbody>
 			{foreach from=$ebay_categories item=category}
-				<tr id="specifics-{$category.id|escape:'htmlall'}">
-					<td style="vertical-align: top">{$category.name|escape:'htmlall'}</td>
+				<tr id="specifics-{$category.id|escape:'htmlall':'UTF-8'}">
+					<td style="vertical-align: top">{$category.name|escape:'htmlall':'UTF-8'}</td>
 					<td>
-						<img id="specifics-{$category.id|escape:'htmlall'}-loader" src="{$_path|escape:'htmlall'}img/loading-small.gif" alt="" style="height:20px;" />
+						<img id="specifics-{$category.id|escape:'htmlall':'UTF-8'}-loader" src="{$_path|escape:'htmlall':'UTF-8'}views/img/loading-small.gif" alt="" style="height:20px;" />
 					</td>
 					<td></td>
 				</tr>
@@ -73,10 +68,10 @@
 </form>
 
 <script type="text/javascript">
-	var module_dir = "{$_module_dir_|escape:'htmlall'}";
-	var id_lang = "{$id_lang|escape:'htmlall'}";
-    var id_ebay_profile = "{$id_ebay_profile|escape:'htmlall'}";
-	var ebay_token = "{$ebay_token|escape:'htmlall'}";
+	var module_dir = "{$_module_dir_|escape:'htmlall':'UTF-8'}";
+	var id_lang = "{$id_lang|escape:'htmlall':'UTF-8'}";
+    var id_ebay_profile = "{$id_ebay_profile|escape:'htmlall':'UTF-8'}";
+	var ebay_token = "{$ebay_token|escape:'htmlall':'UTF-8'}";
 	
 	var l = {ldelim}
 		'Attributes'				 : "{l s="Attributes" mod='ebay'}",
@@ -88,22 +83,22 @@
 	var categories_to_load = new Array();
 
 	{foreach from=$ebay_categories item=category}
-		categories_to_load.push({$category.id|escape:'htmlall'});
+		categories_to_load.push({$category.id|escape:'htmlall':'UTF-8'});
 	{/foreach}
 	
 	var conditions_data = new Array();
 	{foreach from=$conditions key=type item=condition}
-		conditions_data[{$type|escape:'htmlall'}] = "{$condition|escape:'htmlall'}";
+		conditions_data[{$type|escape:'htmlall':'UTF-8'}] = "{$condition|escape:'htmlall':'UTF-8'}";
 	{/foreach}
 	
 	var possible_attributes = new Array();
 	{foreach from=$possible_attributes item=attribute}
-		possible_attributes[{$attribute.id_attribute_group|escape:'htmlall'}] = "{$attribute.name|escape:'htmlall'}";
+		possible_attributes[{$attribute.id_attribute_group|escape:'htmlall':'UTF-8'}] = "{$attribute.name|escape:'htmlall':'UTF-8'}";
 	{/foreach}		
 		
 	var possible_features = new Array();
 	{foreach from=$possible_features item=feature}
-		possible_features[{$feature.id_feature|escape:'htmlall'}] = "{$feature.name|escape:'htmlall'}";
+		possible_features[{$feature.id_feature|escape:'htmlall':'UTF-8'}] = "{$feature.name|escape:'htmlall':'UTF-8'}";
 	{/foreach}
 
 	
@@ -121,4 +116,4 @@
 	{rdelim})
 	
 </script>
-<script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/itemsSpecifics.js?date={$date|escape:'htmlall'}"></script>
+<script type="text/javascript" src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/js/itemsSpecifics.js?date={$date|escape:'htmlall':'UTF-8'}"></script>

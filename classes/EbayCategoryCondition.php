@@ -42,7 +42,7 @@ class EbayCategoryCondition
 		foreach ($ebay_category_ids as $category_id)
 		{
 			$xml_data = $request->GetCategoryFeatures($category_id);
-            
+			
 			if (isset($xml_data->Category->ConditionEnabled))
 				$condition_enabled = $xml_data->Category->ConditionEnabled;
 			else
@@ -55,15 +55,15 @@ class EbayCategoryCondition
 				$xml_conditions = $xml_data->Category->ConditionValues->Condition;
 			else
 				$xml_conditions = $xml_data->SiteDefaults->ConditionValues->Condition;
-            
-            if ($xml_conditions)
-    			foreach ($xml_conditions as $xml_condition)
-    				$conditions[] = array(
-                        'id_ebay_profile'  => (int)$id_ebay_profile,
-    					'id_category_ref' => (int)$category_id,
-    					'id_condition_ref' => (int)$xml_condition->ID,
-    					'name' => pSQL((string)$xml_condition->DisplayName)
-    				);
+			
+			if ($xml_conditions)
+				foreach ($xml_conditions as $xml_condition)
+					$conditions[] = array(
+						'id_ebay_profile'  => (int)$id_ebay_profile,
+						'id_category_ref' => (int)$category_id,
+						'id_condition_ref' => (int)$xml_condition->ID,
+						'name' => pSQL((string)$xml_condition->DisplayName)
+					);
 
 			//
 			Db::getInstance()->ExecuteS("SELECT 1");
@@ -73,7 +73,7 @@ class EbayCategoryCondition
 		{
 			$db = Db::getInstance();
 			$db->Execute('DELETE FROM '._DB_PREFIX_.'ebay_category_condition 
-                WHERE `id_ebay_profile` = '.(int)$id_ebay_profile);
+				WHERE `id_ebay_profile` = '.(int)$id_ebay_profile);
 
 			if (version_compare(_PS_VERSION_, '1.5', '>'))
 				$db->insert('ebay_category_condition', $conditions);
