@@ -31,7 +31,7 @@ abstract class EbayLoadLogs {
 	public function getLogs()
 	{
 		if (!Configuration::get('EBAY_SECURITY_TOKEN') 
-		    || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+			|| Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
 			return Tools::safeOutput(Tools::getValue('not_logged_str'));
 
 		$ebay = new Ebay();
@@ -50,10 +50,10 @@ abstract class EbayLoadLogs {
 
 		/* Smarty datas */
 		$template_vars = array(
-		    'logs' => $logs,
+			'logs' => $logs,
 			'p' => $page,
 			'noLogFound' => Tools::getValue('no_logs_str'),
-		    'showStr' =>  Tools::getValue('show_str'),
+			'showStr' =>  Tools::getValue('show_str'),
 		);
 
 		$smarty->assign($template_vars);

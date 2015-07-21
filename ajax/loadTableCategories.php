@@ -35,13 +35,15 @@ $ebay_profile = new EbayProfile((int)Tools::getValue('profile'));
 if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
 	return Tools::safeOutput(Tools::getValue('not_logged_str'));
 
-$category_list = $ebay->getChildCategories(Category::getCategories(Tools::getValue('id_lang')), version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0);
+$categories = Category::getCategories(Tools::getValue('id_lang'));
+$category_list = $ebay->getChildCategories($categories, version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0, array(), '', Tools::getValue('s'));
 
 $offset = 20;
 $page = (int)Tools::getValue('p', 0);
 if ($page < 2)
 	$page = 1;
 $limit = $offset * ($page - 1);
+$nb_categories = count($category_list);
 $category_list = array_slice($category_list, $limit, $offset);
 
 $ebay_category_list = Db::getInstance()->executeS('SELECT *
@@ -51,25 +53,49 @@ $ebay_category_list = Db::getInstance()->executeS('SELECT *
 
 if (version_compare(_PS_VERSION_, '1.5', '>'))
 {
-	$rq_get_cat_in_stock = '
-		SELECT SUM(s.`quantity`) AS instockProduct, p.`id_category_default`
+	
+	$rq_products = '
+		SELECT COUNT(DISTINCT(p.`id_product`)) AS nbProducts, 
+			COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts, 
+			p.`id_category_default`
 		FROM `'._DB_PREFIX_.'product` AS p
-		INNER JOIN `'._DB_PREFIX_.'stock_available` AS s ON p.`id_product` = s.`id_product`
-		WHERE 1 '.$ebay->addSqlRestrictionOnLang('s').'
+		
+		INNER JOIN `'._DB_PREFIX_.'product_shop` AS ps 
+		ON p.`id_product` = ps.`id_product`
+		
+		LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` AS epc 
+		ON p.`id_product` = epc.`id_product` 
+		AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.' 
+		AND epc.blacklisted = 1
+		
+		WHERE 1 '.$ebay->addSqlRestrictionOnLang('ps').'
+		AND ps.`id_shop` = 1
 		GROUP BY p.`id_category_default`';
+
 }
 else
 {
-	$rq_get_cat_in_stock = 'SELECT SUM(`quantity`) AS instockProduct, `id_category_default`
-		FROM `'._DB_PREFIX_.'product`
+	
+	$rq_products = 'SELECT COUNT(DISTINCT(p.`id_product`)) AS nbProducts, 
+		COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts, `id_category_default`
+		FROM `'._DB_PREFIX_.'product` p
+		
+		LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc 
+		ON p.`id_product` = epc.`id_product` 
+		AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.' 
+		AND epc.blacklisted = 1    
 		GROUP BY `id_category_default`';
+		
 }
 
-$get_cats_stock = Db::getInstance()->ExecuteS($rq_get_cat_in_stock);
-$get_cat_in_stock = array();
+$get_products = Db::getInstance()->ExecuteS($rq_products);
+$get_cat_nb_products = array();
+$get_cat_nb_sync_products = array();
 
-foreach ($get_cats_stock as $data)
-	$get_cat_in_stock[$data['id_category_default']] = $data['instockProduct'];
+foreach ($get_products as $data) {
+	$get_cat_nb_products[$data['id_category_default']] = (int)$data['nbProducts'];
+	$get_cat_nb_sync_products[$data['id_category_default']] = (int)$data['nbProducts'] - (int)$data['nbNotSyncProducts'];        
+}
 
 /* Loading categories */
 $category_config_list = array();
@@ -129,8 +155,10 @@ $template_vars = array(
 	'tabHelp' => '&id_tab=7',
 	'_path' => $ebay->getPath(),
 	'categoryList' => $category_list,
+	'nbCategories' => $nb_categories,
 	'eBayCategoryList' => $ebay_category_list,
-	'getCatInStock' => $get_cat_in_stock,
+	'getNbProducts' => $get_cat_nb_products,
+	'getNbSyncProducts' => $get_cat_nb_sync_products,
 	'categoryConfigList' => $category_config_list,
 	'request_uri' => $_SERVER['REQUEST_URI'],
 	'noCatSelected' => Tools::getValue('ch_cat_str'),

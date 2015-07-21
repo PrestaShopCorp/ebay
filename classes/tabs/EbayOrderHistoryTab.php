@@ -27,8 +27,8 @@
 class EbayOrderHistoryTab extends EbayTab
 {
 
-    function getContent()
-    {
+	function getContent()
+	{
 		// Check if the module is configured
 		if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))
 			return '<p><b>'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab').'</b></p><br />';
@@ -44,7 +44,7 @@ class EbayOrderHistoryTab extends EbayTab
 		);
 
 		return $this->display('ordersHistory.tpl', $template_vars);
-    }
-    
+	}
+	
 }
 

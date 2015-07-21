@@ -28,10 +28,10 @@ class EbayCategory
 {
 	private $id_category; /* PrestaShop category id */
 	private $id_category_ref; /* eBay Category id */
-    private $id_country; /* eBay Site id. naming is not great */
+	private $id_country; /* eBay Site id. naming is not great */
 	private $is_multi_sku;
-    
-    private $ebay_profile;
+	
+	private $ebay_profile;
 
 	private $percent;
 
@@ -41,10 +41,10 @@ class EbayCategory
 	public function __construct($ebay_profile, $id_category_ref, $id_category = null)
 	{
 		if ($ebay_profile)
-        {
+		{
 			$this->ebay_profile = $ebay_profile;
-            $this->id_country = (int)$ebay_profile->ebay_site_id;
-        }
+			$this->id_country = (int)$ebay_profile->ebay_site_id;
+		}
 		if ($id_category_ref)
 			$this->id_category_ref = (int)$id_category_ref;
 		if ($id_category)
@@ -56,7 +56,7 @@ class EbayCategory
 		$sql = 'SELECT ecc.`id_category`, ec.`id_category_ref`, ec.`is_multi_sku`, ecc.`percent` FROM `'._DB_PREFIX_.'ebay_category` ec
 			LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
 			ON (ecc.`id_ebay_category` = ec.`id_ebay_category`)
-            AND ecc.`id_ebay_profile` = '.(int)$this->ebay_profile->id.'
+			AND ecc.`id_ebay_profile` = '.(int)$this->ebay_profile->id.'
 			WHERE ec.`id_country` = '.(int)$this->id_country.' AND ';
 
 		if ($this->id_category_ref)
@@ -116,7 +116,7 @@ class EbayCategory
 		$sql = 'SELECT e.`name`, e.`id_ebay_category_specific` as id, e.`required`, e.`selection_mode`, e.`id_attribute_group`, e.`id_feature`, e.`id_ebay_category_specific_value` as id_specific_value, e.`is_brand`, e.`can_variation`
 			FROM `'._DB_PREFIX_.'ebay_category_specific` e
 			WHERE e.`id_category_ref` = '.(int)$this->id_category_ref.'
-            AND e.`ebay_site_id` = '.(int)$this->id_country;
+			AND e.`ebay_site_id` = '.(int)$this->id_country;
 
 		return DB::getInstance()->executeS($sql);
 	}
@@ -138,7 +138,7 @@ class EbayCategory
 				LEFT JOIN `'._DB_PREFIX_.'ebay_category_specific_value` ec
 				ON e.`id_ebay_category_specific_value` = ec.`id_ebay_category_specific_value`
 				WHERE e.`id_category_ref` = '.(int)$this->id_category_ref.'
-                AND e.`ebay_site_id` = '.(int)$this->id_country;
+				AND e.`ebay_site_id` = '.(int)$this->id_country;
 
 			$this->items_specific_values = Db::getInstance()->executeS($sql);
 		}
@@ -160,7 +160,7 @@ class EbayCategory
 			AND e.`id_condition_ref` = ec.`id_condition_ref`
 			AND e.`id_ebay_profile` = ec.`id_ebay_profile`
 			WHERE e.`id_category_ref` = '.(int)$this->id_category_ref.'
-            AND e.`id_ebay_profile` = '.(int)$id_ebay_profile;
+			AND e.`id_ebay_profile` = '.(int)$id_ebay_profile;
 
 		$res = Db::getInstance()->executeS($sql);
 
@@ -268,7 +268,7 @@ class EbayCategory
 		$row = Db::getInstance()->getRow('SELECT `id_category_ref_parent`, `is_multi_sku`
 			FROM `'._DB_PREFIX_.'ebay_category`
 			WHERE `id_category_ref` = '.(int)$id_category_ref.'
-            AND `id_country` = '.(int)$ebay_site_id);
+			AND `id_country` = '.(int)$ebay_site_id);
 
 		if ($row['is_multi_sku'] !== null)
 			return $row['is_multi_sku'];

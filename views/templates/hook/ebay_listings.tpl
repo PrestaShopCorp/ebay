@@ -35,7 +35,7 @@
 		$.ajax({
 			type: "POST",
 			url: module_dir+'ebay/ajax/getEbayListings.php',
-			data: "token="+ebay_token+"&id_employee={$id_employee|escape:'htmlall'}",
+			data: "token="+ebay_token+"&id_employee={$id_employee|escape:'htmlall':'UTF-8'}",
 			success: function(data)
 			{
 				$('#ebayListings').fadeOut(400, function(){

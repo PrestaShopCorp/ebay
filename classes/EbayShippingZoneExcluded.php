@@ -46,9 +46,9 @@ class EbayShippingZoneExcluded
 	{
 		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_zone_excluded', $data, 'INSERT');
 	}
-    
-    public static function loadEbayExcludedLocations($id_ebay_profile)
-    {
+	
+	public static function loadEbayExcludedLocations($id_ebay_profile)
+	{
 		$ebay_request = new EbayRequest();
 		$excluded_locations = $ebay_request->getExcludeShippingLocations();
 
@@ -66,8 +66,8 @@ class EbayShippingZoneExcluded
 		else
 			foreach ($excluded_locations as $location)
 				EbayShippingZoneExcluded::insert($location);        
-    }
-    
+	}
+	
 	public static function cacheEbayExcludedLocation($id_ebay_profile)
 	{
 		$ebay_excluded_zones = EbayShippingZoneExcluded::getAll($id_ebay_profile);
@@ -107,5 +107,5 @@ class EbayShippingZoneExcluded
 			'excluded' => $excluded
 		);
 	}
-    
+	
 }

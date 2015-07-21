@@ -31,7 +31,6 @@ include('../../../modules/ebay/ebay.php');
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
 	die('ERROR: Invalid Token');
 
-global $cookie;
 $cookie = new Cookie('psEbay', '', 3600);
 
 $ebay = new eBay((int)Tools::getValue('profile'));

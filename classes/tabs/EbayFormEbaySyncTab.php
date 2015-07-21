@@ -27,12 +27,12 @@
 class EbayFormEbaySyncTab extends EbayTab
 {
 
-    function getContent()
-    {
+	function getContent()
+	{
 		// Check if the module is configured
 		if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))
 			return '<p class="error"><b>'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab').'</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
-        
+		
 		if (!EbayCategoryConfiguration::getTotalCategoryConfigurations($this->ebay_profile->id))
 			return '<p class="error"><b>'.$this->ebay->l('Please configure the \'Category settings\' tab before using this tab').'</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
 
@@ -55,7 +55,7 @@ class EbayFormEbaySyncTab extends EbayTab
 							SELECT  `id_category`
 							FROM  `'._DB_PREFIX_.'ebay_category_configuration`
 							WHERE  `id_ebay_category` > 0
-                            AND `id_ebay_profile` = '.(int)$this->ebay_profile->id.'
+							AND `id_ebay_profile` = '.(int)$this->ebay_profile->id.'
 						)
 						'.$this->ebay->addSqlRestrictionOnLang('s').'
 						AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($this->ebay_profile->id).')
@@ -80,8 +80,8 @@ class EbayFormEbaySyncTab extends EbayTab
 							SELECT  `id_category`
 							FROM  `'._DB_PREFIX_.'ebay_category_configuration`
 							WHERE  `id_ebay_category` > 0 
-                            AND `sync` = 1
-                            AND `id_ebay_profile` = '.(int)$this->ebay_profile->id.'
+							AND `sync` = 1
+							AND `id_ebay_profile` = '.(int)$this->ebay_profile->id.'
 						)'.$this->ebay->addSqlRestrictionOnLang('s').'
 						AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($this->ebay_profile->id).')
 						GROUP BY p.id_product
@@ -103,7 +103,7 @@ class EbayFormEbaySyncTab extends EbayTab
 					SELECT `id_category`
 					FROM `'._DB_PREFIX_.'ebay_category_configuration`
 					WHERE `id_ebay_category` > 0
-                    AND `id_ebay_profile` = '.(int)$this->ebay_profile->id.')
+					AND `id_ebay_profile` = '.(int)$this->ebay_profile->id.')
 				AND p.`id_product` NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($this->ebay_profile->id).')';
 			$nb_products_mode_a = Db::getInstance()->getValue($sql);
 
@@ -120,7 +120,7 @@ class EbayFormEbaySyncTab extends EbayTab
 					FROM `'._DB_PREFIX_.'ebay_category_configuration`
 					WHERE `id_ebay_category` > 0
 					AND `sync` = 1
-                    AND `id_ebay_profile` = '.(int)$this->ebay_profile->id.')
+					AND `id_ebay_profile` = '.(int)$this->ebay_profile->id.')
 				AND p.`id_product` NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($this->ebay_profile->id).')';
 			$nb_products_mode_b = Db::getInstance()->getValue($sql);
 		}
@@ -174,7 +174,7 @@ class EbayFormEbaySyncTab extends EbayTab
 		$sync_products_url = _MODULE_DIR_.'ebay/ajax/eBaySyncProduct.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&option=\'+option+\'&profile='.$this->ebay_profile->id.'&time='.pSQL(date('Ymdhis'));
 
 		$smarty_vars = array(
-            'category_alerts' => $this->_getAlertCategories(),
+			'category_alerts' => $this->_getAlertCategories(),
 			'path' => $this->path,
 			'nb_products' => $nb_products ? $nb_products : 0,
 			'nb_products_mode_a' => $nb_products_mode_a ? $nb_products_mode_a : 0,
@@ -192,13 +192,16 @@ class EbayFormEbaySyncTab extends EbayTab
 		);
 
 		return $this->display('formEbaySync.tpl', $smarty_vars);
-        
-    }
-    
-    function postProcess()
-    {
-        
+		
+	}
+	
+	function postProcess()
+	{
+		
 		// Update Sync Option
+		if ($this->ebay_profile == null)
+			return;
+		
 		$this->ebay_profile->setConfiguration('EBAY_SYNC_OPTION_RESYNC', (Tools::getValue('ebay_sync_option_resync') == 1 ? 1 : 0));
 
 		// Empty error result
@@ -223,19 +226,19 @@ class EbayFormEbaySyncTab extends EbayTab
 					EbayCategoryConfiguration::updateByIdProfileAndIdCategory((int)$this->ebay_profile->id, $id_category, array('id_ebay_profile' => $this->ebay_profile->id, 'sync' => 1));
 			}
 		}
-        
-    }
-    
+		
+	}
+	
 	/*
-     *
-     * Get alert to see if some multi variation product on PrestaShop were added to a non multi sku categorie on ebay
-     *
-     */
+	 *
+	 * Get alert to see if some multi variation product on PrestaShop were added to a non multi sku categorie on ebay
+	 *
+	 */
 	private function _getAlertCategories()
 	{
 		$alert = '';
-        
-        $cat_with_problem = EbayCategoryConfiguration::getMultiVarToNonMultiSku($this->ebay_profile, $this->context);
+		
+		$cat_with_problem = EbayCategoryConfiguration::getMultiVarToNonMultiSku($this->ebay_profile, $this->context);
 
 		$var = implode(', ', $cat_with_problem);
 
@@ -244,11 +247,11 @@ class EbayFormEbaySyncTab extends EbayTab
 			if (count($cat_with_problem) == 1)
 				$alert = $this->ebay->l('You have chosen eBay category : ').' "'.$var.'" '.$this->ebay->l(' which does not support multivariation products. Each variation of a product will generate a new product in eBay');
 			else
-				$alert = $this->ebay->l('You have chosen eBay categories : ').' "'.$var.'"" '.$this->ebay->l(' which do not support multivariation products. Each variation of a product will generate a new product in eBay');
+				$alert = $this->ebay->l('You have chosen eBay categories : ').' "'.$var.'" '.$this->ebay->l(' which do not support multivariation products. Each variation of a product will generate a new product in eBay');
 		}
 
 		return $alert;
 	}    
-    
+	
 }
 

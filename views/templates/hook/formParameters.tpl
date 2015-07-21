@@ -59,14 +59,14 @@
     
 	<fieldset style="margin-top:10px;">
 		<legend>{l s='Account details' mod='ebay'}</legend>
-		<h4>{l s='To list your products on eBay, you need to create' mod='ebay'} <a href="{l s='https://scgi.ebay.co.uk/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2' mod='ebay'}" target="_blank">{l s='a business seller account' mod='ebay'}</a> {l s='and' mod='ebay'} <a href="https://www.paypal.com/" target="_blank">{l s='a PayPal account.' mod='ebay'}</a></h4>
+		<h4>{l s='To list your products on eBay, you need to create' mod='ebay'} <a href="https://www.paypal.com/" target="_blank">{l s='a PayPal account.' mod='ebay'}</a></h4>
         
-		<input type="hidden" name="ebay_shop" value="{$ebayShopValue|escape:'htmlall'}" />            
+		<input type="hidden" name="ebay_shop" value="{$ebayShopValue|escape:'htmlall':'UTF-8'}" />            
         
 		<label>{l s='Paypal email address' mod='ebay'} : </label>
 		<div class="margin-form">
 
-			<input type="text" size="20" name="ebay_paypal_email" value="{$ebay_paypal_email|escape:'htmlall'}"/>
+			<input type="text" size="20" name="ebay_paypal_email" value="{$ebay_paypal_email|escape:'htmlall':'UTF-8'}"/>
 			<p>{l s='You have to set your PayPal e-mail account, it\'s the only payment available with this module' mod='ebay'}</p>
 		</div>
         
@@ -77,7 +77,7 @@
 			<select name="currency" data-inlinehelp="{l s='This currency will be used for your products sold on eBay' mod='ebay'}" class="ebay_select">
 				{if isset($currencies) && $currencies && sizeof($currencies)}
 					{foreach from=$currencies item='currency'}
-						<option value="{$currency.id_currency|escape:'htmlall'}"{if $currency.id_currency == $current_currency} selected{/if}>{$currency.name|escape:'htmlall'}</option>
+						<option value="{$currency.id_currency|escape:'htmlall':'UTF-8'}"{if $currency.id_currency == $current_currency} selected{/if}>{$currency.name|escape:'htmlall':'UTF-8'}</option>
 					{/foreach}
 				{/if}
 			</select>
@@ -85,7 +85,7 @@
         
 		<label>{l s='Item location' mod='ebay'} : </label>
 		<div class="margin-form">
-			<input type="text" size="20" name="ebay_shop_postalcode" value="{$shopPostalCode|escape:'htmlall'}"/>
+			<input type="text" size="20" name="ebay_shop_postalcode" value="{$shopPostalCode|escape:'htmlall':'UTF-8'}"/>
 			<p>{l s='Your shop\'s postal code' mod='ebay'}</p>
 		</div>
 		<label>{l s='Item Country' mod='ebay'} : </label>
@@ -93,7 +93,7 @@
 			<select name="ebay_shop_country" class="ebay_select">
                 <option value=""></option>
 			{foreach from=$ebay_shop_countries item=ebay_shop_country}
-				<option value="{$ebay_shop_country.iso_code|escape:'htmlall'}" {if $current_ebay_shop_country == $ebay_shop_country.iso_code} selected="selected"{/if}>{$ebay_shop_country.site_name|escape:'htmlall'}</option>
+				<option value="{$ebay_shop_country.iso_code|escape:'htmlall':'UTF-8'}" {if $current_ebay_shop_country == $ebay_shop_country.iso_code} selected="selected"{/if}>{$ebay_shop_country.site_name|escape:'htmlall':'UTF-8'}</option>
 			{/foreach}							   
 			</select>            
 			<p>{l s='Your shop\'s country' mod='ebay'}</p>
@@ -122,7 +122,7 @@
 		<div class="margin-form">
 			<select name="ebay_returns_accepted_option" data-dialoghelp="#returnsAccepted" data-inlinehelp="{l s='eBay business sellers must accept returns under the Distance Selling Regulations.' mod='ebay'}" class="ebay_select">
 			{foreach from=$policies item=policy}
-				<option value="{$policy.value|escape:'htmlall'}" {if $returnsConditionAccepted == $policy.value} selected="selected"{/if}>{$policy.description|escape:'htmlall'}</option>
+				<option value="{$policy.value|escape:'htmlall':'UTF-8'}" {if $returnsConditionAccepted == $policy.value} selected="selected"{/if}>{$policy.description|escape:'htmlall':'UTF-8'}</option>
 			{/foreach}							   
 			</select>
 		</div>
@@ -132,7 +132,7 @@
 			<select name="returnswithin" data-inlinehelp="{l s='eBay business sellers must offer a minimum of 14 days for buyers to return their items.' mod='ebay'}" class="ebay_select">
 					{if isset($within_values) && $within_values && sizeof($within_values)}
 						{foreach from=$within_values item='within_value'}
-							<option value="{$within_value.value|escape:'htmlall'}"{if isset($within) && $within == $within_value.value} selected{/if}>{$within_value.description|escape:'htmlall'}</option>
+							<option value="{$within_value.value|escape:'htmlall':'UTF-8'}"{if isset($within) && $within == $within_value.value} selected{/if}>{$within_value.description|escape:'htmlall':'UTF-8'}</option>
 						{/foreach}
 					{/if}
 			</select>
@@ -143,7 +143,7 @@
 			<select name="returnswhopays" class="ebay_select">
 				{if isset($whopays_values) && $whopays_values && sizeof($whopays_values)}
 					{foreach from=$whopays_values item='whopays_value'}
-						<option value="{$whopays_value.value|escape:'htmlall'}"{if isset($whopays) && $whopays == $whopays_value.value} selected{/if}>{$whopays_value.description|escape:'htmlall'}</option>
+						<option value="{$whopays_value.value|escape:'htmlall':'UTF-8'}"{if isset($whopays) && $whopays == $whopays_value.value} selected{/if}>{$whopays_value.description|escape:'htmlall':'UTF-8'}</option>
 					{/foreach}
 				{/if}
 			</select>
@@ -172,7 +172,7 @@
                 <option value=""></option>
 				{if isset($order_states) && $order_states && sizeof($order_states)}
 					{foreach from=$order_states item='order_state'}
-						<option value="{$order_state.id_order_state|escape:'htmlall'}"{if $order_state.id_order_state == $current_order_state} selected{/if}>{$order_state.name|escape:'htmlall'}</option>
+						<option value="{$order_state.id_order_state|escape:'htmlall':'UTF-8'}"{if $order_state.id_order_state == $current_order_state} selected{/if}>{$order_state.name|escape:'htmlall':'UTF-8'}</option>
 					{/foreach}
 				{/if}
 			</select>
@@ -191,9 +191,9 @@
 		</label>
 		<div class="margin-form">
 
-			<select name="listingdurations" data-dialoghelp="http://pages.ebay.com/help/sell/duration.html" data-inlinehelp="{l s='The listing duration is the length of time that your listing is active on eBay.co.uk. You can have it last 1, 3, 5, 7, 10, 30 days or Good \'Til Cancelled. Good \'Til Cancelled listings renew automatically every 30 days unless all of the items sell, you end the listing, or the listing breaches an eBay policy. Good \'Til Cancelled is the default setting here to save you time relisting your items.' mod='ebay'}" class="ebay_select">
+			<select name="listingdurations" data-dialoghelp="{l s='http://pages.ebay.com/help/sell/duration.html' mod='ebay'}" data-inlinehelp="{l s='The listing duration is the length of time that your listing is active on eBay.co.uk. You can have it last 1, 3, 5, 7, 10, 30 days or Good \'Til Cancelled. Good \'Til Cancelled listings renew automatically every 30 days unless all of the items sell, you end the listing, or the listing breaches an eBay policy. Good \'Til Cancelled is the default setting here to save you time relisting your items.' mod='ebay'}" class="ebay_select">
 				{foreach from=$listingDurations item=listing key=key}
-					<option value="{$key|escape:'htmlall'}" {if $ebayListingDuration == $key}selected="selected" {/if}>{$listing|escape:'htmlall':'UTF-8'}</option>
+					<option value="{$key|escape:'htmlall':'UTF-8'}" {if $ebayListingDuration == $key}selected="selected" {/if}>{$listing|escape:'htmlall':'UTF-8'}</option>
 				{/foreach}
 			</select>
 		</div>
