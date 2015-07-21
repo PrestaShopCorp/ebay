@@ -45,14 +45,14 @@ class EbayLog extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		if (isset($this->id))
+		if (isset($this->id)) {
 			$fields['id_ebay_log'] = (int)($this->id);
+			$fields['text'] = pSQL($this->text);
+			$fields['type'] = pSQL($this->type);
+			$fields['date_add'] = pSQL($this->date_add);
 
-		$fields['text'] = pSQL($this->text);
-		$fields['type'] = pSQL($this->type);
-		$fields['date_add'] = pSQL($this->date_add);
-
-		return $fields;
+			return $fields;
+		}
 	}        
     
     public function __construct($id = null, $id_lang = null, $id_shop = null) {
