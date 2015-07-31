@@ -57,7 +57,7 @@
 		<tbody>
 			<tr id="removeRow">
 				<td class="center" colspan="2">
-					<img src="{$_path|escape:'htmlall':'UTF-8'}img/loading-small.gif" alt="" />
+					<img src="{$_path|escape:'htmlall':'UTF-8'}views/img/loading-small.gif" alt="" />
 				</td>
 			</tr>
 		</tbody>
