@@ -55,7 +55,6 @@ if (Module::isInstalled('ebay'))
             $context = Context::getContext();
             $context->shop = new Shop((int)Tools::getValue('id_shop'));
         }
-
         $ebay_profile = new EbayProfile((int)Tools::getValue('profile'));
 
         $root_category = Category::getRootCategory();

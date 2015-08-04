@@ -75,6 +75,18 @@ class EbayProduct
 		return (int)$a['id_product'];
 	}
 
+	public static function getProductsIdFromItemId($itemID)
+	{
+		$row = Db::getInstance()->getRow('SELECT id_product, id_attribute
+			FROM `'._DB_PREFIX_.'ebay_product`
+			WHERE `id_product_ref` = '.(int)$itemID);
+
+		if ((int)$row['id_product'])
+			return array('id_product' => (int)$row['id_product'], 'id_product_attribute' => (int)$row['id_attribute']);
+		else
+			return false;
+	}
+
 	public static function getNbProducts($id_ebay_profile)
 	{
 		return Db::getInstance()->getValue('SELECT count(*)

@@ -25,28 +25,28 @@
 
 
 <script type="text/javascript">
-	regenerate_token_show = false;
-	{if $regenerate_token != false}
-	regenerate_token_show = true;
-	{/if}
+    regenerate_token_show = false;
+    {if $regenerate_token != false}
+    regenerate_token_show = true;
+    {/if}
 </script>
 
 <link rel="stylesheet" href="{$css_file|escape:'urlencode'}" />
 <link rel="stylesheet" href="{$font_awesome_css_file|escape:'urlencode'}" />
 <script>
-	var $j = $;
+    var $j = $;
 </script>
 {if substr($smarty.const._PS_VERSION_, 0, 3) == "1.4" || substr($smarty.const._PS_VERSION_, 0, 5) == "1.5.2"}
-	<link rel="stylesheet" href="{$fancyboxCss|escape:'urlencode'}" />
-	<script src="{$ebayjquery|escape:'urlencode'}"></script>
-	<script src="{$noConflicts|escape:'urlencode'}"></script>
-	<script>
-		if(typeof($j172) != 'undefined')
-			$j = $j172;
-		else 
-			$j = $;
-	</script>
-	<script src="{$fancybox|escape:'urlencode'}"></script>
+    <link rel="stylesheet" href="{$fancyboxCss|escape:'urlencode'}" />
+    <script src="{$ebayjquery|escape:'urlencode'}"></script>
+    <script src="{$noConflicts|escape:'urlencode'}"></script>
+    <script>
+        if(typeof($j172) != 'undefined')
+            $j = $j172;
+        else 
+            $j = $;
+    </script>
+    <script src="{$fancybox|escape:'urlencode'}"></script>
 {/if}
 <script src="{$tooltip|escape:'urlencode'}" type="text/javascript"></script>
 <script src="{$tips202|escape:'urlencode'}" type="text/javascript"></script>
@@ -117,30 +117,30 @@
         <div class="ebay-boxes-2-col-cell-content left">
             <fieldset class="new" style="min-height: 165px">
                 {if $show_welcome}
-                	<legend><img src="{$path|escape:'htmlall':'UTF-8'}logo.gif" alt="" />{l s='eBay Module Status' mod='ebay'}</legend>
-                	<div style="float: left">
-                    	{if empty($alert)}
-                    		<p id="ebay-no-profile">{l s='You don\'t have any profile setup yet' mod='ebay'}</p>
-                    		{if $is_version_one_dot_five}
-                    			{if $is_version_one_dot_five_dot_one}
-                    				<br/><img src="../modules/ebay/views/img/warn.png" /><strong>{l s='You\'re using version 1.5.1 of PrestaShop. We invite you to upgrade to version 1.5.2  so you can use the eBay module properly.' mod='ebay'}</strong>
-                    				<br/><strong>{l s='Please synchronize your eBay sales in your Prestashop front office' mod='ebay'}</strong>
-                    			{/if}
-                    		{/if}
-                    	{else}
-                    		<img src="../modules/ebay/views/img/warn.png" /><strong>{l s='Please complete the following settings to configure the module' mod='ebay'}</strong>
-                    		<br />{if in_array('registration', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 1) {l s='Register the module on eBay' mod='ebay'}
-                    		<br />{if in_array('allowurlfopen', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 2) {l s='Allow url fopen' mod='ebay'}
-                    		<br />{if in_array('curl', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 3) {l s='Enable cURL' mod='ebay'}
-                    		<br />{if in_array('SellerBusinessType', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 4) {l s='Please register an eBay business seller account to configure the application' mod='ebay'}
-                    	{/if}
+                    <legend><img src="{$path|escape:'htmlall':'UTF-8'}logo.gif" alt="" />{l s='eBay Module Status' mod='ebay'}</legend>
+                    <div style="float: left">
+                        {if empty($alert)}
+                            <p id="ebay-no-profile">{l s='You don\'t have any profile setup yet' mod='ebay'}</p>
+                            {if $is_version_one_dot_five}
+                                {if $is_version_one_dot_five_dot_one}
+                                    <br/><img src="../modules/ebay/views/img/warn.png" /><strong>{l s='You\'re using version 1.5.1 of PrestaShop. We invite you to upgrade to version 1.5.2  so you can use the eBay module properly.' mod='ebay'}</strong>
+                                    <br/><strong>{l s='Please synchronize your eBay sales in your Prestashop front office' mod='ebay'}</strong>
+                                {/if}
+                            {/if}
+                        {else}
+                            <img src="../modules/ebay/views/img/warn.png" /><strong>{l s='Please complete the following settings to configure the module' mod='ebay'}</strong>
+                            <br />{if in_array('registration', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 1) {l s='Register the module on eBay' mod='ebay'}
+                            <br />{if in_array('allowurlfopen', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 2) {l s='Allow url fopen' mod='ebay'}
+                            <br />{if in_array('curl', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 3) {l s='Enable cURL' mod='ebay'}
+                            <br />{if in_array('SellerBusinessType', $alert)}<img src="../modules/ebay/views/img/warn.png" />{else}<img src="../modules/ebay/views/img/valid.png" />{/if} 4) {l s='Please register an eBay business seller account to configure the application' mod='ebay'}
+                        {/if}
                     </div>
                 {else}
-                    	<legend>{l s='eBay Profiles' mod='ebay'}</legend>
+                        <legend>{l s='eBay Profiles' mod='ebay'}</legend>
                         {if $profiles && count($profiles)}
                             <table class="table tableDnD" cellpadding="0" cellspacing="0">
-                        		<thead>
-                        			<tr class="nodrag nodrop">
+                                <thead>
+                                    <tr class="nodrag nodrop">
                                         <th>#</th>
                                         <th>{l s='eBay User Id' mod='ebay'}</th>
                                         <th>{l s='eBay Site' mod='ebay'}</th>
@@ -151,7 +151,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                        			{foreach from=$profiles item=profile}            
+                                    {foreach from=$profiles item=profile}            
                                         <tr onclick="document.getElementById('ebay_profile_form_{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}').submit();" style="cursor:pointer{if $current_profile->id == $profile.id_ebay_profile};font-weight:bold{/if}">
                                                 <td><form id="ebay_profile_form_{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}" method="post"><input type="hidden" name="ebay_profile" value="{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}" /><input type="hidden" name="action" value="logged" /></form>{$profile.id_ebay_profile|escape:'htmlall':'UTF-8'}</td>                                                
                                             <td>{$profile.ebay_user_identifier|escape:'htmlall':'UTF-8'}</td>

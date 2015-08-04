@@ -726,7 +726,11 @@ class EbayOrder
 
 		foreach ($transactions as $transaction)
 		{
+			$handle = fopen(dirname(__FILE__) . '/totolog.txt', 'a+');
+			fwrite($handle, print_r($transaction, true));
+			fclose($handle);
 			$id_product = 0;
+
 			$id_product_attribute = 0;
 			$id_ebay_profile = 0;
 			$quantity = (string)$transaction->QuantityPurchased;
@@ -755,6 +759,7 @@ class EbayOrder
 					'price' => (string)$transaction->TransactionPrice);
 			else
 			{
+				$product_has_find = false;
 				$reference = $this->_getReference($transaction);
 
 				if (!empty($reference))
@@ -763,27 +768,42 @@ class EbayOrder
 						FROM `'._DB_PREFIX_.'product`
 						WHERE `reference` = \''.pSQL($reference).'\'');
 
-					if ((int)$id_product)
+					if ((int)$id_product) {
 						$products[] = array(
 							'id_product' => $id_product,
 							'id_product_attribute' => 0,
 							'id_ebay_profile' => 0,
 							'quantity' => $quantity,
 							'price' => (string)$transaction->TransactionPrice);
+						$product_has_find = true;
+					}
 					else
 					{
-						$row = Db::getInstance()->getValue('SELECT `id_product`, `id_product_attribute`
+						$row = Db::getInstance()->getRow('SELECT `id_product`, `id_product_attribute`
 							FROM `'._DB_PREFIX_.'product_attribute`
 							WHERE `reference` = \''.pSQL($reference).'\'');
 
-						if ((int)$row['id_product'])
+						if ((int)$row['id_product']){
 							$products[] = array(
 								'id_product' => (int)$row['id_product'],
 								'id_product_attribute' => (int)$row['id_product_attribute'],
 								'id_ebay_profile' => 0,
 								'quantity' => $quantity,
 								'price' => (string)$transaction->TransactionPrice);
+							$product_has_find = true;
+						}
 					}
+				}
+
+				if (!$product_has_find && false)
+				{
+					if ($p = EbayProduct::getProductsIdFromItemId('test'))
+						$products[] = array(
+							'id_product' => $p['id_product'],
+							'id_product_attribute' => $p['id_product_attribute'],
+							'id_ebay_profile' => 0,
+							'quantity' => $quantity,
+							'price' => (string)$transaction->TransactionPrice);
 				}
 			}
 		}
