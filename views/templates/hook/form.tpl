@@ -136,7 +136,7 @@
                         {/if}
                     </div>
                 {else}
-                        <legend><img src="{$path|escape:'htmlall':'UTF-8'}logo.gif" alt="" />{l s='eBay Profiles' mod='ebay'}</legend>
+                        <legend><img src="{$_path|escape:'htmlall':'UTF-8'}logo.gif" alt="" />{l s='eBay Profiles' mod='ebay'}</legend>
                         {if $profiles && count($profiles)}
                             <table class="table tableDnD" cellpadding="0" cellspacing="0">
                                 <thead>
