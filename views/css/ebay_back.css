@@ -973,3 +973,15 @@ margin-bottom: 3px;
 #ebay-register-right-col, #ebay-register-left-col{
 	float: left;
 }
+
+
+
+
+/*SYNCHRONIZATION > TAB 1*/
+.box_sync_ajax{
+	width: 100%;
+	min-height: 120px;
+	line-height: 120px;
+	background: #ebedf4;
+	margin-bottom: 18px;
+}

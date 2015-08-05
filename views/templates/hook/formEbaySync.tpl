@@ -94,7 +94,7 @@
 		$("#button_ebay_sync1").css("background-color", "#D5D5D5");
 		$("#button_ebay_sync2").attr("disabled", "true");
 		$("#button_ebay_sync2").css("background-color", "#D5D5D5");
-		$("#resultSync").html("<img src=\"../modules/ebay/views/img/loading-small.gif\" border=\"0\" />");
+		$("#resultSync").html("<img src=\"../modules/ebay/views/img/ajax-loader-small.gif\" border=\"0\" />");
 		eBaySyncProduct(option);
 	}
 

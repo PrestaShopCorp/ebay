@@ -1715,7 +1715,7 @@ class Ebay extends Module
             // we cheat a bit to display a consistent number of products done
             $nb_products_done = min($nb_products - $nb_products_less + 1, $nb_products);
 
-            echo 'KO|<br /><br /> <img src="../modules/ebay/views/img/loading-small.gif" border="0" /> '.$this->l('Products').' : '.$nb_products_done.' / '.$nb_products.'<br /><br />';
+            echo 'KO|<div class="box_sync_ajax"><img src="'.$this->getPath().'/views/img/ajax-loader-small.gif" border="0" style="width:32px;height:32px;vertical-align:middle" /> '.$this->l('Products').' : '.$nb_products_done.' / '.$nb_products.'</div>';
         }
         else
         {
