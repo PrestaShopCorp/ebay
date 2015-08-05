@@ -1428,6 +1428,7 @@ class Ebay extends Module
         $ebay = new EbayRequest();
 
         $smarty_vars = array();
+        $smarty_vars['show_send_stats'] = Configuration::get('EBAY_SEND_STATS') === false ? true : false;
 
         if (Tools::getValue('relogin'))
         {

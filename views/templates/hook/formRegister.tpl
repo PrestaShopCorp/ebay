@@ -169,7 +169,7 @@
 
                       
 
-                        
+                        {if isset($show_send_stats) && $show_send_stats}
                             <tr> 
                                 <td>
                                    <label>{l s='Help us improve the eBay Module by sending anonymous usage stats:' mod='ebay'}</label>
@@ -181,7 +181,7 @@
                                     </select>
                                 </td> 
                             </tr> 
-                        
+                        {/if}
                         <!-- Button link -->
                         <tr> 
                             <td colspan="2">
