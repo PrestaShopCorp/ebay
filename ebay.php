@@ -82,7 +82,8 @@ $classes_to_load = array(
     'tabs/EbayOrphanListingsTab',
     'EbayAlert',
     'EbayOrderErrors',
-    'EbayDbValidator'      
+    'EbayDbValidator',
+    'EbayKb'      
 );
 
 foreach ($classes_to_load as $classname)
@@ -1751,8 +1752,6 @@ class Ebay extends Module
                     $message .= $this->l('A later version of the module will allow you to specify item conditions by category');
                     echo $this->displayError($message);
                 }
-
-                echo '<style>#content .alert { text-align: left; width: 875px; }</style>';
                 @unlink(dirname(__FILE__).'/log/syncError.php');
                 
             } else {

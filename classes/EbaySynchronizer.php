@@ -148,6 +148,8 @@ class EbaySynchronizer
 
 			// Export to eBay
 			$ebay = EbaySynchronizer::_exportProductToEbay($product, $data, $p['id_ebay_profile'], $ebay_category, $ebay, $date, $context, $id_lang);
+			
+			$handle = fopen(dirname(__FILE__) . '/log-error.txt', 'w');
 
 			if (!empty($ebay->error)) // Check for errors
             {
@@ -344,7 +346,7 @@ class EbaySynchronizer
 	private static function _updateTabError($ebay_error, $name)
 	{
 		$error_key = md5($ebay_error);
-		$tab_error[$error_key]['msg'] = '<hr/>'.$ebay_error;
+		$tab_error[$error_key]['msg'] = '<hr/>'.$ebay_error->error;
 
 		if (!isset($tab_error[$error_key]['products']))
 				$tab_error[$error_key]['products'] = array();

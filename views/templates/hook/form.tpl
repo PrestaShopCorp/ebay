@@ -136,8 +136,8 @@
                         {/if}
                     </div>
                 {else}
-                        <legend><img src="{$_path|escape:'htmlall':'UTF-8'}logo.gif" alt="" />{l s='eBay Profiles' mod='ebay'}</legend>
                         {if $profiles && count($profiles)}
+                         <legend><img src="{if isset($_path) && !empty($_path)}{$_path|escape:'htmlall':'UTF-8'}{elseif isset($path)}{$path|escape:'htmlall':'UTF-8'}{/if}logo.gif" alt="" />{l s='eBay Profiles' mod='ebay'}</legend>
                             <table class="table tableDnD" cellpadding="0" cellspacing="0">
                                 <thead>
                                     <tr class="nodrag nodrop">

@@ -3,3 +3,4 @@ log/request.php
 orders.php
 request.txt
 classes/log_database.txt
+classes/log-error.txt

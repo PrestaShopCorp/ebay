@@ -985,3 +985,5 @@ margin-bottom: 3px;
 	background: #ebedf4;
 	margin-bottom: 18px;
 }
+
+#content .alert { text-align: left; width: 100%; }

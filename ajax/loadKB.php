@@ -28,8 +28,8 @@ if (!defined('TMP_DS'))
 
 $base_path = dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS;
 
-if (array_key_exists('admin_path', $_GET) && !empty($_GET['admin_path']) && is_dir($base_path.$_GET['admin_path'].TMP_DS))
-    define('_PS_ADMIN_DIR_', $base_path.$_GET['admin_path'].TMP_DS);
+if (array_key_exists('admin_path', $_POST) && !empty($_POST['admin_path']) && is_dir($base_path.$_POST['admin_path'].TMP_DS))
+    define('_PS_ADMIN_DIR_', $base_path.$_POST['admin_path'].TMP_DS);
 
 require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php');
 

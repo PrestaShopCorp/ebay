@@ -144,7 +144,6 @@
 			data: {errorcode: $( that ).attr('data-errorcode'), lang: $( that ).attr('data-lang'), token: ebay_token, admin_path: "{/literal}{$admin_path|escape:'urlencode'}{literal}"},
 			success: function(data)
 			{
-
 				if (data != 'false' && data != 'error')
 				{
 					$( that ).addClass('active');
