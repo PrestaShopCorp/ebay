@@ -1222,7 +1222,11 @@ class Ebay extends Module
 
     private function _displayForm()
     {
-        
+        // Save eBay Stats
+        if (Tools::getIsset('stats'))
+            Configuration::updateValue('EBAY_SEND_STATS', Tools::getValue('stats') ? 1 : 0, false, 0, 0);
+        // End Save eBay Stats
+         
         $alerts = $this->_getAlerts();
 
         $stream_context = @stream_context_create(array('http' => array('method' => 'GET', 'timeout' => 2)));
@@ -1340,9 +1344,7 @@ class Ebay extends Module
         else
             $is_all_shops = false;
         
-        if ($ebay_send_stats === false)
-            $template = $this->_displayFormStats();
-        elseif (!($this->ebay_profile && $this->ebay_profile->getToken()) || $add_profile || Tools::isSubmit('ebayRegisterButton'))
+        if (!($this->ebay_profile && $this->ebay_profile->getToken()) || $add_profile || Tools::isSubmit('ebayRegisterButton'))
             $template = $this->_displayFormRegister();
         else
             $template = $this->_displayFormConfig();            

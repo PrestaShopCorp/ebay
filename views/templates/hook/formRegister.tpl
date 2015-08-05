@@ -107,68 +107,102 @@
 	</script>
 	<form action="{$action_url|escape:'urlencode'}" method="post" id="ebay_register_form">
         <div id="ebay-register-content">
+            <div id="title_register">
+                <strong>{l s='I have a professional eBay account:' mod='ebay'}</strong>
+                <strong>{l s='New to eBay?' mod='ebay'}</strong>
+            </div>
             <div id="ebay-register-left-col">
                 <div id="ebay-register-left-col-content">
-            		<strong id="ebay-register-title">{l s='Link your eBay account to the eBay add-on' mod='ebay'}</strong>
-                    <p id="ebay-register-subtitle"><strong>{l s='I have a professional eBay account:' mod='ebay'}</strong></p>
-                
-                    <div class="ebay-register-p">               
-                		<label class="ebay-label" for="eBayUsername">{l s='eBay User ID' mod='ebay'}</label>
-                        {if $ebay_user_identifiers|count}
-                            <select id="eBayUsernamesList" name="eBayUsernamesList" class="ebay_select ebay-float-right">
-                                {foreach from=$ebay_user_identifiers item='profile'}
-                                    <option value="{$profile.identifier|escape:'htmlall':'UTF-8'}">{$profile.identifier|escape:'htmlall':'UTF-8'}</option>
-                                {/foreach}
-                                <option value="-1">New eBay user</option>
-                            </select>
-                			<input id="eBayUsernameInput" type="text" name="eBayUsername" value="" />
-                        {else}
-            			    <input id="eBayUsernameInput" type="text" name="eBayUsername" class="ebay-float-right" value="" />
-                        {/if}
-                        <div style="clear:both"></div>  
-                        <div class="txt-right">{l s='Please use an eBay identifier, not your email address' mod='ebay'}</div>
-                        <div style="clear:both"></div>                             
-                    </div>
-                
-                    <div class="ebay-register-p">
-                        <label class="ebay-label" for="ebay_countries">{l s='Choose ebay site you want to listen' mod='ebay'}</label>
-            			<select name="ebay_country" id="ebay_countries" class="ebay_select ebay-float-right">
-            				{if isset($ebay_countries) && $ebay_countries && sizeof($ebay_countries)}
-            					{foreach from=$ebay_countries item='country' key='key'}
-            						<option value="{$key|escape:'htmlall':'UTF-8'}" data-signin="{$country.signin|escape:'htmlall':'UTF-8'}" {if $key == $default_country} selected{/if}>{if $country.subdomain}{$country.subdomain|escape:'htmlall':'UTF-8'}.{/if}ebay.{$country.site_extension|escape:'htmlall':'UTF-8'}</option>
-            					{/foreach}
-            				{/if}
-            			</select>
-                        <div style="clear:both"></div>
-                    </div>
+                    <table id="register_table"> 
+                        <!-- Pseudo -->
+                        <tr> 
+                            <td><label class="ebay-label" for="eBayUsername">{l s='eBay User ID' mod='ebay'} :</label></td> 
+                            <td>
+                                {if $ebay_user_identifiers|count}
+                                    <select id="eBayUsernamesList" name="eBayUsernamesList" class="ebay_select ebay-float-right">
+                                        {foreach from=$ebay_user_identifiers item='profile'}
+                                            <option value="{$profile.identifier|escape:'htmlall':'UTF-8'}">{$profile.identifier|escape:'htmlall':'UTF-8'}</option>
+                                        {/foreach}
+                                        <option value="-1">New eBay user</option>
+                                    </select>
+                                    <input id="eBayUsernameInput" type="text" name="eBayUsername" value="" />
+                                {else}
+                                    <input id="eBayUsernameInput" type="text" name="eBayUsername" class="ebay-float-right" value="" />
+                                {/if}
+                            </td>
+                        </tr> 
+                        <tr class="margin-bottom"> 
+                            <td colspan="3">
+                                <div class="txt-right">{l s='Please use an eBay identifier, not your email address.' mod='ebay'}</div>
+                            </td>
+                        </tr>
 
-                    <div class="ebay-register-p">
-                        <label class="ebay-label" for="ebay_languages">{l s='Choose the language you want to list with:' mod='ebay'}</label>
-            			<select name="ebay_language" id="ebay_languages" class="ebay_select ebay-float-right">
-            				{if isset($languages) && $languages && sizeof($languages)}
-            					{foreach from=$languages item='language' key='key'}
-            						<option value="{$language.id_lang|escape:'htmlall':'UTF-8'}">{$language.name|escape:'htmlall':'UTF-8'}</option>
-            					{/foreach}
-            				{/if}
-            			</select>
-                        <div style="clear:both"></div>                        
-                    </div>
+                        <!-- Ebay Site -->
+                        <tr class="margin-bottom"> 
+                            <td><label class="ebay-label" for="ebay_countries">{l s='Choose ebay site you want to listen:' mod='ebay'}</label></td> 
+                            <td>
+                                <select name="ebay_country" id="ebay_countries" class="ebay_select ebay-float-right">
+                                    {if isset($ebay_countries) && $ebay_countries && sizeof($ebay_countries)}
+                                        {foreach from=$ebay_countries item='country' key='key'}
+                                            <option value="{$key|escape:'htmlall':'UTF-8'}" data-signin="{$country.signin|escape:'htmlall':'UTF-8'}" {if $key == $default_country} selected{/if}>{if $country.subdomain}{$country.subdomain|escape:'htmlall':'UTF-8'}.{/if}ebay.{$country.site_extension|escape:'htmlall':'UTF-8'}</option>
+                                        {/foreach}
+                                    {/if}
+                                </select>
+                            </td>
+                        </tr> 
 
-            		<div class="margin-form">
-            			<input type="submit" id="ebayRegisterButton" name="ebayRegisterButton" class="button ebay-float-right" value="{l s='Link your ebay account' mod='ebay'}" />
-            		</div>
+                        <!-- Language -->
+                        <tr class="margin-bottom"> 
+                            <td>
+                                <label class="ebay-label" for="ebay_languages">{l s='Choose the language you want to list with:' mod='ebay'}</label>
+                            </td> 
+                            <td>
+                                <select name="ebay_language" id="ebay_languages" class="ebay_select ebay-float-right">
+                                    {if isset($languages) && $languages && sizeof($languages)}
+                                        {foreach from=$languages item='language' key='key'}
+                                            <option value="{$language.id_lang|escape:'htmlall':'UTF-8'}">{$language.name|escape:'htmlall':'UTF-8'}</option>
+                                        {/foreach}
+                                    {/if}
+                                </select>
+                            </td>
+                        </tr> 
+
+                      
+
+                        
+                            <tr> 
+                                <td>
+                                   <label>{l s='Help us improve the eBay Module by sending anonymous usage stats:' mod='ebay'}</label>
+                                </td>
+                                <td>
+                                    <select name="stats" id="ebay_stats">
+                                        <option value="1">{l s='I agree' mod='ebay'}</option>
+                                        <option value="0">{l s='No thanks' mod='ebay'}</option>
+                                    </select>
+                                </td> 
+                            </tr> 
+                        
+                        <!-- Button link -->
+                        <tr> 
+                            <td colspan="2">
+                               <div class="margin-form">
+                                    <input type="submit" id="ebayRegisterButton" name="ebayRegisterButton" class="button ebay-float-right" value="{l s='Link your ebay account' mod='ebay'}" />
+                                </div>
+                            </td> 
+                        </tr> 
+                    </table>   
+
+            		
             		<div class="clear both"></div>
                 </div>
             </div>
             <div id="ebay-register-right-col">
                 <div id="ebay-register-right-col-content">
                     <div id="ebay-register-div">
-                        <a id="ebay-register-link" href="{$signin_pro_url}" class="ebay-primary primary button" target="_blank">{l s='Register' mod='ebay'}</a>
-                		<strong>{l s='New to eBay?' mod='ebay'}</strong><br />
                         {l s='Get started now, Its fast and easy.' mod='ebay'}
                     </div>
                     <p id="ebay-register-p">{l s='Once you have registered on eBay you will obtain the eBay ID required to configure the eBay add-on.' mod='ebay'}</p>
-                    
+                     <a id="ebay-register-link" href="{$signin_pro_url}" class="ebay-primary primary button" target="_blank">{l s='Register' mod='ebay'}</a>
                     <!--
             		<br /><br />
             		<br /><u><a href="{l s='http://pages.ebay.com/help/sell/businessfees.html' mod='ebay'}" target="_blank">{l s='Review the eBay business seller fees page' mod='ebay'}</a></u>

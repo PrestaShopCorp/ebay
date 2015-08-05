@@ -678,7 +678,8 @@ fieldset.new legend {
 }
 
 #ebay-register-left-col-content {
-  width: 70%;
+    padding: 1em;
+    padding-right: 3em;
 }
 
 #ebay-register-left-col p, #ebay-register-left-col label {
@@ -692,9 +693,10 @@ fieldset.new legend {
 }
 
 #ebay-register-right-col-content {
-  border-left: 1px solid #a6a6a6;
   padding: 1em;
   padding-left: 3em;
+  border-left: 1px solid #a6a6a6;
+  overflow: hidden;
 }
 
 a.ebay-primary {
@@ -717,7 +719,8 @@ a.ebay-primary {
 }
 
 #ebay-register-link {
-  float: right;
+  float: left;
+  width: 160px
 }
 
 #ebay-register-subtitle {
@@ -926,4 +929,47 @@ margin-bottom: 3px;
     background-repeat: no-repeat;
     background-position: center center;
 
+}
+
+
+/*FORM REGISTER*/
+#eBayUsernameInput, #ebay_countries, #ebay_languages, #ebayRegisterButton, #eBayUsernamesList, #ebay_stats{
+	width: 160px;
+	box-sizing:border-box;
+	color: #000;
+}
+
+#register_table{
+	width:100%;
+	border-collapse:collapse;
+}
+
+#register_table tbody tr td:nth-child(2){
+	width:160px;
+}
+#register_table tbody tr td:nth-child(1) label{
+	width: 95%;
+	display: block;
+	text-align: right;
+}
+#ebay-register-left-col .margin-bottom td{
+	padding-bottom: 12px;
+}
+#register_table caption p strong{
+	float: left;
+}
+#title_register{
+	width: 100%;
+	overflow: hidden;
+	padding-bottom: 20px;
+}
+#title_register strong{
+	display: block;
+	width: 48%;
+	padding: 0 0 0 2%;
+	margin:0;
+	float: left;
+}
+#ebay-register-right-col, #ebay-register-left-col{
+	float: left;
 }

@@ -55,7 +55,7 @@
 
 {/literal}
 
-{if $show_welcome || $show_welcome_stats}
+{if $show_welcome}
 <div class="ebay-welcome">
     <img id="ebay-logo" src="{$path|escape:'htmlall':'UTF-8'}views/img/ebay.png" />
     <div id="ebay-welcome-top" class="ebay-boxes-2-col-table">
@@ -118,7 +118,7 @@
             <fieldset class="new" style="min-height: 165px">
                 {if $show_welcome}
                     <legend><img src="{$path|escape:'htmlall':'UTF-8'}logo.gif" alt="" />{l s='eBay Module Status' mod='ebay'}</legend>
-                    <div style="float: left">
+                    <div>
                         {if empty($alert)}
                             <p id="ebay-no-profile">{l s='You don\'t have any profile setup yet' mod='ebay'}</p>
                             {if $is_version_one_dot_five}
@@ -136,7 +136,7 @@
                         {/if}
                     </div>
                 {else}
-                        <legend>{l s='eBay Profiles' mod='ebay'}</legend>
+                        <legend><img src="{$path|escape:'htmlall':'UTF-8'}logo.gif" alt="" />{l s='eBay Profiles' mod='ebay'}</legend>
                         {if $profiles && count($profiles)}
                             <table class="table tableDnD" cellpadding="0" cellspacing="0">
                                 <thead>
@@ -169,7 +169,7 @@
                             <br><br>
                             <a href="{$add_profile_url|escape:'urlencode'}"><img src="../img/admin/add.gif">{l s='Add a New Profile' mod='ebay'}</a>
                         {else}
-                            <legend>{l s='Status of your eBay Add-on' mod='ebay'}</legend>
+                            <legend><img src="{$path|escape:'htmlall':'UTF-8'}logo.gif" alt="" />{l s='Status of your eBay Add-on' mod='ebay'}</legend>
                             <p id="ebay-no-profile">{l s='You don\'t have any profile setup yet' mod='ebay'}</p>
                         {/if}
                     {/if}
