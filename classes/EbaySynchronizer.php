@@ -537,8 +537,11 @@ class EbaySynchronizer
 
 	private static function _getPrices($product_id, $percent, $ebay_profile)
 	{
-		$price = Product::getPriceStatic((int)$product_id, true);
-		$price_original = Product::getPriceStatic((int)$product_id, true, null, 6, null, false, false);
+		$context = clone Context::getContext();
+		$context->shop = new Shop($ebay_profile->id_shop);
+
+		$price = Product::getPriceStatic((int)$product_id, true, null, 6, null, false, true, 1, false, null, null, null, null, true, true, $context);
+		$price_original = Product::getPriceStatic((int)$product_id, true, null, 6, null, false, false, 1, false, null, null, null, null, true, true, $context);
         
         // convert price to destination currency
         $currency = new Currency($ebay_profile->getConfiguration('EBAY_CURRENCY'));
