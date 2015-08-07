@@ -100,7 +100,7 @@ foreach ($res as &$row) {
     
     if (isset($row['id_category_default']) && $row['id_category_default']) {
         foreach ($category_list as $cat) {
-            if (isset($cat['id_category']) && () $cat['id_category'] == $row['id_category_default'])) {
+            if (isset($cat['id_category']) && ($cat['id_category'] == $row['id_category_default'])) {
                 $row['category_full_name'] = $cat['name'];
                 break;
             }

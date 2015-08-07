@@ -261,20 +261,37 @@ class Ebay extends Module
     {
         // Install SQL
         include(dirname(__FILE__).'/sql/sql-install.php');
+
         foreach ($sql as $s)
             if (!Db::getInstance()->execute($s))
                 return false;
 
         // Install Module
-        if (!parent::install()
-            || !$this->registerHook('addProduct')
-            || !$this->registerHook('updateProduct') 
-            || !$this->registerHook('deleteProduct')
-            || !$this->registerHook('newOrder')
-            || !$this->registerHook('backOfficeTop')
-            || !$this->registerHook('header')
-            || !$this->registerHook('updateCarrier')
-            || !$this->registerHook('actionCarrierUpdate'))
+        if (!parent::install())
+            return false;
+
+        if (!$this->registerHook('addProduct'))
+            return false;
+
+        if (!$this->registerHook('updateProduct'))
+            return false;
+
+        if (!$this->registerHook('deleteProduct'))
+            return false;
+
+        if (!$this->registerHook('newOrder'))
+            return false;
+
+        if (!$this->registerHook('backOfficeTop'))
+            return false;
+
+        if (!$this->registerHook('header'))
+            return false;
+
+        if (!$this->registerHook('updateCarrier'))
+            return false;
+
+        if (!$this->registerHook('updateCarrier'))
             return false;
 
         $hook_update_quantity = version_compare(_PS_VERSION_, '1.5', '>') ? 'actionUpdateQuantity' : 'updateQuantity';
@@ -424,8 +441,7 @@ class Ebay extends Module
             || !$this->unregisterHook('newOrder')
             || !$this->unregisterHook('backOfficeTop')
             || !$this->unregisterHook('header')
-            || !$this->unregisterHook('updateCarrier')
-            || !$this->unregisterHook('actionCarrierUpdate'))
+            || !$this->unregisterHook('updateCarrier'))
             return false;
 
         // Clean Cookie

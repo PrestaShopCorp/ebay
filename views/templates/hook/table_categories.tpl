@@ -22,20 +22,18 @@
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-
-{if $categoryList === false || sizeof($categoryList) === 0}
+{if $categoryList === false || $categoryList|count === 0}
 	<tr>
 		<td colspan="3" class="center">{$noCatFound|escape:'htmlall':'UTF-8'}</td>
 	</tr>
 {else}
-
     {if $nbCategories > 20}
         <div id="cat-pagination" style="display:none">
         	<p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nbCategories / 20)|round:"0") mod='ebay'}</p>
         	<ul id="pagination" class="pagination">
         		<li class="prev"><</li>
-        		{math equation="floor(x/20)" x=$nbCategories assign=nb_pages} 
-        		{for $i=1 to ($nb_pages)}
+        		{assign var="nbcat" value=($nbCategories / 20)|round:"0"}
+        		{for $i=1 to $nbcat}
         			<li{if $i == $p} class="current"{/if}>{$i}</li>
         		{/for}
         		<li class="next">></li>

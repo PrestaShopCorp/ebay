@@ -54,9 +54,10 @@
 
 </div>
 <br />
-
 {if $nb_categorie > 0}
-	<p id="textStoresPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nb_categorie / 20)|round:"0") mod='ebay'}</p>
+	{assign var="nbcat" value=($nb_categorie / 20)|round:"0"}
+	{if $nbcat > 1}
+	<p id="textStoresPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=$nbcat mod='ebay'}</p>
 	<ul id="stores_pagination" class="pagination">
 		<li class="prev"><</li>
 		{for $i=1 to ($nb_categorie / 20)|round:"0"}
@@ -64,6 +65,7 @@
 		{/for}
 		<li class="next">></li>
 	</ul>
+	{/if}
 {/if}
 
 <form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall':'UTF-8'}{else}tab={$tab|escape:'htmlall':'UTF-8'}{/if}&configure={$configure|escape:'htmlall':'UTF-8'}&token={$token|escape:'htmlall':'UTF-8'}&tab_module={$tab_module|escape:'htmlall':'UTF-8'}&module_name={$module_name|escape:'htmlall':'UTF-8'}&id_tab=10&section=store_category" method="post" class="form" id="configFormStoreCategories"><table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">

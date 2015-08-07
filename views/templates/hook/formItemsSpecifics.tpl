@@ -98,7 +98,9 @@
 		
 	var possible_features = new Array();
 	{foreach from=$possible_features item=feature}
-		possible_features[{$feature.id_feature|escape:'htmlall':'UTF-8'}] = "{$feature.name|escape:'htmlall':'UTF-8'}";
+		{if isset($feature.id_feature) && $feature.id_feature != ""}
+			possible_features[{$feature.id_feature|escape:'htmlall':'UTF-8'}] = "{$feature.name|escape:'htmlall':'UTF-8'}";
+		{/if}
 	{/foreach}
 
 	
