@@ -35,6 +35,7 @@ class EbayKb extends ObjectModel
 	
 	private $url;
 
+
 	static public $definition = array(
 		'table' => 'ebay_kb',
 		'primary' => 'id_ebay_kb', 
@@ -49,8 +50,29 @@ class EbayKb extends ObjectModel
 		),
 	);
 	
+	//PS 1.4
+	protected $table;
+	protected $identifier;
+	protected $fieldsRequired = array();
+	protected $fieldsValidate = array();
+	protected $fieldsValidateLang = array();
+	
 	public function __construct($id = null)
 	{
+		if (version_compare(_PS_VERSION_, 1.5, '<'))
+		{
+			$this->table      = self::$definition['table'];
+			$this->identifier = self::$definition['primary'];
+
+			foreach (self::$definition['fields'] as $key => $field)
+			{
+				if (isset($field['required']) && $field['required'])
+					$this->fieldsRequired[] = $key;
+				
+				$this->fieldsValidate[$key] = $field['validate'];
+			}
+		}
+
 		$module = Module::getInstanceByName($this->module);
 
 		$this->module_version = $module->version;
