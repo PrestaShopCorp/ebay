@@ -316,7 +316,11 @@ class Ebay extends Module
         $this->setConfiguration('EBAY_LOGS_DAYS', 30);
 
         $this->verifyAndFixDataBaseFor1_7();
-
+        
+        // Ebay 1.12.0
+        EbayOrderErrors::install();
+        EbayKb::install();
+        
         return true;
     }
 
@@ -523,8 +527,8 @@ class Ebay extends Module
                 upgrade_module_1_11($this);
             }
             EbayOrderErrors::install();
+            EbayKb::install();
             $this->registerHook('updateCarrier');
-            $this->registerHook('actionCarrierUpdate');
         }
     }
 

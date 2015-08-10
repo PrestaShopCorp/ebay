@@ -142,12 +142,14 @@
 			type: "POST",
 			url: '{/literal}{$load_kb_path}{literal}',
 			data: {errorcode: $( that ).attr('data-errorcode'), lang: $( that ).attr('data-lang'), token: ebay_token, admin_path: "{/literal}{$admin_path|escape:'urlencode'}{literal}"},
+			dataType: "json",
 			success: function(data)
 			{
-				if (data != 'false' && data != 'error')
+				console.log(data.result);
+				if (data.result != 'error')
 				{
 					$( that ).addClass('active');
-					$( that ).attr('href', data);
+					$( that ).attr('href', data.result);
 					$( that ).attr('target', '_blank');
 				}
 				var next = item + 1;
@@ -239,4 +241,3 @@
 		</div>
 	</fieldset>
 </form>
-				

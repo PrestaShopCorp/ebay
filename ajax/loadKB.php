@@ -30,6 +30,8 @@ $base_path = dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS;
 
 if (array_key_exists('admin_path', $_POST) && !empty($_POST['admin_path']) && is_dir($base_path.$_POST['admin_path'].TMP_DS))
     define('_PS_ADMIN_DIR_', $base_path.$_POST['admin_path'].TMP_DS);
+else
+    die('ERROR : INVALID DATA');
 
 require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php');
 
@@ -65,6 +67,9 @@ if (Validate::isString($name_module) && Module::isInstalled($name_module))
     {
         $kb = new $module_kb();
         $kb->setErrorCode(Tools::getValue('errorcode'));
-        echo $kb->getLink();
+        if ($result = $kb->getLink())
+            die(Tools::jsonEncode(array('result' => $result, 'code' => 'kb-202')));
+        else
+            die(Tools::jsonEncode(array('result' => 'error', 'code' => 'kb-001', 'more' => 'Aucun lien trouvé')));
     }
 }
