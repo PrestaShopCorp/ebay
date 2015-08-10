@@ -29,7 +29,7 @@ class EbayKb extends ObjectModel
 
 	public  $error_code, $ps_version, $language, $module_version, $link, $date_add, $date_upd;
 
-	private $domain = 'http://localhost:8000/';
+	private $domain = 'http://localhost/kb/public/';
 
 	private $module = 'ebay';
 	
