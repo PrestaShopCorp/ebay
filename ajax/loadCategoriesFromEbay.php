@@ -37,8 +37,7 @@ if (version_compare(_PS_VERSION_, '1.5', '>'))
 else
     require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php');
 
-if (
-    !Tools::getValue('token')
+if (!Tools::getValue('token')
     || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
     die('ERROR : INVALID TOKEN');
 

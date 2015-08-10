@@ -24,12 +24,25 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-include(dirname(__FILE__).'/../../../config/config.inc.php');
+if (!defined('TMP_DS'))
+    define('TMP_DS', DIRECTORY_SEPARATOR);
+
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
 
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
     die('ERROR: Invalid Token');
 
-include(dirname(__FILE__).'/../classes/EbayProfile.php');
+require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php');
 
+if (Module::isInstalled('ebay'))
+{   
+    $ebay = Module::getInstanceByName('ebay');
 
-echo EbayProfile::deleteById((int)Tools::getValue('profile'));
+    if (version_compare(_PS_VERSION_,'1.5','<'))
+        $enable = $ebay->active;
+    else
+        $enable = Module::isEnabled('ebay');
+
+    if($enable)
+       die(EbayProfile::deleteById((int)Tools::getValue('profile')));
+}

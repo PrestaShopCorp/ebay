@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -24,9 +24,11 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-include_once dirname(__FILE__).'/../../../config/config.inc.php';
-include_once dirname(__FILE__).'/../../../init.php';
-include_once dirname(__FILE__).'/../ebay.php';
+if (!defined('TMP_DS'))
+    define('TMP_DS', DIRECTORY_SEPARATOR);
+
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
+require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php');
 
 $ebay = new Ebay();
 

@@ -24,7 +24,10 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-include(dirname(__FILE__).'/../../../config/config.inc.php');
+if (!defined('TMP_DS'))
+    define('TMP_DS', DIRECTORY_SEPARATOR);
+
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
 
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
     die('ERROR: Invalid Token');
