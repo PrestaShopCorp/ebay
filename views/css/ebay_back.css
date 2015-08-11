@@ -986,4 +986,8 @@ margin-bottom: 3px;
 	margin-bottom: 18px;
 }
 
-#content .alert { text-align: left; width: 100%; }
+#content .alert { text-align: left; width: 100%; box-sizing: border-box;}
+
+textarea[name='ebay_returns_description']{
+	width:100%;
+}

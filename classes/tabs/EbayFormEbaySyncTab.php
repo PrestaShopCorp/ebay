@@ -43,9 +43,8 @@ class EbayFormEbaySyncTab extends EbayTab
 					SELECT COUNT(p.id_product) AS nb
 						FROM  `'._DB_PREFIX_.'product` AS p
 						INNER JOIN  `'._DB_PREFIX_.'stock_available` AS s 
-						ON p.id_product = s.id_product';
-			if (version_compare(_PS_VERSION_, '1.5', '>'))
-				$sql .= ' INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps 
+						ON p.id_product = s.id_product
+						INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps 
 						ON p.id_product = ps.id_product 
 						AND ps.id_shop = '.(int)$this->ebay_profile->id_shop;
 			$sql .= ' WHERE s.`quantity` > 0
@@ -57,7 +56,7 @@ class EbayFormEbaySyncTab extends EbayTab
 							WHERE  `id_ebay_category` > 0
 							AND `id_ebay_profile` = '.(int)$this->ebay_profile->id.'
 						)
-						'.$this->ebay->addSqlRestrictionOnLang('s').'
+						'.StockAvailable::addSqlShopRestriction(null, null, 's').'
 						AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($this->ebay_profile->id).')
 						GROUP BY p.id_product
 				)TableReponse';
@@ -68,9 +67,8 @@ class EbayFormEbaySyncTab extends EbayTab
 					SELECT COUNT( p.id_product ) AS nb
 						FROM  `'._DB_PREFIX_.'product` AS p
 						INNER JOIN  `'._DB_PREFIX_.'stock_available` AS s 
-						ON p.id_product = s.id_product';
-			if (version_compare(_PS_VERSION_, '1.5', '>'))
-				$sql .= ' INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
+						ON p.id_product = s.id_product
+						INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
 						ON p.id_product = ps.id_product 
 						AND ps.id_shop = '.(int)$this->ebay_profile->id_shop;
 			$sql .= ' WHERE s.`quantity` > 0
@@ -82,7 +80,7 @@ class EbayFormEbaySyncTab extends EbayTab
 							WHERE  `id_ebay_category` > 0 
 							AND `sync` = 1
 							AND `id_ebay_profile` = '.(int)$this->ebay_profile->id.'
-						)'.$this->ebay->addSqlRestrictionOnLang('s').'
+						)'.StockAvailable::addSqlShopRestriction(null, null, 's').'
 						AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($this->ebay_profile->id).')
 						GROUP BY p.id_product
 				)TableReponse';

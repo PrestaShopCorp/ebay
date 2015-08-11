@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -23,7 +23,7 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
- 
+
 class EbayKb extends ObjectModel
 {
 
@@ -173,18 +173,29 @@ class EbayKb extends ObjectModel
 
 			if ($interval->format('%a') > 4)
 			{
-				if($this->call())
-					return $this->link;
-				else
-					return false;
+				if ($this->call()){
+					if ($this->link == 'false' || $this->link === false)
+						return false;
+					else
+						return $this->link;
+				}
+				return false;
 			}
-			else
-				return $this->link;
+			else{
+				if ($this->link == 'false' || $this->link === false)
+					return false;
+				else
+					return $this->link;
+			}
 		}
 		else
 		{
-			if ($this->call())
-				return $this->link;
+			if ($this->call()){
+				if ($this->link == 'false' || $this->link === false)
+					return false;
+				else
+					return $this->link;
+			}
 			return false;
 		}
 	}
