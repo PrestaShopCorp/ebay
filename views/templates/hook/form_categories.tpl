@@ -160,13 +160,13 @@
 		'Settings updated'		 : "{l s='Settings updated' mod='ebay'}",
 		'Unselect products'		: "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}",
 		'Unselect products clicked' : "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}",
-        'Products' : "{l s='Products'}",
-        'Stock' : "{l s='Stock'}",
-        'Finish' : "{l s='Finish'}",
-        'An error has occurred' : "{l s='An error has occurred'}",
-        'En attente' : "{l s='En attente'}",
-        'categories loaded success' : "{l s='categories loaded successfully.'}",
-        'Download subcategories of' : "{l s='Download subcategories of'}",
+        'Products' : "{l s='Products' mod='ebay'}",
+        'Stock' : "{l s='Stock' mod='ebay'}",
+        'Finish' : "{l s='Finish' mod='ebay'}",
+        'An error has occurred' : "{l s='An error has occurred' mod='ebay'}",
+        'En attente' : "{l s='En attente' mod='ebay'}",
+        'categories loaded success' : "{l s='categories loaded successfully.' mod='ebay'}",
+        'Download subcategories of' : "{l s='Download subcategories of' mod='ebay'}",
 	{rdelim};
     </script>
 <script type="text/javascript" src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/js/categories.js?date={$date|escape:'htmlall':'UTF-8'}"></script>

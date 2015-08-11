@@ -74,10 +74,10 @@
 	var ebay_token = "{$ebay_token|escape:'htmlall':'UTF-8'}";
 	
 	var l = {ldelim}
-		'Attributes'				 : "{l s="Attributes" mod='ebay'}",
-		'Features'  				 : "{l s="Features" mod='ebay'}",
-		'eBay Specifications': "{l s="eBay Specifications" mod='ebay'}",
-		'Brand'							 : "{l s="Brand" mod='ebay'}"
+		'Attributes'				 : "{l s='Attributes' mod='ebay'}",
+		'Features'  				 : "{l s='Features' mod='ebay'}",
+		'eBay Specifications': "{l s='eBay Specifications' mod='ebay'}",
+		'Brand'							 : "{l s='Brand' mod='ebay'}"
 	{rdelim};
 
 	var categories_to_load = new Array();

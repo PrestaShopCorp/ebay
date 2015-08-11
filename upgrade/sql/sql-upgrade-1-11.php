@@ -22,6 +22,6 @@
  *  @copyright 2007-2015 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
- */ 
+ */
 
 $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_log` CHANGE `id_ebay_log` `id_ebay_log` INT(16) NOT NULL AUTO_INCREMENT;';

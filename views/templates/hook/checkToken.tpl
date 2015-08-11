@@ -26,13 +26,13 @@
 	function checkToken()
 	{ldelim}
 		$.ajax({ldelim}
-			url: '{$url|escape:'urlencode'}',
+			url: '{$url|escape:'htmlall':'UTF-8'}',
 			cache: false,
 			type: "POST",
 			success: function(data)
 			{ldelim}
 				if (data == 'OK')
-					window.location.href = '{$window_location_href|escape:'urlencode'}';
+					window.location.href = '{$window_location_href|escape:'htmlall':'UTF-8'}';
 				else
 					setTimeout ("checkToken()", 5000);
 			{rdelim}
@@ -40,6 +40,6 @@
 	{rdelim}
 	checkToken();
 </script>
-	<p align="center" class="warning"><a href="{$request_uri|escape:'urlencode'}&action=logged&relogin=1" target="_blank" class="button">{l s='If you\'ve been logged out of eBay and not redirected to the configuration page, please click here' mod='ebay'}</a></p>
+	<p align="center" class="warning"><a href="{$request_uri|escape:'htmlall':'UTF-8'}&action=logged&relogin=1" target="_blank" class="button">{l s='If you\'ve been logged out of eBay and not redirected to the configuration page, please click here' mod='ebay'}</a></p>
 	<p align="center"><img src="{$path|escape:'htmlall':'UTF-8'}views/img/loading.gif" alt="{l s='Loading' mod='ebay'}" title="{l s='Loading' mod='ebay'}" /></p>
 	<p align="center">{l s='Once you sign in via the new eBay window, the module will automatically finish the installation' mod='ebay'}</p>

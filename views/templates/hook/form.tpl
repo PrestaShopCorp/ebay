@@ -31,25 +31,25 @@
     {/if}
 </script>
 
-<link rel="stylesheet" href="{$css_file|escape:'urlencode'}" />
-<link rel="stylesheet" href="{$font_awesome_css_file|escape:'urlencode'}" />
+<link rel="stylesheet" href="{$css_file|escape:'htmlall':'UTF-8'}" />
+<link rel="stylesheet" href="{$font_awesome_css_file|escape:'htmlall':'UTF-8'}" />
 <script>
     var $j = $;
 </script>
 {if substr($smarty.const._PS_VERSION_, 0, 3) == "1.4" || substr($smarty.const._PS_VERSION_, 0, 5) == "1.5.2"}
-    <link rel="stylesheet" href="{$fancyboxCss|escape:'urlencode'}" />
-    <script src="{$ebayjquery|escape:'urlencode'}"></script>
-    <script src="{$noConflicts|escape:'urlencode'}"></script>
+    <link rel="stylesheet" href="{$fancyboxCss|escape:'htmlall':'UTF-8'}" />
+    <script src="{$ebayjquery|escape:'htmlall':'UTF-8'}"></script>
+    <script src="{$noConflicts|escape:'htmlall':'UTF-8'}"></script>
     <script>
         if(typeof($j172) != 'undefined')
             $j = $j172;
         else 
             $j = $;
     </script>
-    <script src="{$fancybox|escape:'urlencode'}"></script>
+    <script src="{$fancybox|escape:'htmlall':'UTF-8'}"></script>
 {/if}
-<script src="{$tooltip|escape:'urlencode'}" type="text/javascript"></script>
-<script src="{$tips202|escape:'urlencode'}" type="text/javascript"></script>
+<script src="{$tooltip|escape:'htmlall':'UTF-8'}" type="text/javascript"></script>
+<script src="{$tips202|escape:'htmlall':'UTF-8'}" type="text/javascript"></script>
 
 {literal}
 
@@ -167,7 +167,7 @@
                             <br>
                             {l s='The bold profile is your current profile. To change the profile you are currently working with, click on the desired profile' mod='ebay'}
                             <br><br>
-                            <a href="{$add_profile_url|escape:'urlencode'}"><img src="../img/admin/add.gif">{l s='Add a New Profile' mod='ebay'}</a>
+                            <a href="{$add_profile_url|escape:'htmlall':'UTF-8'}"><img src="../img/admin/add.gif">{l s='Add a New Profile' mod='ebay'}</a>
                         {else}
                             <legend><img src="{$path|escape:'htmlall':'UTF-8'}logo.gif" alt="" />{l s='Status of your eBay Add-on' mod='ebay'}</legend>
                             <p id="ebay-no-profile">{l s='You don\'t have any profile setup yet' mod='ebay'}</p>

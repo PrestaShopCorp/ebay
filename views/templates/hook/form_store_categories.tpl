@@ -39,7 +39,7 @@
         	</p>
         {else}
             <p>
-                <b><a href="http://cgi6.sandbox.ebay.fr/ws/eBayISAPI.dll?StoreCategoryMgmt" target="_blank">{l s="you don’t have any category in your shop, please refer to this page to create categories" mod='ebay'}</a></b>
+                <b><a href="http://cgi6.sandbox.ebay.fr/ws/eBayISAPI.dll?StoreCategoryMgmt" target="_blank">{l s='you don’t have any category in your shop, please refer to this page to create categories' mod='ebay'}</a></b>
             </p> 
         {/if}
     {else}
@@ -47,7 +47,7 @@
         	<p>
         		<b>{l s='Your eBay account has no eBay shop registered.' mod='ebay'} </b>
             
-        		<a href="{$ebay_store_url}" target="_blank">{l s="An eBay shop subscription isn’t required but you may benefit. Find out if an eBay Shop is right for you." mod='ebay'}</a>
+        		<a href="{$ebay_store_url}" target="_blank">{l s='An eBay shop subscription isn’t required but you may benefit. Find out if an eBay Shop is right for you.' mod='ebay'}</a>
         	</p>
         </div>    
     {/if}
