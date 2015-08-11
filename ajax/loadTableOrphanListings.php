@@ -123,10 +123,10 @@ foreach ($res as &$row) {
     }
 
     // filtering
-    if (!$row['exists']){
+    if (!$row['exists']) {
         $final_res[] = $row;
     }
-    elseif (!$row['EbayCategoryExists']){
+    elseif (!$row['EbayCategoryExists']) {
         $final_res[] = $row;
     }
     elseif ($row['isMultiSku']

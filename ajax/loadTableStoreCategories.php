@@ -23,15 +23,17 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
+
 if (!defined('TMP_DS'))
     define('TMP_DS', DIRECTORY_SEPARATOR);
 
 $base_path = dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS;
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'classes'.TMP_DS.'EbayTools.php';
 
-if (array_key_exists('admin_path', $_GET) && !empty($_GET['admin_path']) && is_dir($base_path.$_GET['admin_path'].TMP_DS))
-    define('_PS_ADMIN_DIR_', $base_path.$_GET['admin_path'].TMP_DS);
+if (EbayTools::getValue('admin_path'))
+    define('_PS_ADMIN_DIR_', realpath(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS).TMP_DS.EbayTools::getValue('admin_path').TMP_DS);
 
-require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php');
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
 
 if (version_compare(_PS_VERSION_, '1.5', '>'))
     require_once(_PS_ADMIN_DIR_.'init.php');

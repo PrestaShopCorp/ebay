@@ -24,15 +24,17 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-if (!defined('TMP_DS'))
+if (!defined('TMP_DS')) {
     define('TMP_DS', DIRECTORY_SEPARATOR);
+}
 
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
 include_once dirname(__FILE__).'/../classes/EbayCountrySpec.php';
 include_once dirname(__FILE__).'/../classes/EbayProductConfiguration.php';
 
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR : INVALID TOKEN');
+}
 
 $ebay = new Ebay();
 $ebay_country = EbayCountrySpec::getInstanceByKey(Configuration::get('EBAY_COUNTRY_DEFAULT'));
@@ -85,13 +87,12 @@ foreach ($res as $row)
         $row['name'] = Tools::safeOutput($row['name']);
         $row['stock'] = Tools::safeOutput($row['stock']);
         $row['id_product_ref'] = Tools::safeOutput($row['id_product_ref']);
-        if ($row['id_product_ref'])
+        if ($row['id_product_ref']) {
             $row['link'] = EbayProduct::getEbayUrl($row['id_product_ref'], $ebay_request->getDev());
+        }
         
         $final_res[$row['id_product_attribute']] = $row;
-
     }
     
 }
-
-echo Tools::jsonEncode($final_res);
+die(Tools::jsonEncode($final_res));
