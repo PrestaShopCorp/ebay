@@ -130,7 +130,7 @@ class EbayDbValidator
 			),
 
 		'ebay_order_log' => array(
-			'id_ebay_order_log'	=> array('type' => 'int', 		'length' => 11),
+			'id_ebay_order_log'	=> array('type' => 'int', 		'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 			'id_ebay_profile'	=> array('type' => 'int', 		'length' => 11),
 			'id_ebay_order'		=> array('type' => 'int', 		'length' => 11),
 			'id_orders'			=> array('type' => 'varchar',	'length' => 255),
@@ -142,7 +142,7 @@ class EbayDbValidator
 			),
 
 		'ebay_order_order' => array(
-		     'id_ebay_order_order'	=> array('type' => 'int', 	'length' => 11),
+		     'id_ebay_order_order'	=> array('type' => 'int', 	'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 		     'id_ebay_order'		=> array('type' => 'int', 	'length' => 11),
 		     'id_order'				=> array('type' => 'int', 	'length' => 11),
 		     'id_shop'				=> array('type' => 'int', 	'length' => 11),
@@ -150,7 +150,7 @@ class EbayDbValidator
 			),
 
 		'ebay_product' => array(
-		     'id_ebay_product'	=> array('type' => 'int', 		'length' => 11),
+		     'id_ebay_product'	=> array('type' => 'int', 		'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 		     'id_ebay_profile'	=> array('type' => 'int',		'length' => 11),
 		     'id_country'		=> array('type' => 'int', 		'length' => 11),
 		     'id_product'		=> array('type' => 'int', 		'length' => 11),
@@ -161,7 +161,7 @@ class EbayDbValidator
 			),
 
 		'ebay_product_configuration' => array(
-		     'id_ebay_product_configuration'	=> array('type' => 'int', 		'length' => 11),
+		     'id_ebay_product_configuration'	=> array('type' => 'int', 		'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 		     'id_product'						=> array('type' => 'int', 		'length' => 11),
 		     'id_ebay_profile'					=> array('type' => 'int', 		'length' => 11),
 		     'blacklisted'						=> array('type' => 'tinyint',	'length' => 1),
@@ -169,19 +169,19 @@ class EbayDbValidator
 			),
 
 		'ebay_product_image' => array(
-		     'id_ebay_product_image'	=> array('type' => 'int', 		'length' => 11),
+		     'id_ebay_product_image'	=> array('type' => 'int', 		'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 		     'ps_image_url'				=> array('type' => 'varchar',	'length' => 255),
 		     'ebay_image_url'			=> array('type' => 'varchar',	'length' => 255),
 			),
 
 		'ebay_product_modified' => array(
-		     'id_ebay_product_modified'	=> array('type' => 'int', 'length' => 11),
+		     'id_ebay_product_modified'	=> array('type' => 'int', 'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 		     'id_ebay_profile'			=> array('type' => 'int', 'length' => 11),
 		     'id_product'				=> array('type' => 'int', 'length' => 11),
 			),
 
 		'ebay_profile' => array(
-		     'id_ebay_profile'						=> array('type' => 'int', 		'length' => 11),
+		     'id_ebay_profile'						=> array('type' => 'int', 		'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 		     'id_lang'								=> array('type' => 'int', 		'length' => 11),
 		     'id_shop'								=> array('type' => 'int', 		'length' => 11),
 		     'ebay_user_identifier'					=> array('type' => 'varchar',	'length' => 255),
@@ -190,13 +190,13 @@ class EbayDbValidator
 			),
 
 		'ebay_returns_policy' => array(
-		     'id_return_policy'		=> array('type' => 'int', 		'length' => 11),
+		     'id_return_policy'		=> array('type' => 'int', 		'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 		     'value'				=> array('type' => 'varchar',	'length' => 256),
 		     'description'			=> array('type' => 'varchar',	'length' => 256),
 			),
 
 		'ebay_returns_policy_configuration' => array(
-		     'id_ebay_returns_policy_configuration'	=> array('type' => 'int', 		'length' => 11),
+		     'id_ebay_returns_policy_configuration'	=> array('type' => 'int', 		'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 		     'ebay_returns_within'					=> array('type' => 'varchar',	'length' => 255),
 		     'ebay_returns_who_pays'				=> array('type' => 'varchar',	'length' => 255),
 		     'ebay_returns_description'				=> array('type' => 'text',		'length' => null),
@@ -204,13 +204,13 @@ class EbayDbValidator
 			),
 
 		'ebay_returns_policy_description' => array(
-		     'id_return_policy'	=> array('type' => 'int', 		'length' => 11),
+		     'id_return_policy'	=> array('type' => 'int', 		'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 		     'value'			=> array('type' => 'varchar',	'length' => 256),
 		     'description'		=> array('type' => 'varchar',	'length' => 256),
 			),
 
 		'ebay_shipping' => array(
-		     'id_ebay_shipping'	=> array('type' => 'int', 		'length' => 11),
+		     'id_ebay_shipping'	=> array('type' => 'int', 		'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 		     'id_ebay_profile'	=> array('type' => 'int', 		'length' => 11),
 		     'ebay_carrier'		=> array('type' => 'varchar',	'length' => 256),
 		     'ps_carrier'		=> array('type' => 'int', 		'length' => 11),
@@ -226,13 +226,13 @@ class EbayDbValidator
 			),
 
 		'ebay_shipping_location' => array(
-		     'id_ebay_location'	=> array('type' => 'int', 		'length' => 11),
+		     'id_ebay_location'	=> array('type' => 'int', 		'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 		     'location'			=> array('type' => 'varchar',	'length' => 256),
 		     'description'		=> array('type' => 'varchar',	'length' => 256),
 			),
 
 		'ebay_shipping_service' => array(
-		     'id_shipping_service'	=> array('type' => 'int', 		'length' => 11),
+		     'id_shipping_service'	=> array('type' => 'int', 		'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 		     'description'			=> array('type' => 'varchar',	'length' => 256),
 		     'shippingService'		=> array('type' => 'varchar',	'length' => 256),
 		     'shippingServiceID'	=> array('type' => 'varchar',	'length' => 256),
@@ -242,7 +242,7 @@ class EbayDbValidator
 			),
 
 		'ebay_shipping_zone_excluded' => array(
-		     'id_ebay_zone_excluded'	=> array('type' => 'int', 		'length' => 11),
+		     'id_ebay_zone_excluded'	=> array('type' => 'int', 		'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 		     'id_ebay_profile'			=> array('type' => 'int', 		'length' => 11),
 		     'region'					=> array('type' => 'varchar',	'length' => 255),
 		     'location'					=> array('type' => 'varchar',	'length' => 255),
@@ -260,7 +260,7 @@ class EbayDbValidator
 			),
 
 		'ebay_store_category' => array(
-		     'id_ebay_store_category'	=> array('type' => 'int', 		'length' => 11),
+		     'id_ebay_store_category'	=> array('type' => 'int', 		'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 		     'id_ebay_profile'			=> array('type' => 'int', 		'length' => 11),
 		     'ebay_category_id'			=> array('type' => 'varchar',	'length' => 255),
 		     'name'						=> array('type' => 'varchar',	'length' => 255),
@@ -269,27 +269,26 @@ class EbayDbValidator
 			),
 
 		'ebay_store_category_configuration' => array(
-		     'id_ebay_store_category_configuration'	=> array('type' => 'int', 		'length' => 11),
+		     'id_ebay_store_category_configuration'	=> array('type' => 'int', 		'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 		     'id_ebay_profile'						=> array('type' => 'int', 		'length' => 11),
 		     'ebay_category_id'						=> array('type' => 'varchar',	'length' => 255),
 		     'id_category'							=> array('type' => 'int', 		'length' => 11),
 			),
 
 		'ebay_sync_history' => array(
-		     'id_ebay_sync_history'	=> array('type' => 'int', 		'length' => 11),
+		     'id_ebay_sync_history'	=> array('type' => 'int', 		'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 		     'is_manual'			=> array('type' => 'tinyint',	'length' => 1),
 		     'datetime'				=> array('type' => 'datetime',	'length' => null),
 			),
 
 		'ebay_sync_history_product' => array(
-		     'id_ebay_sync_history_product'	=> array('type' => 'int', 'length' => 11),
+		     'id_ebay_sync_history_product'	=> array('type' => 'int', 'length' => 11, 'primary'	=> true, 'auto_increment' => true),
 		     'id_ebay_sync_history'			=> array('type' => 'int', 'length' => 11),
 		     'id_product'					=> array('type' => 'int', 'length' => 11),
-		     'id_ebay_sync_history'			=> array('type' => 'int', 'length' => 11),
 			),
 
 		'ebay_user_identifier_token' => array(
-		     'ebay_user_identifier'	=> array('type' => 'varchar',	'length' => 255),
+		     'ebay_user_identifier'	=> array('type' => 'varchar',	'length' => 255, 'primary'	=> true, 'auto_increment' => true),
 		     'token'				=> array('type' => 'text',		'length' => null),
 			),
 		);

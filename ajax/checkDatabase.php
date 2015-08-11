@@ -28,23 +28,37 @@ if (!defined('TMP_DS'))
     define('TMP_DS', DIRECTORY_SEPARATOR);
 
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
-include_once dirname(__FILE__).'/../../../init.php';
-include_once dirname(__FILE__).'/../ebay.php';
+require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php');
 
-// if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
-//  die('INVALID TOKEN');
+if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+ die('INVALID TOKEN');
 
-$validator = new EbayDbValidator();
 
-if (Tools::getValue('action') == 'getNbTable')
-    echo (int)$validator->getNbTable();
-else if (Tools::getValue('action') == 'checkSpecific' && Tools::getValue('value')) {
-    if ($validator->checkSpecificTable((int)Tools::getValue('value')))
-        echo Tools::jsonEncode($validator->getLog());
+if (Module::isInstalled('ebay'))
+{   
+    $module = Module::getInstanceByName('ebay');
+
+    if (version_compare(_PS_VERSION_,'1.5','<'))
+        $enable = $module->active;
     else
-        echo Tools::jsonEncode(array( 'finish' => array(array('status' => 'stop', 'action' => 'End of checking'))));
-}
-else if (Tools::getValue('action') == 'checkAll'){
-    $validator->checkDatabase();
-    echo Tools::jsonEncode($validator->getLog());
+        $enable = Module::isEnabled('ebay');
+
+    if($enable)
+    {
+        $validator = new EbayDbValidator();
+
+		if (Tools::getValue('action') == 'getNbTable')
+		    echo (int)$validator->getNbTable();
+		else if (Tools::getValue('action') == 'checkSpecific' && Tools::getValue('value')) {
+		    if ($validator->checkSpecificTable((int)Tools::getValue('value')))
+		        echo Tools::jsonEncode($validator->getLog());
+		    else
+		        echo Tools::jsonEncode(array( 'finish' => array(array('status' => 'stop', 'action' => 'End of checking'))));
+		}
+		else if (Tools::getValue('action') == 'checkAll'){
+		    $validator->checkDatabase();
+		    echo Tools::jsonEncode($validator->getLog());
+		}
+
+    }
 }
