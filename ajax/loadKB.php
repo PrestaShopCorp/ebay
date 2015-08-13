@@ -65,7 +65,9 @@ if (Validate::isString($name_module) && Module::isInstalled($name_module))
     if($enable)
     {
         $kb = new $module_kb();
+        $kb->setLanguage(Tools::getValue('lang'));
         $kb->setErrorCode(Tools::getValue('errorcode'));
+        
         if ($result = $kb->getLink())
             die(Tools::jsonEncode(array('result' => $result, 'code' => 'kb-202')));
         else

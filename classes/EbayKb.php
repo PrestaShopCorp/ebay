@@ -29,7 +29,7 @@ class EbayKb extends ObjectModel
 
 	public  $error_code, $ps_version, $language, $module_version, $link, $date_add, $date_upd;
 
-	private $domain = 'http://localhost/kb/public/';
+	private $domain = 'http://kb-link-modules.202-ecommerce.com/';
 
 	private $module = 'ebay';
 	
@@ -81,6 +81,20 @@ class EbayKb extends ObjectModel
 
 		parent::__construct($id);
 	}
+
+	public function getFields()
+	{
+		$fields['error_code'] = $this->error_code;
+		$fields['language'] = $this->ps_version;
+		$fields['ps_version'] = $this->language;
+		$fields['module_version'] = $this->module_version;
+		$fields['link'] = $this->link;
+		$fields['date_add'] = $this->date_add;
+		$fields['date_upd'] = $this->date_upd;
+
+		return $fields;
+	}
+
 	static public function getIds()
 	{
 		$sql = "SELECT `".self::$definition['primary']."` FROM " ._DB_PREFIX_.self::$definition['table']."";
