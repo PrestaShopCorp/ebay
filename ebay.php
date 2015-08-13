@@ -403,7 +403,9 @@ class Ebay extends Module
          `'._DB_PREFIX_.'ebay_order_log`,
          `'._DB_PREFIX_.'ebay_store_category`,
          `'._DB_PREFIX_.'ebay_store_category_configuration`,
-         `'._DB_PREFIX_.'ebay_user_identifier_token`;
+         `'._DB_PREFIX_.'ebay_user_identifier_token`,
+         `'._DB_PREFIX_.'ebay_kb`,
+         `'._DB_PREFIX_.'ebay_order_errors`;
          ');
 
         $this->uninstall();
