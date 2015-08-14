@@ -103,14 +103,11 @@ class EbayAlert
 	public function sendDailyMail(){
 		$this->getAlerts();
 
-		$template_vars = array(
-			'{errors}' 	=> $this->formatErrorForEmail(),
-			'{warnings}' 	=> $this->formatWarningForEmail(),
-			'{infos}' 	=> $this->formatInfoForEmail(),
-		);
-
-		if (empty($template_vars['{errors}']) && empty($template_vars['{errors}']) && empty($template_vars['{errors}']))
+		if (!$this->formatEmail()) {
 			return;
+		}
+
+		$template_vars = array('{content}' 	=> $this->formatEmail());
 
 		Mail::Send(
 			(int)Configuration::get('PS_LANG_DEFAULT'),
@@ -127,140 +124,21 @@ class EbayAlert
 		);
 	}
 
-	public function formatErrorForEmail(){
-		if (empty($this->errors))
-			return '';
+	public function formatEmail(){
 
-		$html = '<tr>
-					<td style="border:1px solid #d6d4d4;background-color:#f8f8f8;padding:7px 0">
-						<table style="width:100%">
-							<tbody>
-								<tr>
-									<td width="10" style="padding:7px 0">&nbsp;</td>
-									<td style="padding:7px 0">
-										<font size="2" face="Open-sans, sans-serif" color="#555454">
-											<p style="border-bottom:1px solid #d6d4d4;margin:3px 0 7px;text-transform:uppercase;font-weight:500;font-size:18px;padding-bottom:10px">';
+		$templates_vars = array();
 
-		$html .= $this->ebay->l('Erreur(s)');
+		(!empty($this->errors)) 	?  $templates_vars['errors'] 	= $this->errors 	: '';
+		(!empty($this->warnings))	?  $templates_vars['warnings'] 	= $this->warnings 	: '';
+		(!empty($this->infos))		?  $templates_vars['infos'] 	= $this->infos 		: '';
 
-		$html .= 							'</p>';
-
-		foreach ($this->errors as $key => $error) {
-			$html .=	'<p style="color:#333;padding-bottom:10px;';
-
-			if (array_key_exists($key+1, $this->errors))
-				$html .= 'border-bottom:1px solid #d6d4d4;';
-
-			$html .= '">
-							<strong>'.$error['message'].'</strong>
-						</p>';
+		if (empty($templates_vars)) {
+			return false;
 		}
+		
+		$this->ebay->smarty->assign($templates_vars);
 
-		$html .= '
-										
-									</font>
-								</td>
-								<td width="10" style="padding:7px 0">&nbsp;</td>
-							</tr>
-						</tbody>
-					</table>
-				</td>
-			</tr>
-			<tr>
-				<td style="padding:0!important">&nbsp;</td>
-			</tr>';
-
-		return $html;
-	}
-
-	public function formatWarningForEmail(){
-		if (empty($this->warnings))
-			return '';
-
-		$html = '<tr><td style="border:1px solid #d6d4d4;background-color:#f8f8f8;padding:7px 0">
-					<table style="width:100%">
-						<tbody>
-							<tr>
-								<td width="10" style="padding:7px 0">&nbsp;</td>
-								<td style="padding:7px 0">
-									<font size="2" face="Open-sans, sans-serif" color="#555454">
-										<p style="border-bottom:1px solid #d6d4d4;margin:3px 0 7px;text-transform:uppercase;font-weight:500;font-size:18px;padding-bottom:10px">';
-
-		$html .= $this->ebay->l('Warning(s)');
-
-		$html .= 						'</p>';
-
-		foreach ($this->warnings as $key => $warning) {
-			$html .=	'<p style="color:#333;padding-bottom:10px;';
-
-			if (array_key_exists($key+1, $this->warnings))
-				$html .= 'border-bottom:1px solid #d6d4d4;';
-
-			$html .= '">
-							<strong>'.$warning['message'].'</strong>
-						</p>';
-		}
-
-		$html .= '
-										
-									</font>
-								</td>
-								<td width="10" style="padding:7px 0">&nbsp;</td>
-							</tr>
-						</tbody>
-					</table>
-				</td>
-			</tr>
-			<tr>
-				<td style="padding:0!important">&nbsp;</td>
-			</tr>';
-
-		return $html;
-	}
-
-	public function formatInfoForEmail(){
-		if (empty($this->infos))
-			return '';
-
-		$html = '<tr><td style="border:1px solid #d6d4d4;background-color:#f8f8f8;padding:7px 0">
-					<table style="width:100%">
-						<tbody>
-							<tr>
-								<td width="10" style="padding:7px 0">&nbsp;</td>
-								<td style="padding:7px 0">
-									<font size="2" face="Open-sans, sans-serif" color="#555454">
-										<p style="border-bottom:1px solid #d6d4d4;margin:3px 0 7px;text-transform:uppercase;font-weight:500;font-size:18px;padding-bottom:10px">';
-
-		$html .= $this->ebay->l('Information(s)');
-
-		$html .= 						'</p>';
-
-		foreach ($this->infos as $key => $info) {
-			$html .=	'<p style="color:#333;padding-bottom:10px;';
-
-			if (array_key_exists($key+1, $this->infos))
-				$html .= 'border-bottom:1px solid #d6d4d4;';
-
-			$html .= '">
-							<strong>'.$info['message'].'</strong>
-						</p>';
-		}
-
-		$html .= '
-										
-									</font>
-								</td>
-								<td width="10" style="padding:7px 0">&nbsp;</td>
-							</tr>
-						</tbody>
-					</table>
-				</td>
-			</tr>
-			<tr>
-				<td style="padding:0!important">&nbsp;</td>
-			</tr>';
-
-		return $html;
+		return $this->ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/alert_mail.tpl');
 	}
 
 	public function checkUrlDomain(){

@@ -1,7 +1,3 @@
-Bonjour,
+{shop_name} Recap eBay Module
 
-Recap
-
-Vous pouvez modifier cette quantité minimum dans la fiche du produit, pour pouvoir récupérer la commande dans PrestaShop.
-
-{shop_name}
+{content}
