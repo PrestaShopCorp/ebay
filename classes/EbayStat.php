@@ -36,6 +36,8 @@ class EbayStat
 		
 		function __construct($stats_version, $ebay_profile)
 		{
+				$ebay = Module::getInstanceByName('ebay');
+
 				if (!$ebay_profile)
 						return;
 				
@@ -61,7 +63,8 @@ class EbayStat
 					'impact_price' => EbayCategoryConfiguration::getImpactPrices($ebay_profile->id),
 					'return_policy' => ($ebay_profile->getReturnsPolicyConfiguration()->ebay_returns_description == '' ? 0 : 1),
 					'ps_version' => _PS_VERSION_,
-          'ps_type'   => defined('_PS_HOST_MODE_') ? true : false,
+          			'ps_type'   => defined('_PS_HOST_MODE_') ? true : false,
+          			'module_version' => $ebay->version
 				);
 				$this->date_add = date('Y-m-d H:i:s');
 		}
