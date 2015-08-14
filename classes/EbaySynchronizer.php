@@ -732,7 +732,11 @@ class EbaySynchronizer
 
 		foreach (EbayShipping::getNationalShippings($ebay_profile->id, $product->id) as $carrier)
 		{
-			$national_ship[$carrier['ebay_carrier']] = array(
+			if(!isset($national_ship[$carrier['ebay_carrier']])){
+				$national_ship[$carrier['ebay_carrier']] = array();
+			}
+
+			$national_ship[$carrier['ebay_carrier']][] = array(
 				'servicePriority' => $service_priority,
 				'serviceAdditionalCosts' => $carrier['extra_fee'],
 				'serviceCosts' => EbaySynchronizer::_getShippingPriceForProduct($product, $carrier['id_zone'], $carrier['ps_carrier'])
@@ -746,15 +750,20 @@ class EbaySynchronizer
 
 		foreach (EbayShipping::getInternationalShippings($ebay_profile->id, $product->id) as $carrier)
 		{
-			$international_ship[$carrier['ebay_carrier']] = array(
+			if(!isset($international_ship[$carrier['ebay_carrier']])){
+				$international_ship[$carrier['ebay_carrier']] = array();
+			}
+			
+			$international_ship[$carrier['ebay_carrier']][] = array(
 				'servicePriority' => $service_priority,
 				'serviceAdditionalCosts' => $carrier['extra_fee'],
 				'serviceCosts' => EbaySynchronizer::_getShippingPriceForProduct($product, $carrier['id_zone'], $carrier['ps_carrier']),
 				'locationsToShip' => EbayShippingInternationalZone::getIdEbayZonesByIdEbayShipping($ebay_profile->id, $carrier['id_ebay_shipping'])
-			);
+				);
 
 			$service_priority++;
 		}
+
 
 		return array(
 			'excludedZone' => EbayShippingZoneExcluded::getExcluded($ebay_profile->id),
