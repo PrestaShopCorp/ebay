@@ -1133,6 +1133,11 @@ class Ebay extends Module
 
     public function hookBackOfficeTop($params)
     {
+        if (Configuration::get('EBAY_STATS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-30 day')).'.000Z'){
+            $stat = new EbayStat($this->stats_version, $this->ebay_profile);
+            $stat->save();
+        }
+
         if (Configuration::get('EBAY_SEND_STATS') && (Configuration::get('EBAY_STATS_LAST_UPDATE') < date('Y-m-d\TH:i:s', strtotime('-1 day')).'.000Z'))
         {
             EbayStat::send();
@@ -1597,7 +1602,7 @@ class Ebay extends Module
 
         // Get all alerts
         $alert = new EbayAlert($this);
-        
+        $alert->sendDailyMail();
         if ($this->ebay_profile->getConfiguration('EBAY_LAST_ALERT_MAIL') === null
             || $this->ebay_profile->getConfiguration('EBAY_LAST_ALERT_MAIL') < date('Y-m-d\TH:i:s', strtotime('-1 day')).'.000Z'
             ){
@@ -1627,6 +1632,8 @@ class Ebay extends Module
             'id_tab' => Tools::getValue('id_tab'),
             'alerts'        => $alert->getAlerts(),
             'ps_version'    => _PS_VERSION_,
+            'admin_path'    => basename(_PS_ADMIN_DIR_),
+            'load_kb_path'  => _MODULE_DIR_.'ebay/ajax/loadKB.php',
         );
 
         $this->smarty->assign($smarty_vars);

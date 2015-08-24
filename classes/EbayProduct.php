@@ -63,7 +63,7 @@ class EbayProduct
 		{
 			$sql2 = 'SELECT count(*)
 				FROM `'._DB_PREFIX_.'ebay_product`
-				WHERE `id_product` IN ('.implode(',', $id_shop_products).')';
+				WHERE `id_product` IN ('.implode(',', $id_shop_products).') GROUP BY `id_product`';
 			$nb_synchronized_products = Db::getInstance()->getValue($sql2);            
 			return number_format($nb_synchronized_products / $nb_shop_products * 100.0, 2);
 		} else
