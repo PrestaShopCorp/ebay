@@ -57,9 +57,14 @@ class EbayFormStoreCategoryTab extends EbayTab
 			'has_ebay_shop' => (bool)($user_profile && $user_profile['StoreUrl']),
 			'ebay_store_url' => EbayCountrySpec::getProUrlBySiteId($this->ebay_profile->ebay_site_id),
 			'admin_path'	=> basename(_PS_ADMIN_DIR_),
-			'id_shop' => $this->context->shop->id
+			'id_shop' => $this->context->shop->id,
+			'help'	=> array(
+				'lang' => $this->context->country->iso_code,
+				'module_version' => $this->ebay->version,
+				'ps_version' => _PS_VERSION_,
+				'code_store_category' => 'HELP-STORES-CATEGORIES'
+			),
 		);
-
 		return $this->display('form_store_categories.tpl', $template_vars);
 	}
 	

@@ -153,7 +153,7 @@ class EbayAlert
 		if (version_compare(_PS_VERSION_, '1.5', '>')) {
 			$shop = $this->ebay_profile instanceof EbayProfile ? new Shop($this->ebay_profile->id_shop) : new Shop();
 			$wrong_domain = ($_SERVER['HTTP_HOST'] != $shop->domain && $_SERVER['HTTP_HOST'] != $shop->domain_ssl && Tools::getValue('ajax') == false);
-			$domain = isset($shop->domain_ssl) ? $shop->domain_ssl : $shop->domain;
+			$domain = isset($shop->domain_ssl) ? $shop->domain_ssl : $shop->domain.DIRECTORY_SEPARATOR.$shop->physical_uri;
 		}
 		else {
 			$wrong_domain = ($_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN') && $_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN_SSL'));

@@ -39,7 +39,7 @@
         	</p>
         {else}
             <p>
-                <b><a href="http://cgi6.sandbox.ebay.fr/ws/eBayISAPI.dll?StoreCategoryMgmt" target="_blank">{l s='you don’t have any category in your shop, please refer to this page to create categories' mod='ebay'}</a></b>
+                <b><a href="http://cgi6.sandbox.ebay.fr/ws/eBayISAPI.dll?StoreCategoryMgmt" target="_blank">{l s='you don’t have any category in your shop, please refer to this page to create categories' mod='ebay'}</a><a class="kb-help" data-errorcode="{$help.code_store_category}" data-module="ebay" data-lang="{$help.lang}" module_version="{$help.module_version}" prestashop_version="{$help.ps_version}" href="" target="_blank"></a></b>
             </p> 
         {/if}
     {else}

@@ -189,5 +189,19 @@
 		jQuery(document).ready(function($) {
 			getKb();
 		});
+
+			window.onbeforeunload = function (e) {
+			  var message = "Your module are synchronizing product",
+			  e = e || window.event;
+			  // For IE and Firefox
+			  if (e) {
+			    e.returnValue = message;
+			  }
+
+			  // For Safari
+			  return message;
+			};
+		
+
 	{/literal}
 </script>

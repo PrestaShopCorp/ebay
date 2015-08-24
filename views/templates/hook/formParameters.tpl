@@ -67,7 +67,7 @@
 		<div class="margin-form">
 
 			<input type="text" size="20" name="ebay_paypal_email" value="{$ebay_paypal_email|escape:'htmlall':'UTF-8'}"/>
-			<p>{l s='You have to set your PayPal e-mail account, it\'s the only payment available with this module' mod='ebay'}</p>
+			<p>{l s='You have to set your PayPal e-mail account, it\'s the only payment available with this module' mod='ebay'}<a class="kb-help" data-errorcode="{$help.code_payment_solution}" data-module="ebay" data-lang="{$help.lang}" module_version="{$help.module_version}" prestashop_version="{$help.ps_version}" href="" target="_blank"></a></p>
 		</div>
         
 		<label>
