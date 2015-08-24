@@ -40,6 +40,7 @@ class EbayAlert
 	}
 
 	public function getAlerts(){
+		$this->reset();
 		$this->checkNumberPhoto();
 		$this->checkOrders();
 		$this->checkUrlDomain();
@@ -49,7 +50,11 @@ class EbayAlert
 
 		return $this->alerts;
 	}
-
+	private function reset(){
+		$this->errors	= array();
+		$this->warnings	= array();
+		$this->infos	= array();
+	}
 	private function build(){
 		$this->alerts = array_merge($this->errors, $this->warnings, $this->infos);
 	}
@@ -122,6 +127,7 @@ class EbayAlert
 			null,
 			dirname(__FILE__).'/../views/templates/mails/'
 		);
+		$this->reset();
 	}
 
 	public function formatEmail(){
@@ -136,7 +142,8 @@ class EbayAlert
 			return false;
 		}
 		
-		$this->ebay->smarty->assign($templates_vars);
+		$smarty = Context::getContext()->smarty;
+		$smarty->assign($templates_vars);
 
 		return $this->ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/alert_mail.tpl');
 	}
@@ -146,22 +153,33 @@ class EbayAlert
 		if (version_compare(_PS_VERSION_, '1.5', '>')) {
 			$shop = $this->ebay_profile instanceof EbayProfile ? new Shop($this->ebay_profile->id_shop) : new Shop();
 			$wrong_domain = ($_SERVER['HTTP_HOST'] != $shop->domain && $_SERVER['HTTP_HOST'] != $shop->domain_ssl && Tools::getValue('ajax') == false);
-
-		} else
+			$domain = isset($shop->domain_ssl) ? $shop->domain_ssl : $shop->domain;
+		}
+		else {
 			$wrong_domain = ($_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN') && $_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN_SSL'));
+			$domain = isset($shop->domain_ssl) ? Configuration::get('PS_SHOP_DOMAIN_SSL') : Configuration::get('PS_SHOP_DOMAIN');
+		}
 
 		if ($wrong_domain) {
 			$url_vars = array();
-			if (version_compare(_PS_VERSION_, '1.5', '>'))
-				$url_vars['controller'] = 'AdminMeta';
-			else
-				$url_vars['tab'] = 'AdminMeta';
-			$warning_url = $this->_getUrl($url_vars);
+			// if (version_compare(_PS_VERSION_, '1.5', '>'))
+			// 	$url_vars['controller'] = 'AdminMeta';
+			// else
+			// 	$url_vars['tab'] = 'AdminMeta';
+			// $warning_url = $this->_getUrl($url_vars);
+
+			$context = Context::getContext();
 
 			$this->warnings[] = array(
 				'type' => 'warning', 
-				'message' => $this->ebay->l('You are currently connected to the Prestashop Back Office using a different URL @link@ than set up@/link@, this module will not work properly. Please login in using URL_Back_Office'),
-				'link_warn' => $warning_url
+				'message' => $this->ebay->l('You are currently connected to the Prestashop Back Office using a different URL than set up, this module will not work properly. Please login in using @link@this url.@/link@'),
+				'link_warn' => $domain.DIRECTORY_SEPARATOR.basename(_PS_ADMIN_DIR_).DIRECTORY_SEPARATOR,
+				'kb'	=> array(
+							'errorcode' => 'HELP-ALERT-DEFAULT-PS-URL', 
+							'lang' => $context->language->iso_code, 
+							'module_version' => $this->ebay->version, 
+							'prestashop_version' => _PS_VERSION_
+							),
 				);
 
 		}

@@ -1602,7 +1602,7 @@ class Ebay extends Module
 
         // Get all alerts
         $alert = new EbayAlert($this);
-        $alert->sendDailyMail();
+        
         if ($this->ebay_profile->getConfiguration('EBAY_LAST_ALERT_MAIL') === null
             || $this->ebay_profile->getConfiguration('EBAY_LAST_ALERT_MAIL') < date('Y-m-d\TH:i:s', strtotime('-1 day')).'.000Z'
             ){
