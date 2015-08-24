@@ -133,31 +133,6 @@
 			}
 		});
 	}
-	function getKb(item){
-		item = typeof item !== 'undefined' ? item : 0;
-		
-		var that = $("a.kb-help:eq("+ item +")");
-
-		$.ajax({
-			type: "POST",
-			url: '{/literal}{$load_kb_path}{literal}',
-			data: {errorcode: $( that ).attr('data-errorcode'), lang: $( that ).attr('data-lang'), token: ebay_token, admin_path: "{/literal}{$admin_path|escape:'urlencode'}{literal}"},
-			dataType: "json",
-			success: function(data)
-			{
-				console.log(data.result);
-				if (data.result != 'error')
-				{
-					$( that ).addClass('active');
-					$( that ).attr('href', data.result);
-					$( that ).attr('target', '_blank');
-				}
-				var next = item + 1;
-				if ($("a.kb-help:eq("+ next +")").length > 0)
-					getKb(next);
-			}
-		});
-	}
 	{/literal}
 </script>
 

@@ -30,12 +30,15 @@
 <div class="bootstrap">
 	{if isset($alerts) && $alerts && sizeof($alerts)}
 		{foreach from=$alerts item='alert'}
-				<div class="{if $ps_version > '1.5'}alert {/if}alert-{if $alert.type == 'error'}danger{if $ps_version < '1.5'} error{/if}{elseif $alert.type == 'warning'}warning{if $ps_version < '1.5'} warn{/if}{elseif $alert.type == 'info'}info{if $ps_version < '1.5'} conf{/if}{/if}"><button type="button" class="close" data-dismiss="alert">×</button>
+			<div class="{if $ps_version > '1.5'}alert {/if}alert-{if $alert.type == 'error'}danger{if $ps_version < '1.5'} error{/if}{elseif $alert.type == 'warning'}warning{if $ps_version < '1.5'} warn{/if}{elseif $alert.type == 'info'}info{if $ps_version < '1.5'} conf{/if}{/if}"><button type="button" class="close" data-dismiss="alert">×</button>
 				{if isset($alert.link_warn)}
 					{assign var="link" value='<a href="'|cat:$alert.link_warn|cat:'" target="_blank">'}
 					{$alert.message|regex_replace:"/@link@/":$link|regex_replace:"/@\/link@/":"</a >"}
 				{else}
 					{$alert.message|escape:'htmlall':'UTF-8'}
+				{/if}
+				{if isset($alert.kb)}
+					<a class="kb-help" data-errorcode="{$alert.kb.errorcode}" data-module="ebay" data-lang="{$alert.kb.lang}" module_version="{$alert.kb.module_version}" prestashop_version="{$alert.kb.prestashop_version}"></a>
 				{/if}
 			</div>
 		{/foreach}
@@ -156,3 +159,35 @@
 	</div>
 	<div id="categoriesProgression" style="overflow: auto;width: 200px;height: 100px;text-align: center;font-size: 16px;padding-top: 30px;"></div>
 </div>
+
+<script>
+	{literal}
+		function getKb(item){
+			item = typeof item !== 'undefined' ? item : 0;
+			
+			var that = $("a.kb-help:eq("+ item +")");
+
+			$.ajax({
+				type: "POST",
+				url: '{/literal}{$load_kb_path}{literal}',
+				data: {errorcode: $( that ).attr('data-errorcode'), lang: $( that ).attr('data-lang'), token: ebay_token, admin_path: "{/literal}{$admin_path|escape:'urlencode'}{literal}"},
+				dataType: "json",
+				success: function(data)
+				{
+					if (data.result != 'error')
+					{
+						$( that ).addClass('active');
+						$( that ).attr('href', data.result);
+						$( that ).attr('target', '_blank');
+					}
+					var next = item + 1;
+					if ($("a.kb-help:eq("+ next +")").length > 0)
+						getKb(next);
+				}
+			});
+		}
+		jQuery(document).ready(function($) {
+			getKb();
+		});
+	{/literal}
+</script>

@@ -85,8 +85,8 @@ class EbayKb extends ObjectModel
 	public function getFields()
 	{
 		$fields['error_code'] = $this->error_code;
-		$fields['language'] = $this->ps_version;
-		$fields['ps_version'] = $this->language;
+		$fields['language'] = $this->language;
+		$fields['ps_version'] = $this->ps_version;
 		$fields['module_version'] = $this->module_version;
 		$fields['link'] = $this->link;
 		$fields['date_add'] = $this->date_add;
