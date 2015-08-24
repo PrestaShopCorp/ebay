@@ -47,7 +47,7 @@ class EbayStat
 				$this->data = array(
 					'id' => sha1($this->_getDefaultShopUrl()),
 					'profile' => $ebay_profile->id,
-					'ebay_username' => sha1(Configuration::get('EBAY_IDENTIFIER')),
+					'ebay_username' => sha1($ebay_profile->ebay_user_identifier),
 					'ebay_site' => $ebay_profile->ebay_site_id,
 					'is_multishop' => (version_compare(_PS_VERSION_, '1.5', '>') && Shop::isFeatureActive()),
 					'install_date' => Configuration::get('EBAY_INSTALL_DATE'),
@@ -63,7 +63,7 @@ class EbayStat
 					'impact_price' => EbayCategoryConfiguration::getImpactPrices($ebay_profile->id),
 					'return_policy' => ($ebay_profile->getReturnsPolicyConfiguration()->ebay_returns_description == '' ? 0 : 1),
 					'ps_version' => _PS_VERSION_,
-          			'ps_type'   => defined('_PS_HOST_MODE_') ? true : false,
+          			'is_cloud'   => defined('_PS_HOST_MODE_') ? true : false,
           			'module_version' => $ebay->version
 				);
 				$this->date_add = date('Y-m-d H:i:s');
