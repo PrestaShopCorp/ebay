@@ -43,7 +43,7 @@ class EbayStat
 				
 				$this->stats_version = $stats_version;
 				$this->id_ebay_profile = (int)$ebay_profile->id;
-				
+
 				$this->data = array(
 					'id' => sha1($this->_getDefaultShopUrl()),
 					'profile' => $ebay_profile->id,
@@ -64,7 +64,8 @@ class EbayStat
 					'return_policy' => ($ebay_profile->getReturnsPolicyConfiguration()->ebay_returns_description == '' ? 0 : 1),
 					'ps_version' => _PS_VERSION_,
           			'is_cloud'   => defined('_PS_HOST_MODE_') ? true : false,
-          			'module_version' => $ebay->version
+          			'module_version' => $ebay->version,
+          			'ps_country'	=> Country::getIsoById(Country::getDefaultCountryId()),
 				);
 				$this->date_add = date('Y-m-d H:i:s');
 		}
