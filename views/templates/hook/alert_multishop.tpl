@@ -34,7 +34,7 @@
 			</label>
 			<div class="col-lg-9" style="margin-top:20px;">
 				<p>
-					<strong>{l s='You can't use this module in the context of the current store.' mod='ebay'}</strong>
+					<strong>{l s='You can\'t use this module in the context of the current store.' mod='ebay'}</strong>
 				</p>
 			</div>
 		</div>

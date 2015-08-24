@@ -37,7 +37,14 @@
 							</p>
 							{foreach from=$errors item='error'}
 								<p style="color:#333;padding-bottom:10px;border-bottom:{cycle values="none,1px solid #d6d4d4" reset=true};">
-									<strong>{$error.message}</strong>
+									<strong>
+									{if isset($error.link_warn)}
+										{assign var="link" value='<a href="'|cat:$error.link_warn|cat:'" target="_blank">'}
+										{$error.message|regex_replace:"/@link@/":$link|regex_replace:"/@\/link@/":"</a >"}
+									{else}
+										{$error.message|escape:'htmlall':'UTF-8'}
+									{/if}
+									</strong>
 								</p>
 							{/foreach}
 						</font>
@@ -58,7 +65,7 @@
 		<table style="width:100%">
 			<tbody>
 				<tr>
-					<td width="10" style="padding:7px 0">&nbsp;</td><
+					<td width="10" style="padding:7px 0">&nbsp;</td>
 					<td style="padding:7px 0">
 						<font size="2" face="Open-sans, sans-serif" color="#555454">
 							<p style="border-bottom:1px solid #d6d4d4;margin:3px 0 7px;text-transform:uppercase;font-weight:500;font-size:18px;padding-bottom:10px">
@@ -66,7 +73,14 @@
 							</p>
 							{foreach from=$warnings item='warning'}
 								<p style="color:#333;padding-bottom:10px;border-bottom:{cycle values="none,1px solid #d6d4d4" reset=true};">
-									<strong>{$warning.message}</strong>
+									<strong>
+									{if isset($warning.link_warn)}
+										{assign var="link" value='<a href="'|cat:$warning.link_warn|cat:'" target="_blank">'}
+										{$warning.message|regex_replace:"/@link@/":$link|regex_replace:"/@\/link@/":"</a >"}
+									{else}
+										{$warning.message|escape:'htmlall':'UTF-8'}
+									{/if}
+									</strong>
 								</p>
 							{/foreach}
 						</font>
@@ -95,7 +109,14 @@
 							</p>
 							{foreach from=$infos item='info'}
 								<p style="color:#333;padding-bottom:10px;border-bottom:{cycle values="none,1px solid #d6d4d4" reset=true};">
-									<strong>{$info.message}</strong>
+									<strong>
+									{if isset($info.link_warn)}
+										{assign var="link" value='<a href="'|cat:$info.link_warn|cat:'" target="_blank">'}
+										{$info.message|regex_replace:"/@link@/":$link|regex_replace:"/@\/link@/":"</a >"}
+									{else}
+										{$info.message|escape:'htmlall':'UTF-8'}
+									{/if}
+									</strong>
 								</p>
 							{/foreach}
 						</font>
