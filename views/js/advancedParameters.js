@@ -30,9 +30,9 @@ function checkInputParameters(){
 	//Test for input number photo
 	var input_nb_photo = $('input[name="picture_per_listing"]');
 	if (!$.isNumeric($(input_nb_photo, 'error', 'Hello').val()))
-		addToolTip(input_nb_photo, 'error', 'You must enter a numeric field');
+		addToolTip(input_nb_photo, 'error', tooltip_numeric);
 	else if ($(input_nb_photo).val() > 11)
-		addToolTip(input_nb_photo, 'error', 'The maximum number is 12, so you can put 11 to maximum');
+		addToolTip(input_nb_photo, 'error', tooltip_max_pictures);
 
 }
 

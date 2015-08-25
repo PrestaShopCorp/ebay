@@ -28,11 +28,14 @@
 	<script>
 		$(document).ready(function() {
 			win = window.location = '{/literal}{$redirect_url|escape:'urlencode'}{literal}';
-		});
+		});		
 	</script>
 	{/literal}
 {/if}
 <script type="text/javascript">
+	var tooltip_numeric = "{l s='You must enter a number.' mod='ebay'}";
+	var tooltip_max_pictures = "{l s='The maximum number is 12, so you can put up to 11 in this field.' mod='ebay'}";
+
 	$(document).ready(function(){ldelim}
 		if(regenerate_token_show)
 		{ldelim}
