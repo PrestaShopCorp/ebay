@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2014 PrestaShop SA
+ *  @copyright 2007-2015 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -31,7 +31,7 @@ class EbayShippingInternationalZone
 		return Db::getInstance()->ExecuteS('SELECT id_ebay_zone
 			FROM '._DB_PREFIX_.'ebay_shipping_international_zone
 			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.' 
-            AND id_ebay_shipping = "'.(int)$id_ebay_shipping.'"');
+			AND id_ebay_shipping = "'.(int)$id_ebay_shipping.'"');
 	}
 
 	public static function insert($id_ebay_profile, $id_ebay_shipping, $id_ebay_zone)
@@ -41,7 +41,7 @@ class EbayShippingInternationalZone
 			
 		DB::getInstance()->Execute($sql);
 	}
-    
+	
 	public static function getExistingInternationalCarrier($id_ebay_profile)
 	{
 		$existing_international_carriers = EbayShipping::getInternationalShippings($id_ebay_profile);

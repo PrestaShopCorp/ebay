@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2014 PrestaShop SA
+ *  @copyright 2007-2015 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -44,12 +44,12 @@ for ($level = 0; $level <= 5; $level++)
 				FROM `'._DB_PREFIX_.'ebay_category`
 				WHERE `level` = 1
 				AND `id_category_ref` = `id_category_ref_parent`
-                AND `id_country` = '.(int)$ebay_profile->ebay_site_id);
+				AND `id_country` = '.(int)$ebay_profile->ebay_site_id);
 		else
 			$ebay_category_list_level = Db::getInstance()->executeS('SELECT *
 				FROM `'._DB_PREFIX_.'ebay_category`
 				WHERE `level` = '.(int)($level + 1).'
-                AND `id_country` = '.(int)$ebay_profile->ebay_site_id.'
+				AND `id_country` = '.(int)$ebay_profile->ebay_site_id.'
 				AND `id_category_ref_parent`
 				IN (
 					SELECT `id_category_ref`

@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2014 PrestaShop SA
+ *  @copyright 2007-2015 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -30,21 +30,21 @@ class EbayShippingService
 	{
 		return Db::getInstance()->ExecuteS('SELECT *
 			FROM '._DB_PREFIX_.'ebay_shipping_service
-            WHERE `ebay_site_id` = '.(int)$ebay_site_id);
+			WHERE `ebay_site_id` = '.(int)$ebay_site_id);
 	}
 
 	public static function getTotal($ebay_site_id)
 	{
 		return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
 			FROM '._DB_PREFIX_.'ebay_shipping_service
-            WHERE `ebay_site_id` = '.(int)$ebay_site_id);
+			WHERE `ebay_site_id` = '.(int)$ebay_site_id);
 	}
 
 	public static function insert($data)
 	{
 		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_service', $data, 'INSERT');
 	}
-    
+	
 	public static function getCarriers($ebay_site_id)
 	{
 		if (EbayShippingService::getTotal($ebay_site_id))

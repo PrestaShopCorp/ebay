@@ -1,5 +1,5 @@
 {*
-* 2007-2014 PrestaShop
+* 2007-2015 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2014 PrestaShop SA
+*  @copyright 2007-2015 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -26,7 +26,7 @@
 <div>
 	{if isset($alerts) && !empty($alerts)}
 	<div class="warning big">
-		{$alerts|escape:'htmlall'}
+		{$alerts|escape:'htmlall':'UTF-8'}
 	</div>
 	{/if}
 	<p>
@@ -36,9 +36,14 @@
 		{l s='The button below will automatically map your categories with eBay categories. We recommend you check that you’re happy with the category chosen and amend if necessary.' mod='ebay'}
 	</p>
 	{if $form_categories == 0}
-		<form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall'}{else}tab={$tab|escape:'htmlall'}{/if}&configure={$configure|escape:'htmlall'}&token={$token|escape:'htmlall'}&tab_module={$tab_module|escape:'htmlall'}&module_name={$module_name|escape:'htmlall'}&id_tab=2&section=category&action=suggestCategories" method="post" class="form" id="configForm2SuggestedCategories">
+		<form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall':'UTF-8'}{else}tab={$tab|escape:'htmlall':'UTF-8'}{/if}&configure={$configure|escape:'htmlall':'UTF-8'}&token={$token|escape:'htmlall':'UTF-8'}&tab_module={$tab_module|escape:'htmlall':'UTF-8'}&module_name={$module_name|escape:'htmlall':'UTF-8'}&id_tab=2&section=category&action=suggestCategories" method="post" class="form" id="configForm2SuggestedCategories">
 			<input class="button" name="submitSave" type="submit" value="{l s='Suggest eBay categories' mod='ebay'}" data-inlinehelp="{l s='Automatically map your Prestashop categories with the correct eBay category. ' mod='ebay'}" />
 		</form>
+		
+		<div class="warning big tips">
+           	{l s='For your first synchronisation, we advise you to synchronize only a one category in order to test the link between your shop and eBay. And then add more categories progressively.' mod='ebay'}
+        </div>
+
 	{/if}
 	<!---------------------------->
 	<p>
@@ -54,36 +59,36 @@
 		<br />
 		{l s='Choose which of your items you want to list on eBay by ticking the box.' mod='ebay'}
 	</p>
+    
+    <p>
+    	<b>{l s='Filter PrestaShop categories' mod='ebay'}</b> : <input id="cat-filter" type="search" placeholder="{l s='Category name' mod='ebay'}" />
+    </p>
 </div>
 <br />
 
-{if $nb_categorie > 0}
-	<p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nb_categorie / 20)|round:"0") mod='ebay'}</p>
-	<ul id="pagination" class="pagination">
-		<li class="prev"><</li>
-		{math equation="floor(x/20)" x=$nb_categorie assign=nb_pages} 
-		{for $i=1 to ($nb_pages +1)}
-			<li{if $i == 0} class="current"{/if}>{$i}</li>
-		{/for}
-		<li class="next">></li>
-	</ul>
-{/if}
+<div id="cat-pagination-holder"></div>
 
-<form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall'}{else}tab={$tab|escape:'htmlall'}{/if}&configure={$configure|escape:'htmlall'}&token={$token|escape:'htmlall'}&tab_module={$tab_module|escape:'htmlall'}&module_name={$module_name|escape:'htmlall'}&id_tab=2&section=category" method="post" class="form" id="configForm2">	<table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
+<form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall':'UTF-8'}{else}tab={$tab|escape:'htmlall':'UTF-8'}{/if}&configure={$configure|escape:'htmlall':'UTF-8'}&token={$token|escape:'htmlall':'UTF-8'}&tab_module={$tab_module|escape:'htmlall':'UTF-8'}&module_name={$module_name|escape:'htmlall':'UTF-8'}&id_tab=2&section=category" method="post" class="form" id="configForm2">	<table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
 		<thead>
 			<tr class="nodrag nodrop">
 				<th style="width:110px;">
-					{l s='PrestaShop category' mod='ebay'}<br/>({l s='Quantity in stock' mod='ebay'})
+					{l s='PrestaShop category' mod='ebay'}
 				</th>
 				<th>
 					<span data-inlinehelp="{l s='Only products with a mapped category will be listed.' mod='ebay'}">{l s='eBay category' mod='ebay'} <span style="color:red">{l s='(required)' mod='ebay'}</span></span>
 				</th>
+				<th style="width:185px;">
+					<span data-inlinehelp="{l s='Increase or decrease the sales price of the items listed on eBay.' mod='ebay'}">{l s='Nb products in category' mod='ebay'}</span>
+				</th>                
 				<th style="width:185px;">
 					<span data-inlinehelp="{l s='Increase or decrease the sales price of the items listed on eBay.' mod='ebay'}">{l s='eBay selling price' mod='ebay'}</span>
 				</th>				
 				<th class="center">
 					<span data-inlinehelp="{l s='All products with mapped categories will be listed.' mod='ebay'}">{l s='List on eBay' mod='ebay'}</span>
 				</th>
+				<th class="center" colspan="2">
+					<span data-inlinehelp="{l s='Number of selected products for synchronisation within the category' mod='ebay'}">{l s='Nb selected products' mod='ebay'}</span>
+				</th>                
 				{*
 				<th class="center">
 					<span data-dialoghelp="http://pages.ebay.com/help/sell/pictures.html" data-inlinehelp="{l s='By default, only your main photo will appear in your eBay listing. You can add more photos but there may be a charge.' mod='ebay'}">{l s='Photos' mod='ebay'}</span>
@@ -94,7 +99,7 @@
 		<tbody>
 			<tr id="removeRow">
 				<td class="center" colspan="3">
-					<img src="{$_path|escape:'htmlall'}img/loading-small.gif" alt="" />
+					<img src="{$_path|escape:'htmlall':'UTF-8'}views/img/loading-small.gif" alt="" />
 				</td>
 			</tr>
 		</tbody>
@@ -116,12 +121,12 @@
 		
 	var $selects = false;
 	
-	var module_dir = '{$_module_dir_|escape:'htmlall'}';
-	var ebay_token = '{$configs.EBAY_SECURITY_TOKEN|escape:'htmlall'}';
-	var module_time = '{$date|escape:'htmlall'}';
-	var module_path = '{$_path|escape:'htmlall'}';
-	var id_lang = '{$id_lang|escape:'htmlall'}';
-	var id_ebay_profile = '{$id_ebay_profile|escape:'htmlall'}';
+	var module_dir = '{$_module_dir_|escape:'htmlall':'UTF-8'}';
+	var ebay_token = '{$configs.EBAY_SECURITY_TOKEN|escape:'htmlall':'UTF-8'}';
+	var module_time = '{$date|escape:'htmlall':'UTF-8'}';
+	var module_path = '{$_path|escape:'htmlall':'UTF-8'}';
+	var id_lang = '{$id_lang|escape:'htmlall':'UTF-8'}';
+	var id_ebay_profile = '{$id_ebay_profile|escape:'htmlall':'UTF-8'}';
 	var categories_ebay_l = {ldelim}
 		'thank you for waiting': "{l s='Thank you for waiting while creating suggestions' mod='ebay'}",
 		'no category selected' : "{l s='No category selected' mod='ebay'}",
@@ -129,14 +134,16 @@
 		'You are not logged in': "{l s='You are not logged in' mod='ebay'}",
 		'Settings updated'		 : "{l s='Settings updated' mod='ebay'}",
 		'Unselect products'		: "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}",
-		'Unselect products clicked' : "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}"
+		'Unselect products clicked' : "{l s='Unselect products that you do NOT want to list on eBay' mod='ebay'}",
+        'Products' : "{l s='Products'}",
+        'Stock' : "{l s='Stock'}"
 	{rdelim};
     </script>
-<script type="text/javascript" src="{$_module_dir_|escape:'htmlall'}ebay/js/categories.js?date={$date|escape:'htmlall'}"></script>
+<script type="text/javascript" src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/js/categories.js?date={$date|escape:'htmlall':'UTF-8'}"></script>
 <script type="text/javascript">
 	// <![CDATA[
 	$(document).ready(function(){
-		var form_categories = parseInt("{$form_categories|escape:'htmlall'}");
+		var form_categories = parseInt("{$form_categories|escape:'htmlall':'UTF-8'}");
 		if (form_categories >= 1)
 			$("#menuTab2").addClass('success');
 		

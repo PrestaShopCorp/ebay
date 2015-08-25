@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,14 +19,14 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2014 PrestaShop SA
+ *  @copyright 2007-2015 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayOrder
 {
-    private $id_ebay_order;
+	private $id_ebay_order;
 	private $id_order_ref;
 	private $amount;
 	private $status;
@@ -49,18 +49,18 @@ class EbayOrder
 	private $payment_method;
 	private $id_order_seller;
 	private $date_add;
-    private $id_currency;
+	private $id_currency;
 
 	private $error_messages = array();
 
-    private $write_logs;    
+	private $write_logs;    
 
 	/* PS variables */
 	private $id_customers;
 	private $id_address;
 	private $id_orders;
 	private $carts;
-    
+	
 
 	public function __construct(SimpleXMLElement $order_xml = null)
 	{
@@ -86,9 +86,9 @@ class EbayOrder
 		$this->shippingServiceCost = (string)$order_xml->ShippingServiceSelected->ShippingServiceCost;
 		$this->payment_method = (string)$order_xml->CheckoutStatus->PaymentMethod;
 		$this->id_order_seller = (string)$order_xml->ShippingDetails->SellingManagerSalesRecordNumber;
-        
-        $amount_paid_attr = $order_xml->AmountPaid->attributes();
-        $this->id_currency = Currency::getIdByIsoCode($amount_paid_attr['currencyID']);
+		
+		$amount_paid_attr = $order_xml->AmountPaid->attributes();
+		$this->id_currency = Currency::getIdByIsoCode($amount_paid_attr['currencyID']);
 
 		if (count($order_xml->TransactionArray->Transaction))
 			$this->email = (string)$order_xml->TransactionArray->Transaction[0]->Buyer->Email;
@@ -108,8 +108,8 @@ class EbayOrder
 
 		if ($order_xml->TransactionArray->Transaction)
 			$this->product_list = $this->_getProductsFromTransactions($order_xml->TransactionArray->Transaction);
-        
-        $this->write_logs = (bool)Configuration::get('EBAY_ACTIVATE_LOGS');
+		
+		$this->write_logs = (bool)Configuration::get('EBAY_ACTIVATE_LOGS');
 	}
 
 	public function isCompleted()
@@ -161,9 +161,9 @@ class EbayOrder
 			$customer->active = 1;
 			$customer->id_shop = (int)$ebay_profile->id_shop;
 			$res = $customer->add();
-            
-            $this->_writeLog($ebay_profile->id, 'add_customer', $res);
-            
+			
+			$this->_writeLog($ebay_profile->id, 'add_customer', $res);
+			
 			$id_customer = $customer->id;
 		}
 
@@ -203,16 +203,16 @@ class EbayOrder
 
 		if ($id_address > 0 && Validate::isLoadedObject($address)) {
 			$res = $address->update();
-            $is_update = true;
+			$is_update = true;
 		}
 		else
 		{
 			$res = $address->add();
 			$id_address = $address->id;
-            $is_update = false;
+			$is_update = false;
 		}
 
-        $this->_writeLog($ebay_profile->id, 'add_address', $res, null, $is_update);
+		$this->_writeLog($ebay_profile->id, 'add_address', $res, null, $is_update);
 
 		$this->id_address = $id_address;
 
@@ -315,12 +315,12 @@ class EbayOrder
 		$cart->delivery_option = @serialize(array($this->id_address => $id_carrier.','));
 		$cart->id_lang = $ebay_country->getIdLang();
 		//$cart->id_currency = Currency::getIdByIsoCode($ebay_country->getCurrency());
-        $cart->id_currency = $this->id_currency;
+		$cart->id_currency = $this->id_currency;
 		$cart->recyclable = 0;
 		$cart->gift = 0;
 		$res = $cart->add();
-        
-        $this->_writeLog($ebay_profile->id, 'add_cart', $res, null);
+		
+		$this->_writeLog($ebay_profile->id, 'add_cart', $res, null);
 		
 		$this->carts[$ebay_profile->id_shop] = $cart;
 
@@ -423,8 +423,8 @@ class EbayOrder
 		);
 		
 		$this->id_orders[$id_shop] = $paiement->currentOrder;
-        
-        $this->_writeLog($id_ebay_profile, 'validate_order', true, 'End of validate order');
+		
+		$this->_writeLog($id_ebay_profile, 'validate_order', true, 'End of validate order');
 
 		// Fix on date
 		Db::getInstance()->autoExecute(_DB_PREFIX_.'orders', array('date_add' => pSQL($this->date_add)), 'UPDATE', '`id_order` = '.(int)$this->id_orders[$id_shop]);
@@ -598,7 +598,7 @@ class EbayOrder
 
 			}
 			if($res)
-            	$this->_writeLog($id_ebay_profile, 'add_orders', $res);
+				$this->_writeLog($id_ebay_profile, 'add_orders', $res);
 		}
 	}
 
@@ -799,36 +799,36 @@ class EbayOrder
 			dirname(__FILE__).'/../views/templates/mails/'
 		);
 	}
-    
-    private function _writeLog($id_ebay_profile, $type, $success, $response = null, $is_update = false)
-    {
-        if (!$this->write_logs)
-            return;
-        
-        $log = new EbayOrderLog();
-        $log->id_ebay_profile = (int)$id_ebay_profile;
-        $log->id_ebay_order = (int)$this->id_ebay_order;
-        $log->id_orders = implode(';', $this->id_orders);
-        $log->type = (string)$type;
-        $log->success = (bool)$success;
-        
-        if ($response)
-            $log->response = $response;
-        
-        if ($is_update)
-            $log->date_update = date('Y-m-d H:i:s');
-        
-        $log->save();
-    }
-    
-    public static function getIdOrderRefByIdOrder($id_order)
-    {
-        return Db::getInstance()->getValue('SELECT eo.`id_order_ref` 
-            FROM `'._DB_PREFIX_.'ebay_order` eo
-            INNER JOIN `'._DB_PREFIX_.'ebay_order_order` eoo
-            ON eo.`id_ebay_order` = eoo.`id_ebay_order`
-            WHERE eoo.`id_order` = '.(int)$id_order);
-    }
+	
+	private function _writeLog($id_ebay_profile, $type, $success, $response = null, $is_update = false)
+	{
+		if (!$this->write_logs)
+			return;
+		
+		$log = new EbayOrderLog();
+		$log->id_ebay_profile = (int)$id_ebay_profile;
+		$log->id_ebay_order = (int)$this->id_ebay_order;
+		$log->id_orders = implode(';', $this->id_orders);
+		$log->type = (string)$type;
+		$log->success = (bool)$success;
+		
+		if ($response)
+			$log->response = $response;
+		
+		if ($is_update)
+			$log->date_update = date('Y-m-d H:i:s');
+		
+		$log->save();
+	}
+	
+	public static function getIdOrderRefByIdOrder($id_order)
+	{
+		return Db::getInstance()->getValue('SELECT eo.`id_order_ref` 
+			FROM `'._DB_PREFIX_.'ebay_order` eo
+			INNER JOIN `'._DB_PREFIX_.'ebay_order_order` eoo
+			ON eo.`id_ebay_order` = eoo.`id_ebay_order`
+			WHERE eoo.`id_order` = '.(int)$id_order);
+	}
 
 	public static function insert($data)
 	{

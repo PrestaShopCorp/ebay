@@ -1,5 +1,5 @@
 {*
-* 2007-2014 PrestaShop
+* 2007-2015 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2014 PrestaShop SA
+*  @copyright 2007-2015 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -26,22 +26,22 @@
 {if $logs === false || sizeof($logs) === 0}
 
 	<tr>
-		<td colspan="3" class="center">{$noLogFound|escape:'htmlall'}</td>
+		<td colspan="3" class="center">{$noLogFound|escape:'htmlall':'UTF-8'}</td>
 	</tr>
 
 {else}
 
 	{foreach from=$logs key=k  item=log}
 		<tr{if $k % 2 !== 0} class="alt_row"{/if}>
-			<td>{$log['id_ebay_order_log']|escape:'htmlall'}</td>
-			<td>{$log['id_ebay_profile']|escape:'htmlall'}</td>
-			<td>{$log['id_ebay_order']|escape:'htmlall'}</td>
-			<td>{$log['id_orders']|escape:'htmlall'}</td>
-			<td>{$log['type']|escape:'htmlall'}</td>
+			<td>{$log['id_ebay_order_log']|escape:'htmlall':'UTF-8'}</td>
+			<td>{$log['id_ebay_profile']|escape:'htmlall':'UTF-8'}</td>
+			<td>{$log['id_ebay_order']|escape:'htmlall':'UTF-8'}</td>
+			<td>{$log['id_orders']|escape:'htmlall':'UTF-8'}</td>
+			<td>{$log['type']|escape:'htmlall':'UTF-8'}</td>
 			<td>{if $log['success']}true{else}false{/if}</td>
-			<td><a class="show_link" href data-content="{$log['data']|escape:'htmlall'}">{$showStr|escape:'htmlall'}</a></td>
-			<td>{$log['date_add']|escape:'htmlall'}</td>
-			<td>{$log['date_update']|escape:'htmlall'}</td>            
+			<td><a class="show_link" href data-content="{$log['data']|escape:'htmlall':'UTF-8'}">{$showStr|escape:'htmlall':'UTF-8'}</a></td>
+			<td>{$log['date_add']|escape:'htmlall':'UTF-8'}</td>
+			<td>{$log['date_update']|escape:'htmlall':'UTF-8'}</td>            
 		</tr>
 	{/foreach}
     

@@ -1,5 +1,5 @@
 {*
-* 2007-2014 PrestaShop
+* 2007-2015 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2014 PrestaShop SA
+*  @copyright 2007-2015 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -26,7 +26,7 @@
 <p class="center">
 	<b>{l s='Your categories have been configured' mod='ebay'}</b>
 </p>
-<form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall'}{else}tab={$tab|escape:'htmlall'}{/if}&configure={$configure|escape:'htmlall'}&token={$token|escape:'htmlall'}&tab_module={$tab_module|escape:'htmlall'}&module_name={$module_name|escape:'htmlall'}&id_tab=2&section=category" method="post" class="form">
+<form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall':'UTF-8'}{else}tab={$tab|escape:'htmlall':'UTF-8'}{/if}&configure={$configure|escape:'htmlall':'UTF-8'}&token={$token|escape:'htmlall':'UTF-8'}&tab_module={$tab_module|escape:'htmlall':'UTF-8'}&module_name={$module_name|escape:'htmlall':'UTF-8'}&id_tab=2&section=category" method="post" class="form">
 	<p class="center">
 		<input class="primary button" name="submitSave" type="submit" value="{l s='View Categories' mod='ebay'}" />
 	</p>
@@ -35,7 +35,7 @@
 <script type="text/javascript">
 	// <![CDATA[
 	$(document).ready(function(){
-		var form_categories = parseInt("{$form_categories|escape:'htmlall'}");
+		var form_categories = parseInt("{$form_categories|escape:'htmlall':'UTF-8'}");
 		if (form_categories >= 1)
 			$("#menuTab2").addClass('success');
 		

@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2014 PrestaShop SA
+ *  @copyright 2007-2015 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -31,34 +31,62 @@ include_once dirname(__FILE__).'/../classes/EbayProductConfiguration.php';
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
 	die('ERROR : INVALID TOKEN');
 
+$ebay = new Ebay();
 $ebay_country = EbayCountrySpec::getInstanceByKey(Configuration::get('EBAY_COUNTRY_DEFAULT'));
 $id_lang = $ebay_country->getIdLang();
 $id_ebay_profile = (int)Tools::getValue('id_ebay_profile');
 
 $is_one_five = version_compare(_PS_VERSION_, '1.5', '>');
 
-$sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`
-		FROM `'._DB_PREFIX_.'product` p';
+if ($is_one_five) {
 
-$sql .= $is_one_five ? Shop::addSqlAssociation('product', 'p') : '';
-$sql .= ' LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
-			ON (p.`id_product` = pl.`id_product`
-			AND pl.`id_lang` = '.(int)$id_lang;
-$sql .= $is_one_five ? Shop::addSqlRestrictionOnLang('pl') : '';
-$sql .= ')
-		LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
-			ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.$id_ebay_profile.'
-		WHERE ';
+	$sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, sa.`quantity` as stock
+			FROM `'._DB_PREFIX_.'product` p';
+
+	$sql .= Shop::addSqlAssociation('product', 'p');
+	$sql .= ' LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
+				ON (p.`id_product` = pl.`id_product`
+				AND pl.`id_lang` = '.(int)$id_lang;
+	$sql .= Shop::addSqlRestrictionOnLang('pl');
+	$sql .= ')
+			LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
+				ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.$id_ebay_profile.'
+			LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
+				ON p.`id_product` = sa.`id_product`
+				AND sa.`id_product_attribute` = 0
+			WHERE ';
 		
-$sql .= $is_one_five ? ' product_shop.`id_shop` = 1 AND ' : '';
-$sql .= ' p.`id_category_default` = '.(int)Tools::getValue('category');
+	$sql .= ' product_shop.`id_shop` = 1 AND ';
+	$sql .= ' p.`id_category_default` = '.(int)Tools::getValue('category');
+	$sql .= $ebay->addSqlRestrictionOnLang('sa');
+	
+} else {
+	
+	$sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, p.`quantity` as stock
+			FROM `'._DB_PREFIX_.'product` p';
+
+	$sql .= ' LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
+				ON (p.`id_product` = pl.`id_product`
+				AND pl.`id_lang` = '.(int)$id_lang;
+	$sql .= ')
+			LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
+				ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.$id_ebay_profile.'
+
+			WHERE ';
+
+	$sql .= ' p.`id_category_default` = '.(int)Tools::getValue('category');
+	
+}
 
 $res = Db::getInstance()->ExecuteS($sql);
 foreach ($res as &$row) 
 {
+	
 	$row['name'] = Tools::safeOutput($row['name']);
 	$row['blacklisted'] = Tools::safeOutput($row['blacklisted']);
 	$row['extra_images'] = Tools::safeOutput($row['extra_images']);
+	$row['stock'] = Tools::safeOutput($row['stock']);
+	
 }
 
 echo Tools::jsonEncode($res);

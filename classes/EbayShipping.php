@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2014 PrestaShop SA
+ *  @copyright 2007-2015 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -156,28 +156,28 @@ class EbayShipping
 	{
 		return Db::getInstance()->getValue('SELECT count(*)
 			FROM '._DB_PREFIX_.'ebay_shipping 
-            WHERE `international` = 0
-            AND `id_ebay_profile` = '.(int)$id_ebay_profile);
+			WHERE `international` = 0
+			AND `id_ebay_profile` = '.(int)$id_ebay_profile);
 	}
 
 	public static function getNbInternationalShippings($id_ebay_profile)
 	{
 		return Db::getInstance()->getValue('SELECT count(*)
 			FROM '._DB_PREFIX_.'ebay_shipping 
-            WHERE international = 1
-            AND `id_ebay_profile` = '.(int)$id_ebay_profile);
+			WHERE international = 1
+			AND `id_ebay_profile` = '.(int)$id_ebay_profile);
 	}
 
 	public static function insert($id_ebay_profile, $ebay_carrier, $ps_carrier, $extra_fee, $id_zone, $international = false)
 	{
 		$sql = 'INSERT INTO `'._DB_PREFIX_.'ebay_shipping` (
-            `id_ebay_profile`, 
-            `ebay_carrier`, 
-            `ps_carrier`, 
-            `extra_fee`,
-            `international`,
-            `id_zone`
-            )
+			`id_ebay_profile`, 
+			`ebay_carrier`, 
+			`ps_carrier`, 
+			`extra_fee`,
+			`international`,
+			`id_zone`
+			)
 			VALUES(
 			\''.(int)$id_ebay_profile.'\',
 			\''.pSQL($ebay_carrier).'\',

@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2014 PrestaShop SA
+ *  @copyright 2007-2015 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -29,13 +29,13 @@ class EbayProductConfiguration
 
 	public static function getByProductIdAndProfile($product_id, $id_ebay_profile)
 	{
-        if (!$product_id)
-            return;
-        
+		if (!$product_id)
+			return;
+		
 		return Db::getInstance()->getRow('SELECT `id_product`, `blacklisted`, `extra_images`
 			FROM `'._DB_PREFIX_.'ebay_product_configuration`
 			WHERE `id_product` = '.(int)$product_id.'
-            AND `id_ebay_profile` = '.(int)$id_ebay_profile);
+			AND `id_ebay_profile` = '.(int)$id_ebay_profile);
 	}
 
 	public static function getBlacklistedProductIdsQuery($id_ebay_profile)
@@ -43,7 +43,7 @@ class EbayProductConfiguration
 		return 'SELECT `id_product`
 			FROM `'._DB_PREFIX_.'ebay_product_configuration`
 			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
-            AND `blacklisted` = 1';
+			AND `blacklisted` = 1';
 	}
 
 	public static function insertOrUpdate($product_id, $data)

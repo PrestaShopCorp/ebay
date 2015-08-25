@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2014 PrestaShop SA
+ *  @copyright 2007-2015 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -27,8 +27,8 @@
 class EbayFormShippingTab extends EbayTab
 {
 
-    function getContent()
-    {
+	function getContent()
+	{
 		$configKeys = array(
 			'EBAY_SECURITY_TOKEN',
 			'PS_LANG_DEFAULT'
@@ -45,7 +45,7 @@ class EbayFormShippingTab extends EbayTab
 		// Check if the module is configured
 		if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))
 		{
-            $template_vars = array('error_form_shipping' => 'true');
+			$template_vars = array('error_form_shipping' => 'true');
 			return $this->display('error_paypal_email.tpl', $template_vars);
 		}
 
@@ -95,11 +95,11 @@ class EbayFormShippingTab extends EbayTab
 		);
 
 		return $this->display('shipping.tpl', $template_vars);
-    }
-    
-    
-    function postProcess()
-    {
+	}
+	
+	
+	function postProcess()
+	{
 		//Update excluded location
 		if (Tools::getValue('excludeLocationHidden'))
 		{
@@ -166,8 +166,8 @@ class EbayFormShippingTab extends EbayTab
 				}
 			}
 		}        
-        
-    }
-    
+		
+	}
+	
 
 }

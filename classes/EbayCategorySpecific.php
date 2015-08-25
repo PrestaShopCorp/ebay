@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2014 PrestaShop SA
+ *  @copyright 2007-2015 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -56,7 +56,7 @@ class EbayCategorySpecific
 	{
 		$request = new EbayRequest($id_ebay_profile);
 		$ebay_category_ids = EbayCategoryConfiguration::getEbayCategoryIds($id_ebay_profile);
-        $ebay_profile = new EbayProfile($id_ebay_profile);
+		$ebay_profile = new EbayProfile($id_ebay_profile);
 
 		foreach ($ebay_category_ids as $ebay_category_id)
 		{
@@ -100,7 +100,7 @@ class EbayCategorySpecific
 						$ebay_category_specific_id = $db->getValue('SELECT `id_ebay_category_specific`
 							FROM `'._DB_PREFIX_.'ebay_category_specific`
 							WHERE `id_category_ref` = '.(int)$ebay_category_id.'
-                            AND `ebay_site_id` = '.(int)$ebay_profile->ebay_site_id.'
+							AND `ebay_site_id` = '.(int)$ebay_profile->ebay_site_id.'
 							AND `name` = \''.pSQL((string)$recommendation->Name).'\'');
 
 					$insert_data = array();
@@ -117,7 +117,7 @@ class EbayCategorySpecific
 
 		return true;
 	}
-    
+	
 	public static function atLeastOneOptionalSpecificIsConfigured($id_ebay_profile)
 	{
 		$optional_items = EbayCategorySpecific::getAllOptional($id_ebay_profile);
@@ -149,49 +149,49 @@ class EbayCategorySpecific
 
 	public static function getAllMandatory($id_ebay_profile)
 	{
-        $ebay_profile = new EbayProfile($id_ebay_profile);
+		$ebay_profile = new EbayProfile($id_ebay_profile);
 		return Db::getInstance()->ExecuteS('
 			SELECT * FROM '._DB_PREFIX_.'ebay_category_specific ecs	
 			INNER JOIN '._DB_PREFIX_.'ebay_category ec 
-            ON ecs.id_category_ref = ec.id_category_ref 
-            AND ecs.`ebay_site_id` = ec.`id_country`
-            AND ec.`id_country` = '.(int)$ebay_profile->ebay_site_id.'
+			ON ecs.id_category_ref = ec.id_category_ref 
+			AND ecs.`ebay_site_id` = ec.`id_country`
+			AND ec.`id_country` = '.(int)$ebay_profile->ebay_site_id.'
 			INNER JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
-            ON ec.`id_ebay_category` = ecc.`id_ebay_category`
-            AND ecc.`id_ebay_profile` = '.(int)$id_ebay_profile.'
+			ON ec.`id_ebay_category` = ecc.`id_ebay_category`
+			AND ecc.`id_ebay_profile` = '.(int)$id_ebay_profile.'
 			WHERE required = 1');
 	}
 
 	public static function getAllOptional($id_ebay_profile)
 	{
-        $ebay_profile = new EbayProfile($id_ebay_profile);
+		$ebay_profile = new EbayProfile($id_ebay_profile);
 		return Db::getInstance()->ExecuteS('
 			SELECT * FROM '._DB_PREFIX_.'ebay_category_specific ecs	
 			INNER JOIN '._DB_PREFIX_.'ebay_category ec 
-            ON ecs.id_category_ref = ec.id_category_ref
-            AND ecs.`ebay_site_id` = ec.`id_country`
-            AND ec.`id_country` = '.(int)$ebay_profile->ebay_site_id.'
+			ON ecs.id_category_ref = ec.id_category_ref
+			AND ecs.`ebay_site_id` = ec.`id_country`
+			AND ec.`id_country` = '.(int)$ebay_profile->ebay_site_id.'
 			INNER JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
-            ON ec.`id_ebay_category` = ecc.`id_ebay_category`
-            AND ecc.`id_ebay_profile` = '.(int)$id_ebay_profile.'
+			ON ec.`id_ebay_category` = ecc.`id_ebay_category`
+			AND ecc.`id_ebay_profile` = '.(int)$id_ebay_profile.'
 			WHERE required = 0');
 	}
 
-    public static function getNbOptionalItemSpecifics($id_ebay_profile)
-    {
-        $ebay_profile = new EbayProfile($id_ebay_profile);
-        $sql = 'SELECT count(*)
-            FROM `'._DB_PREFIX_.'ebay_category_specific` ecs
-            INNER JOIN `'._DB_PREFIX_.'ebay_category` ec
-            ON ecs.`id_category_ref` = ec.`id_category_ref`
-            AND ecs.`ebay_site_id` = ec.`id_country`
-            AND ec.`id_country` = '.(int)$ebay_profile->ebay_site_id.'
-            INNER JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
-            ON ec.`id_ebay_category` = ecc.`id_ebay_category`
-            AND ecc.`id_ebay_profile` = '.(int)$id_ebay_profile.'
-            WHERE ecs.`required` = 0
-            AND `id_ebay_category_specific_value` > 0';
-        return Db::getInstance()->getValue($sql);
-    }
+	public static function getNbOptionalItemSpecifics($id_ebay_profile)
+	{
+		$ebay_profile = new EbayProfile($id_ebay_profile);
+		$sql = 'SELECT count(*)
+			FROM `'._DB_PREFIX_.'ebay_category_specific` ecs
+			INNER JOIN `'._DB_PREFIX_.'ebay_category` ec
+			ON ecs.`id_category_ref` = ec.`id_category_ref`
+			AND ecs.`ebay_site_id` = ec.`id_country`
+			AND ec.`id_country` = '.(int)$ebay_profile->ebay_site_id.'
+			INNER JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
+			ON ec.`id_ebay_category` = ecc.`id_ebay_category`
+			AND ecc.`id_ebay_profile` = '.(int)$id_ebay_profile.'
+			WHERE ecs.`required` = 0
+			AND `id_ebay_category_specific_value` > 0';
+		return Db::getInstance()->getValue($sql);
+	}
 
 }

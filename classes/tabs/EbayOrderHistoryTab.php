@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2014 PrestaShop SA
+ *  @copyright 2007-2015 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -27,8 +27,8 @@
 class EbayOrderHistoryTab extends EbayTab
 {
 
-    function getContent()
-    {
+	function getContent()
+	{
 		// Check if the module is configured
 		if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))
 			return '<p><b>'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab').'</b></p><br />';
@@ -44,7 +44,7 @@ class EbayOrderHistoryTab extends EbayTab
 		);
 
 		return $this->display('ordersHistory.tpl', $template_vars);
-    }
-    
+	}
+	
 }
 

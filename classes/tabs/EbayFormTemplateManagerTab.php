@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2014 PrestaShop SA
+ *  @copyright 2007-2015 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -27,8 +27,8 @@
 class EbayFormTemplateManagerTab extends EbayTab
 {
 
-    function getContent()
-    {
+	function getContent()
+	{
 		// Check if the module is configured
 		if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))
 			return '<p class="error"><b>'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab').'</b></p><br /><script type="text/javascript">$("#menuTab4").addClass("wrong")</script>';
@@ -83,18 +83,18 @@ class EbayFormTemplateManagerTab extends EbayTab
 		}
 		
 		return $this->display('formTemplateManager.tpl', $smarty_vars);
-    }
-    
-    
-    function postProcess()
-    {
+	}
+	
+	
+	function postProcess()
+	{
 		$ebay_product_template = Tools::getValue('ebay_product_template');
 		$ebay_product_template_title = Tools::getValue('ebay_product_template_title');
 		if (empty($ebay_product_template_title))
 			$ebay_product_template_title = '{TITLE}';
 
 		// work around for the tinyMCE bug deleting the css line
-		$css_line = '<link rel="stylesheet" type="text/css" href="'.$this->_getModuleUrl().'css/ebay.css" />';
+		$css_line = '<link rel="stylesheet" type="text/css" href="'.$this->_getModuleUrl().'views/css/ebay.css" />';
 		$ebay_product_template = $css_line.TotFormat::formatDescription($ebay_product_template);
 
 			// Saving new configurations
@@ -102,7 +102,7 @@ class EbayFormTemplateManagerTab extends EbayTab
 			return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));
 		else
 			return $this->ebay->displayError($this->ebay->l('Settings failed'));    
-    
-    }
-      
+	
+	}
+	  
 }

@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2014 PrestaShop SA
+*  @copyright 2007-2015 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -33,9 +33,7 @@
 		
         <div class="margin-form">
 			
-			<a href="{$url|escape:'urlencode'}&EBAY_SYNC_ORDERS=1">
-				<input type="button" class="button" value="{l s='Sync Orders from eBay' mod='ebay'}" />
-			</a>
+			<a href="{$url|escape:'urlencode'}&EBAY_SYNC_ORDERS=1"><input type="button" class="button" value="{l s='Sync Orders from eBay' mod='ebay'}" /></a>
 	        <br>
 		
         </div>

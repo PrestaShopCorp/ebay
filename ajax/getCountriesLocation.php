@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2014 PrestaShop SA
+ *  @copyright 2007-2015 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -31,8 +31,8 @@ if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get(
 
 $id_ebay_profile = (int)Tools::getValue('profile');
 $sql = 'SELECT * FROM '._DB_PREFIX_.'ebay_shipping_zone_excluded 
-    WHERE `id_ebay_profile` = '.$id_ebay_profile.' 
-    AND region = \''.pSQL(Tools::getValue('region')).'\'';
+	WHERE `id_ebay_profile` = '.$id_ebay_profile.' 
+	AND region = \''.pSQL(Tools::getValue('region')).'\'';
 $countries = Db::getInstance()->ExecuteS($sql);
 
 if (count($countries))

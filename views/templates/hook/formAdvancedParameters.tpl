@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2014 PrestaShop SA
+*  @copyright 2007-2015 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -77,7 +77,14 @@
 			<input type="text" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall':'UTF-8'}">
 		</div>
 		<div style="clear:both;"></div>
-
+		<label>
+			{l s='Send new product images on the next synchronization' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<a id="reset-image" href="#" target="_blank" class="button">Active</a>
+			<p id="reset-image-result"></p>
+		</div>
+		<div style="clear:both;"></div>
 	</fieldset>
     
     
@@ -205,6 +212,27 @@
                     $('#sync_orders_by_cron_url').hide();
                 }
             });
+
+            $(function() {
+				$('#reset-image').on('click', function(e){
+					e.preventDefault();
+					$.ajax({
+						type: 'POST',
+						url: module_dir + 'ebay/ajax/deleteProductImage.php',
+						data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=delete-all",
+						beforeSend: function() {
+						    $('#reset-image-result').css('color', 'orange').text("{/literal}{l s='Activation in progress...' mod='ebay'}{literal}");
+						}
+					}).done(function( data ) {
+						if (data == 'success')
+							$('#reset-image-result').css('color', 'green').text("{/literal}{l s='New images will be included in next synchronization.' mod='ebay'}{literal}");
+						else
+							$('#reset-image-result').css('color', 'red').text("{/literal}{l s='An error has occurred.' mod='ebay'}{literal}");
+					}).fail(function() {
+						$('#reset-image-result').css('color', 'red').text("{/literal}{l s='An error has occurred.' mod='ebay'}{literal}");
+					})
+				});
+			});
 		</script>
 	{/literal}    
     

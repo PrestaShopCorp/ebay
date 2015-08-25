@@ -1,5 +1,5 @@
 {*
-* 2007-2014 PrestaShop
+* 2007-2015 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2014 PrestaShop SA
+*  @copyright 2007-2015 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -28,7 +28,7 @@
 		<NameValueList>
 			<Name>{$name}</Name>
 			{foreach from=$values item=value}
-				<Value>{$value}</Value>
+				<Value><![CDATA[{$value}]]></Value>
 			{/foreach}
 		</NameValueList>
 	{/foreach}
@@ -44,7 +44,7 @@
 				{foreach from=$variation.variation_specifics key=name item=value}
 					<NameValueList>
 						<Name>{$name}</Name>
-						<Value>{$value}</Value>
+						<Value><![CDATA[{$value}]]></Value>
 					</NameValueList>
 				{/foreach}				
 			</VariationSpecifics>
@@ -62,10 +62,10 @@
 	{foreach from=$variations_pictures item=variations_pictures_list}
 		{foreach from=$variations_pictures_list item=picture}
 			{if isset($picture.name)}
-				<VariationSpecificName>{$picture.name}</VariationSpecificName>
+				<VariationSpecificName><![CDATA[{$picture.name}]]></VariationSpecificName>
 			{/if}
 			<VariationSpecificPictureSet>
-				<VariationSpecificValue>{$picture.value}</VariationSpecificValue>                
+				<VariationSpecificValue><![CDATA[{$picture.value}]]></VariationSpecificValue>                
 				<PictureURL>{$picture.url}</PictureURL>
 			</VariationSpecificPictureSet>
 		{/foreach}

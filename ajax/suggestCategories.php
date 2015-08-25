@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2014 PrestaShop SA
+ *  @copyright 2007-2015 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -44,7 +44,7 @@ $ebay_profile = new EbayProfile($id_ebay_profile);
 $category_config_list = array();
 $category_config_list_tmp = Db::getInstance()->executeS('SELECT *
 	FROM `'._DB_PREFIX_.'ebay_category_configuration` 
-    WHERE `id_ebay_profile` = '.(int)$ebay_profile->id);
+	WHERE `id_ebay_profile` = '.(int)$ebay_profile->id);
 
 foreach ($category_config_list_tmp as $category)
 	$category_config_list[$category['id_category']] = $category;
@@ -76,7 +76,7 @@ foreach ($products as $product)
 /* cats ref */
 $ref_cats = Db::getInstance()->executeS('SELECT `id_ebay_category`, `id_category_ref`
 	FROM `'._DB_PREFIX_.'ebay_category`
-    WHERE `id_country` = '.(int)$ebay->ebay_profile->ebay_site_id);
+	WHERE `id_country` = '.(int)$ebay->ebay_profile->ebay_site_id);
 
 if (!is_array($ref_cats) || !count($ref_cats))
 	return;

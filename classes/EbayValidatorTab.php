@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2014 PrestaShop SA
+ *  @copyright 2007-2015 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -64,27 +64,27 @@ class EbayValidatorTab{
 		//$configs_mandatory = array('EBAY_API_USERNAME');
 		$ebay = new Ebay();
 		$ebay_profile = new EbayProfile($id_ebay_profile);
-        
-        $has_something_configured = false;
-        $return_message = null;
+		
+		$has_something_configured = false;
+		$return_message = null;
 		foreach ($configs_mandatory_profile as $config) 
 		{
 			if(($ebay_profile->getConfiguration($config)) == null) {
-                if (!$return_message)
-                    $return_message = array(
-                        'indicator' => 'wrong',
-                        'indicatorBig' => 'wrong',
-                        'message' => $ebay->l('Your need to configure the field ', 'ebayvalidatortab').' '.$config
-                    );
+				if (!$return_message)
+					$return_message = array(
+						'indicator' => 'wrong',
+						'indicatorBig' => 'wrong',
+						'message' => $ebay->l('Your need to configure the field ', 'ebayvalidatortab').' '.$config
+					);
 			} else
-                $has_something_configured = true;
+				$has_something_configured = true;
 		}
-        
-        // if nothing is configured, we don't show a message
-        if ($has_something_configured && $return_message)
-            return $return_message;
-        
-        /*
+		
+		// if nothing is configured, we don't show a message
+		if ($has_something_configured && $return_message)
+			return $return_message;
+		
+		/*
 		foreach ($configs_mandatory as $config) 
 		{
 			if((Configuration::get($config)) == null)
@@ -94,7 +94,7 @@ class EbayValidatorTab{
 					'message' => $ebay->l('Your need to configure the field ', 'ebayvalidatortab') . $config
 				);
 		}
-        */
+		*/
 		if(!$ebay_profile->ebay_user_identifier)
 			return array(
 				'indicator' => 'wrong',

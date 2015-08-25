@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2014 PrestaShop SA
+ *  @copyright 2007-2015 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -67,6 +67,8 @@ class EbayProfile extends ObjectModel
 
 		return $fields;
 	}    
+
+
 	
 	public function __construct($id = null, $id_lang = null, $id_shop = null) 
 	{
@@ -77,7 +79,7 @@ class EbayProfile extends ObjectModel
 					'fields' => array(
 						'id_lang' =>		array('type' => self::TYPE_INT, 'validate' => 'isInt'),
 						'id_shop' =>		array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-						'ebay_user_identifier' => array('type' => self::TYPE_STRING, 'size' => 32),
+						'ebay_user_identifier' => array('type' => self::TYPE_STRING, 'size' => 255),
 						'ebay_site_id' => array('type' => self::TYPE_STRING, 'size' => 32),
 						'id_ebay_returns_policy_configuration' => array('type' => self::TYPE_INT, 'validate' => 'isInt')
 					),
@@ -106,6 +108,21 @@ class EbayProfile extends ObjectModel
 		return $returns_policy_configuration;
 	}
 	
+	public function loadStoreCategories()
+	{
+		
+		if($this->getConfiguration('EBAY_PROFILE_STORE_CAT') || !$this->getToken() || $this->getToken() == null)
+			return;
+
+		$ebay_store_categories = EbayStoreCategory::getStoreCategories($this->id);
+		if(count($ebay_store_categories['compatible']) == 0)
+		{
+			$ebay = new EbayRequest();
+			EbayStoreCategory::updateStoreCategoryTable($ebay->getStoreCategories(), $this);
+		}
+		$this->setConfiguration('EBAY_PROFILE_STORE_CAT', 1);
+	}
+
 	public function setReturnsPolicyConfiguration($within, $who_pays, $description, $accepted_option)
 	{
 		
@@ -237,6 +254,7 @@ class EbayProfile extends ObjectModel
 		$this->setConfiguration('EBAY_LISTING_DURATION', 'GTC');
 		$this->setConfiguration('EBAY_AUTOMATICALLY_RELIST', 'on');
 		$this->setConfiguration('EBAY_LAST_RELIST', date('Y-m-d'));        
+		$this->setConfiguration('EBAY_SEND_TRACKING_CODE', 1);        
 	}
 	
 	public function setPicturesSettings() 
