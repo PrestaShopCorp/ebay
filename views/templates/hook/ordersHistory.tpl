@@ -30,7 +30,7 @@
 <br />
 <br />
 <h2>{l s='Orders History' mod='ebay'} :</h2>
-
+<div class="ebay_mind big">{l s='If you have orders with NOSEND-EBAY in the email client, you can contact us to open a support ticket.' mod='ebay'}<a class="kb-help" data-errorcode="HELP-VISUALIZATION-NO-SEND-EBAY" data-module="ebay" data-lang="{$help.lang}" module_version="{$help.module_version}" prestashop_version="{$help.ps_version}"></a></div>
 {if count($orders)}
 	{foreach from=$orders item="order"}
 		<style>

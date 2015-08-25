@@ -304,6 +304,7 @@ function loadCategoriesFromEbay(step, id_category, row) {
 							loadCategoriesFromEbay(3);
 							$('#load_cat_ebay').css('display', 'none');
 							$('.hidden.importCatEbay').removeClass('hidden').removeClass('importCatEbay');
+							alertOnExit(false, "");
 							return loadCategories();
 
 						}

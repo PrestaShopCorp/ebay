@@ -40,7 +40,11 @@ class EbayOrderHistoryTab extends EbayTab
 
 		$template_vars = array(
 			'date_last_import' => $dateLastImport,
-			'orders' => isset($orders) ? $orders : array()
+			'orders' => isset($orders) ? $orders : array(),
+			'help'	=> array(
+				'lang' => $this->context->country->iso_code,
+				'module_version' => $this->ebay->version,
+				'ps_version' => _PS_VERSION_,)
 		);
 
 		return $this->display('ordersHistory.tpl', $template_vars);
