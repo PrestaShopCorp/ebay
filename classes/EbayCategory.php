@@ -213,6 +213,10 @@ class EbayCategory
 		return $this->conditions_values[$id_ebay_profile];
 	}
 
+	public static function deleteCategoriesByIdCountry($id_country)
+	{
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'ebay_category` WHERE `id_country` = '.(int)$id_country);
+	}
 	public static function insertCategories($ebay_site_id, $categories, $categories_multi_sku)
 	{
 		$db = Db::getInstance();

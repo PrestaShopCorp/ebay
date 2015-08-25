@@ -247,7 +247,7 @@ $(document).ready(function() {
 
 // Import Category From eBay
 function loadCategoriesFromEbay(step, id_category, row) {
-
+		alertOnExit(true, alert_exit_import_categories);
 		step = typeof step !== 'undefined' ? step : 1;
    		id_category = typeof id_category !== 'undefined' ? id_category : false;
    		row = typeof row !== 'undefined' ? row : 2;
@@ -268,7 +268,7 @@ function loadCategoriesFromEbay(step, id_category, row) {
 					{
 						$('#load_cat_ebay tbody tr:nth-child('+row+')').addClass('error');
 					}
-
+					alertOnExit(false, "");
 				}
 				else
 				{	
@@ -277,7 +277,7 @@ function loadCategoriesFromEbay(step, id_category, row) {
 					if (step == 1)
 					{
 						for (var i in data){
-							output +='<tr class="standby" data-id="' + data[i].CategoryID + '"><td></td><td>'+categories_ebay_l['Download subcategories of'] + ' ' + data[i].CategoryName + '</td><td>' + categories_ebay_l['En attente'] + '</td></tr>';
+							output +='<tr class="standby" data-id="' + data[i].CategoryID + '"><td></td><td>'+categories_ebay_l['Download subcategories of'] + ' ' + data[i].CategoryName + '</td><td>' + categories_ebay_l['Waiting'] + '</td></tr>';
 						}
 						var count = $.map(data, function(n, i) { return i; }).length;
 						$('#cat_parent').removeClass('load').addClass('success');
@@ -307,10 +307,11 @@ function loadCategoriesFromEbay(step, id_category, row) {
 							return loadCategories();
 
 						}
+						alertOnExit(false, "");
 					}
 
 				}
-
 			}
 		});
+		
 	}

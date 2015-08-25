@@ -1634,6 +1634,7 @@ class Ebay extends Module
             'ps_version'    => _PS_VERSION_,
             'admin_path'    => basename(_PS_ADMIN_DIR_),
             'load_kb_path'  => _MODULE_DIR_.'ebay/ajax/loadKB.php',
+            'alert_exit_import_categories'  => $this->l('Import of eBay category is running.'),
         );
 
         $this->smarty->assign($smarty_vars);

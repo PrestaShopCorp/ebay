@@ -164,7 +164,7 @@
         'Stock' : "{l s='Stock' mod='ebay'}",
         'Finish' : "{l s='Finish' mod='ebay'}",
         'An error has occurred' : "{l s='An error has occurred' mod='ebay'}",
-        'En attente' : "{l s='En attente' mod='ebay'}",
+        'Waiting' : "{l s='Waiting' mod='ebay'}",
         'categories loaded success' : "{l s='categories loaded successfully.' mod='ebay'}",
         'Download subcategories of' : "{l s='Download subcategories of' mod='ebay'}",
 	{rdelim};

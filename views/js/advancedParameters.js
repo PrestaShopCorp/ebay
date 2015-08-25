@@ -79,3 +79,21 @@ function launchDatabaseChecking(i){
 function refreshDatabaseProgress(){
 	$('#check_database_progress > .progress > .progress-bar').text($('#check_database_progress > .progress > .progress-bar').attr('aria-valuenow')+" / "+$('#check_database_progress').attr('data-nb_database'));
 }
+function alertOnExit(active, msg){
+	if (active === true){
+		window.onbeforeunload = function (e) {
+			var message = msg,
+			e = e || window.event;
+				  // For IE and Firefox
+			if (e) {
+				e.returnValue = message;
+			}
+			// For Safari
+			return message;
+		};	
+	}
+	else if (active === false)
+	{
+		window.onbeforeunload = null;
+	}
+}

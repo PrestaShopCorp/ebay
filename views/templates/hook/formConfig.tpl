@@ -162,6 +162,7 @@
 
 <script>
 	{literal}
+		var alert_exit_import_categories = "{/literal}{$alert_exit_import_categories}{literal}";
 		function getKb(item){
 			item = typeof item !== 'undefined' ? item : 0;
 			
@@ -189,25 +190,5 @@
 		jQuery(document).ready(function($) {
 			getKb();
 		});
-		
-		function alertOnExit(active, msg){
-			if (active === true){
-				window.onbeforeunload = function (e) {
-				  var message = msg,
-				  e = e || window.event;
-				  // For IE and Firefox
-				  if (e) {
-				    e.returnValue = message;
-				  }
-					  // For Safari
-				  return message;
-				};	
-			}
-			else if (active === false)
-			{
-				window.onbeforeunload = null;
-			}
-		}
-
 	{/literal}
 </script>
