@@ -179,6 +179,7 @@ class EbayFormEbaySyncTab extends EbayTab
 			'nb_products_mode_b' => $nb_products_mode_b ? $nb_products_mode_b : 0,
 			'nb_products_sync_url' => $nb_products_sync_url,
 			'sync_products_url' => $sync_products_url,
+			'sync_message_exit' =>  $this->ebay->l('A synchronization is currently underway. If you leave this page, it will be abandoned.'),
 			'action_url' => $action_url,
 			'ebay_sync_option_resync' => $this->ebay_profile->getConfiguration('EBAY_SYNC_OPTION_RESYNC'),
 			'categories' => $categories,

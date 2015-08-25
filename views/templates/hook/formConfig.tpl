@@ -189,19 +189,25 @@
 		jQuery(document).ready(function($) {
 			getKb();
 		});
-
-			window.onbeforeunload = function (e) {
-			  var message = "Your module are synchronizing product",
-			  e = e || window.event;
-			  // For IE and Firefox
-			  if (e) {
-			    e.returnValue = message;
-			  }
-
-			  // For Safari
-			  return message;
-			};
 		
+		function alertOnExit(active, msg){
+			if (active === true){
+				window.onbeforeunload = function (e) {
+				  var message = msg,
+				  e = e || window.event;
+				  // For IE and Firefox
+				  if (e) {
+				    e.returnValue = message;
+				  }
+					  // For Safari
+				  return message;
+				};	
+			}
+			else if (active === false)
+			{
+				window.onbeforeunload = null;
+			}
+		}
 
 	{/literal}
 </script>

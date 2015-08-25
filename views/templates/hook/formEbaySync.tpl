@@ -118,6 +118,7 @@
 	var counter = 0;
 	function eBaySyncProduct(option)
 	{
+		alertOnExit(true, "{/literal}{$sync_message_exit|escape:'htmlall':'UTF-8'}{literal}");
 		counter++;
 		$.ajax({
 			type: "POST",
@@ -128,8 +129,10 @@
 				$("#resultSync").html(tab[1]);
 				if (tab[0] != "OK")
 					eBaySyncProduct(option);
-				else
+				else {
 					reableSyncProduct();
+					alertOnExit(false, '');
+				}
 			}
 		});
 	}
