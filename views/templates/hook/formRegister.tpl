@@ -139,7 +139,7 @@
 
                         <!-- Ebay Site -->
                         <tr class="margin-bottom"> 
-                            <td><label class="ebay-label" for="ebay_countries">{l s='Choose ebay site you want to listen:' mod='ebay'}</label></td> 
+                            <td><label class="ebay-label" for="ebay_countries">{l s='Choose ebay site on which you want to list:' mod='ebay'}</label></td> 
                             <td>
                                 <select name="ebay_country" id="ebay_countries" class="ebay_select ebay-float-right">
                                     {if isset($ebay_countries) && $ebay_countries && sizeof($ebay_countries)}
@@ -154,7 +154,7 @@
                         <!-- Language -->
                         <tr class="margin-bottom"> 
                             <td>
-                                <label class="ebay-label" for="ebay_languages">{l s='Choose the language you want to list with:' mod='ebay'}</label>
+                                <label class="ebay-label" for="ebay_languages">{l s='Choose language:' mod='ebay'}</label>
                             </td> 
                             <td>
                                 <select name="ebay_language" id="ebay_languages" class="ebay_select ebay-float-right">

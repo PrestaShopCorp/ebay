@@ -764,7 +764,7 @@ class Ebay extends Module
 
             if (!$order->isCountryEnable())
             {
-                $message = $this->l('Country is not activate');
+                $message = $this->l('Country is not activated');
                 $errors[] = $message;
                 $order->addErrorMessage($message);
                 continue;

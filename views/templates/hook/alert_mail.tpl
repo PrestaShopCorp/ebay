@@ -1,4 +1,4 @@
-za{*
+{*
 * 2007-2015 PrestaShop
 *
 * NOTICE OF LICENSE
@@ -33,7 +33,7 @@ za{*
 					<td style="padding:7px 0">
 						<font size="2" face="Open-sans, sans-serif" color="#555454">
 							<p style="border-bottom:1px solid #d6d4d4;margin:3px 0 7px;text-transform:uppercase;font-weight:500;font-size:18px;padding-bottom:10px">
-								{l s='Erreur(s)' mod='ebay'}
+								{l s='Error(s)' mod='ebay'}
 							</p>
 							{foreach from=$errors item='error'}
 								<p style="color:#333;padding-bottom:10px;border-bottom:{cycle values="none,1px solid #d6d4d4" reset=true};">

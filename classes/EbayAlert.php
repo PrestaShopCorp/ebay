@@ -73,7 +73,7 @@ class EbayAlert
 		if ($this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING') >= 12)
 			$this->errors[] = array(
 				'type' => 'error', 
-				'message' => $this->ebay->l('You can\'t send more than 12 pictures by product. Please configure that in Advanced Parameters')
+				'message' => $this->ebay->l('You can\'t send more than 12 pictures per product. Please configure in Advanced Settings')
 				);
 	}
 
