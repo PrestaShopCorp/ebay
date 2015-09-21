@@ -158,6 +158,7 @@ class EbayRequest
 				'SellerBusinessType' => $response->User->SellerBusinessType
 			);
 
+			$userProfileCache = $userProfile;
 			$this->apiUrl = $apiUrl;
 		} else {
 			$userProfile = $userProfileCache;
