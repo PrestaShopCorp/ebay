@@ -41,7 +41,6 @@ class EbayAlert
 
 	public function getAlerts(){
 		$this->reset();
-		$this->checkNumberPhoto();
 		$this->checkOrders();
 		$this->checkUrlDomain();
 		$this->checkCronTask();
@@ -59,22 +58,36 @@ class EbayAlert
 		$this->alerts = array_merge($this->errors, $this->warnings, $this->infos);
 	}
 
-	private function checkNumberPhoto(){
+	public function checkNumberPhoto(){
+		$context = Context::getContext();
 		if ($this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING') > 0){
 			$link = new EbayCountrySpec();
 			$link->getPictureUrl();
-			$this->warnings[] = array(
+			return array(
 				'type' => 'warning', 
-				'message' => $this->ebay->l('You will send more than one image. This can have financial consequences. Please verify @link@this link@/link@'),
-				'link_warn' => $link->getPictureUrl()
+				'message' => $this->ebay->l('You will send more than one image. This can have financial consequences. Please verify this link'),
+				'link_warn' => $link->getPictureUrl(),
+				'kb'	=> array(
+							'errorcode' => 'PICTURES_NUMBER_ABOVE_ZERO', 
+							'lang' => $context->language->iso_code, 
+							'module_version' => $this->ebay->version, 
+							'prestashop_version' => _PS_VERSION_
+							),
 				);
 		}
 
 		if ($this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING') >= 12)
-			$this->errors[] = array(
+			return array(
 				'type' => 'error', 
-				'message' => $this->ebay->l('You can\'t send more than 12 pictures per product. Please configure in Advanced Settings')
+				'message' => $this->ebay->l('You can\'t send more than 12 pictures per product. Please configure in Advanced Settings'),
+				'kb'	=> array(
+							'errorcode' => 'PICTURES_NUMBER_ABOVE_TWELVE', 
+							'lang' => $context->language->iso_code, 
+							'module_version' => $this->ebay->version, 
+							'prestashop_version' => _PS_VERSION_
+							),
 				);
+		return false;
 	}
 
 	private function checkOrders(){

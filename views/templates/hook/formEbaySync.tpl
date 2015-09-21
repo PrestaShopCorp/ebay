@@ -144,7 +144,14 @@
 
 <form action="{$action_url|escape:'urlencode'}" method="post" class="form" id="configForm4">
 	<fieldset style="border: 0">
-
+		{if isset($img_alert) && !empty($img_alert)}
+			<div class="warning big">
+                {$img_alert['message']|escape:'htmlall':'UTF-8'}
+                {if isset($img_alert.kb)}
+					<a class="kb-help" data-errorcode="{$img_alert.kb.errorcode}" data-module="ebay" data-lang="{$img_alert.kb.lang}" module_version="{$img_alert.kb.module_version}" prestashop_version="{$img_alert.kb.prestashop_version}"></a>
+				{/if}
+            </div>
+		{/if}
         {if isset($category_alerts) && !empty($category_alerts)}
             <div class="warning big">
                 {$category_alerts|escape:'htmlall':'UTF-8'}
