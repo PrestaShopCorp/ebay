@@ -31,7 +31,7 @@ class EbayOrderHistoryTab extends EbayTab
 	{
 		// Check if the module is configured
 		if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))
-			return '<p><b>'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab').'</b></p><br />';
+			return '<p><b>'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayorderhistorytab').'</b></p><br />';
 
 		$dateLastImport = '-';
 

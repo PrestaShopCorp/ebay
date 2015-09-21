@@ -31,7 +31,7 @@ class EbayFormTemplateManagerTab extends EbayTab
 	{
 		// Check if the module is configured
 		if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))
-			return '<p class="error"><b>'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab').'</b></p><br /><script type="text/javascript">$("#menuTab4").addClass("wrong")</script>';
+			return '<p class="error"><b>'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayformtemplatemanagertab').'</b></p><br /><script type="text/javascript">$("#menuTab4").addClass("wrong")</script>';
 
 		$iso = $this->context->language->iso_code;
 		$iso_tiny_mce = (file_exists(_PS_ROOT_DIR_.'/js/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en');
@@ -99,9 +99,9 @@ class EbayFormTemplateManagerTab extends EbayTab
 
 			// Saving new configurations
 		if ($this->ebay_profile->setConfiguration('EBAY_PRODUCT_TEMPLATE', $ebay_product_template, true) && $this->ebay_profile->setConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE', $ebay_product_template_title))
-			return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));
+			return $this->ebay->displayConfirmation($this->ebay->l('Settings updated', 'ebayformtemplatemanagertab'));
 		else
-			return $this->ebay->displayError($this->ebay->l('Settings failed'));    
+			return $this->ebay->displayError($this->ebay->l('Settings failed', 'ebayformtemplatemanagertab'));    
 	
 	}
 	  

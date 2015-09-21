@@ -31,10 +31,10 @@ class EbayFormEbaySyncTab extends EbayTab
 	{
 		// Check if the module is configured
 		if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))
-			return '<p class="error"><b>'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab').'</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
+			return '<p class="error"><b>'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayformebaysynctab').'</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
 		
 		if (!EbayCategoryConfiguration::getTotalCategoryConfigurations($this->ebay_profile->id))
-			return '<p class="error"><b>'.$this->ebay->l('Please configure the \'Category settings\' tab before using this tab').'</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
+			return '<p class="error"><b>'.$this->ebay->l('Please configure the \'Category settings\' tab before using this tab', 'ebayformebaysynctab').'</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
 
 		if (version_compare(_PS_VERSION_, '1.5', '>'))
 		{
@@ -124,7 +124,7 @@ class EbayFormEbaySyncTab extends EbayTab
 		}
 
 		$nb_products = ($this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'B' ? $nb_products_mode_b : $nb_products_mode_a);
-		$prod_nb = ($nb_products < 2 ? $this->ebay->l('product') : $this->ebay->l('products'));
+		$prod_nb = ($nb_products < 2 ? $this->ebay->l('product', 'ebayformebaysynctab') : $this->ebay->l('products', 'ebayformebaysynctab'));
 
 		// Display Form
 		$url_vars = array(
@@ -171,6 +171,7 @@ class EbayFormEbaySyncTab extends EbayTab
 		$nb_products_sync_url = _MODULE_DIR_.'ebay/ajax/getNbProductsSync.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')).'&profile='.$this->ebay_profile->id;
 		$sync_products_url = _MODULE_DIR_.'ebay/ajax/eBaySyncProduct.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&option=\'+option+\'&profile='.$this->ebay_profile->id.'&admin_path='.basename(_PS_ADMIN_DIR_).'&time='.pSQL(date('Ymdhis'));
 
+		$ebay_alert = new EbayAlert($this->ebay);
 		$smarty_vars = array(
 			'category_alerts' => $this->_getAlertCategories(),
 			'path' => $this->path,
@@ -179,7 +180,7 @@ class EbayFormEbaySyncTab extends EbayTab
 			'nb_products_mode_b' => $nb_products_mode_b ? $nb_products_mode_b : 0,
 			'nb_products_sync_url' => $nb_products_sync_url,
 			'sync_products_url' => $sync_products_url,
-			'sync_message_exit' =>  $this->ebay->l('A synchronization is currently underway. If you leave this page, it will be abandoned.'),
+			'sync_message_exit' =>  $this->ebay->l('A synchronization is currently underway. If you leave this page, it will be abandoned.', 'ebayformebaysynctab'),
 			'action_url' => $action_url,
 			'ebay_sync_option_resync' => $this->ebay_profile->getConfiguration('EBAY_SYNC_OPTION_RESYNC'),
 			'categories' => $categories,
@@ -187,9 +188,10 @@ class EbayFormEbaySyncTab extends EbayTab
 			'sync_2' => (Tools::getValue('section') == 'sync' && Tools::getValue('ebay_sync_mode') == "2" && Tools::getValue('btnSubmitSyncAndPublish')),
 			'is_sync_mode_b' => ($this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'B'),
 			'ebay_sync_mode' => (int)($this->ebay_profile->getConfiguration('EBAY_SYNC_MODE') ? $this->ebay_profile->getConfiguration('EBAY_SYNC_MODE') : 2),
-			'prod_str' => $nb_products >= 2 ? $this->ebay->l('products') : $this->ebay->l('product'),
+			'prod_str' => $nb_products >= 2 ? $this->ebay->l('products', 'ebayformebaysynctab') : $this->ebay->l('product', 'ebayformebaysynctab'),
 			'admin_path'	=> basename(_PS_ADMIN_DIR_),
 			'load_kb_path'	=> _MODULE_DIR_.'ebay/ajax/loadKB.php',
+			'img_alert'	=> $ebay_alert->checkNumberPhoto(),
 		);
 
 		return $this->display('formEbaySync.tpl', $smarty_vars);
@@ -246,9 +248,9 @@ class EbayFormEbaySyncTab extends EbayTab
 		if (count($cat_with_problem) > 0)
 		{
 			if (count($cat_with_problem) == 1)
-				$alert = $this->ebay->l('You have chosen eBay category : ').' "'.$var.'" '.$this->ebay->l(' which does not support multivariation products. Each variation of a product will generate a new product in eBay');
+				$alert = $this->ebay->l('You have chosen eBay category : ', 'ebayformebaysynctab').' "'.$var.'" '.$this->ebay->l(' which does not support multivariation products. Each variation of a product will generate a new product in eBay', 'ebayformebaysynctab');
 			else
-				$alert = $this->ebay->l('You have chosen eBay categories : ').' "'.$var.'" '.$this->ebay->l(' which do not support multivariation products. Each variation of a product will generate a new product in eBay');
+				$alert = $this->ebay->l('You have chosen eBay categories : ', 'ebayformebaysynctab').' "'.$var.'" '.$this->ebay->l(' which do not support multivariation products. Each variation of a product will generate a new product in eBay', 'ebayformebaysynctab');
 		}
 
 		return $alert;
