@@ -142,21 +142,27 @@ class EbayRequest
 	 **/
 	public function getUserProfile($username)
 	{
-		//Change API URL
-		$apiUrl = $this->apiUrl;
-		$this->apiUrl = ($this->dev) ? 'http://open.api.sandbox.ebay.com/shopping?' : 'http://open.api.ebay.com/shopping?';
-		$response = $this->_makeRequest('GetUserProfile', array('user_id' => $username), true);
+		global $userProfileCache;
+		if (empty($userProfileCache)) {
+			//Change API URL
+			$apiUrl = $this->apiUrl;
+			$this->apiUrl = ($this->dev) ? 'http://open.api.sandbox.ebay.com/shopping?' : 'http://open.api.ebay.com/shopping?';
+			$response = $this->_makeRequest('GetUserProfile', array('user_id' => $username), true);
 
-		if ($response === false)
-			return false;
+			if ($response === false)
+				return false;
 
-		$userProfile = array(
-			'StoreUrl' => $response->User->StoreURL,
-			'StoreName' => $response->User->StoreName,
-			'SellerBusinessType' => $response->User->SellerBusinessType
-		);
+			$userProfile = array(
+				'StoreUrl' => $response->User->StoreURL,
+				'StoreName' => $response->User->StoreName,
+				'SellerBusinessType' => $response->User->SellerBusinessType
+			);
 
-		$this->apiUrl = $apiUrl;
+			$userProfileCache = $userProfile;
+			$this->apiUrl = $apiUrl;
+		} else {
+			$userProfile = $userProfileCache;
+		}
 
 		return $userProfile;
 	}
