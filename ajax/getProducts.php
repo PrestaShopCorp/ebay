@@ -58,7 +58,7 @@ if ($is_one_five) {
 		
 	$sql .= ' product_shop.`id_shop` = 1 AND ';
 	$sql .= ' p.`id_category_default` = '.(int)Tools::getValue('category');
-	$sql .= $ebay->addSqlRestrictionOnLang('sa');
+	$sql .= $ebay->addSqlRestrictionOnLang('pl');
 	
 } else {
 	
