@@ -597,6 +597,7 @@ class EbaySynchronizer
 
 			//case where the product is multisku and could have been sent a several products
 			if (count($variations) && !EbaySynchronizer::_isProductMultiSku($ebay_category, $product->id, $id_lang, $ebay_profile->ebay_site_id))
+			{
 				foreach ($variations as $variation)
 					if ($itemID = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $variation['id_attribute']))
 					{
@@ -604,7 +605,8 @@ class EbaySynchronizer
 						EbayProduct::deleteByIdProductRef($itemID);
 					}
 
-			return $ebay;
+				return $ebay;
+			}
 		}
 
 		if (!$ebay_item_id && $product_id)
