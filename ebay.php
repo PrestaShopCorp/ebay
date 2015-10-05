@@ -821,15 +821,6 @@ class Ebay extends Module
 				
 				$cart = $order->addCart($ebay_profile, $this->ebay_country); //Create a Cart for the order
 				
-				if (!$order->updateCartQuantities($ebay_profile)) // if products in the cart
-				{
-					$order->deleteCart($ebay_profile->id_shop);
-					$message = $this->l('Could not add product to cart (maybe your stock quantity is 0)');
-					$errors[] = $message;
-					$order->addErrorMessage($message);
-					continue;
-				}
-				
 				// if the carrier is disabled, we enable it for the order validation and then disable it again
 				$carrier = new Carrier((int)EbayShipping::getPsCarrierByEbayCarrier($ebay_profile->id, $order->shippingService));
 				if (!$carrier->active)
@@ -840,7 +831,22 @@ class Ebay extends Module
 				} 
 				else
 					$has_disabled_carrier = false;
-
+					
+				if (!$order->updateCartQuantities($ebay_profile)) // if products in the cart
+				{
+					$order->deleteCart($ebay_profile->id_shop);
+					$message = $this->l('Could not add product to cart (maybe your stock quantity is 0)');
+					$errors[] = $message;
+					$order->addErrorMessage($message);
+					// we now disable the carrier if required
+					if ($has_disabled_carrier)
+					{
+						$carrier->active = false;
+						$carrier->save();
+					}
+					continue;
+				}
+				
 				// Validate order
 				$id_order = $order->validate($ebay_profile->id_shop, $this->ebay_profile->id);
 				// we now disable the carrier if required
