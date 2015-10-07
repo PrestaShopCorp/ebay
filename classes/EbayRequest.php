@@ -1000,13 +1000,5 @@ class EbayRequest
 
 		return EbaySynchronizer::fillTemplateTitle($tags, $values, $data['titleTemplate']);
 	}
-	
-	public static function getValueOfFeature($val, $feature)
-	{
-		if (!isset($feature['id_feature']))
-			return false;
-		
-		return ((int)$val['id_feature'] == (int)$feature['id_feature'] ? $val['value'] : false);
-	}
 
 }
