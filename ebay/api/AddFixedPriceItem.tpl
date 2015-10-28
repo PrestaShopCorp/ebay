@@ -94,7 +94,11 @@
                   <!--<StoreCategoryName> string </StoreCategoryName>-->
             </Storefront>
         {/if}
-
+        {if isset($ean13)}
+        <ProductListingDetails>
+        	<EAN>{$ean13}</EAN>
+        </ProductListingDetails>
+        {/if}  
 	</Item>
 	<RequesterCredentials>
 		<eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>
