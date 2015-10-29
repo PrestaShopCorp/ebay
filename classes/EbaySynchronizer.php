@@ -114,7 +114,8 @@ class EbaySynchronizer
 					'shipping' => EbaySynchronizer::_getShippingDetailsForProduct($product, $ebay_profile),
 					'id_lang' => $id_lang,
 					'real_id_product' => (int)$p['id_product'],
-                    'ebay_store_category_id' => $ebay_store_category_id
+                    'ebay_store_category_id' => $ebay_store_category_id,
+                    'ean13' => $product->ean13
 			);
 
 			$data = array_merge($data, EbaySynchronizer::_getProductData($product, $ebay_profile));
