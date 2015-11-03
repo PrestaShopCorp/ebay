@@ -56,9 +56,9 @@
                 </DiscountPriceInfo>
             {/if}
             {if isset($ean13)}
-            <ProductListingDetails>
+            <VariationProductListingDetails>
             	<EAN>{$ean13}</EAN>
-            </ProductListingDetails>
+            </VariationProductListingDetails>
             {/if}  
 		</Variation>
 	{/foreach}

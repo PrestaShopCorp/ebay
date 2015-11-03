@@ -28,7 +28,7 @@
 
 {foreach from=$national_services key=service_name item=services}
 	{foreach from=$services item=service}
-		{if $service.serviceCosts !== fase}
+		{if $service.serviceCosts !== false}
 			<ShippingServiceOptions>
 				<ShippingServicePriority>{$service.servicePriority}</ShippingServicePriority>
 				<ShippingService>{$service_name}</ShippingService>
