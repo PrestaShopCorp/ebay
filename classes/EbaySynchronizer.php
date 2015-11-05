@@ -115,7 +115,7 @@ class EbaySynchronizer
 					'id_lang' => $id_lang,
 					'real_id_product' => (int)$p['id_product'],
                     'ebay_store_category_id' => $ebay_store_category_id,
-                    'ean13' => $product->ean13
+                    'ean13' => $product->ean13 != 0 ? $product->ean13 : null
 			);
 
 			$data = array_merge($data, EbaySynchronizer::_getProductData($product, $ebay_profile));

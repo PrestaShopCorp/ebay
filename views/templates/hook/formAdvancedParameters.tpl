@@ -125,7 +125,17 @@
         
 	</fieldset>
     
-    
+    <fieldset style="margin-top:10px;">
+       
+        <legend>{l s='EAN Sync' mod='ebay'}</legend>
+        <label>{l s='Synchronise EAN.' mod='ebay'} : </label>
+        <div class="margin-form">
+            <input type="checkbox" name="synchronize_ean" value="1"{if $synchronize_ean} checked="checked"{/if}>
+        </div>
+        <div style="clear:both;"></div>
+        
+    </fieldset>
+
 	<fieldset style="margin-top:10px;">
         
 		<legend>{l s='Sync' mod='ebay'}</legend>

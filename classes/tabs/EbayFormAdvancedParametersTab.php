@@ -59,6 +59,10 @@ class EbayFormAdvancedParametersTab extends EbayTab
 			'log_file_exists' => file_exists(_PS_MODULE_DIR_.'ebay/log/request.txt'),
 			'logs_conservation_duration' => Configuration::get('EBAY_LOGS_DAYS'),            
 			
+            //EAN 
+            'synchronize_ean' => Configuration::get('EBAY_SYNCHRONIZE_EAN'),
+
+
 			// CRON sync
 			'sync_products_by_cron' => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON'),
 			'sync_products_by_cron_url' => $this->_getModuleUrl().'synchronizeProducts_CRON.php',
@@ -97,7 +101,8 @@ class EbayFormAdvancedParametersTab extends EbayTab
 			&& $this->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_SMALL', (int)Tools::getValue('sizesmall'))
 			&& $this->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_BIG', (int)Tools::getValue('sizebig'))
 			&& $this->ebay_profile->setConfiguration('EBAY_PICTURE_PER_LISTING', $picture_per_listing)
-			&& $this->ebay->setConfiguration('EBAY_API_LOGS', Tools::getValue('api_logs') ? 1 : 0)
+            && $this->ebay->setConfiguration('EBAY_API_LOGS', Tools::getValue('api_logs') ? 1 : 0)
+			&& $this->ebay->setConfiguration('EBAY_SYNCHRONIZE_EAN', Tools::getValue('synchronize_ean') ? 1 : 0)
 			&& $this->ebay->setConfiguration('EBAY_ACTIVATE_LOGS', Tools::getValue('activate_logs') ? 1 : 0)
 			&& Configuration::updateValue('EBAY_SYNC_PRODUCTS_BY_CRON', ('cron' === Tools::getValue('sync_products_mode')))
 			&& Configuration::updateValue('EBAY_SYNC_ORDERS_BY_CRON', ('cron' === Tools::getValue('sync_orders_mode')))

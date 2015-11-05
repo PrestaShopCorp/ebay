@@ -111,7 +111,10 @@
                   <StoreCategoryID>{$ebay_store_category_id}</StoreCategoryID>
                   <!--<StoreCategoryName> string </StoreCategoryName>-->
             </Storefront>
-        {/if}        
+        {/if} 
+        {if isset($product_listing_details)}
+            {$product_listing_details}
+        {/if}       
                 
 	</Item>
 	<RequesterCredentials>

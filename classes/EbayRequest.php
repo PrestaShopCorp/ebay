@@ -416,7 +416,8 @@ class EbayRequest
 			'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
 			'site' => $this->ebay_country->getSiteName(),
 			'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
-			'ean13' => (string)$data['ean13']
+			'product_listing_details' => $this->_getProductListingDetails($data),
+
 		);
 		
 		if (isset($data['price_original']) && ($data['price_original'] > $data['price']))
@@ -460,7 +461,8 @@ class EbayRequest
 			'item_specifics' => $data['item_specifics'],
 			'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
 			'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
-			'ean13' => (string)$data['ean13']          
+			'product_listing_details' => $this->_getProductListingDetails($data),
+          
 		);
 
 	 if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id'])
@@ -523,12 +525,12 @@ class EbayRequest
 			'return_policy' => $this->_getReturnPolicy(),
 			'price_update' => !isset($data['noPriceUpdate']),
 			'variations' => $this->_getVariations($data),
+            'product_listing_details' => $this->_getProductListingDetails($data),
 			'shipping_details' => $this->_getShippingDetails($data),
 			'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
 			'site' => $this->ebay_country->getSiteName(),
 			'item_specifics' => $data['item_specifics'],
 			'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
-			'ean13' => (string)$data['ean13']
 		);
 		
 		if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id'])
@@ -593,9 +595,9 @@ class EbayRequest
 			'buyer_requirements_details' => $this->_getBuyerRequirementDetails($data),
 			'site' => $this->ebay_country->getSiteName(),
 			'variations' => $this->_getVariations($data),
+            'product_listing_details' => $this->_getProductListingDetails($data),
 			'item_specifics' => $data['item_specifics'],
-			'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
-			'ean13' => (string)$data['ean13']         
+			'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),         
 		);
 		
 		if (isset($data['ebay_store_category_id']) && $data['ebay_store_category_id'])
@@ -770,10 +772,30 @@ class EbayRequest
 		return $this->smarty->fetch(dirname(__FILE__).'/../ebay/api/GetReturnPolicy.tpl');
 	}
 
+    private function _getProductListingDetails($data)
+    {
+        if(Configuration::get('EBAY_SYNCHRONIZE_EAN'))
+        {
+            $vars = array(
+                'ean13' => $data['ean13']
+            );
+        }
+        else
+        {
+            $vars = array(
+                'ean13' => 0
+            );
+        }
+
+        $this->smarty->assign($vars);
+        return $this->smarty->fetch(dirname(__FILE__).'/../ebay/api/GetProductListingDetails.tpl');   
+    }
+
 	private function _getVariations($data)
 	{
 		$variation_pictures = array();
 		$variation_specifics_set = array();
+        $synchronize_ean = Configuration::get('EBAY_SYNCHRONIZE_EAN');
 
 		if (isset($data['variations']))
 		{
@@ -782,6 +804,9 @@ class EbayRequest
 
 			foreach ($data['variations'] as $key => $variation)
 			{
+                if(!$synchronize_ean)
+                    $data['variations'][$key]['ean13'] = '';
+
 				if(isset($variation['variations']))
 				{
 					foreach ($variation['variations'] as $variation_key => $variation_element)

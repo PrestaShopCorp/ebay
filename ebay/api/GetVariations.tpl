@@ -55,9 +55,9 @@
                     <SoldOffeBay>true</SoldOffeBay>
                 </DiscountPriceInfo>
             {/if}
-            {if isset($ean13)}
+            {if isset($variation.ean13) && $variation.ean13 != ''}
             <VariationProductListingDetails>
-            	<EAN>{$ean13}</EAN>
+            	<EAN>{$variation.ean13}</EAN>
             </VariationProductListingDetails>
             {/if}  
 		</Variation>
