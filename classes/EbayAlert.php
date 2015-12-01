@@ -258,7 +258,7 @@ class EbayAlert
 
 				$datetime2 = new DateTime();
 				
-				$interval = $datetime->diff($datetime2);
+				$interval = round(($datetime2->format('U') - $datetime->format('U')) / (60*60*24));
 
 				if ($interval->format('%a') >= 1)
 					$this->errors[] = array(
