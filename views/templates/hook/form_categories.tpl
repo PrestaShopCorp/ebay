@@ -29,7 +29,7 @@
 		{$alerts|escape:'htmlall':'UTF-8'}
 	</div>
 	{/if}
-	{if isset($load_cat) && $load_cat == true}
+	{if (isset($load_cat) && $load_cat == true) && (isset($launch_load_cat) && $launch_load_cat == true)}
 	<table id="load_cat_ebay" class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
 		<thead>
 			<tr class="nodrag nodrop">
@@ -45,14 +45,17 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr id="cat_parent" class="{if isset($launch_load_cat) && $launch_load_cat == true}load{else}wait{/if}">
+			<tr id="cat_parent" class="load">
 				<td></td>
 				<td>{l s='Loading list of eBay categories' mod='ebay'}</td>
-				<td>{if isset($launch_load_cat) && $launch_load_cat == true}{l s='In progress' mod='ebay'}{else}{l s='Pending' mod='ebay'}{/if}</td>
+				<td>{l s='In progress' mod='ebay'}</td>
 			</tr>
 		</tbody>
 	</table>
-	{/if}
+    {elseif isset($load_cat) && $load_cat == true}
+        {l s='The loading of all the ebay categories did not finish. Please retry.' mod='ebay'}<br/>
+        <a href="{$url_categories|escape:'urlencode'}"><input type="button" class="button" value="{l s='Load categories' mod='ebay'}"/></a>
+    {/if}
 	<p {if isset($load_cat) && $load_cat == true}class="hidden importCatEbay"{/if}>
 		<b>{l s='Select a category' mod='ebay'}</b>
 		<br />

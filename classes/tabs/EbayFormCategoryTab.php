@@ -29,6 +29,16 @@ class EbayFormCategoryTab extends EbayTab
 
 	function getContent()
 	{
+        // make url
+        $url_vars = array(
+            'id_tab' => '2',
+        );
+        if (version_compare(_PS_VERSION_, '1.5', '>'))
+            $url_vars['controller'] = Tools::getValue('controller');
+        else
+            $url_vars['tab'] = Tools::getValue('tab');
+        $url = $this->_getUrl($url_vars);
+
 		$is_one_dot_five = version_compare(_PS_VERSION_, '1.5', '>');
 
 		// Load prestashop ebay's configuration
@@ -66,6 +76,7 @@ class EbayFormCategoryTab extends EbayTab
 
 		// Smarty
 		$template_vars = array(
+            'url_categories' => $url,
 			'alerts' => $this->_getAlertCategories(),
 			'tabHelp' => '&id_tab=7',
 			'id_lang' => $this->context->cookie->id_lang,
