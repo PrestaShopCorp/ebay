@@ -53,7 +53,7 @@
 		</tbody>
 	</table>
     {elseif isset($load_cat) && $load_cat == true}
-        {l s='The loading of all the ebay categories did not finish. Please retry.' mod='ebay'}<br/>
+        {l s='Loading of categories did not finish, please retry with button below.' mod='ebay'}<br/>
         <a href="{$url_categories|escape:'urlencode'}"><input type="button" class="button" value="{l s='Load categories' mod='ebay'}"/></a>
     {/if}
 	<p {if isset($load_cat) && $load_cat == true}class="hidden importCatEbay"{/if}>

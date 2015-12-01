@@ -1,9 +1,7 @@
 <?php
 
 global $_MODULE;
-
 $_MODULE = array();
-
 $_MODULE['<{ebay}prestashop>ebay_282539987a2276dd5259f8e745d668a1'] = 'eBay';
 $_MODULE['<{ebay}prestashop>ebay_fe4139533f9589aed248d4210bf2137e'] = 'Z łatwością eksportuj produkty z PrestaShop do eBay, największej platformy handlowej, aby zdobyć nowych klientów i zwiększyć sprzedaż.';
 $_MODULE['<{ebay}prestashop>ebay_324d5b9eb4d6c052ceb767215ea3780b'] = 'Moduł eBay jest obecnie dostępny dla serwisów eBay.fr, eBay.it, eBay.co.uk, eBay.pl, eBay.nl i eBay.es';
@@ -33,10 +31,6 @@ $_MODULE['<{ebay}prestashop>ebay_1761efb946aa43c14af989665dae691a'] = 'Produkty,
 $_MODULE['<{ebay}prestashop>ebay_5096b1cd265224acf046bf2a04c97e98'] = 'Stan przedmiotu zdefiniowany w konfiguracji nie jest dostępny w tej kategorii eBay.';
 $_MODULE['<{ebay}prestashop>ebay_98dc9c312b853d330c69fbe11141e596'] = 'Możesz zmienić stan przedmiotu w ustawieniach konfiguracji (opisy stanu przedmiotu dostępne w różnych kategoriach znajdziesz na stronie: http://pages.ebay.pl/help/sell/item-condition.html)';
 $_MODULE['<{ebay}prestashop>ebay_1ec3f6e91783ec459fcdb51c89ddf225'] = 'Nowsza wersja modułu umożliwi Ci podanie stanu przedmiotu według kategorii';
-$_MODULE['<{ebay}prestashop>ebay_3defc5eecc87a01b7ff5dfc4fcd8898a'] = 'Zobacz nasze oceny';
-$_MODULE['<{ebay}prestashop>ebay_356c707afada9bf5305aee151b7e42c9'] = 'Dodaj ten sklep do ulubionych';
-$_MODULE['<{ebay}prestashop>ebay_faeaec9eda6bc4c8cb6e1a9156a858be'] = 'Dostępność';
-$_MODULE['<{ebay}prestashop>ebay_8289b7ec22f39ace395a246dec26e79f'] = 'w magazynie';
 $_MODULE['<{ebay}prestashop>suggestcategories_c888438d14855d7d96a2724ee9c306bd'] = 'Ustawienia zostały zaktualizowane';
 $_MODULE['<{ebay}prestashop>ebayalert_7df30e6b14bf416875549d4899cf1df3'] = 'Zamierzasz przesłać więcej niż jeden obraz. Może to mieć konsekwencje finansowe. Sprawdź to łącze';
 $_MODULE['<{ebay}prestashop>ebayalert_27a6bc63e925081ef4f0df4154685dd7'] = 'Nie można przesłać więcej niż 12 obrazów na produkt. Skonfiguruj ten parametr w Ustawieniach zaawansowanych';
@@ -92,6 +86,10 @@ $_MODULE['<{ebay}prestashop>ebayformtemplatemanagertab_04e5a085ee8db3d10b3572374
 $_MODULE['<{ebay}prestashop>ebayformtemplatemanagertab_c888438d14855d7d96a2724ee9c306bd'] = 'Ustawienia zostały zaktualizowane';
 $_MODULE['<{ebay}prestashop>ebayformtemplatemanagertab_b9284bff13acffdd879ef4ac7fca5234'] = 'Niepowodzenie zmiany ustawień';
 $_MODULE['<{ebay}prestashop>ebayorderhistorytab_04e5a085ee8db3d10b357237472d28f7'] = 'Przed użyciem tej zakładki skonfiguruj zakładkę „Ustawienia ogólne”';
+$_MODULE['<{ebay}prestashop>ebay_3defc5eecc87a01b7ff5dfc4fcd8898a'] = 'Zobacz nasze oceny';
+$_MODULE['<{ebay}prestashop>ebay_356c707afada9bf5305aee151b7e42c9'] = 'Dodaj ten sklep do ulubionych';
+$_MODULE['<{ebay}prestashop>ebay_faeaec9eda6bc4c8cb6e1a9156a858be'] = 'Dostępność';
+$_MODULE['<{ebay}prestashop>ebay_8289b7ec22f39ace395a246dec26e79f'] = 'w magazynie';
 $_MODULE['<{ebay}prestashop>alert_mail_fe816ec4b30c11a39edfd8b0a4cfab49'] = 'Błędy';
 $_MODULE['<{ebay}prestashop>alert_mail_cc49f384fd7b6f80fee8762e96323ff0'] = 'Ostrzeżenia';
 $_MODULE['<{ebay}prestashop>alert_mail_47c1cd97f5787ec60674a0360ae32e69'] = 'Informacje';
@@ -199,6 +197,8 @@ $_MODULE['<{ebay}prestashop>formadvancedparameters_1402c5692de729ecd59e08af887c7
 $_MODULE['<{ebay}prestashop>formadvancedparameters_2b100896fd5ace4912e319bc7463b16e'] = 'Pobierz dzienniki';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_801ab24683a4a8c433c6eb40c48bcd9d'] = 'Pobierz';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_d2fd2db4137a11bdbd6c63750d7f875f'] = 'Czas trwania konserwacji dzienników';
+$_MODULE['<{ebay}prestashop>formadvancedparameters_e8605220e0fd610c52ec6fdd43035528'] = 'EAN Sync';
+$_MODULE['<{ebay}prestashop>formadvancedparameters_5b69be52cfc307fdebc04f850acb8566'] = 'Synchronizacja EAN';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_d8e87c0927539672f54462c837be0b7f'] = 'Synchronizuj';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_31bb5929dfddc4a33bfb7d035e4d7be0'] = 'Synchronizuj zamówienia';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_88470e0a387c590e7520820a4d665bb7'] = 'co 30 minut przy ładowaniu strony';
@@ -324,11 +324,6 @@ $_MODULE['<{ebay}prestashop>formregister_abea3cd3f772f1246cb388cf20528de8'] = 'h
 $_MODULE['<{ebay}prestashop>formregister_b9a5eed0d483078a21f7ee6f3ce7cee7'] = 'Sprawdź stronę o opłatach dla sprzedawców-firm na eBay';
 $_MODULE['<{ebay}prestashop>formregister_8cb0f9d11395a2e4f2de997ca6e63e14'] = 'Więcej informacji znajdziesz w sekcji Pomoc';
 $_MODULE['<{ebay}prestashop>formregister_6aa53cf3d6454040f9d772a2d5688002'] = 'EBay wyłącznie identyfikatory użytkownika mogą być używane do logowania się. Proszę nie używać adresu e-mail';
-$_MODULE['<{ebay}prestashop>formstats_9b418ba4c211810fc440f89ca1d2e298'] = 'Musisz odpowiedzieć na to pytanie, aby uzyskać dostęp do ustawień modułu';
-$_MODULE['<{ebay}prestashop>formstats_019fc92d49206aab1d669ef9e32e4b89'] = 'Użytkowanie danych – moduł eBay';
-$_MODULE['<{ebay}prestashop>formstats_c0e4b9f3fbbb5e65319e9a6c4554166f'] = 'Pomóż nam w udoskonalaniu modułu eBay, wysyłając anonimowy raport dotyczący użytkowania danych';
-$_MODULE['<{ebay}prestashop>formstats_8ad4303b83a62fb6ca3b025bad5bc114'] = 'Nie, dziękuję';
-$_MODULE['<{ebay}prestashop>formstats_39535fa9d04b1337c8394b684ccec7bb'] = 'Zgadzam się';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_35dcb1b564f161a2ff7a55ab9ae51da8'] = 'Zoptymalizuj nazwy aukcji dzięki tagom:';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_8cf5069b483d3ee4eb6bdbf4df13728f'] = 'Określ format nazwy z użyciem tagów';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_2efd89b3ccc76b0b03a34196fc6d1c8b'] = 'Dodaj tag';
@@ -349,7 +344,8 @@ $_MODULE['<{ebay}prestashop>form_categories_b5a7adde1af5c87d7fd797b6245c2a39'] =
 $_MODULE['<{ebay}prestashop>form_categories_8eea62084ca7e541d918e823422bd82e'] = 'Wynik';
 $_MODULE['<{ebay}prestashop>form_categories_887d210e5fffbc1caae18734b24b240e'] = 'Wczytywanie listy kategorii eBay';
 $_MODULE['<{ebay}prestashop>form_categories_b6e0b0c90cfbddfe767f137f8066d1df'] = 'W trakcie przetwarzania';
-$_MODULE['<{ebay}prestashop>form_categories_2d13df6f8b5e4c5af9f87e0dc39df69d'] = 'Oczekuje';
+$_MODULE['<{ebay}prestashop>form_categories_a414c5ab88b8c159a26fd13711e3dc0a'] = 'Ładowanie kategorii nie dokończył, spróbuj ponownie za pomocą przycisku poniżej.';
+$_MODULE['<{ebay}prestashop>form_categories_f7c98b527526097a75561b595611b2af'] = 'kategorie obciążenia';
 $_MODULE['<{ebay}prestashop>form_categories_b02d8b2c78dfd6cc791eff6f283e5008'] = 'Wybierz kategorię';
 $_MODULE['<{ebay}prestashop>form_categories_8110522c7590c9cfe917eeb571389267'] = 'Aby wystawić swoje produkty na eBay, musisz dopasować kategorie PrestaShop do odpowiadających im kategorii eBay.';
 $_MODULE['<{ebay}prestashop>form_categories_0f54d15d9b1e406da09d14e7444b40da'] = 'Przy pomocy poniższego przycisku możesz automatycznie dopasować swoje kategorie do odpowiednich kategorii eBay. Zalecamy sprawdzenie, czy wybrane kategorie Ci odpowiadają, i wprowadzenie ewentualnych poprawek.';
@@ -562,25 +558,3 @@ $_MODULE['<{ebay}prestashop>table_prestashop_products_84c27bbcecf86489f4a299b12c
 $_MODULE['<{ebay}prestashop>table_prestashop_products_44548951e9c6e0cd97093bd5894516d5'] = 'Kategoria nie jest zsynchronizowana lub wystąpił błąd podczas synchronizacji produktu';
 $_MODULE['<{ebay}prestashop>table_prestashop_products_c106ffb3df72a6d20ae1850eedf7cd03'] = 'Kategoria eBay nie jest kategorią multi-SKU';
 $_MODULE['<{ebay}prestashop>table_prestashop_products_48900a6a0a3b3104f52398c08c13cfa1'] = 'Więcej niż jeden powód';
-$_MODULE['<{ebay}prestashop>ebayformparameterstab_c888438d14855d7d96a2724ee9c306bd'] = 'Ustawienia zostały zaktualizowane';
-$_MODULE['<{ebay}prestashop>formconfig_4bd0f51551ea145989b5283f3f8c6bf3'] = 'Nigdy nie wykonano zadania programu cron dla tego produktu.';
-$_MODULE['<{ebay}prestashop>formconfig_5f2b515eb4d0ac5a72b0c29467dcfcef'] = 'Ostatnia synchronizacja produktu miała miejsce w';
-$_MODULE['<{ebay}prestashop>formconfig_c5695dc13d5eda9a308e85363c549c70'] = 'o godz.';
-$_MODULE['<{ebay}prestashop>formconfig_739b4c5f1600064e46ec1e1fb581db7a'] = 'i obejmowała';
-$_MODULE['<{ebay}prestashop>formconfig_d8d5bf31b4dca93d6a739a56c27923d3'] = 'produktów(/y).';
-$_MODULE['<{ebay}prestashop>formconfig_14bbaa58591b4c1d8e97a550dc462df9'] = 'Nigdy nie wykonywano zadania programu cron dla zamówienia.';
-$_MODULE['<{ebay}prestashop>formconfig_6614090e9f1bd848cabbee58c484e22a'] = 'Ostatnia synchronizacja zamówienia miała miejsce';
-$_MODULE['<{ebay}prestashop>formparameters_153e4104f5a42e006735dd85847760b1'] = 'Ładowanie kategorii';
-$_MODULE['<{ebay}prestashop>formregister_3d9742de1b9742bd8031ec3f8334da22'] = 'Powiąż swoje konto eBay z modułem eBay';
-$_MODULE['<{ebay}prestashop>formregister_6a859a475b89c59b15a1f268cf047db0'] = 'Prosimy korzystać z identyfikatora eBay (zamiast adresu e-mail)';
-$_MODULE['<{ebay}prestashop>formregister_48d1d9771a2f4dd36817e4a68145e1d6'] = 'Wybierz serwis eBay, w którym chcesz wystawiać';
-$_MODULE['<{ebay}prestashop>formregister_e7a105460eb283d3fd17c9d8507b10f9'] = 'Wybierz język, w którym chcesz wystawiać aukcje:';
-$_MODULE['<{ebay}prestashop>form_store_categories_0a2a0ab4e5a152678a5203237a11f3a2'] = 'Poniższej kategorie nie są dostępne, ponieważ zawierają podkategorie. Interfejs API eBay nie pozwala na przesyłanie produktów w tych kategoriach:';
-$_MODULE['<{ebay}prestashop>orphan_listings_f348e68ad1443142c4b2447cc5acb6b7'] = 'Jeśli w tej kolumnie widnieje słowo Nie, oznacza to, że domyślna kategoria produktu nie została zsynchronizowana w zakładce Synchronizacji > 1. Lista produktów';
-$_MODULE['<{ebay}prestashop>prestashop_products_745c1d4754db6ac024162db0fe209b68'] = 'Wybrana opcja synchronizacji (w zakładce \'Synchronizacja > 1. Lista produktów\') to:';
-$_MODULE['<{ebay}prestashop>prestashop_products_7e7c45adf774230dfbb85cd1753d4f24'] = 'Skonfigurowano w zakładce \'Parametry > 2. Kategorie i ceny\'';
-$_MODULE['<{ebay}prestashop>prestashop_products_f348e68ad1443142c4b2447cc5acb6b7'] = 'Jeśli w tej kolumnie widnieje słowo Nie, oznacza to, że domyślna kategoria produktu nie została zsynchronizowana w zakładce Synchronizacji > 1. Lista produktów';
-$_MODULE['<{ebay}prestashop>prestashop_products_45cc6d102727bc8b4f549755b5f44fe8'] = 'Jeśli w tej kolumnie widnieje słowo Nie, oznacza to, że produkt nie jest już zaznaczony w zakładce \'Parametry > 2. Kategorie i ceny\'';
-$_MODULE['<{ebay}prestashop>prestashop_products_d72867c4ffae604a88757c4c25f36153'] = 'Usunięto zaznaczenie produktu w zakładce \'Parametry > 2. Kategorie i ceny\'';
-$_MODULE['<{ebay}prestashop>table_prestashop_products_8e7f91e25a403fe7dc0ca21eec9fcf8e'] = 'Nie zsynchronizowano domyślnej kategorii produktu w zakładce \'Synchronizacja > 1. Lista produktów\'';
-$_MODULE['<{ebay}prestashop>table_prestashop_products_d72867c4ffae604a88757c4c25f36153'] = 'Usunięto zaznaczenie produktu w zakładce \'Parametry > 2. Kategorie i ceny\'';
