@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2015 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -98,7 +98,7 @@ class EbaySynchronizer
 			list($price, $price_original) = EbaySynchronizer::_getPrices($product->id, $ebay_category->getPercent(), $ebay_profile);
 			$conditions = $ebay_category->getConditionsValues($p['id_ebay_profile']);
             
-            $ebay_store_category_id = (int)EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory($ebay_profile->id, $product->id_category_default);
+            $ebay_store_category_id = pSQL(EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory($ebay_profile->id, $product->id_category_default));
             
 
 			// Generate array and try insert in database
@@ -581,7 +581,10 @@ class EbaySynchronizer
 				'{EBAY_IDENTIFIER}',
 				'{EBAY_SHOP}',
 				'{SLOGAN}',
-				'{PRODUCT_NAME}'
+				'{PRODUCT_NAME}',
+				'{REFERENCE}',
+				'{BRAND}',
+				'{BRAND_ID}',
 			),
 			array(
 				$product->description_short,
@@ -590,7 +593,10 @@ class EbaySynchronizer
 				$ebay_profile->ebay_user_identifier,
 				$ebay_profile->getConfiguration('EBAY_SHOP'),
 				'',
-				$product->name
+				$product->name,
+				$product->reference,
+				Manufacturer::getNameById($product->id_manufacturer),
+				$product->id_manufacturer,
 			),
 			$ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE')
 		);
