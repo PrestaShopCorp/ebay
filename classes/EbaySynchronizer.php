@@ -346,7 +346,7 @@ class EbaySynchronizer
 
 	private static function _updateTabError($ebay_error, $name)
 	{
-		$error_key = md5($ebay_error);
+		$error_key = md5($ebay_error->error);
 		$tab_error[$error_key]['msg'] = '<hr/>'.$ebay_error->error;
 
 		if (!isset($tab_error[$error_key]['products']))
@@ -427,9 +427,9 @@ class EbaySynchronizer
 		$variations = array();
 
 		if (version_compare(_PS_VERSION_, '1.5', '>'))
-			$combinations = $product->getAttributeCombinations($context->cookie->id_lang);
+			$combinations = $product->getAttributeCombinations($ebay_profile->id_lang);
 		else
-			$combinations = $product->getAttributeCombinaisons($context->cookie->id_lang);
+			$combinations = $product->getAttributeCombinaisons($ebay_profile->id_lang);
 
 		foreach ($combinations as $combinaison)
 		{
@@ -447,7 +447,7 @@ class EbaySynchronizer
 				'ean13' => $combinaison['ean13'],
 				'quantity' => $combinaison['quantity'],
 				'price_static' => $price,
-				'variation_specifics' => EbaySynchronizer::_getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $context->cookie->id_lang, $ebay_profile->ebay_site_id, $ebay_category),
+				'variation_specifics' => EbaySynchronizer::_getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $ebay_profile->id_lang, $ebay_profile->ebay_site_id, $ebay_category),
 				'variations' => array(
 					array(
 						'name' => $combinaison['group_name'],
@@ -478,7 +478,7 @@ class EbaySynchronizer
 		}
 
 		// Load Variations Pictures
-		$combination_images = $product->getCombinationImages($context->cookie->id_lang);
+		$combination_images = $product->getCombinationImages($ebay_profile->id_lang);
 
 		$large = new ImageType((int)$ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_BIG'));
 
@@ -490,7 +490,6 @@ class EbaySynchronizer
 					$link = EbaySynchronizer::_getPictureLink($product->id, $image['id_image'], $context->link, $large->name);
 					$variations[$product->id.'-'.$image['id_product_attribute'].'_'.$ebay_profile->id]['pictures'][] = $link;
 				}
-
 		return $variations;
 	}
 
@@ -725,7 +724,6 @@ class EbaySynchronizer
 
 		$data['ean13'] = $variation['ean13'];
 		$data['reference'] = $variation['reference'];
-
 		return $data;
 	}
 
