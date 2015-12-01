@@ -711,10 +711,16 @@ class Ebay extends Module
     public function cronProductsSync()
     {
         Configuration::updateValue('NB_PRODUCTS_LAST', '0');
-        EbaySynchronizer::syncProducts(EbayProductModified::getAll(), Context::getContext(), $this->ebay_profile->id_lang, 'CRON', 'CRON_PRODUCT');
-        EbayProductModified::truncate();
+        foreach (EbayProductModified::getAll() as $ebay_product) {
+            EbaySynchronizer::syncProducts(array($ebay_product), Context::getContext(), $this->ebay_profile->id_lang, 'CRON', 'CRON_PRODUCT');
+            $ebay_product_modified = new EbayProductModified($ebay_product['id_ebay_product_modified']); 
+            $ebay_product_modified->delete();
+            
+
+        }
         Configuration::updateValue('DATE_LAST_SYNC_PRODUCTS', date('Y-m-d H:i:s'));
     }
+    
     
     public function cronOrdersSync()
     {

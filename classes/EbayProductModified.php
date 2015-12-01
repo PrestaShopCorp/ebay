@@ -87,11 +87,13 @@ class EbayProductModified extends ObjectModel
 	}
 	
 	public static function getAll()
-	{
-		$sql = 'SELECT `id_ebay_profile`, `id_product`
-			FROM '._DB_PREFIX_.'ebay_product_modified';
-		return Db::getInstance()->executeS($sql);
-	}
+    {
+        $sql = 'SELECT `id_ebay_profile`, `id_product`, `id_ebay_product_modified`
+            FROM '._DB_PREFIX_.'ebay_product_modified GROUP BY id_product, id_ebay_profile';
+            
+        $result = Db::getInstance()->executeS($sql);
+        return $result;
+    }
 	
 	public static function truncate()
 	{
