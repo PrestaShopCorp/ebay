@@ -528,9 +528,14 @@ class Ebay extends Module
                 include_once(dirname(__FILE__).'/upgrade/Upgrade-1.11.php');
                 upgrade_module_1_11($this);
             }
-            EbayOrderErrors::install();
-            EbayKb::install();
-            $this->registerHook('updateCarrier');
+        }
+
+        if (version_compare($version, '1.12', '<')) {
+            if (version_compare(_PS_VERSION_, '1.5', '<'))
+            {
+                include_once(dirname(__FILE__).'/upgrade/Upgrade-1.12.php');
+                upgrade_module_1_12($this);
+            }
         }
     }
 
