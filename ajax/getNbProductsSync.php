@@ -18,63 +18,64 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2015 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-if (!defined('TMP_DS'))
+if (!defined('TMP_DS')) {
     define('TMP_DS', DIRECTORY_SEPARATOR);
+}
 
-require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
-include(dirname(__FILE__).'/../classes/EbayProductConfiguration.php');
-include(dirname(__FILE__).'/../classes/EbayProfile.php');
+require_once dirname(__FILE__) . TMP_DS . '..' . TMP_DS . '..' . TMP_DS . '..' . TMP_DS . 'config' . TMP_DS . 'config.inc.php';
+include(dirname(__FILE__) . '/../classes/EbayProductConfiguration.php');
+include(dirname(__FILE__) . '/../classes/EbayProfile.php');
 
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR: Invalid Token');
+}
 
 $id_ebay_profile = (int)Tools::getValue('profile');
 $ebay_profile = new EbayProfile($id_ebay_profile);
 
-Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_category_configuration', array('sync' => (int)Tools::getValue('action')), 'UPDATE', '`id_category` = '.(int)Tools::getValue('id_category').' AND `id_ebay_profile` = '.(int)$ebay_profile->id);
+Db::getInstance()->autoExecute(_DB_PREFIX_ . 'ebay_category_configuration',
+    array('sync' => (int)Tools::getValue('action')), 'UPDATE',
+    '`id_category` = ' . (int)Tools::getValue('id_category') . ' AND `id_ebay_profile` = ' . (int)$ebay_profile->id);
 
-if (version_compare(_PS_VERSION_, '1.5', '>'))
-{
+if (version_compare(_PS_VERSION_, '1.5', '>')) {
     $sql = 'SELECT COUNT(*) AS nb FROM(
         SELECT p.id_product
-        FROM '._DB_PREFIX_.'product AS p
-        INNER JOIN '._DB_PREFIX_.'stock_available AS s 
+        FROM ' . _DB_PREFIX_ . 'product AS p
+        INNER JOIN ' . _DB_PREFIX_ . 'stock_available AS s
         ON s.id_product = p.id_product';
 
-    $sql .= ' INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
+    $sql .= ' INNER JOIN  `' . _DB_PREFIX_ . 'product_shop` AS ps
         ON p.id_product = ps.id_product 
-        AND ps.id_shop = '.(int)$ebay_profile->id_shop.'
+        AND ps.id_shop = ' . (int)$ebay_profile->id_shop . '
         AND ps.active = 1';
 
     $sql .= ' WHERE s.`quantity` > 0 
         AND p.`id_category_default` IN (
             SELECT `id_category`
-            FROM `'._DB_PREFIX_.'ebay_category_configuration`
+            FROM `' . _DB_PREFIX_ . 'ebay_category_configuration`
             WHERE `id_ebay_category` > 0
             AND `sync` = 1
-            AND `id_ebay_profile` = '.(int)$ebay_profile->id.')
-        AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($ebay_profile->id).')
+            AND `id_ebay_profile` = ' . (int)$ebay_profile->id . ')
+        AND p.id_product NOT IN (' . EbayProductConfiguration::getBlacklistedProductIdsQuery($ebay_profile->id) . ')
         GROUP BY p.id_product) TableRequete';
-}
-else
-{
+} else {
     $sql = 'SELECT COUNT(`id_product`) as nb
-        FROM `'._DB_PREFIX_.'product` AS p
+        FROM `' . _DB_PREFIX_ . 'product` AS p
         WHERE p.`quantity` > 0
         AND p.`active` = 1
         AND p.`id_category_default` IN (
             SELECT `id_category`
-            FROM `'._DB_PREFIX_.'ebay_category_configuration`
+            FROM `' . _DB_PREFIX_ . 'ebay_category_configuration`
             WHERE `id_ebay_category` > 0
             AND `sync` = 1
-            AND `id_ebay_profile` = '.(int)$ebay_profile->id.')
-        AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($ebay_profile->id).')';
+            AND `id_ebay_profile` = ' . (int)$ebay_profile->id . ')
+        AND p.id_product NOT IN (' . EbayProductConfiguration::getBlacklistedProductIdsQuery($ebay_profile->id) . ')';
 }
 
 $nb_products = Db::getInstance()->getValue($sql);
