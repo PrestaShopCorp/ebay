@@ -984,25 +984,21 @@ class EbayRequest
 			$data['reference'],
 			$data['ean13'],
 		);
+
+		// iterate all features for this language
 		foreach ($features as $feature)
 		{
-			$tags[] = trim(str_replace(' ', '_', Tools::strtoupper('{FEATURE_'.$feature['name'].'}')));
-			$hasFeature = array_map(array('EbayRequest', 'getValueOfFeature'), $features_product, $feature);
-			if (isset($hasFeature[0]) &&$hasFeature[0])
-				$values[] = $hasFeature[0];
-			else
-				$values[] = '';
-		}
-		
-		return EbaySynchronizer::fillTemplateTitle($tags, $values, $data['titleTemplate']);
-	}
+			// iterate the features for this product
+			foreach ($features_product as $prod_feature) {
+				if ($feature['id_feature'] == $prod_feature['id_feature']) {
+					$tags[] = trim(str_replace(' ', '_', Tools::strtoupper('{FEATURE_'.$feature['name'].'}')));
+					$values[] = $prod_feature['value'];
+				}
+			}
 
-	public static function getValueOfFeature($val, $feature)
-	{
-		if (!isset($feature['id_feature']))
-			return false;
-		
-		return ((int)$val['id_feature'] == (int)$feature['id_feature'] ? $val['value'] : false);
+		}
+
+		return EbaySynchronizer::fillTemplateTitle($tags, $values, $data['titleTemplate']);
 	}
 
 }
