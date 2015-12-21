@@ -134,12 +134,19 @@ class EbayShipping
             }
         }
 
+        // We keep only the selected transport
         if ($id_product && version_compare(_PS_VERSION_, '1.5', '>')) {
             $shippings_product = Db::getInstance()->ExecuteS('SELECT id_carrier_reference as ps_carrier
 			FROM ' . _DB_PREFIX_ . 'product_carrier WHERE id_product = ' . (int)$id_product);
-            if (count($shippings_product) > 0) {
-                if (array_intersect_assoc($shippings, $shippings_product)) {
-                    $shippings = array_intersect_assoc($shippings, $shippings_product);
+
+            $simple_shippings_product = array();
+            foreach ($shippings_product as $key => $value) {
+                $simple_shippings_product[] = $value['ps_carrier'];
+            }
+
+            foreach ($shippings as $key => $value) {
+                if (!in_array($value['ps_carrier'], $simple_shippings_product)) {
+                    unset($shippings[$key]);
                 }
             }
         }
