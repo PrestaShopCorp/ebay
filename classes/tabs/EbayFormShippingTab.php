@@ -159,11 +159,8 @@ class EbayFormShippingTab extends EbayTab
                     foreach (array_keys($international_shipping_locations[$key]) as $id_ebay_zone) {
                         EbayShippingInternationalZone::insert($this->ebay_profile->id, $last_id, $id_ebay_zone);
                     }
-
                 }
             }
         }
-
     }
-
 }

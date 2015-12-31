@@ -117,5 +117,4 @@ class EbayFormItemsSpecificsTab extends EbayTab
 
         return $ps_conditions;
     }
-
 }

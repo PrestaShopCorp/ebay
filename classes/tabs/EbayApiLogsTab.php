@@ -38,5 +38,4 @@ class EbayApiLogsTab extends EbayTab
             'api_not_configured' => !Configuration::get('EBAY_API_LOGS'),
         ));
     }
-
 }

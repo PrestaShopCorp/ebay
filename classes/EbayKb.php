@@ -27,7 +27,13 @@
 class EbayKb extends ObjectModel
 {
 
-    public $error_code, $ps_version, $language, $module_version, $link, $date_add, $date_upd;
+    public $error_code;
+    public $ps_version;
+    public $language;
+    public $module_version;
+    public $link;
+    public $date_add;
+    public $date_upd;
 
     private $domain = 'http://redirect.202-ecommerce.com/';
 

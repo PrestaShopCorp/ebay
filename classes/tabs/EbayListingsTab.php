@@ -34,5 +34,4 @@ class EbayListingsTab extends EbayTab
         );
         return $this->display('ebay_listings.tpl', $template_vars);
     }
-
 }

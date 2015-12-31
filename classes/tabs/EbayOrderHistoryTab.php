@@ -51,5 +51,4 @@ class EbayOrderHistoryTab extends EbayTab
 
         return $this->display('ordersHistory.tpl', $template_vars);
     }
-
 }

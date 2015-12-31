@@ -67,5 +67,4 @@ class EbayTab
     {
         return Tools::getShopDomain(true).__PS_BASE_URI__.'modules/ebay/';
     }
-
 }

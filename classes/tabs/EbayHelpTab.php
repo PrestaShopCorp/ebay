@@ -26,7 +26,6 @@
 
 class EbayHelpTab extends EbayTab
 {
-
     public function getContent()
     {
         $ebay_country = EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'));
@@ -38,5 +37,4 @@ class EbayHelpTab extends EbayTab
 
         return Tools::file_get_contents($help_file);
     }
-
 }

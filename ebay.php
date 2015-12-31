@@ -328,7 +328,7 @@ class Ebay extends Module
         $this->setConfiguration('EBAY_ORDERS_DAYS_BACKWARD', 30);
         $this->setConfiguration('EBAY_LOGS_DAYS', 30);
 
-        $this->verifyAndFixDataBaseFor1_7();
+        $this->verifyAndFixDataBaseFor17();
 
         // Ebay 1.12.0
         EbayOrderErrors::install();
@@ -337,7 +337,7 @@ class Ebay extends Module
         return true;
     }
 
-    public function verifyAndFixDataBaseFor1_7()
+    public function verifyAndFixDataBaseFor17()
     {
         if (!Configuration::get('EBAY_UPGRADE_17')) {
             if (count(Db::getInstance()->ExecuteS("SHOW COLUMNS FROM "._DB_PREFIX_."ebay_category_configuration LIKE 'id_ebay_category'")) == 0) {
@@ -894,8 +894,8 @@ class Ebay extends Module
 
                 $cart = $order->addCart($ebay_profile, $this->ebay_country); //Create a Cart for the order
 
-                if (!$order->updateCartQuantities($ebay_profile)) // if products in the cart
-                {
+                if (!$order->updateCartQuantities($ebay_profile)) {
+                    // if products in the cart
                     $order->deleteCart($ebay_profile->id_shop);
                     $message = $this->l('Could not add product to cart (maybe your stock quantity is 0)');
                     $errors[] = $message;
@@ -1521,8 +1521,8 @@ class Ebay extends Module
             }
 
             $smarty_vars['check_token_tpl'] = $this->_displayCheckToken();
-        } else // not logged yet
-        {
+        } else {
+            // not logged yet
             if (empty($this->context->cookie->eBaySession)) {
                 $session_id = $ebay->login();
                 $this->context->cookie->eBaySession = $session_id;
@@ -1581,7 +1581,8 @@ class Ebay extends Module
             array(
                 'token' => Configuration::get('EBAY_SECURITY_TOKEN'),
                 'time' => pSQL(date('Ymdhis')),
-            ));
+            )
+        );
 
         $smarty_vars = array(
             'window_location_href' => $this->_getUrl($url_vars),

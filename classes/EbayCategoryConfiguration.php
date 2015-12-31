@@ -236,5 +236,4 @@ class EbayCategoryConfiguration
             'impacts' => Db::getInstance()->ExecuteS('SELECT percent FROM '._DB_PREFIX_.'ebay_category_configuration WHERE percent IS NOT NULL AND percent != "" AND id_ebay_profile = '.(int) $id_ebay_profile),
         );
     }
-
 }

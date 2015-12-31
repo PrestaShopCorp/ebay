@@ -118,5 +118,4 @@ class EbayApiLog extends ObjectModel
         Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_api_log`
 			WHERE `date_add` < \''.pSQL($date).'\'');
     }
-
 }

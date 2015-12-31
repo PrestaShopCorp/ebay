@@ -143,5 +143,4 @@ class EbayStat
             Db::getInstance()->execute($sql);
         }
     }
-
 }

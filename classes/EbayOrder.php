@@ -399,7 +399,8 @@ class EbayOrder
                         false,
                         'up',
                         0,
-                        new Shop($ebay_profile->id_shop));
+                        new Shop($ebay_profile->id_shop)
+                    );
 
                     if ($update === true) {
                         $cart_nb_products++;
@@ -409,8 +410,8 @@ class EbayOrder
                     $cart_nb_products++;
                 }
 
-            } else // minimal quantity for purchase not met
-            {
+            } else {
+                // minimal quantity for purchase not met
                 $this->_sendMinimalQtyAlertEmail($prod->name, $minimal_quantity, $product['quantity']);
             }
 

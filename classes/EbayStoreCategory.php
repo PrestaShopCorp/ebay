@@ -223,5 +223,4 @@ class EbayStoreCategory extends ObjectModel
         return $final_categories;
 
     }
-
 }

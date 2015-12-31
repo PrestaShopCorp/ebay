@@ -27,7 +27,10 @@
 class EbayOrderErrors extends ObjectModel
 {
 
-    public $error, $id_order_seller, $date_add, $date_upd;
+    public $error;
+    public $id_order_seller;
+    public $date_add;
+    public $date_upd;
 
     public static $definition = array(
         'table' => 'ebay_order_errors',

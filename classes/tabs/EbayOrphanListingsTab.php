@@ -69,5 +69,4 @@ class EbayOrphanListingsTab extends EbayTab
     {
 
     }
-
 }

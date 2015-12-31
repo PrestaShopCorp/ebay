@@ -89,5 +89,4 @@ class EbayFormStoreCategoryTab extends EbayTab
 
         return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));
     }
-
 }

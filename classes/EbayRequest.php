@@ -224,7 +224,7 @@ class EbayRequest
         return $compliancies;
     }
 
-    public function GetCategoryFeatures($category_id)
+    public function getCategoryFeatures($category_id)
     {
         $response = $this->_makeRequest('GetCategoryFeatures', array(
             'version' => $this->compatibility_level,
@@ -238,7 +238,7 @@ class EbayRequest
         return $response;
     }
 
-    public function GetCategorySpecifics($category_id)
+    public function getCategorySpecifics($category_id)
     {
         $response = $this->_makeRequest('GetCategorySpecifics', array(
             'version' => $this->compatibility_level,
@@ -1106,5 +1106,4 @@ class EbayRequest
 
         return ((int) $val['id_feature'] == (int) $feature['id_feature'] ? $val['value'] : false);
     }
-
 }

@@ -315,5 +315,4 @@ class EbayCategory
 
         return true;
     }
-
 }

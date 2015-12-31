@@ -105,5 +105,4 @@ class EbayFormTemplateManagerTab extends EbayTab
         }
 
     }
-
 }

@@ -76,5 +76,4 @@ class EbayReturnsPolicy
 
         return $policiesDetails['ReturnsAccepted'];
     }
-
 }

@@ -64,5 +64,4 @@ abstract class EbayLoadLogs
     }
 
     abstract protected function getDatas($offset, $nb_results);
-
 }

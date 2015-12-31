@@ -201,5 +201,4 @@ class EbayFormParametersTab extends EbayTab
             'GTC' => $this->ebay->l('Good \'Till Canceled'),
         );
     }
-
 }

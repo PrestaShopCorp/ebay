@@ -82,5 +82,4 @@ class EbayLog extends ObjectModel
 
         return $ebay_log->save();
     }
-
 }

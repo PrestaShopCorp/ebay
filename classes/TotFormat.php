@@ -155,13 +155,15 @@ class TotFormat
                 $in_quotes = !$in_quotes;
             } else if (!$in_quotes) {
                 switch ($char) {
-                    case '}':case ']':
+                    case '}':
+                    case ']':
                         $level--;
                         $ends_line_level = null;
                         $new_line_level = $level;
                         break;
 
-                    case '{':case '[':
+                    case '{':
+                    case '[':
                         $level++;
                     case ',':
                         $ends_line_level = $level;
@@ -171,7 +173,10 @@ class TotFormat
                         $post = " ";
                         break;
 
-                    case " ":case "\t":case "\n":case "\r":
+                    case " ":
+                    case "\t":
+                    case "\n":
+                    case "\r":
                         $char = "";
                         $ends_line_level = $new_line_level;
                         $new_line_level = null;
@@ -188,5 +193,4 @@ class TotFormat
 
         return $result;
     }
-
 }

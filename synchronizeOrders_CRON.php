@@ -28,7 +28,7 @@ include dirname(__FILE__).'/../../config/config.inc.php';
 include dirname(__FILE__).'/../../init.php';
 include dirname(__FILE__).'/ebay.php';
 
-class ebaySynchronizeOrdersTask extends Ebay
+class EbaySynchronizeOrdersTask extends Ebay
 {
 
     public function __construct()
@@ -38,4 +38,4 @@ class ebaySynchronizeOrdersTask extends Ebay
     }
 }
 
-new ebaySynchronizeOrdersTask();
+new EbaySynchronizeOrdersTask();

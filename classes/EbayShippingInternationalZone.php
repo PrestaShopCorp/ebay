@@ -46,9 +46,8 @@ class EbayShippingInternationalZone
     {
         $existing_international_carriers = EbayShipping::getInternationalShippings($id_ebay_profile);
 
-        foreach ($existing_international_carriers as $key => &$carrier)
-        //get All shipping location associated
-        {
+        foreach ($existing_international_carriers as $key => &$carrier) {
+            //get All shipping location associated
             $carrier['shippingLocation'] = DB::getInstance()->ExecuteS('SELECT *
 				FROM '._DB_PREFIX_.'ebay_shipping_international_zone
 				WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.'

@@ -45,5 +45,4 @@ class EbayOrdersSyncTab extends EbayTab
 
         return $this->display('orders_sync.tpl', array('url' => $url));
     }
-
 }

@@ -124,5 +124,4 @@ class EbayFormAdvancedParametersTab extends EbayTab
         }
 
     }
-
 }

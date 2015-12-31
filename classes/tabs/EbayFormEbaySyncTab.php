@@ -260,5 +260,4 @@ class EbayFormEbaySyncTab extends EbayTab
 
         return $alert;
     }
-
 }

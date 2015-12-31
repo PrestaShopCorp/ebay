@@ -58,5 +58,4 @@ class EbayShippingLocation
 
         return $locations;
     }
-
 }

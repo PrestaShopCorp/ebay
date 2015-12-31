@@ -396,11 +396,10 @@ class EbayProfile extends ObjectModel
         $sql = 'SELECT `id_ebay_profile`
 			FROM `'._DB_PREFIX_.'ebay_profile` ep
 			WHERE ep.`id_shop` = '.(int) $id_shop;
-        try
-        {
+        try {
             // will fail if the table doesn't exist (when doing a PS module autoupgrade for example)
-            if ($profile_data = Db::getInstance()->getRow($sql)) // one row exists
-            {
+            if ($profile_data = Db::getInstance()->getRow($sql)) {
+                // one row exists
                 return new EbayProfile($profile_data['id_ebay_profile']);
             } else {
                 return false;
@@ -578,5 +577,4 @@ class EbayProfile extends ObjectModel
 
         return true;
     }
-
 }

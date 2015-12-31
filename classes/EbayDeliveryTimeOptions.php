@@ -65,5 +65,4 @@ class EbayDeliveryTimeOptions
 
         return $delivery_time_options;
     }
-
 }

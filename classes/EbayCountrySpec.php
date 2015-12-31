@@ -363,8 +363,8 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
     public function getIdLang()
     {
         $id_lang = Language::getIdByIso($this->getIsoCode());
-        if (!$id_lang) //Fix for UK
-        {
+        if (!$id_lang) {
+            //Fix for UK
             $id_lang = Configuration::get('PS_LANG_DEFAULT');
         }
 
@@ -565,5 +565,4 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
 
         return null;
     }
-
 }

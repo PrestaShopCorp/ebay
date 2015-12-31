@@ -115,5 +115,4 @@ class EbayShippingZoneExcluded
             'excluded' => $excluded,
         );
     }
-
 }

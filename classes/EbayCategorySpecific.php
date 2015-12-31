@@ -65,7 +65,7 @@ class EbayCategorySpecific
         $ebay_profile = new EbayProfile($id_ebay_profile);
 
         foreach ($ebay_category_ids as $ebay_category_id) {
-            $xml_data = $request->GetCategorySpecifics($ebay_category_id);
+            $xml_data = $request->getCategorySpecifics($ebay_category_id);
             if ($xml_data->Recommendations->NameRecommendation) {
                 foreach ($xml_data->Recommendations->NameRecommendation as $recommendation) {
 
@@ -208,5 +208,4 @@ class EbayCategorySpecific
 			AND `id_ebay_category_specific_value` > 0';
         return Db::getInstance()->getValue($sql);
     }
-
 }

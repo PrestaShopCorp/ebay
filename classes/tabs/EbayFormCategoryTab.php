@@ -218,5 +218,4 @@ class EbayFormCategoryTab extends EbayTab
 
         return $alert;
     }
-
 }

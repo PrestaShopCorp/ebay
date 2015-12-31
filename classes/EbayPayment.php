@@ -32,5 +32,4 @@ class EbayPayment extends PaymentModule
         $this->name = 'ebay';
         parent::__construct();
     }
-
 }

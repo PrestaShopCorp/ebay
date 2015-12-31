@@ -77,5 +77,4 @@ class EbayStoreCategoryConfiguration
 				FROM `'._DB_PREFIX_.'ebay_store_category`
 				WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.')');
     }
-
 }

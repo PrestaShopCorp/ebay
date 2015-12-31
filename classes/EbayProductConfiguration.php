@@ -68,5 +68,4 @@ class EbayProductConfiguration
 
         return Db::getInstance()->execute($sql);
     }
-
 }
