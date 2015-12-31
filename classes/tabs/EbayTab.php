@@ -26,46 +26,46 @@
 
 class EbayTab
 {
-	protected $ebay;
-	protected $smarty;
-	protected $ebay_profile;
-	protected $context;
-	protected $path;
-	
-	function __construct($ebay, $smarty, $context = null, $path = null)
-	{
-		$this->ebay = $ebay;
-		$this->ebay_profile = $ebay->ebay_profile;
-		$this->smarty = $smarty;
-		$this->context = $context;
-		$this->path = $path;
-	}
-	
-	protected function display($template, $template_vars)
-	{
-		$this->smarty->assign($template_vars);
-		return $this->ebay->display(dirname(__FILE__).'/../../ebay.php', '/views/templates/hook/'.$template);
-	}
-	
-	protected function _getUrl($extra_vars = array())
-	{
-		$url_vars = array(
-			'configure' => Tools::getValue('configure'),
-			'token' => Tools::getValue('token'),
-			'tab_module' => Tools::getValue('tab_module'),
-			'module_name' => Tools::getValue('module_name'),
-		);
+    protected $ebay;
+    protected $smarty;
+    protected $ebay_profile;
+    protected $context;
+    protected $path;
 
-		return 'index.php?'.http_build_query(array_merge($url_vars, $extra_vars));
-	}
+    public function __construct($ebay, $smarty, $context = null, $path = null)
+    {
+        $this->ebay = $ebay;
+        $this->ebay_profile = $ebay->ebay_profile;
+        $this->smarty = $smarty;
+        $this->context = $context;
+        $this->path = $path;
+    }
 
-	/**
-	 * Returns the module url
-	 *
-   **/
-	protected function _getModuleUrl()
-	{
-		return Tools::getShopDomain(true).__PS_BASE_URI__.'modules/ebay/';
-	}
-	
+    protected function display($template, $template_vars)
+    {
+        $this->smarty->assign($template_vars);
+        return $this->ebay->display(dirname(__FILE__).'/../../ebay.php', '/views/templates/hook/'.$template);
+    }
+
+    protected function _getUrl($extra_vars = array())
+    {
+        $url_vars = array(
+            'configure' => Tools::getValue('configure'),
+            'token' => Tools::getValue('token'),
+            'tab_module' => Tools::getValue('tab_module'),
+            'module_name' => Tools::getValue('module_name'),
+        );
+
+        return 'index.php?'.http_build_query(array_merge($url_vars, $extra_vars));
+    }
+
+    /**
+     * Returns the module url
+     *
+     **/
+    protected function _getModuleUrl()
+    {
+        return Tools::getShopDomain(true).__PS_BASE_URI__.'modules/ebay/';
+    }
+
 }

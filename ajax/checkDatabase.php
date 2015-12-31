@@ -24,41 +24,42 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-if (!defined('TMP_DS'))
+if (!defined('TMP_DS')) {
     define('TMP_DS', DIRECTORY_SEPARATOR);
+}
 
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
-require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php');
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
 
-if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
- die('INVALID TOKEN');
+if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
+    die('INVALID TOKEN');
+}
 
-
-if (Module::isInstalled('ebay'))
-{   
+if (Module::isInstalled('ebay')) {
     $module = Module::getInstanceByName('ebay');
 
-    if (version_compare(_PS_VERSION_,'1.5','<'))
+    if (version_compare(_PS_VERSION_, '1.5', '<')) {
         $enable = $module->active;
-    else
+    } else {
         $enable = Module::isEnabled('ebay');
+    }
 
-    if($enable)
-    {
+    if ($enable) {
         $validator = new EbayDbValidator();
 
-		if (Tools::getValue('action') == 'getNbTable')
-		    echo (int)$validator->getNbTable();
-		else if (Tools::getValue('action') == 'checkSpecific' && Tools::getValue('value')) {
-		    if ($validator->checkSpecificTable((int)Tools::getValue('value')))
-		        echo Tools::jsonEncode($validator->getLog());
-		    else
-		        echo Tools::jsonEncode(array( 'finish' => array(array('status' => 'stop', 'action' => 'End of checking'))));
-		}
-		else if (Tools::getValue('action') == 'checkAll'){
-		    $validator->checkDatabase();
-		    echo Tools::jsonEncode($validator->getLog());
-		}
+        if (Tools::getValue('action') == 'getNbTable') {
+            echo (int) $validator->getNbTable();
+        } else if (Tools::getValue('action') == 'checkSpecific' && Tools::getValue('value')) {
+            if ($validator->checkSpecificTable((int) Tools::getValue('value'))) {
+                echo Tools::jsonEncode($validator->getLog());
+            } else {
+                echo Tools::jsonEncode(array('finish' => array(array('status' => 'stop', 'action' => 'End of checking'))));
+            }
+
+        } else if (Tools::getValue('action') == 'checkAll') {
+            $validator->checkDatabase();
+            echo Tools::jsonEncode($validator->getLog());
+        }
 
     }
 }

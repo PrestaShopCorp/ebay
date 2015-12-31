@@ -52,31 +52,30 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_returns_policy_configu
 		`ebay_returns_accepted_option` varchar(255) NOT NULL,
 	  PRIMARY KEY (`id_ebay_returns_policy_configuration`)
 	) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
-	
-$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_configuration` 
+
+$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_configuration`
 	ADD `id_ebay_profile` INT( 16 ) NOT NULL AFTER `id_ebay_category_configuration`';
 // TODO: that would be better to remove the previous indexes if possible
 $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_configuration` ADD INDEX `ebay_category` (`id_ebay_profile` ,  `id_ebay_category`)';
 $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_configuration` ADD INDEX `category` (`id_ebay_profile` ,  `id_category`)';
 
-$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_shipping_zone_excluded` 
+$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_shipping_zone_excluded`
 	ADD `id_ebay_profile` INT( 16 ) NOT NULL AFTER `id_ebay_zone_excluded`';
 
-$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_shipping_international_zone` 
+$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_shipping_international_zone`
 	ADD `id_ebay_profile` INT( 16 ) NOT NULL AFTER `id_ebay_zone`';
 
-$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_condition` 
+$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_condition`
 	ADD `id_ebay_profile` INT( 16 ) NOT NULL AFTER `id_ebay_category_condition`';
 
-$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_condition_configuration` 
+$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_condition_configuration`
 	ADD `id_ebay_profile` INT( 16 ) NOT NULL AFTER `id_ebay_category_condition_configuration`';
 
-$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_product` 
+$sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_product`
 	ADD `id_ebay_profile` INT( 16 ) NOT NULL AFTER `id_ebay_product`';
 
 $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_shipping`
 	ADD `id_ebay_profile` INT( 16 ) NOT NULL AFTER `international`';
-
 
 $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_shipping`
 	ADD `id_zone` INT( 16 ) NOT NULL AFTER `id_ebay_shipping`';

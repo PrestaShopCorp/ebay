@@ -26,86 +26,94 @@
 
 class EbayShippingZoneExcluded
 {
-	public static function getAll($id_ebay_profile)
-	{
-		return Db::getInstance()->ExecuteS('SELECT * 
+    public static function getAll($id_ebay_profile)
+    {
+        return Db::getInstance()->ExecuteS('SELECT *
 			FROM `'._DB_PREFIX_.'ebay_shipping_zone_excluded`
-			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
+			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.'
 			ORDER BY region, description');
-	}
+    }
 
-	public static function getExcluded($id_ebay_profile)
-	{
-		return Db::getInstance()->ExecuteS('SELECT * 
+    public static function getExcluded($id_ebay_profile)
+    {
+        return Db::getInstance()->ExecuteS('SELECT *
 			FROM `'._DB_PREFIX_.'ebay_shipping_zone_excluded`
-			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
+			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.'
 			AND excluded = 1');
-	}
+    }
 
-	public static function insert($data)
-	{
-		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_zone_excluded', $data, 'INSERT');
-	}
-	
-	public static function loadEbayExcludedLocations($id_ebay_profile)
-	{
-		$ebay_request = new EbayRequest();
-		$excluded_locations = $ebay_request->getExcludeShippingLocations();
+    public static function insert($data)
+    {
+        return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_zone_excluded', $data, 'INSERT');
+    }
 
-		foreach ($excluded_locations as &$excluded_location)
-		{
-			foreach ($excluded_location as &$field)
-				$field = pSQL($field);
+    public static function loadEbayExcludedLocations($id_ebay_profile)
+    {
+        $ebay_request = new EbayRequest();
+        $excluded_locations = $ebay_request->getExcludeShippingLocations();
 
-			$excluded_location['excluded'] = 0;
-			$excluded_location['id_ebay_profile'] = intval($id_ebay_profile);
-		}
+        foreach ($excluded_locations as &$excluded_location) {
+            foreach ($excluded_location as &$field) {
+                $field = pSQL($field);
+            }
 
-		if (version_compare(_PS_VERSION_, '1.5', '>'))
-			Db::getInstance()->insert('ebay_shipping_zone_excluded', $excluded_locations);
-		else
-			foreach ($excluded_locations as $location)
-				EbayShippingZoneExcluded::insert($location);        
-	}
-	
-	public static function cacheEbayExcludedLocation($id_ebay_profile)
-	{
-		$ebay_excluded_zones = EbayShippingZoneExcluded::getAll($id_ebay_profile);
+            $excluded_location['excluded'] = 0;
+            $excluded_location['id_ebay_profile'] = intval($id_ebay_profile);
+        }
 
-		$all = array();
-		$excluded = array();
-		$regions = array();
+        if (version_compare(_PS_VERSION_, '1.5', '>')) {
+            Db::getInstance()->insert('ebay_shipping_zone_excluded', $excluded_locations);
+        } else {
+            foreach ($excluded_locations as $location) {
+                EbayShippingZoneExcluded::insert($location);
+            }
+        }
 
-		foreach ($ebay_excluded_zones as $key => $zone)
-		{
-			if (!in_array($zone['region'], $regions))
-				$regions[] = $zone['region'];
+    }
 
-			$all[$zone['region']]['country'][] = array(
-				'location' => $zone['location'],
-				'description' => $zone['description'],
-				'excluded' => $zone['excluded']
-			);
-		}
+    public static function cacheEbayExcludedLocation($id_ebay_profile)
+    {
+        $ebay_excluded_zones = EbayShippingZoneExcluded::getAll($id_ebay_profile);
 
-		foreach ($ebay_excluded_zones as $key => $zone)
-			if (in_array($zone['location'], $regions))
-				$all[$zone['location']]['description'] = $zone['description'];
+        $all = array();
+        $excluded = array();
+        $regions = array();
 
-		unset($all['Worldwide']);
+        foreach ($ebay_excluded_zones as $key => $zone) {
+            if (!in_array($zone['region'], $regions)) {
+                $regions[] = $zone['region'];
+            }
 
-		foreach ($all as $key => $value)
-			if (!isset($value['description']))
-				$all[$key]['description'] = $key;
+            $all[$zone['region']]['country'][] = array(
+                'location' => $zone['location'],
+                'description' => $zone['description'],
+                'excluded' => $zone['excluded'],
+            );
+        }
 
-		//get real excluded location
-		foreach (EbayShippingZoneExcluded::getExcluded($id_ebay_profile) as $zone)
-			$excluded[] = $zone['location'];
+        foreach ($ebay_excluded_zones as $key => $zone) {
+            if (in_array($zone['location'], $regions)) {
+                $all[$zone['location']]['description'] = $zone['description'];
+            }
+        }
 
-		return array(
-			'all' => $all,
-			'excluded' => $excluded
-		);
-	}
-	
+        unset($all['Worldwide']);
+
+        foreach ($all as $key => $value) {
+            if (!isset($value['description'])) {
+                $all[$key]['description'] = $key;
+            }
+        }
+
+        //get real excluded location
+        foreach (EbayShippingZoneExcluded::getExcluded($id_ebay_profile) as $zone) {
+            $excluded[] = $zone['location'];
+        }
+
+        return array(
+            'all' => $all,
+            'excluded' => $excluded,
+        );
+    }
+
 }

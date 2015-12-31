@@ -26,96 +26,97 @@
 
 class EbayApiLog extends ObjectModel
 {
-	public $id_ebay_profile;    
-	public $type;
-	public $context;
-	public $data_sent;
-	public $response;
-	
-	public $id_product;
-	public $id_order;
+    public $id_ebay_profile;
+    public $type;
+    public $context;
+    public $data_sent;
+    public $response;
 
-	public $date_add;    
-	
-	/**
-	 * @see ObjectModel::$definition
-	 */
-	public static $definition;
-	
-	// for Prestashop 1.4
-	protected $tables;
-	protected $fieldsRequired;
-	protected $fieldsSize;
-	protected $fieldsValidate;
-	protected $table = 'ebay_api_log';
-	protected $identifier = 'id_ebay_api_log';    
-	
-	public function getFields()
-	{
-		parent::validateFields();
-		if (isset($this->id))
-			$fields['id_ebay_api_log'] = (int)($this->id);
+    public $id_product;
+    public $id_order;
 
-		$fields['id_ebay_profile'] = (int)($this->id_ebay_profile);
-		$fields['type'] = pSQL($this->type);
-		$fields['context'] = pSQL($this->context);
-		$fields['data_sent'] = pSQL($this->data_sent);
-		$fields['response'] = pSQL($this->response);
-		$fields['id_product'] = (int)$this->id_product;
-		$fields['id_order'] = (int)$this->id_order;
-		$fields['date_add'] = pSQL($this->date_add);
+    public $date_add;
 
-		return $fields;
-	}        
-	
-	public function __construct($id = null, $id_lang = null, $id_shop = null) {
-		if (version_compare(_PS_VERSION_, '1.5', '>'))
-			self::$definition = array(
-				'table' => 'ebay_api_log',
-				'primary' => 'id_ebay_log',
-				'fields' => array(
-					'id_ebay_profile' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-					'type' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-					'context' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-					'data_sent' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-					'response' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-					'id_product' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-					'id_order' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-					'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
-				),
-			);
-		else 
-		{
-			$tables = array ('ebay_api_log');
-			$fieldsRequired = array('date_add', 'type', 'context', 'data_sent', 'reponse');
-			$fieldsValidate = array();
-		}
-		
-		$this->date_add = date('Y-m-d H:i:s');
-		
-		return parent::__construct($id, $id_lang, $id_shop);     
-	}
-	
-	public static function get($offset, $limit)
-	{
-		return Db::getInstance()->executeS('SELECT * 
+    /**
+     * @see ObjectModel::$definition
+     */
+    public static $definition;
+
+    // for Prestashop 1.4
+    protected $tables;
+    protected $fieldsRequired;
+    protected $fieldsSize;
+    protected $fieldsValidate;
+    protected $table = 'ebay_api_log';
+    protected $identifier = 'id_ebay_api_log';
+
+    public function getFields()
+    {
+        parent::validateFields();
+        if (isset($this->id)) {
+            $fields['id_ebay_api_log'] = (int) ($this->id);
+        }
+
+        $fields['id_ebay_profile'] = (int) ($this->id_ebay_profile);
+        $fields['type'] = pSQL($this->type);
+        $fields['context'] = pSQL($this->context);
+        $fields['data_sent'] = pSQL($this->data_sent);
+        $fields['response'] = pSQL($this->response);
+        $fields['id_product'] = (int) $this->id_product;
+        $fields['id_order'] = (int) $this->id_order;
+        $fields['date_add'] = pSQL($this->date_add);
+
+        return $fields;
+    }
+
+    public function __construct($id = null, $id_lang = null, $id_shop = null)
+    {
+        if (version_compare(_PS_VERSION_, '1.5', '>')) {
+            self::$definition = array(
+                'table' => 'ebay_api_log',
+                'primary' => 'id_ebay_log',
+                'fields' => array(
+                    'id_ebay_profile' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
+                    'type' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+                    'context' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+                    'data_sent' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+                    'response' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+                    'id_product' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
+                    'id_order' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
+                    'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
+                ),
+            );
+        } else {
+            $tables = array('ebay_api_log');
+            $fieldsRequired = array('date_add', 'type', 'context', 'data_sent', 'reponse');
+            $fieldsValidate = array();
+        }
+
+        $this->date_add = date('Y-m-d H:i:s');
+
+        return parent::__construct($id, $id_lang, $id_shop);
+    }
+
+    public static function get($offset, $limit)
+    {
+        return Db::getInstance()->executeS('SELECT *
 			FROM `'._DB_PREFIX_.'ebay_api_log`
 			ORDER BY `id_ebay_api_log` DESC
-			LIMIT '.(int)$offset. ', '.(int)$limit);
-	}
-	
-	public static function count()
-	{
-		return Db::getInstance()->getValue('SELECT count(*) 
+			LIMIT '.(int) $offset.', '.(int) $limit);
+    }
+
+    public static function count()
+    {
+        return Db::getInstance()->getValue('SELECT count(*)
 			FROM `'._DB_PREFIX_.'ebay_api_log`');
-	}
-	
-	public static function cleanOlderThan($nb_days)
-	{
-		$date = date('Y-m-d\TH:i:s', strtotime('-1 day'));
-		
-		Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_api_log`
+    }
+
+    public static function cleanOlderThan($nb_days)
+    {
+        $date = date('Y-m-d\TH:i:s', strtotime('-1 day'));
+
+        Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_api_log`
 			WHERE `date_add` < \''.pSQL($date).'\'');
-	}
-	
+    }
+
 }

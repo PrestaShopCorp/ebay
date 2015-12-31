@@ -26,11 +26,15 @@
 
 function upgrade_module_1_10($module)
 {
-    include(dirname(__FILE__).'/sql/sql-upgrade-1-10.php');
+    include dirname(__FILE__).'/sql/sql-upgrade-1-10.php';
 
-    if (!empty($sql) && is_array($sql))
-        foreach ($sql as $request)
-            if (!Db::getInstance()->execute($request))
+    if (!empty($sql) && is_array($sql)) {
+        foreach ($sql as $request) {
+            if (!Db::getInstance()->execute($request)) {
                 return false;
+            }
+        }
+    }
+
     return true;
 }

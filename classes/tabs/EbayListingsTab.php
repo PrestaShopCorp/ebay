@@ -27,13 +27,12 @@
 class EbayListingsTab extends EbayTab
 {
 
-	function getContent()
-	{
-		$template_vars = array(
-			'id_employee' => $this->context->employee->id
-			);
-		return $this->display('ebay_listings.tpl', $template_vars);
-	}
-	
-}
+    public function getContent()
+    {
+        $template_vars = array(
+            'id_employee' => $this->context->employee->id,
+        );
+        return $this->display('ebay_listings.tpl', $template_vars);
+    }
 
+}

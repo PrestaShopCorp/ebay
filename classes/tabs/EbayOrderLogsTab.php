@@ -27,17 +27,16 @@
 class EbayOrderLogsTab extends EbayTab
 {
 
-	function getContent()
-	{
-		// Load prestashop ebay's configuration
-		$configs = Configuration::getMultiple(array('EBAY_SECURITY_TOKEN'));        
-		
-		return $this->display('order_logs.tpl', array(
-			'nb_logs' => EbayOrderLog::count(),
-			'configs' => $configs,
-			'api_not_configured' => !Configuration::get('EBAY_API_LOGS')
-		));
-	}
-	
-}
+    public function getContent()
+    {
+        // Load prestashop ebay's configuration
+        $configs = Configuration::getMultiple(array('EBAY_SECURITY_TOKEN'));
 
+        return $this->display('order_logs.tpl', array(
+            'nb_logs' => EbayOrderLog::count(),
+            'configs' => $configs,
+            'api_not_configured' => !Configuration::get('EBAY_API_LOGS'),
+        ));
+    }
+
+}

@@ -30,7 +30,7 @@ include_once dirname(__FILE__).'/../ebay.php';
 
 $ebay = new Ebay();
 
-$ebay_profile = new EbayProfile((int)Tools::getValue('profile'));
+$ebay_profile = new EbayProfile((int) Tools::getValue('profile'));
 $ebay_request = new EbayRequest();
 
 if (!Configuration::get('EBAY_SECURITY_TOKEN')
@@ -46,7 +46,7 @@ $query = 'SELECT DISTINCT(ep.`id_ebay_product`),
         ep.`id_attribute`                    AS `notSetWithMultiSkuCat`,
         epc.`blacklisted`,
         p.`id_product`                       AS `exists`,
-        p.`id_category_default`,   
+        p.`id_category_default`,
         p.`active`,
         pa.`id_product_attribute`            AS isMultiSku,
         pl.`name`                            AS psProductName,
@@ -62,22 +62,22 @@ $query = 'SELECT DISTINCT(ep.`id_ebay_product`),
 
     LEFT JOIN `'._DB_PREFIX_.'product` p
     ON p.`id_product` = ep.`id_product`
-    
+
     LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
     ON pl.`id_product` = p.`id_product`
-    AND pl.`id_lang` = '.$ebay_profile->id_lang.'    
-    
+    AND pl.`id_lang` = '.$ebay_profile->id_lang.'
+
     LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
     ON pa.`id_product` = p.`id_product`
-    AND pa.default_on = 1    
-    
+    AND pa.default_on = 1
+
     LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
     ON ecc.`id_category` = p.`id_category_default`
     AND ecc.`id_ebay_profile` = '.$ebay_profile->id.'
-    
+
     LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
     ON ec.`id_ebay_category` = ecc.`id_ebay_category`
-    
+
     WHERE ep.`id_ebay_profile` = '.$ebay_profile->id;
 
 //$currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
@@ -97,7 +97,7 @@ foreach ($res as &$row) {
     if (isset($row['id_product_ref']) && $row['id_product_ref']) {
         $row['link'] = EbayProduct::getEbayUrl($row['id_product_ref'], $ebay_request->getDev());
     }
-    
+
     if (isset($row['id_category_default']) && $row['id_category_default']) {
         foreach ($category_list as $cat) {
             if (isset($cat['id_category']) && ($cat['id_category'] == $row['id_category_default'])) {
@@ -105,44 +105,39 @@ foreach ($res as &$row) {
                 break;
             }
         }
-        
+
     }
-    
+
     if ($row['id_category_ref']) {
-        foreach($ebay_categories as $cat) {
+        foreach ($ebay_categories as $cat) {
             if ($cat['id'] == $row['id_category_ref']) {
                 $row['ebay_category_full_name'] = $cat['name'];
                 break;
             }
         }
-        
+
     }
-    
+
     if ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A') {
-        $row['sync'] = (bool)$row['EbayCategoryExists']; // only true if category synced with an eBay category
+        $row['sync'] = (bool) $row['EbayCategoryExists']; // only true if category synced with an eBay category
     }
 
     // filtering
     if (!$row['exists']) {
         $final_res[] = $row;
-    }
-    elseif (!$row['EbayCategoryExists']) {
+    } elseif (!$row['EbayCategoryExists']) {
         $final_res[] = $row;
-    }
-    elseif ($row['isMultiSku']
-        && !$row['notSetWithMultiSkuCat'] // set as if on a MultiSku category
-        && !$row['EbayCategoryIsMultiSku']
-        ) {
+    } elseif ($row['isMultiSku']
+        && !$row['notSetWithMultiSkuCat']// set as if on a MultiSku category
+         && !$row['EbayCategoryIsMultiSku']
+    ) {
         $final_res[] = $row;
-    }
-    elseif ($row['notSetWithMultiSkuCat']
+    } elseif ($row['notSetWithMultiSkuCat']
         && $row['EbayCategoryIsMultiSku']) {
         $final_res[] = $row;
-    }
-    elseif (!$row['active'] || $row['blacklisted']) {
+    } elseif (!$row['active'] || $row['blacklisted']) {
         $final_res[] = $row;
-    }
-    elseif (!$row['sync']) {
+    } elseif (!$row['sync']) {
         $final_res[] = $row;
     }
 }
@@ -151,7 +146,7 @@ $smarty = Context::getContext()->smarty;
 
 // Smarty datas
 $template_vars = array(
-    'ads' => $final_res
+    'ads' => $final_res,
 );
 
 $smarty->assign($template_vars);

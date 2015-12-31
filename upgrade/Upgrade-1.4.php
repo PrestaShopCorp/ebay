@@ -26,20 +26,20 @@
 
 function upgrade_module_1_4($module)
 {
-	include(dirname(__FILE__).'/sql/sql-upgrade-1-4.php');
+    include dirname(__FILE__).'/sql/sql-upgrade-1-4.php';
 
-	if (!empty($sql) && is_array($sql))
-	{
-		foreach ($sql as $request)
-			if (!Db::getInstance()->execute($request))
-			{
-				$this->_errors[] = DB::getInstance()->getMsgError();
-				return false;
-			}
-	}
+    if (!empty($sql) && is_array($sql)) {
+        foreach ($sql as $request) {
+            if (!Db::getInstance()->execute($request)) {
+                $this->_errors[] = DB::getInstance()->getMsgError();
+                return false;
+            }
+        }
 
-	$module->installUpgradeOneFour();
-	$module->setConfiguration('EBAY_VERSION', $module->version);
+    }
 
-	return true;
+    $module->installUpgradeOneFour();
+    $module->setConfiguration('EBAY_VERSION', $module->version);
+
+    return true;
 }

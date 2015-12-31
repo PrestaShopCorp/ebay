@@ -26,36 +26,38 @@
 
 class EbayShippingService
 {
-	public static function getAll($ebay_site_id)
-	{
-		return Db::getInstance()->ExecuteS('SELECT *
+    public static function getAll($ebay_site_id)
+    {
+        return Db::getInstance()->ExecuteS('SELECT *
 			FROM '._DB_PREFIX_.'ebay_shipping_service
-			WHERE `ebay_site_id` = '.(int)$ebay_site_id);
-	}
+			WHERE `ebay_site_id` = '.(int) $ebay_site_id);
+    }
 
-	public static function getTotal($ebay_site_id)
-	{
-		return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
+    public static function getTotal($ebay_site_id)
+    {
+        return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
 			FROM '._DB_PREFIX_.'ebay_shipping_service
-			WHERE `ebay_site_id` = '.(int)$ebay_site_id);
-	}
+			WHERE `ebay_site_id` = '.(int) $ebay_site_id);
+    }
 
-	public static function insert($data)
-	{
-		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_service', $data, 'INSERT');
-	}
-	
-	public static function getCarriers($ebay_site_id)
-	{
-		if (EbayShippingService::getTotal($ebay_site_id))
-			return EbayShippingService::getAll($ebay_site_id);
+    public static function insert($data)
+    {
+        return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_service', $data, 'INSERT');
+    }
 
-		$ebay = new EbayRequest();
-		$carriers = $ebay->getCarriers();
+    public static function getCarriers($ebay_site_id)
+    {
+        if (EbayShippingService::getTotal($ebay_site_id)) {
+            return EbayShippingService::getAll($ebay_site_id);
+        }
 
-		foreach ($carriers as $carrier)
-			EbayShippingService::insert(array_map('pSQL', $carrier));
+        $ebay = new EbayRequest();
+        $carriers = $ebay->getCarriers();
 
-		return $carriers;
-	}
+        foreach ($carriers as $carrier) {
+            EbayShippingService::insert(array_map('pSQL', $carrier));
+        }
+
+        return $carriers;
+    }
 }

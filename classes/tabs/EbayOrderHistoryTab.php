@@ -27,28 +27,29 @@
 class EbayOrderHistoryTab extends EbayTab
 {
 
-	function getContent()
-	{
-		// Check if the module is configured
-		if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))
-			return '<p><b>'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayorderhistorytab').'</b></p><br />';
+    public function getContent()
+    {
+        // Check if the module is configured
+        if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
+            return '<p><b>'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayorderhistorytab').'</b></p><br />';
+        }
 
-		$dateLastImport = '-';
+        $dateLastImport = '-';
 
-		if (file_exists(dirname(__FILE__).'/../../log/orders.php'))
-			include(dirname(__FILE__).'/../../log/orders.php');
+        if (file_exists(dirname(__FILE__).'/../../log/orders.php')) {
+            include dirname(__FILE__).'/../../log/orders.php';
+        }
 
-		$template_vars = array(
-			'date_last_import' => $dateLastImport,
-			'orders' => isset($orders) ? $orders : array(),
-			'help'	=> array(
-				'lang' => $this->context->country->iso_code,
-				'module_version' => $this->ebay->version,
-				'ps_version' => _PS_VERSION_,)
-		);
+        $template_vars = array(
+            'date_last_import' => $dateLastImport,
+            'orders' => isset($orders) ? $orders : array(),
+            'help' => array(
+                'lang' => $this->context->country->iso_code,
+                'module_version' => $this->ebay->version,
+                'ps_version' => _PS_VERSION_),
+        );
 
-		return $this->display('ordersHistory.tpl', $template_vars);
-	}
-	
+        return $this->display('ordersHistory.tpl', $template_vars);
+    }
+
 }
-

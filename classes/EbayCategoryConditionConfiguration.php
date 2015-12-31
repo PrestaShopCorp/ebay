@@ -26,33 +26,37 @@
 
 class EbayCategoryConditionConfiguration
 {
-	const PS_CONDITION_NEW = 1;
-	const PS_CONDITION_USED = 2;
-	const PS_CONDITION_REFURBISHED = 3;
+    const PS_CONDITION_NEW = 1;
+    const PS_CONDITION_USED = 2;
+    const PS_CONDITION_REFURBISHED = 3;
 
-	public static function getPSConditions($condition_type = null)
-	{
-		$condition_types = array(
-			EbayCategoryConditionConfiguration::PS_CONDITION_NEW => 'new',
-			EbayCategoryConditionConfiguration::PS_CONDITION_USED => 'used',
-			EbayCategoryConditionConfiguration::PS_CONDITION_REFURBISHED => 'refurbished'
-		);
+    public static function getPSConditions($condition_type = null)
+    {
+        $condition_types = array(
+            EbayCategoryConditionConfiguration::PS_CONDITION_NEW => 'new',
+            EbayCategoryConditionConfiguration::PS_CONDITION_USED => 'used',
+            EbayCategoryConditionConfiguration::PS_CONDITION_REFURBISHED => 'refurbished',
+        );
 
-		if ($condition_type)
-			return $condition_types[$condition_type];
-		
-		return $condition_types;
-	}
+        if ($condition_type) {
+            return $condition_types[$condition_type];
+        }
 
-	public static function replace($data)
-	{
-		$to_insert = array();
-		foreach ($data as $key => $value)
-			$to_insert[bqSQL($key)] = pSQL($value);
+        return $condition_types;
+    }
 
-		if (version_compare(_PS_VERSION_, '1.5', '>'))
-			Db::getInstance()->insert('ebay_category_condition_configuration', $to_insert, false, false, Db::REPLACE);
-		else
-			Db::getInstance()->execute('REPLACE INTO `'._DB_PREFIX_.'ebay_category_condition_configuration` (`'.implode('` , `', array_keys($to_insert)).'`) VALUES (\''.implode('\', \'', $to_insert).'\')');
-	}
+    public static function replace($data)
+    {
+        $to_insert = array();
+        foreach ($data as $key => $value) {
+            $to_insert[bqSQL($key)] = pSQL($value);
+        }
+
+        if (version_compare(_PS_VERSION_, '1.5', '>')) {
+            Db::getInstance()->insert('ebay_category_condition_configuration', $to_insert, false, false, Db::REPLACE);
+        } else {
+            Db::getInstance()->execute('REPLACE INTO `'._DB_PREFIX_.'ebay_category_condition_configuration` (`'.implode('` , `', array_keys($to_insert)).'`) VALUES (\''.implode('\', \'', $to_insert).'\')');
+        }
+
+    }
 }

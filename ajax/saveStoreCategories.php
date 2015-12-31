@@ -24,12 +24,13 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-include(dirname(__FILE__).'/../../../config/config.inc.php');
-require_once(dirname(__FILE__).'/../../../init.php');
-include('../ebay.php');
+include dirname(__FILE__).'/../../../config/config.inc.php';
+require_once dirname(__FILE__).'/../../../init.php';
+include '../ebay.php';
 
-if (Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+if (Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR: Invalid Token');
+}
 
 $ebay = new eBay();
 $context = Context::getContext();

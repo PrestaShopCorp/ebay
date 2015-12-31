@@ -24,22 +24,25 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-if (!defined('TMP_DS'))
+if (!defined('TMP_DS')) {
     define('TMP_DS', DIRECTORY_SEPARATOR);
+}
 
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
 
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR: Invalid Token');
-
-include(dirname(__FILE__).'/../classes/EbayProductImage.php');
-
-if (Tools::getValue('action') == 'delete-all')
-{
-    if (EbayProductImage::removeAllProductImage() === true)
-        echo 'success';
-    else
-        echo 'error';
 }
-else
+
+include dirname(__FILE__).'/../classes/EbayProductImage.php';
+
+if (Tools::getValue('action') == 'delete-all') {
+    if (EbayProductImage::removeAllProductImage() === true) {
+        echo 'success';
+    } else {
+        echo 'error';
+    }
+
+} else {
     die('ERROR: Invalid arguments');
+}

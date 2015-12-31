@@ -44,7 +44,6 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_sync_history` (
 		PRIMARY KEY  (`id_ebay_sync_history`)
 	) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
-
 // Create Sync History Product Table in Database
 $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_sync_history_product` (
 		`id_ebay_sync_history_product` int(16) NOT NULL AUTO_INCREMENT,
@@ -53,4 +52,3 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_sync_history_product` 
 		KEY (`id_ebay_sync_history`),
 		PRIMARY KEY  (`id_ebay_sync_history_product`)
 	) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
-

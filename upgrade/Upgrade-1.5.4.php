@@ -31,8 +31,9 @@
 
 function upgrade_module_1_5_4($module)
 {
-    if ($module->ebay_profile)
+    if ($module->ebay_profile) {
         $module->ebay_profile->setPicturesSettings();
+    }
 
-	return true;
+    return true;
 }

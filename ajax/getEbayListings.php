@@ -24,15 +24,17 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-if (!defined('TMP_DS'))
+if (!defined('TMP_DS')) {
     define('TMP_DS', DIRECTORY_SEPARATOR);
+}
 
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
-include('../../../init.php');
-include('../../../modules/ebay/ebay.php');
+include '../../../init.php';
+include '../../../modules/ebay/ebay.php';
 
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR : INVALID TOKEN');
+}
 
 $ebay = new eBay();
-$ebay->displayEbayListingsAjax((int)Tools::getValue('id_employee'));
+$ebay->displayEbayListingsAjax((int) Tools::getValue('id_employee'));

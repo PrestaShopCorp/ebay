@@ -24,21 +24,22 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-if (!defined('TMP_DS'))
+if (!defined('TMP_DS')) {
     define('TMP_DS', DIRECTORY_SEPARATOR);
+}
 
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
 include_once dirname(__FILE__).'/../../../init.php';
 include_once dirname(__FILE__).'/../ebay.php';
 
-class EbayLoadAPILogs extends EbayLoadLogs {
+class EbayLoadAPILogs extends EbayLoadLogs
+{
 
     protected $file = '/views/templates/hook/table_api_logs.tpl';
     protected function getDatas($offset, $nb_results)
     {
         $logs = EbayApiLog::get($offset, $nb_results);
-        foreach ($logs as &$log) 
-        {
+        foreach ($logs as &$log) {
             $log['data_sent'] = nl2br(TotFormat::prettyPrint($log['data_sent']));
             $log['response'] = nl2br(TotFormat::prettyPrint($log['response']));
         }

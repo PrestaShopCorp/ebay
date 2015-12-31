@@ -27,23 +27,23 @@
 class EbayOrdersSyncTab extends EbayTab
 {
 
-	function getContent()
-	{
-		
-		$url_vars = array(
-			'id_tab' => '14',
-			'section' => 'parameters'
-		);
+    public function getContent()
+    {
 
-		if (version_compare(_PS_VERSION_, '1.5', '>'))
-			$url_vars['controller'] = Tools::getValue('controller');
-		else
-			$url_vars['tab'] = Tools::getValue('tab');
+        $url_vars = array(
+            'id_tab' => '14',
+            'section' => 'parameters',
+        );
 
-		$url = $this->_getUrl($url_vars);        
-		
-		return $this->display('orders_sync.tpl', array('url' => $url));
-	}
-	
+        if (version_compare(_PS_VERSION_, '1.5', '>')) {
+            $url_vars['controller'] = Tools::getValue('controller');
+        } else {
+            $url_vars['tab'] = Tools::getValue('tab');
+        }
+
+        $url = $this->_getUrl($url_vars);
+
+        return $this->display('orders_sync.tpl', array('url' => $url));
+    }
+
 }
-

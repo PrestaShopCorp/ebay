@@ -27,44 +27,46 @@
 class EbayProductConfiguration
 {
 
-	public static function getByProductIdAndProfile($product_id, $id_ebay_profile)
-	{
-		if (!$product_id)
-			return;
-		
-		return Db::getInstance()->getRow('SELECT `id_product`, `blacklisted`, `extra_images`
-			FROM `'._DB_PREFIX_.'ebay_product_configuration`
-			WHERE `id_product` = '.(int)$product_id.'
-			AND `id_ebay_profile` = '.(int)$id_ebay_profile);
-	}
+    public static function getByProductIdAndProfile($product_id, $id_ebay_profile)
+    {
+        if (!$product_id) {
+            return;
+        }
 
-	public static function getBlacklistedProductIdsQuery($id_ebay_profile)
-	{
-		return 'SELECT `id_product`
+        return Db::getInstance()->getRow('SELECT `id_product`, `blacklisted`, `extra_images`
 			FROM `'._DB_PREFIX_.'ebay_product_configuration`
-			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
+			WHERE `id_product` = '.(int) $product_id.'
+			AND `id_ebay_profile` = '.(int) $id_ebay_profile);
+    }
+
+    public static function getBlacklistedProductIdsQuery($id_ebay_profile)
+    {
+        return 'SELECT `id_product`
+			FROM `'._DB_PREFIX_.'ebay_product_configuration`
+			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.'
 			AND `blacklisted` = 1';
-	}
+    }
 
-	public static function insertOrUpdate($product_id, $data)
-	{
-		if (!count($data))
-			return;
-		
-		$to_insert = array();
-		$fields_strs = array();
-		foreach($data as $key => $value) {
-			$to_insert[bqSQL($key)] = '"'.pSQL($value).'"';
-			$fields_strs[] = '`'.bqSQL($key).'` = "'.pSQL($value).'"';
-		}
+    public static function insertOrUpdate($product_id, $data)
+    {
+        if (!count($data)) {
+            return;
+        }
 
-		$sql = 'INSERT INTO `'._DB_PREFIX_.'ebay_product_configuration` (`id_product`, `'.implode('`,`', array_keys($to_insert)).'`)
-			VALUES ('.(int)$product_id.', '.implode(',', $to_insert).')
+        $to_insert = array();
+        $fields_strs = array();
+        foreach ($data as $key => $value) {
+            $to_insert[bqSQL($key)] = '"'.pSQL($value).'"';
+            $fields_strs[] = '`'.bqSQL($key).'` = "'.pSQL($value).'"';
+        }
+
+        $sql = 'INSERT INTO `'._DB_PREFIX_.'ebay_product_configuration` (`id_product`, `'.implode('`,`', array_keys($to_insert)).'`)
+			VALUES ('.(int) $product_id.', '.implode(',', $to_insert).')
 			ON DUPLICATE KEY UPDATE ';
 
-		$sql .= implode(',', $fields_strs);
+        $sql .= implode(',', $fields_strs);
 
-		return Db::getInstance()->execute($sql);
-	}
+        return Db::getInstance()->execute($sql);
+    }
 
 }

@@ -30,47 +30,46 @@
  */
 function update_product_template($module)
 {
-	if ($product_template = Configuration::get('EBAY_PRODUCT_TEMPLATE'))
-	{
-		// We cannot just replace "template/images/" by "img" since the use may have added its own images in "template/images"
-		$product_template = str_replace(
-			array(
-				'template/images/favorite.png',
-				'template/images/footer.png',
-				'template/images/header.png',
-				'template/images/search.png',
-				'template/images/stats.png',
-			),
-			array(
-				'img/favorite.png',
-				'img/footer.png',
-				'img/header.png',
-				'img/search.png',
-				'img/stats.png',
-			),
-			$product_template
-		);
-		$module->setConfiguration('EBAY_PRODUCT_TEMPLATE', $product_template, true);
-	}
+    if ($product_template = Configuration::get('EBAY_PRODUCT_TEMPLATE')) {
+        // We cannot just replace "template/images/" by "img" since the use may have added its own images in "template/images"
+        $product_template = str_replace(
+            array(
+                'template/images/favorite.png',
+                'template/images/footer.png',
+                'template/images/header.png',
+                'template/images/search.png',
+                'template/images/stats.png',
+            ),
+            array(
+                'img/favorite.png',
+                'img/footer.png',
+                'img/header.png',
+                'img/search.png',
+                'img/stats.png',
+            ),
+            $product_template
+        );
+        $module->setConfiguration('EBAY_PRODUCT_TEMPLATE', $product_template, true);
+    }
 }
 
 function upgrade_module_1_5($module)
 {
-	include(dirname(__FILE__).'/sql/sql-upgrade-1-5.php');
+    include dirname(__FILE__).'/sql/sql-upgrade-1-5.php';
 
-	if (!empty($sql) && is_array($sql))
-	{
-		foreach ($sql as $request)
-			if (!Db::getInstance()->execute($request))
-			{
-				$this->_errors[] = DB::getInstance()->getMsgError();
-				return false;
-			}
-	}
+    if (!empty($sql) && is_array($sql)) {
+        foreach ($sql as $request) {
+            if (!Db::getInstance()->execute($request)) {
+                $this->_errors[] = DB::getInstance()->getMsgError();
+                return false;
+            }
+        }
 
-	update_product_template($module);
+    }
 
-	$module->setConfiguration('EBAY_VERSION', $module->version);
+    update_product_template($module);
 
-	return true;
+    $module->setConfiguration('EBAY_VERSION', $module->version);
+
+    return true;
 }

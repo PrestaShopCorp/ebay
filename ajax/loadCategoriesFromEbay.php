@@ -37,60 +37,53 @@ if (EbayTools::getValue('admin_path')) {
 
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
 
-if (version_compare(_PS_VERSION_, '1.5', '>'))
-    require_once(_PS_ADMIN_DIR_.'init.php');
-else
-    require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php');
+if (version_compare(_PS_VERSION_, '1.5', '>')) {
+    require_once _PS_ADMIN_DIR_.'init.php';
+} else {
+    require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
+}
 
 if (!Tools::getValue('token')
-    || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+    || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR : INVALID TOKEN');
+}
 
-if(!($id_profile = Tools::getValue('profile')) || !Validate::isInt($id_profile)
+if (!($id_profile = Tools::getValue('profile')) || !Validate::isInt($id_profile)
     || !($step = Tools::getValue('step')) || !Validate::isInt($step)
     || !($cat = Tools::getValue('id_category'))
-    ) {
+) {
     die('ERROR : INVALID DATA');
 }
 
-if (Module::isInstalled('ebay'))
-{   
+if (Module::isInstalled('ebay')) {
     $ebay = Module::getInstanceByName('ebay');
 
-    if (version_compare(_PS_VERSION_,'1.5','<')) {
+    if (version_compare(_PS_VERSION_, '1.5', '<')) {
         $enable = $ebay->active;
-    }
-    else {
+    } else {
         $enable = Module::isEnabled('ebay');
     }
 
-    if($enable)
-    {
+    if ($enable) {
         $ebay_request = new EbayRequest();
-        $ebay_profile = new EbayProfile((int)$id_profile);
+        $ebay_profile = new EbayProfile((int) $id_profile);
 
-        if ($step == 1)
-        {
+        if ($step == 1) {
             EbayCategory::deleteCategoriesByIdCountry($ebay_profile->ebay_site_id);
             if ($cat_root = $ebay_request->getCategories(false)) {
                 die(Tools::jsonEncode($cat_root));
-            }
-            else {
+            } else {
                 die(Tools::jsonEncode('error'));
             }
-        }
-        else if ($step == 2)
-        {
-            $cat = $ebay_request->getCategories((int)$cat);
+        } else if ($step == 2) {
+            $cat = $ebay_request->getCategories((int) $cat);
 
             if (EbayCategory::insertCategories($ebay_profile->ebay_site_id, $cat, $ebay_request->getCategoriesSkuCompliancy())) {
                 die(Tools::jsonEncode($cat));
-            }
-            else {
+            } else {
                 die(Tools::jsonEncode('error'));
             }
-        }
-        elseif ($step == 3) {
+        } elseif ($step == 3) {
             Configuration::updateValue('EBAY_CATEGORY_LOADED_'.$ebay_profile->ebay_site_id, 1);
         }
     }

@@ -26,22 +26,28 @@
 
 function upgrade_module_1_9($module)
 {
-    include(dirname(__FILE__).'/sql/sql-upgrade-1-9.php');
+    include dirname(__FILE__).'/sql/sql-upgrade-1-9.php';
 
-    if (!empty($sql) && is_array($sql))
-        foreach ($sql as $request)
-            if (!Db::getInstance()->execute($request))
+    if (!empty($sql) && is_array($sql)) {
+        foreach ($sql as $request) {
+            if (!Db::getInstance()->execute($request)) {
                 return false;
-    
-    if (!Configuration::get('EBAY_ORDERS_DAYS_BACKWARD'))
+            }
+        }
+    }
+
+    if (!Configuration::get('EBAY_ORDERS_DAYS_BACKWARD')) {
         Configuration::updateValue('EBAY_ORDERS_DAYS_BACKWARD', 30, false, 0, 0);
-    
-    if (!Configuration::get('EBAY_LOGS_DAYS'))
+    }
+
+    if (!Configuration::get('EBAY_LOGS_DAYS')) {
         Configuration::updateValue('EBAY_LOGS_DAYS', 30, false, 0, 0);
-    
-	$hook_update_order_status = version_compare(_PS_VERSION_, '1.5', '>') ? 'actionOrderStatusUpdate' : 'updateOrderStatus';
-	if (!$module->registerHook($hook_update_order_status))
-		return false;    
-    
+    }
+
+    $hook_update_order_status = version_compare(_PS_VERSION_, '1.5', '>') ? 'actionOrderStatusUpdate' : 'updateOrderStatus';
+    if (!$module->registerHook($hook_update_order_status)) {
+        return false;
+    }
+
     return true;
 }

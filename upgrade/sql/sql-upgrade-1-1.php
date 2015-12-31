@@ -26,5 +26,3 @@
 
 // Init
 $sql = array();
-
-

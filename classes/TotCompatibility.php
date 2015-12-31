@@ -26,30 +26,30 @@
 
 class TotCompatibility
 {
-	/*
-	 * for backward compatibility
-	 *
-	 *
-	 */
-	
-	public static function getCurrenciesByIdShop($id_shop = 0)
-	{
-		if (version_compare(_PS_VERSION_, '1.5.1', '>='))
-			return Currency::getCurrenciesByIdShop($id_shop);
-		elseif (version_compare(_PS_VERSION_, '1.5', '>')) {
-			$sql = 'SELECT *
+    /*
+     * for backward compatibility
+     *
+     *
+     */
+
+    public static function getCurrenciesByIdShop($id_shop = 0)
+    {
+        if (version_compare(_PS_VERSION_, '1.5.1', '>=')) {
+            return Currency::getCurrenciesByIdShop($id_shop);
+        } elseif (version_compare(_PS_VERSION_, '1.5', '>')) {
+            $sql = 'SELECT *
 					FROM `'._DB_PREFIX_.'currency` c
 					LEFT JOIN `'._DB_PREFIX_.'currency_shop` cs ON (cs.`id_currency` = c.`id_currency`)
-					'.($id_shop != 0 ? ' WHERE cs.`id_shop` = '.(int)$id_shop : '').'
+					'.($id_shop != 0 ? ' WHERE cs.`id_shop` = '.(int) $id_shop : '').'
 					GROUP BY c.id_currency
 					ORDER BY `name` ASC';
 
-			return Db::getInstance()->executeS($sql);
-		} else {
-			$sql = 'SELECT *
-					FROM `'._DB_PREFIX_.'currency` c';            
+            return Db::getInstance()->executeS($sql);
+        } else {
+            $sql = 'SELECT *
+					FROM `'._DB_PREFIX_.'currency` c';
 
-			return Db::getInstance()->executeS($sql);
-		}
-	}
+            return Db::getInstance()->executeS($sql);
+        }
+    }
 }

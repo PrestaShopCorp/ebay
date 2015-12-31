@@ -26,36 +26,37 @@
 
 class EbayShippingLocation
 {
-	public static function getEbayShippingLocations()
-	{
-		return Db::getInstance()->ExecuteS('SELECT *
+    public static function getEbayShippingLocations()
+    {
+        return Db::getInstance()->ExecuteS('SELECT *
 			FROM '._DB_PREFIX_.'ebay_shipping_location');
-	}
+    }
 
-	public static function getTotal()
-	{
-		return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
+    public static function getTotal()
+    {
+        return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
 			FROM '._DB_PREFIX_.'ebay_delivery_time_options');
-	}
+    }
 
-	public static function insert($data)
-	{
-		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_location', $data, 'INSERT');
-	}
-	
-	public static function getInternationalShippingLocations()
-	{
-		if (EbayShippingLocation::getTotal())
-			return EbayShippingLocation::getEbayShippingLocations();
+    public static function insert($data)
+    {
+        return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_location', $data, 'INSERT');
+    }
 
-		$ebay = new EbayRequest();
-		$locations = $ebay->getInternationalShippingLocations();
+    public static function getInternationalShippingLocations()
+    {
+        if (EbayShippingLocation::getTotal()) {
+            return EbayShippingLocation::getEbayShippingLocations();
+        }
 
-		foreach ($locations as $location)
-			EbayShippingLocation::insert(array_map('pSQL', $location));
+        $ebay = new EbayRequest();
+        $locations = $ebay->getInternationalShippingLocations();
 
-		return $locations;
-	}
+        foreach ($locations as $location) {
+            EbayShippingLocation::insert(array_map('pSQL', $location));
+        }
 
-	
+        return $locations;
+    }
+
 }

@@ -24,71 +24,75 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-if (!defined('TMP_DS'))
+if (!defined('TMP_DS')) {
     define('TMP_DS', DIRECTORY_SEPARATOR);
+}
 
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
 
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR: Invalid Token');
+}
 
 /* Fix for limit db sql request in time */
 sleep(1);
 
-$id_ebay_profile = (int)Tools::getValue('profile');
+$id_ebay_profile = (int) Tools::getValue('profile');
 $ebay_profile = new EbayProfile($id_ebay_profile);
 
 $current_path = Db::getInstance()->getRow('
     SELECT ecc.`id_ebay_category`, ec.`id_category_ref`, ec.`id_category_ref_parent`, ec.`level`
     FROM `'._DB_PREFIX_.'ebay_category_configuration` ecc
     LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec ON (ec.`id_ebay_category` = ecc.`id_ebay_category`)
-    WHERE ecc.`id_ebay_profile` = '.(int)$id_ebay_profile.' 
-    AND ecc.`id_category` = '.(int)Tools::getValue('id_category'));
+    WHERE ecc.`id_ebay_profile` = '.(int) $id_ebay_profile.'
+    AND ecc.`id_category` = '.(int) Tools::getValue('id_category'));
 
-for ($levelStart = $current_path['level']; $levelStart > 1; $levelStart--)
-{
+for ($levelStart = $current_path['level']; $levelStart > 1; $levelStart--) {
     $current_path = Db::getInstance()->getRow('
         SELECT ec.`id_ebay_category`, ec.`id_category_ref`, ec.`id_category_ref_parent`, ec.`level`
         FROM `'._DB_PREFIX_.'ebay_category` ec
         LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc ON (ecc.`id_ebay_category` = ec.`id_ebay_category`)
-        WHERE ecc.`id_ebay_profile` = '.(int)$id_ebay_profile.' 
-        AND ec.`id_category_ref` = '.(int)$current_path['id_category_ref_parent'].'
-        AND ec.`id_country` = '.(int)$ebay_profile->ebay_site_id);
+        WHERE ecc.`id_ebay_profile` = '.(int) $id_ebay_profile.'
+        AND ec.`id_category_ref` = '.(int) $current_path['id_category_ref_parent'].'
+        AND ec.`id_country` = '.(int) $ebay_profile->ebay_site_id);
 }
 
 $level_exists = array();
 
-for ($level = 0; $level <= 5; $level++)
-    if (Tools::getValue('level') >= $level)
-    {
-        if ($level == 0)
+for ($level = 0; $level <= 5; $level++) {
+    if (Tools::getValue('level') >= $level) {
+        if ($level == 0) {
             $ebay_category_list_level = Db::getInstance()->ExecuteS('SELECT *
                 FROM `'._DB_PREFIX_.'ebay_category`
                 WHERE `level` = 1
                 AND `id_category_ref` = `id_category_ref_parent`
-                AND `id_country` = '.(int)$ebay_profile->ebay_site_id);
-        else
+                AND `id_country` = '.(int) $ebay_profile->ebay_site_id);
+        } else {
             $ebay_category_list_level = Db::getInstance()->ExecuteS('SELECT *
                 FROM `'._DB_PREFIX_.'ebay_category`
-                WHERE `level` = '.(int)($level + 1).'
-                AND `id_country` = '.(int)$ebay_profile->ebay_site_id.'
+                WHERE `level` = '.(int) ($level + 1).'
+                AND `id_country` = '.(int) $ebay_profile->ebay_site_id.'
                 AND `id_category_ref_parent` IN (
                     SELECT `id_category_ref`
                     FROM `'._DB_PREFIX_.'ebay_category`
-                    WHERE `id_ebay_category` = '.(int)(Tools::getValue('level'.$level)).')');
+                    WHERE `id_ebay_category` = '.(int) (Tools::getValue('level'.$level)).')');
+        }
 
-        if ($ebay_category_list_level)
-        {
+        if ($ebay_category_list_level) {
             $level_exists[$level + 1] = true;
 
-            echo '<select name="category['.(int)Tools::getValue('id_category').']" id="categoryLevel'.(int)($level + 1).'-'.(int)Tools::getValue('id_category').'" rel="'.(int)Tools::getValue('id_category').'" style="font-size: 12px; width: 160px;" OnChange="changeCategoryMatch('.(int)($level + 1).', '.(int)Tools::getValue('id_category').');">
+            echo '<select name="category['.(int) Tools::getValue('id_category').']" id="categoryLevel'.(int) ($level + 1).'-'.(int) Tools::getValue('id_category').'" rel="'.(int) Tools::getValue('id_category').'" style="font-size: 12px; width: 160px;" OnChange="changeCategoryMatch('.(int) ($level + 1).', '.(int) Tools::getValue('id_category').');">
                 <option value="0">'.Tools::safeOutput(Tools::getValue('ch_cat_str')).'</option>';
 
-            foreach ($ebay_category_list_level as $ec)
-                echo '<option value="'.(int)$ec['id_ebay_category'].'" '.((Tools::getValue('level'.($level + 1)) && Tools::getValue('level'.($level + 1)) == $ec['id_ebay_category']) ? 'selected="selected"' : '').'>'.Tools::safeOutput($ec['name']).($ec['is_multi_sku'] == 1 ? ' *' : '').'</option>';
+            foreach ($ebay_category_list_level as $ec) {
+                echo '<option value="'.(int) $ec['id_ebay_category'].'" '.((Tools::getValue('level'.($level + 1)) && Tools::getValue('level'.($level + 1)) == $ec['id_ebay_category']) ? 'selected="selected"' : '').'>'.Tools::safeOutput($ec['name']).($ec['is_multi_sku'] == 1 ? ' *' : '').'</option>';
+            }
+
             echo '</select> ';
         }
     }
+}
 
-if (!isset($level_exists[Tools::getValue('level') + 1]))
-    echo '<input type="hidden" name="category['.(int)Tools::getValue('id_category').']" value="'.(int)Tools::getValue('level'.Tools::getValue('level')).'" />';
+if (!isset($level_exists[Tools::getValue('level') + 1])) {
+    echo '<input type="hidden" name="category['.(int) Tools::getValue('id_category').']" value="'.(int) Tools::getValue('level'.Tools::getValue('level')).'" />';
+}

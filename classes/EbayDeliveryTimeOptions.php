@@ -26,41 +26,44 @@
 
 class EbayDeliveryTimeOptions
 {
-	public static function getAll()
-	{
-		return Db::getInstance()->ExecuteS('SELECT *
+    public static function getAll()
+    {
+        return Db::getInstance()->ExecuteS('SELECT *
 			FROM '._DB_PREFIX_.'ebay_delivery_time_options');
-	}
+    }
 
-	public static function getTotal()
-	{
-		return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
+    public static function getTotal()
+    {
+        return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
 			FROM '._DB_PREFIX_.'ebay_delivery_time_options');
-	}
+    }
 
-	public static function insert($all_data)
-	{
-		$to_insert = array();
-		if(is_array($all_data) && count($all_data))
-			foreach($all_data as $key => $data)
-				$to_insert[bqSQL($key)] = pSQL($data);
+    public static function insert($all_data)
+    {
+        $to_insert = array();
+        if (is_array($all_data) && count($all_data)) {
+            foreach ($all_data as $key => $data) {
+                $to_insert[bqSQL($key)] = pSQL($data);
+            }
+        }
 
-		Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_delivery_time_options', $to_insert, 'INSERT');
-	}
-	
-	public static function getDeliveryTimeOptions()
-	{
-		if (EbayDeliveryTimeOptions::getTotal())
-			return EbayDeliveryTimeOptions::getAll();
+        Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_delivery_time_options', $to_insert, 'INSERT');
+    }
 
-		$ebay = new EbayRequest();
-		$delivery_time_options = $ebay->getDeliveryTimeOptions();
+    public static function getDeliveryTimeOptions()
+    {
+        if (EbayDeliveryTimeOptions::getTotal()) {
+            return EbayDeliveryTimeOptions::getAll();
+        }
 
-		foreach ($delivery_time_options as $delivery_time_option)
-			EbayDeliveryTimeOptions::insert(array_map('pSQL', $delivery_time_option));
+        $ebay = new EbayRequest();
+        $delivery_time_options = $ebay->getDeliveryTimeOptions();
 
-		return $delivery_time_options;
-	}
+        foreach ($delivery_time_options as $delivery_time_option) {
+            EbayDeliveryTimeOptions::insert(array_map('pSQL', $delivery_time_option));
+        }
 
-	
+        return $delivery_time_options;
+    }
+
 }

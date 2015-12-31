@@ -26,49 +26,55 @@
 
 class EbayReturnsPolicy
 {
-	public static function getAll()
-	{
-		return Db::getInstance()->ExecuteS('SELECT *
+    public static function getAll()
+    {
+        return Db::getInstance()->ExecuteS('SELECT *
 			FROM '._DB_PREFIX_.'ebay_returns_policy');
-	}
+    }
 
-	public static function getTotal()
-	{
-		$returnspolicy = Db::getInstance()->getValue('SELECT COUNT(*) AS nb	FROM '._DB_PREFIX_.'ebay_returns_policy');
-		$returnsWithin = Configuration::get('EBAY_RETURNS_WITHIN_VALUES');
-		$returnsWhoPays = Configuration::get('EBAY_RETURNS_WHO_PAYS_VALUES');
-		return $returnspolicy && $returnsWithin && $returnsWhoPays;
+    public static function getTotal()
+    {
+        $returnspolicy = Db::getInstance()->getValue('SELECT COUNT(*) AS nb	FROM '._DB_PREFIX_.'ebay_returns_policy');
+        $returnsWithin = Configuration::get('EBAY_RETURNS_WITHIN_VALUES');
+        $returnsWhoPays = Configuration::get('EBAY_RETURNS_WHO_PAYS_VALUES');
+        return $returnspolicy && $returnsWithin && $returnsWhoPays;
 
-	}
+    }
 
-	public static function insert($data)
-	{
-		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_returns_policy', $data, 'INSERT');
-	}
-	
-	public static function getReturnsPolicies()
-	{
-		// already in the DB
-		if (EbayReturnsPolicy::getTotal())
-			return EbayReturnsPolicy::getAll();
+    public static function insert($data)
+    {
+        return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_returns_policy', $data, 'INSERT');
+    }
 
-		$ebay_request = new EbayRequest();
-		$policiesDetails = $ebay_request->getReturnsPolicies();
+    public static function getReturnsPolicies()
+    {
+        // already in the DB
+        if (EbayReturnsPolicy::getTotal()) {
+            return EbayReturnsPolicy::getAll();
+        }
 
-		foreach ($policiesDetails['ReturnsAccepted'] as $returns_policy)
-			EbayReturnsPolicy::insert(array_map('pSQL', $returns_policy));
+        $ebay_request = new EbayRequest();
+        $policiesDetails = $ebay_request->getReturnsPolicies();
 
-		$ReturnsWithin = array();
-		foreach($policiesDetails['ReturnsWithin'] as $returns_within)
-			$ReturnsWithin[] = array_map('pSQL', $returns_within);
-		Configuration::updateValue('EBAY_RETURNS_WITHIN_VALUES', serialize($ReturnsWithin), false, 0, 0);
+        foreach ($policiesDetails['ReturnsAccepted'] as $returns_policy) {
+            EbayReturnsPolicy::insert(array_map('pSQL', $returns_policy));
+        }
 
-		$returnsWhoPays = array();
-		foreach($policiesDetails['ReturnsWhoPays'] as $returns_within)
-			$returnsWhoPays[] = array_map('pSQL', $returns_within);
-		Configuration::updateValue('EBAY_RETURNS_WHO_PAYS_VALUES', serialize($returnsWhoPays), false, 0, 0);
+        $ReturnsWithin = array();
+        foreach ($policiesDetails['ReturnsWithin'] as $returns_within) {
+            $ReturnsWithin[] = array_map('pSQL', $returns_within);
+        }
 
-		return $policiesDetails['ReturnsAccepted'];
-	}
-	
+        Configuration::updateValue('EBAY_RETURNS_WITHIN_VALUES', serialize($ReturnsWithin), false, 0, 0);
+
+        $returnsWhoPays = array();
+        foreach ($policiesDetails['ReturnsWhoPays'] as $returns_within) {
+            $returnsWhoPays[] = array_map('pSQL', $returns_within);
+        }
+
+        Configuration::updateValue('EBAY_RETURNS_WHO_PAYS_VALUES', serialize($returnsWhoPays), false, 0, 0);
+
+        return $policiesDetails['ReturnsAccepted'];
+    }
+
 }
