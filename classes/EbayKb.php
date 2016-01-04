@@ -192,7 +192,7 @@ class EbayKb extends ObjectModel
             $expire = new DateTime($this->date_upd);
             $interval = round(($now->format('U') - $now->format('U')) / (60 * 60 * 24));
 
-            if ($interval->format('%a') > 4) {
+            if ($interval > 4) {
                 if ($this->call()) {
                     if ($this->link == 'false' || $this->link === false) {
                         return false;

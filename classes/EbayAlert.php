@@ -270,7 +270,7 @@ class EbayAlert
 
                 $interval = round(($datetime2->format('U') - $datetime->format('U')) / (60 * 60 * 24));
 
-                if ($interval->format('%a') >= 1) {
+                if ($interval >= 1) {
                     $this->errors[] = array(
                         'type' => 'error',
                         'message' => $this->ebay->l('Last order synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
