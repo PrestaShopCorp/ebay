@@ -36,6 +36,15 @@ class EbaySynchronizer
 
     public static function syncProducts($products, $context, $id_lang, $request_context = null, $log_type = false)
     {
+        //Fix for orders that are passed in a country without taxes
+        $context = Context::getContext();
+        $id_address = $context->cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
+        $address = new Address($id_address);
+        $country_address = $address->id_country; 
+        $address->id_country = Configuration::get('PS_COUNTRY_DEFAULT');
+        $address->save();
+        //Fix for orders that are passed in a country without taxes
+
         if (!$products) {
             return;
         }
@@ -190,6 +199,11 @@ class EbaySynchronizer
 
             file_put_contents(dirname(__FILE__).'/../log/syncError.php', '<?php $all_error = '.var_export($tab_error, true).'; '.($ebay->itemConditionError ? '$itemConditionError = true; ' : '$itemConditionError = false;').' ?>');
         }
+
+        //Fix for orders that are passed in a country without taxes
+        $address->id_country = $country_address;
+        $address->save();
+        //Fix for orders that are passed in a country without taxes
     }
 
     private static function _getProductData($product, $ebay_profile)
