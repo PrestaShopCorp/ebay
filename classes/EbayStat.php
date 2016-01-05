@@ -66,7 +66,7 @@ class EbayStat
             'ps_version' => _PS_VERSION_,
             'is_cloud' => defined('_PS_HOST_MODE_') ? true : false,
             'module_version' => $ebay->version,
-            'ps_country' => Country::getIsoById(Country::getDefaultCountryId()),
+            'ps_country' => Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')),
         );
         $this->date_add = date('Y-m-d H:i:s');
     }
