@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2015 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -38,100 +38,15 @@ class EbayFormEbaySyncTab extends EbayTab
             return '<p class="error"><b>'.$this->ebay->l('Please configure the \'Category settings\' tab before using this tab', 'ebayformebaysynctab').'</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
         }
 
-        if (version_compare(_PS_VERSION_, '1.5', '>')) {
-            $sql = '
-				SELECT COUNT( * ) FROM (
-					SELECT COUNT(p.id_product) AS nb
-						FROM  `'._DB_PREFIX_.'product` AS p
-						INNER JOIN  `'._DB_PREFIX_.'stock_available` AS s
-						ON p.id_product = s.id_product
-						INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
-						ON p.id_product = ps.id_product
-						AND ps.id_shop = '.(int) $this->ebay_profile->id_shop;
-            $sql .= ' WHERE s.`quantity` > 0
-						AND  p.`active` = 1
-						AND  p.`id_category_default`
-						IN (
-							SELECT  `id_category`
-							FROM  `'._DB_PREFIX_.'ebay_category_configuration`
-							WHERE  `id_ebay_category` > 0
-							AND `id_ebay_profile` = '.(int) $this->ebay_profile->id.'
-						)
-						'.StockAvailable::addSqlShopRestriction(null, null, 's').'
-						AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($this->ebay_profile->id).')
-						GROUP BY p.id_product
-				)TableReponse';
-            $nb_products_mode_a = Db::getInstance()->getValue($sql);
-
-            $sql = '
-				SELECT COUNT( * ) FROM (
-					SELECT COUNT( p.id_product ) AS nb
-						FROM  `'._DB_PREFIX_.'product` AS p
-						INNER JOIN  `'._DB_PREFIX_.'stock_available` AS s
-						ON p.id_product = s.id_product
-						INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
-						ON p.id_product = ps.id_product
-						AND ps.id_shop = '.(int) $this->ebay_profile->id_shop;
-            $sql .= ' WHERE s.`quantity` > 0
-						AND  p.`active` = 1
-						AND  p.`id_category_default`
-						IN (
-							SELECT  `id_category`
-							FROM  `'._DB_PREFIX_.'ebay_category_configuration`
-							WHERE  `id_ebay_category` > 0
-							AND `sync` = 1
-							AND `id_ebay_profile` = '.(int) $this->ebay_profile->id.'
-						)'.StockAvailable::addSqlShopRestriction(null, null, 's').'
-						AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($this->ebay_profile->id).')
-						GROUP BY p.id_product
-				)TableReponse';
-            $nb_products_mode_b = Db::getInstance()->getValue($sql);
-        } else {
-            $sql = '
-				SELECT COUNT(`id_product`) as nb
-				FROM `'._DB_PREFIX_.'product` AS p';
-            if (version_compare(_PS_VERSION_, '1.5', '>')) {
-                $sql .= ' INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
-				ON p.id_product = ps.id_product
-				AND ps.id_shop = '.(int) $this->ebay_profile->id_shop;
-            }
-
-            $sql .= ' WHERE p.`quantity` > 0
-				AND p.`active` = 1
-				AND p.`id_category_default` IN (
-					SELECT `id_category`
-					FROM `'._DB_PREFIX_.'ebay_category_configuration`
-					WHERE `id_ebay_category` > 0
-					AND `id_ebay_profile` = '.(int) $this->ebay_profile->id.')
-				AND p.`id_product` NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($this->ebay_profile->id).')';
-            $nb_products_mode_a = Db::getInstance()->getValue($sql);
-
-            $sql = 'SELECT COUNT(`id_product`) as nb
-				FROM `'._DB_PREFIX_.'product` AS p';
-            if (version_compare(_PS_VERSION_, '1.5', '>')) {
-                $sql .= ' INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
-				ON p.id_product = ps.id_product
-				AND ps.id_shop = '.(int) $this->ebay_profile->id_shop;
-            }
-
-            $sql .= ' WHERE p.`quantity` > 0
-				AND p.`active` = 1
-				AND p.`id_category_default` IN (
-					SELECT `id_category`
-					FROM `'._DB_PREFIX_.'ebay_category_configuration`
-					WHERE `id_ebay_category` > 0
-					AND `sync` = 1
-					AND `id_ebay_profile` = '.(int) $this->ebay_profile->id.')
-				AND p.`id_product` NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($this->ebay_profile->id).')';
-            $nb_products_mode_b = Db::getInstance()->getValue($sql);
-        }
+        $nb_products_mode_a = EbaySynchronizer::getNbProductsSync($this->ebay_profile->id, "A");
+        $nb_products_mode_b = EbaySynchronizer::getNbProductsSync($this->ebay_profile->id, "B");
 
         $nb_products = ($this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'B' ? $nb_products_mode_b : $nb_products_mode_a);
         $prod_nb = ($nb_products < 2 ? $this->ebay->l('product', 'ebayformebaysynctab') : $this->ebay->l('products', 'ebayformebaysynctab'));
 
         // Display Form
         $url_vars = array(
-            'id_tab' => '5',
+            'id_tab'  => '5',
             'section' => 'sync',
         );
 
@@ -157,12 +72,13 @@ class EbayFormEbaySyncTab extends EbayTab
             $alt_row = false;
             foreach ($category_list as $category) {
                 if (isset($category_config_list[$category['id_category']]['id_ebay_category'])
-                    && $category_config_list[$category['id_category']]['id_ebay_category'] > 0) {
+                    && $category_config_list[$category['id_category']]['id_ebay_category'] > 0
+                ) {
                     $categories[] = array(
                         'row_class' => $alt_row ? 'alt_row' : '',
-                        'value' => $category['id_category'],
-                        'checked' => ($category_config_list[$category['id_category']]['sync'] == 1 ? 'checked="checked"' : ''),
-                        'name' => $category['name'],
+                        'value'     => $category['id_category'],
+                        'checked'   => ($category_config_list[$category['id_category']]['sync'] == 1 ? 'checked="checked"' : ''),
+                        'name'      => $category['name'],
                     );
 
                     $alt_row = !$alt_row;
@@ -175,25 +91,25 @@ class EbayFormEbaySyncTab extends EbayTab
 
         $ebay_alert = new EbayAlert($this->ebay);
         $smarty_vars = array(
-            'category_alerts' => $this->_getAlertCategories(),
-            'path' => $this->path,
-            'nb_products' => $nb_products ? $nb_products : 0,
-            'nb_products_mode_a' => $nb_products_mode_a ? $nb_products_mode_a : 0,
-            'nb_products_mode_b' => $nb_products_mode_b ? $nb_products_mode_b : 0,
-            'nb_products_sync_url' => $nb_products_sync_url,
-            'sync_products_url' => $sync_products_url,
-            'sync_message_exit' => $this->ebay->l('A synchronization is currently underway. If you leave this page, it will be abandoned.', 'ebayformebaysynctab'),
-            'action_url' => $action_url,
+            'category_alerts'         => $this->_getAlertCategories(),
+            'path'                    => $this->path,
+            'nb_products'             => $nb_products ? $nb_products : 0,
+            'nb_products_mode_a'      => $nb_products_mode_a ? $nb_products_mode_a : 0,
+            'nb_products_mode_b'      => $nb_products_mode_b ? $nb_products_mode_b : 0,
+            'nb_products_sync_url'    => $nb_products_sync_url,
+            'sync_products_url'       => $sync_products_url,
+            'sync_message_exit'       => $this->ebay->l('A synchronization is currently underway. If you leave this page, it will be abandoned.', 'ebayformebaysynctab'),
+            'action_url'              => $action_url,
             'ebay_sync_option_resync' => $this->ebay_profile->getConfiguration('EBAY_SYNC_OPTION_RESYNC'),
-            'categories' => $categories,
-            'sync_1' => (Tools::getValue('section') == 'sync' && Tools::getValue('ebay_sync_mode') == "1" && Tools::getValue('btnSubmitSyncAndPublish')),
-            'sync_2' => (Tools::getValue('section') == 'sync' && Tools::getValue('ebay_sync_mode') == "2" && Tools::getValue('btnSubmitSyncAndPublish')),
-            'is_sync_mode_b' => ($this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'B'),
-            'ebay_sync_mode' => (int) ($this->ebay_profile->getConfiguration('EBAY_SYNC_MODE') ? $this->ebay_profile->getConfiguration('EBAY_SYNC_MODE') : 2),
-            'prod_str' => $nb_products >= 2 ? $this->ebay->l('products', 'ebayformebaysynctab') : $this->ebay->l('product', 'ebayformebaysynctab'),
-            'admin_path' => basename(_PS_ADMIN_DIR_),
-            'load_kb_path' => _MODULE_DIR_.'ebay/ajax/loadKB.php',
-            'img_alert' => $ebay_alert->checkNumberPhoto(),
+            'categories'              => $categories,
+            'sync_1'                  => (Tools::getValue('section') == 'sync' && Tools::getValue('ebay_sync_mode') == "1" && Tools::getValue('btnSubmitSyncAndPublish')),
+            'sync_2'                  => (Tools::getValue('section') == 'sync' && Tools::getValue('ebay_sync_mode') == "2" && Tools::getValue('btnSubmitSyncAndPublish')),
+            'is_sync_mode_b'          => ($this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'B'),
+            'ebay_sync_mode'          => (int)($this->ebay_profile->getConfiguration('EBAY_SYNC_MODE') ? $this->ebay_profile->getConfiguration('EBAY_SYNC_MODE') : 2),
+            'prod_str'                => $nb_products >= 2 ? $this->ebay->l('products', 'ebayformebaysynctab') : $this->ebay->l('product', 'ebayformebaysynctab'),
+            'admin_path'              => basename(_PS_ADMIN_DIR_),
+            'load_kb_path'            => _MODULE_DIR_.'ebay/ajax/loadKB.php',
+            'img_alert'               => $ebay_alert->checkNumberPhoto(),
         );
 
         return $this->display('formEbaySync.tpl', $smarty_vars);
@@ -228,7 +144,7 @@ class EbayFormEbaySyncTab extends EbayTab
             if (Tools::getValue('category')) {
                 EbayCategoryConfiguration::updateByIdProfile($this->ebay_profile->id, array('sync' => 0));
                 foreach (Tools::getValue('category') as $id_category) {
-                    EbayCategoryConfiguration::updateByIdProfileAndIdCategory((int) $this->ebay_profile->id, $id_category, array('id_ebay_profile' => $this->ebay_profile->id, 'sync' => 1));
+                    EbayCategoryConfiguration::updateByIdProfileAndIdCategory((int)$this->ebay_profile->id, $id_category, array('id_ebay_profile' => $this->ebay_profile->id, 'sync' => 1));
                 }
 
             }
@@ -236,10 +152,8 @@ class EbayFormEbaySyncTab extends EbayTab
 
     }
 
-    /*
-     *
+    /**
      * Get alert to see if some multi variation product on PrestaShop were added to a non multi sku categorie on ebay
-     *
      */
     private function _getAlertCategories()
     {
