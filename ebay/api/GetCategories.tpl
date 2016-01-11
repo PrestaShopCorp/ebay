@@ -18,26 +18,26 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2015 PrestaShop SA
+*  @copyright 2007-2016 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 <?xml version="1.0" encoding="utf-8"?>
 <GetCategories xmlns="urn:ebay:apis:eBLBaseComponents">
-	<Version>{$version}</Version>
-	<RequesterCredentials>
-		<eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>
-	</RequesterCredentials>
-	<CategorySiteID>{$category_site_id}</CategorySiteID>
-	<DetailLevel>ReturnAll</DetailLevel>
-	{if $root == true && $all == false}
-		<LevelLimit>1</LevelLimit>
-	{elseif $root == false && $all == true}
-		<LevelLimit>5</LevelLimit>
-	{else}
-		<LevelLimit>5</LevelLimit>
-		<CategoryParent>{$id_category}</CategoryParent>
-	{/if}
-	<ViewAllNodes>true</ViewAllNodes>
+    <Version>{$version}</Version>
+    <RequesterCredentials>
+        <eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>
+    </RequesterCredentials>
+    <CategorySiteID>{$category_site_id}</CategorySiteID>
+    <DetailLevel>ReturnAll</DetailLevel>
+    {if $root == true && $all == false}
+        <LevelLimit>1</LevelLimit>
+    {elseif $root == false && $all == true}
+        <LevelLimit>5</LevelLimit>
+    {else}
+        <LevelLimit>5</LevelLimit>
+        <CategoryParent>{$id_category}</CategoryParent>
+    {/if}
+    <ViewAllNodes>true</ViewAllNodes>
 </GetCategories>
 

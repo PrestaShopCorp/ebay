@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2015 PrestaShop SA
+*  @copyright 2007-2016 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -60,7 +60,7 @@
         {/foreach}
         ];
         {literal}
-    
+
 		$(document).ready(function() {
 			$('#ebayRegisterButton').click(function(event) {
 				if ($('#eBayUsername').val() == '')
@@ -69,21 +69,21 @@
 					return false;
 				}
                 else if(validateEmail($('#eBayUsernameInput').val()))
-                {   
+                {
                     alert("{/literal}{l s="Only eBay user identifiers can be used to log in. Please do not use your email address" mod="ebay"}{literal}");
                     return false;
                 }
 				else{
-                    
+
 					var country = $("#ebay_countries").val();
 					var link = $("option[value=" + country + "]").data("signin");
-                    
+
                     var username = $('#eBayUsernamesList').val();
                     if (username == -1)
                         username = $('#eBayUsername').val();
-                    
+
                         console.log(ebay_profiles);
-                        
+
                     var exists = false;
                     for (var i in ebay_profiles) {
                         var ebay_profile = ebay_profiles[i];
@@ -93,12 +93,12 @@
                             break;
                         }
                     }
-                    
+
                     if (exists) {
                         alert("{/literal}{l s='An account with this identifier and this eBay site already exists' mod='ebay'}{literal}");
                         return false;
                     }
-                    
+
                     window.open(link + "{/literal}{$window_open_url|escape:'urlencode'}{literal}");
 				}
 			});
@@ -113,10 +113,10 @@
             </div>
             <div id="ebay-register-left-col">
                 <div id="ebay-register-left-col-content">
-                    <table id="register_table"> 
+                    <table id="register_table">
                         <!-- Pseudo -->
-                        <tr> 
-                            <td><label class="ebay-label" for="eBayUsername">{l s='eBay User ID' mod='ebay'} :</label></td> 
+                        <tr>
+                            <td><label class="ebay-label" for="eBayUsername">{l s='eBay User ID' mod='ebay'} :</label></td>
                             <td>
                                 {if $ebay_user_identifiers|count}
                                     <select id="eBayUsernamesList" name="eBayUsernamesList" class="ebay_select ebay-float-right">
@@ -130,16 +130,16 @@
                                     <input id="eBayUsernameInput" type="text" name="eBayUsername" class="ebay-float-right" value="" />
                                 {/if}
                             </td>
-                        </tr> 
-                        <tr class="margin-bottom"> 
+                        </tr>
+                        <tr class="margin-bottom">
                             <td colspan="3">
                                 <div class="txt-right">{l s='Please use an eBay identifier, not your email address.' mod='ebay'}</div>
                             </td>
                         </tr>
 
                         <!-- Ebay Site -->
-                        <tr class="margin-bottom"> 
-                            <td><label class="ebay-label" for="ebay_countries">{l s='Choose ebay site on which you want to list:' mod='ebay'}</label></td> 
+                        <tr class="margin-bottom">
+                            <td><label class="ebay-label" for="ebay_countries">{l s='Choose ebay site on which you want to list:' mod='ebay'}</label></td>
                             <td>
                                 <select name="ebay_country" id="ebay_countries" class="ebay_select ebay-float-right">
                                     {if isset($ebay_countries) && $ebay_countries && sizeof($ebay_countries)}
@@ -149,13 +149,13 @@
                                     {/if}
                                 </select>
                             </td>
-                        </tr> 
+                        </tr>
 
                         <!-- Language -->
-                        <tr class="margin-bottom"> 
+                        <tr class="margin-bottom">
                             <td>
                                 <label class="ebay-label" for="ebay_languages">{l s='Choose language:' mod='ebay'}</label>
-                            </td> 
+                            </td>
                             <td>
                                 <select name="ebay_language" id="ebay_languages" class="ebay_select ebay-float-right">
                                     {if isset($languages) && $languages && sizeof($languages)}
@@ -165,12 +165,12 @@
                                     {/if}
                                 </select>
                             </td>
-                        </tr> 
+                        </tr>
 
-                      
+
 
                         {if isset($show_send_stats) && $show_send_stats}
-                            <tr> 
+                            <tr>
                                 <td>
                                    <label>{l s='Help us improve the eBay Module by sending anonymous usage stats:' mod='ebay'}</label>
                                 </td>
@@ -179,20 +179,20 @@
                                         <option value="1">{l s='I agree' mod='ebay'}</option>
                                         <option value="0">{l s='No thanks' mod='ebay'}</option>
                                     </select>
-                                </td> 
-                            </tr> 
+                                </td>
+                            </tr>
                         {/if}
                         <!-- Button link -->
-                        <tr> 
+                        <tr>
                             <td colspan="2">
                                <div class="margin-form">
                                     <input type="submit" id="ebayRegisterButton" name="ebayRegisterButton" class="button ebay-float-right" value="{l s='Link your ebay account' mod='ebay'}" />
                                 </div>
-                            </td> 
-                        </tr> 
-                    </table>   
+                            </td>
+                        </tr>
+                    </table>
 
-            		
+
             		<div class="clear both"></div>
                 </div>
             </div>
@@ -232,7 +232,7 @@
 
 
     $(document).ready(function() {
-        
+
     });
 
     $('#eBayUsernameInput').focusout(function(){
@@ -249,18 +249,18 @@
 
     $('#ebay_register_form').submit(function(){
         if(validateEmail($('#eBayUsernameInput').val()))
-        {   
+        {
             alert("{l s='Only eBay user identifiers can be used to log in. Please do not use your email address' mod='ebay'}");
             return false;
         }
     })
 
-{literal}  
+{literal}
 /**
  * Validate email function with regualr expression
- * 
+ *
  * If email isn't valid then return false
- * 
+ *
  * @param email
  * @return Boolean
  */
