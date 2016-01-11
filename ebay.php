@@ -1597,11 +1597,11 @@ class Ebay extends Module
         }
 
         $url = _MODULE_DIR_.'ebay/ajax/checkToken.php?'.http_build_query(
-                array(
-                    'token' => Configuration::get('EBAY_SECURITY_TOKEN'),
-                    'time'  => pSQL(date('Ymdhis')),
-                )
-            );
+            array(
+                'token' => Configuration::get('EBAY_SECURITY_TOKEN'),
+                'time'  => pSQL(date('Ymdhis'))
+            )
+        );
 
         $smarty_vars = array(
             'window_location_href' => $this->_getUrl($url_vars),

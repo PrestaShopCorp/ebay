@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2015 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -35,15 +35,15 @@ class EbayProductConfiguration
 
         return Db::getInstance()->getRow('SELECT `id_product`, `blacklisted`, `extra_images`
 			FROM `'._DB_PREFIX_.'ebay_product_configuration`
-			WHERE `id_product` = '.(int) $product_id.'
-			AND `id_ebay_profile` = '.(int) $id_ebay_profile);
+			WHERE `id_product` = '.(int)$product_id.'
+			AND `id_ebay_profile` = '.(int)$id_ebay_profile);
     }
 
     public static function getBlacklistedProductIdsQuery($id_ebay_profile)
     {
         return 'SELECT `id_product`
 			FROM `'._DB_PREFIX_.'ebay_product_configuration`
-			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.'
+			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
 			AND `blacklisted` = 1';
     }
 
@@ -61,7 +61,7 @@ class EbayProductConfiguration
         }
 
         $sql = 'INSERT INTO `'._DB_PREFIX_.'ebay_product_configuration` (`id_product`, `'.implode('`,`', array_keys($to_insert)).'`)
-			VALUES ('.(int) $product_id.', '.implode(',', $to_insert).')
+			VALUES ('.(int)$product_id.', '.implode(',', $to_insert).')
 			ON DUPLICATE KEY UPDATE ';
 
         $sql .= implode(',', $fields_strs);
