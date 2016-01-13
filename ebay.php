@@ -114,6 +114,8 @@ class Ebay extends Module
     /** @var EbayProfile $ebay_profile */
     public $ebay_profile;
 
+    /** @var Smarty $smarty */
+    protected $smarty;
     private $is_multishop;
 
     private $stats_version;
@@ -262,6 +264,8 @@ class Ebay extends Module
      */
     public function install()
     {
+        $sql = array();
+
         // Install SQL
         include dirname(__FILE__).'/sql/sql-install.php';
 
@@ -441,6 +445,7 @@ class Ebay extends Module
      **/
     public function uninstall()
     {
+        $sql = array();
         // Uninstall SQL
         include dirname(__FILE__).'/sql/sql-uninstall.php';
 
@@ -1947,11 +1952,11 @@ class Ebay extends Module
     }
 
     /**
-     * $newContextShop = array
-     * @param int $type Shop::CONTEXT_ALL | Shop::CONTEXT_GROUP | Shop::CONTEXT_SHOP
-     * @param int $id   ID shop if CONTEXT_SHOP or id shop group if CONTEXT_GROUP
-     *
-     **/
+     * @param array $new_context_shop
+     * @throws PrestaShopException
+     * @internal param int $type Shop::CONTEXT_ALL | Shop::CONTEXT_GROUP | Shop::CONTEXT_SHOP
+     * @internal param int $id ID shop if CONTEXT_SHOP or id shop group if CONTEXT_GROUP
+     */
     private function _setContextShop($new_context_shop = null)
     {
         if ($new_context_shop) {
@@ -1967,7 +1972,6 @@ class Ebay extends Module
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
             return Shop::addSqlRestrictionOnLang($alias);
         }
-
     }
 
     /**
@@ -2149,5 +2153,36 @@ class Ebay extends Module
             readfile($full_path);
             exit;
         }
+    }
+
+    ############################################################################################################
+    # Logger // Debug
+    ############################################################################################################
+
+    /**
+     * Fonction de log
+     *
+     * Enregistre dans /modules/ebay/log/debug.log
+     *
+     * @param     $object
+     * @param int $error_level
+     */
+    public static function debug($object, $error_level = 0)
+    {
+        $error_type = array(
+            0 => "[ALL]",
+            1 => "[DEBUG]",
+            2 => "[INFO]",
+            3 => "[WARN]",
+            4 => "[ERROR]",
+            5 => "[FATAL]"
+        );
+        $module_name = "ebay";
+        $backtrace = debug_backtrace();
+        $date = date("<Y-m-d(H:i:s)>");
+        $file = $backtrace[0]['file'].":".$backtrace[0]['line'];
+        $stderr = fopen(_PS_MODULE_DIR_.'/'.$module_name.'/log/debug.log', 'a');
+        fwrite($stderr, $error_type[$error_level]." ".$date." ".$file."\n".print_r($object, true)."\n\n");
+        fclose($stderr);
     }
 }

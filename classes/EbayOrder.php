@@ -441,12 +441,12 @@ class EbayOrder
     public function validate($id_shop, $id_ebay_profile = null)
     {
         $customer = new Customer($this->id_customers[$id_shop]);
-        $paiement = new EbayPayment();
+        $payment = new EbayPayment();
 
         //Change context's currency
         $this->context->currency = new Currency($this->carts[$id_shop]->id_currency);
 
-        $paiement->validateOrder(
+        $payment->validateOrder(
             (int)$this->carts[$id_shop]->id,
             Configuration::get('PS_OS_PAYMENT'),
             (float)$this->carts[$id_shop]->getOrderTotal(true, 3),
@@ -459,14 +459,14 @@ class EbayOrder
             version_compare(_PS_VERSION_, '1.5', '>') ? new Shop((int)$id_shop) : null
         );
 
-        $this->id_orders[$id_shop] = $paiement->currentOrder;
+        $this->id_orders[$id_shop] = $payment->currentOrder;
 
         $this->_writeLog($id_ebay_profile, 'validate_order', true, 'End of validate order');
 
         // Fix on date
         Db::getInstance()->autoExecute(_DB_PREFIX_.'orders', array('date_add' => pSQL($this->date_add)), 'UPDATE', '`id_order` = '.(int)$this->id_orders[$id_shop]);
 
-        return $paiement->currentOrder;
+        return $payment->currentOrder;
     }
 
     public function updatePrice($ebay_profile)

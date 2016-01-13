@@ -30,30 +30,60 @@ class EbayValidatorTab
     public static function getShippingTabConfiguration($id_ebay_profile)
     {
         $ebay = new Ebay();
+
+        $result = array();
+
+        $module_carriers = Carrier::getCarriers((int)Configuration::get('PS_LANG_DEFAULT'), true, false, false, null, Carrier::CARRIERS_MODULE);
+        // @todo: checker que Carrier::getCarriers CARRIERS_MODULE a des infos. Si on affiche le message comme quoi
+        if (count($module_carriers) > 0) {
+            $liste_carrier = "";
+            foreach ($module_carriers as $module_carrier) {
+                $liste_carrier .= strlen($liste_carrier) ? ", " : "";
+                $liste_carrier .= $module_carrier['name'];
+            }
+            $result[] = array(
+                'indicator'    => 'success',
+                'indicatorBig' => 'mind',
+                'message'      => $ebay->l('Some shippings (', 'ebayvalidatortab')
+                    .$liste_carrier
+                    .$ebay->l(') are not available. You will find here why', 'ebayvalidatortab'),
+            );
+            $result['indicator'] = 'success';
+        }
+
         $shipping_national = EbayShipping::getNationalShippings($id_ebay_profile);
         if (!is_array($shipping_national) || count($shipping_national) == 0) {
-            return array(
+            $result[] = array(
                 'indicator'    => 'wrong',
                 'indicatorBig' => 'wrong',
                 'message'      => $ebay->l('You must at least configure one domestic shipping service', 'ebayvalidatortab'),
             );
+            $result['indicator'] = 'wrong';
+
+            return $result;
         }
 
         $shipping_international = EbayShipping::getInternationalShippings($id_ebay_profile);
         if (!EbayShipping::internationalShippingsHaveZone($shipping_international)) {
-            return array(
+            $result[] = array(
                 'indicator'    => 'wrong',
                 'indicatorBig' => 'wrong',
                 'message'      => $ebay->l('Your international shipping must at least have one zone configured', 'ebayvalidatortab'),
             );
+            $result['indicator'] = 'wrong';
+
+            return $result;
         }
 
         if (count($shipping_international) == 0) {
-            return array(
+            $result[] = array(
                 'indicator'    => 'success',
                 'indicatorBig' => 'mind',
                 'message'      => $ebay->l('You could benefit to configure international shipping services', 'ebayvalidatortab'),
             );
+            $result['indicator'] = 'success';
+
+            return $result;
         }
 
         return array(
