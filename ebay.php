@@ -54,6 +54,7 @@ $classes_to_load = array(
     'EbayConfiguration',
     'EbayProductModified',
     'EbayLog',
+    'EbayLogger',
     'EbayLoadLogs',
     'EbayApiLog',
     'EbayOrderLog',

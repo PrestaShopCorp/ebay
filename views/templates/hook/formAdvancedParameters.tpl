@@ -85,6 +85,13 @@
 			<p id="reset-image-result"></p>
 		</div>
 		<div style="clear:both;"></div>
+        <label>
+			{l s='Do not send variations images' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<input type="checkbox" name="picture_skip_variations" value="1" {if $picture_skip_variations} checked="checked"{/if}>
+		</div>
+		<div style="clear:both;"></div>
 	</fieldset>
     
     

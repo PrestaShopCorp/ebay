@@ -32,6 +32,8 @@ class EbayLogger
     const ERROR = 6;
     const FATAL = 9;
 
+    private static $loggers = array();
+
     public static $severity = array(
         'DEBUG'=>   self::DEBUG,
         'INFO'=>    self::INFO,
@@ -39,7 +41,12 @@ class EbayLogger
         'ERROR'=>   self::ERROR,
     );
 
-    private static $loggers = array();
+    public function __construct($level='INFO',$context=null,$uid='')
+    {
+        $this->level = self::$severity[strtoupper($level)];
+        $this->uid = uniqid($prefix=(string)$uid,True); 
+        $this->context = $context;
+    }
 
     public static function get($name=null,$level=null,$context=null)
     {
@@ -51,17 +58,6 @@ class EbayLogger
             self::$loggers[$name] = new EbayLogger($level=$level,$context=$context,$uid=$name);
         }
         return self::$loggers[$name];
-    }
-    
-
-    public function __construct($level='INFO',$context=null,$uid='')
-    {
-        
-        $this->level = self::$severity[strtoupper($level)];
-        $this->uid = uniqid($prefix=(string)$uid,True); 
-        $this->context = $context;
-        
-        self::installSQL();
     }
 
     public static function getLogs($uid=null,$keyword=null,$limit=200) {
@@ -259,33 +255,6 @@ class EbayLogger
         $log = EbayLogger::get(); // doit etre la même instance (si !name on prend la derniere instance créée (curent instance))
         $log->info('test MYLOGGER');
 
-    }
-
-
-    public static function installSQL() {
-            
-        if (!Db::getInstance()->Execute('
-			CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_logs` (
-				`id_ebay_logs` INT(16) NOT NULL AUTO_INCREMENT,
-                `datetime` DATETIME NOT NULL,
-				`severity` TINYINT(1) NOT NULL DEFAULT 0,
-				`code` INT(11) NOT NULL DEFAULT 0,
-				`message` TEXT,
-				`context` TEXT,
-				`backtrace` TEXT,
-				`uid` TEXT,
-				PRIMARY KEY (`id_ebay_logs`)
-				) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8
-			')) {
-            return false;
-        }
-        return true;
-    }
-    public static function uninstallSQL() {
-        if (!Db::getInstance()->Execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'ebay_logs`')) {
-            return false;
-        }
-        return true;
     }
 
 

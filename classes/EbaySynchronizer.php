@@ -582,8 +582,9 @@ class EbaySynchronizer
         $combination_images = $product->getCombinationImages($ebay_profile->id_lang);
 
         $large = new ImageType((int)$ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_BIG'));
+        $picture_skip_variations = (bool)$ebay_profile->getConfiguration('EBAY_PICTURE_SKIP_VARIATIONS');
 
-        if (!empty($combination_images)) {
+        if (!$picture_skip_variations && !empty($combination_images)) {
             foreach ($combination_images as $combination_image) {
                 foreach ($combination_image as $image) {
                     // If issue, it's because of https/http in the url

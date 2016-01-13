@@ -52,6 +52,7 @@ class EbayFormAdvancedParametersTab extends EbayTab
             'sizebig' => (int) $this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_BIG'),
             'sizesmall' => (int) $this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_SMALL'),
             'picture_per_listing' => (int) $this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING'),
+			'picture_skip_variations' => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SKIP_VARIATIONS'),
 
             // logs
             'api_logs' => Configuration::get('EBAY_API_LOGS'),
@@ -102,6 +103,7 @@ class EbayFormAdvancedParametersTab extends EbayTab
             && $this->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_SMALL', (int) Tools::getValue('sizesmall'))
             && $this->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_BIG', (int) Tools::getValue('sizebig'))
             && $this->ebay_profile->setConfiguration('EBAY_PICTURE_PER_LISTING', $picture_per_listing)
+			&& $this->ebay_profile->setConfiguration('EBAY_PICTURE_SKIP_VARIATIONS', (int) Tools::getValue('picture_skip_variations'))
             && $this->ebay->setConfiguration('EBAY_API_LOGS', Tools::getValue('api_logs') ? 1 : 0)
             && $this->ebay->setConfiguration('EBAY_SYNCHRONIZE_EAN', Tools::getValue('synchronize_ean') ? 1 : 0)
             && $this->ebay->setConfiguration('EBAY_ACTIVATE_LOGS', Tools::getValue('activate_logs') ? 1 : 0)

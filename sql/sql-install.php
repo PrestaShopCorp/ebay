@@ -279,6 +279,18 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_log` (
 	PRIMARY KEY  (`id_ebay_log`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
+$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_logs` (
+    `id_ebay_logs` INT(16) NOT NULL AUTO_INCREMENT,
+    `datetime` DATETIME NOT NULL,
+    `severity` TINYINT(1) NOT NULL DEFAULT 0,
+    `code` INT(11) NOT NULL DEFAULT 0,
+    `message` TEXT,
+    `context` TEXT,
+    `backtrace` TEXT,
+    `uid` TEXT,
+    PRIMARY KEY (`id_ebay_logs`)
+) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+
 $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_stat` (
 	`id_ebay_stat` int(16) NOT NULL AUTO_INCREMENT,
 	`id_ebay_profile` int(16) NOT NULL,
