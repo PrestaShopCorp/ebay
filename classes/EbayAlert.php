@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2015 PrestaShop SA
+ * @copyright 2007-2016 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -166,9 +166,15 @@ class EbayAlert
 
         $templates_vars = array();
 
-        (!empty($this->errors)) ? $templates_vars['errors'] = $this->errors : '';
-        (!empty($this->warnings)) ? $templates_vars['warnings'] = $this->warnings : '';
-        (!empty($this->infos)) ? $templates_vars['infos'] = $this->infos : '';
+        if (!empty($this->errors)) {
+            $templates_vars['errors'] = $this->errors;
+        }
+        if (!empty($this->warnings)) {
+            $templates_vars['warnings'] = $this->warnings;
+        }
+        if (!empty($this->infos)) {
+            $templates_vars['infos'] = $this->infos;
+        }
 
         if (empty($templates_vars)) {
             return false;
@@ -189,11 +195,11 @@ class EbayAlert
             $domain = isset($shop->domain_ssl) ? $shop->domain_ssl : $shop->domain.DIRECTORY_SEPARATOR.$shop->physical_uri;
         } else {
             $wrong_domain = ($_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN') && $_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN_SSL'));
-            $domain = isset($shop->domain_ssl) ? Configuration::get('PS_SHOP_DOMAIN_SSL') : Configuration::get('PS_SHOP_DOMAIN');
+            $domain = Configuration::get('PS_SSL_ENABLED') ? Configuration::get('PS_SHOP_DOMAIN_SSL') : Configuration::get('PS_SHOP_DOMAIN');
         }
 
         if ($wrong_domain) {
-            $url_vars = array();
+            // $url_vars = array();
             // if (version_compare(_PS_VERSION_, '1.5', '>'))
             //     $url_vars['controller'] = 'AdminMeta';
             // else
@@ -231,8 +237,6 @@ class EbayAlert
 
     private function checkCronTask()
     {
-        $cron_task = array();
-
         // PRODUCTS
         if ((int)Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON') == 1) {
             if ($last_sync_datetime = Configuration::get('DATE_LAST_SYNC_PRODUCTS')) {

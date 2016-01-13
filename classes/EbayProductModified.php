@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -18,10 +18,10 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2016 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayProductModified extends ObjectModel
@@ -46,11 +46,11 @@ class EbayProductModified extends ObjectModel
     {
         parent::validateFields();
         if (isset($this->id)) {
-            $fields['id_ebay_product_modified'] = (int) ($this->id);
+            $fields['id_ebay_product_modified'] = (int)($this->id);
         }
 
-        $fields['id_ebay_profile'] = (int) ($this->id_ebay_profile);
-        $fields['id_product'] = (int) ($this->id_product);
+        $fields['id_ebay_profile'] = (int)($this->id_ebay_profile);
+        $fields['id_product'] = (int)($this->id_product);
 
         return $fields;
     }
@@ -59,10 +59,10 @@ class EbayProductModified extends ObjectModel
     {
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
             self::$definition = array(
-                'table' => 'ebay_product_modified',
+                'table'   => 'ebay_product_modified',
                 'primary' => 'id_ebay_product_modified',
-                'fields' => array(
-                    'id_product' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
+                'fields'  => array(
+                    'id_product'      => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
                     'id_ebay_profile' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
                 ),
             );
@@ -71,17 +71,18 @@ class EbayProductModified extends ObjectModel
             $fieldsRequired = array('id_ebay_profile', 'id_product');
             $fieldsValidate = array(
                 'id_ebay_profile' => 'isUnsignedInt',
-                'id_product' => 'isUnsignedInt',
+                'id_product'      => 'isUnsignedInt',
             );
         }
+
         return parent::__construct($id, $id_lang, $id_shop);
     }
 
     public static function addProduct($id_ebay_profile, $id_product)
     {
         $product_modified = new EbayProductModified();
-        $product_modified->id_product = (int) $id_product;
-        $product_modified->id_ebay_profile = (int) $id_ebay_profile;
+        $product_modified->id_product = (int)$id_product;
+        $product_modified->id_ebay_profile = (int)$id_ebay_profile;
 
         return $product_modified->save();
     }
@@ -92,6 +93,7 @@ class EbayProductModified extends ObjectModel
             FROM '._DB_PREFIX_.'ebay_product_modified GROUP BY id_product, id_ebay_profile';
 
         $result = Db::getInstance()->executeS($sql);
+
         return $result;
     }
 

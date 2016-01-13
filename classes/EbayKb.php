@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2015 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -42,16 +42,16 @@ class EbayKb extends ObjectModel
     private $url;
 
     public static $definition = array(
-        'table' => 'ebay_kb',
+        'table'   => 'ebay_kb',
         'primary' => 'id_ebay_kb',
-        'fields' => array(
-            'error_code' => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
-            'language' => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
-            'ps_version' => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
+        'fields'  => array(
+            'error_code'     => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
+            'language'       => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
+            'ps_version'     => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
             'module_version' => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
-            'link' => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
-            'date_add' => array('type' => 'TYPE_DATE', 'validate' => 'isDateFormat'),
-            'date_upd' => array('type' => 'TYPE_DATE', 'validate' => 'isDateFormat'),
+            'link'           => array('type' => 'TYPE_STRING', 'validate' => 'isString'),
+            'date_add'       => array('type' => 'TYPE_DATE', 'validate' => 'isDateFormat'),
+            'date_upd'       => array('type' => 'TYPE_DATE', 'validate' => 'isDateFormat'),
         ),
     );
 
@@ -103,6 +103,7 @@ class EbayKb extends ObjectModel
     {
         $sql = "SELECT `".self::$definition['primary']."` FROM "._DB_PREFIX_.self::$definition['table']."";
         $objsIDs = Db::getInstance()->ExecuteS($sql);
+
         return $objsIDs;
     }
 
@@ -145,6 +146,7 @@ class EbayKb extends ObjectModel
             $result = Tools::file_get_contents($this->url);
             if (!Tools::isEmpty($result)) {
                 $this->link = pSQL($result);
+
                 return $this->save();
             } else {
                 return false;
@@ -168,6 +170,7 @@ class EbayKb extends ObjectModel
         $this->url .= '&prestashop_version='.$this->ps_version;
         $this->url .= '&language='.$this->language;
         $this->url .= '&error_code='.$this->error_code;
+
         return true;
     }
 
@@ -189,7 +192,7 @@ class EbayKb extends ObjectModel
 
         if ($this->exist()) {
             $now = new DateTime(date('Y-m-d'));
-            $expire = new DateTime($this->date_upd);
+//            $expire = new DateTime($this->date_upd);
             $interval = round(($now->format('U') - $now->format('U')) / (60 * 60 * 24));
 
             if ($interval > 4) {
@@ -201,6 +204,7 @@ class EbayKb extends ObjectModel
                     }
 
                 }
+
                 return false;
             } else {
                 if ($this->link == 'false' || $this->link === false) {
@@ -219,6 +223,7 @@ class EbayKb extends ObjectModel
                 }
 
             }
+
             return false;
         }
     }
@@ -238,7 +243,8 @@ class EbayKb extends ObjectModel
 
         if ($id_kb = Db::getInstance()->getValue($sql)) {
             if (Validate::isInt($id_kb)) {
-                parent::__construct((int) $id_kb);
+                parent::__construct((int)$id_kb);
+
                 return true;
             }
         }

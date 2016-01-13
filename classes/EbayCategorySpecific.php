@@ -42,7 +42,8 @@ class EbayCategorySpecific
     /**
      * Returns an array containing the correspondance between the form select fields prefix and the table field name
      *
-     **/
+     * @return array
+     */
     public static function getPrefixToFieldNames()
     {
         return EbayCategorySpecific::$prefix_to_field_names;
@@ -51,7 +52,10 @@ class EbayCategorySpecific
     /**
      * Parse the data returned by the API and enter them in the table
      *
-     **/
+     * @param int      $id_ebay_profile
+     * @param bool|int $id_category
+     * @return bool
+     */
     public static function loadCategorySpecifics($id_ebay_profile, $id_category = false)
     {
         $request = new EbayRequest($id_ebay_profile);

@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2015 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -54,16 +54,16 @@ class EbayApiLog extends ObjectModel
     {
         parent::validateFields();
         if (isset($this->id)) {
-            $fields['id_ebay_api_log'] = (int) ($this->id);
+            $fields['id_ebay_api_log'] = (int)($this->id);
         }
 
-        $fields['id_ebay_profile'] = (int) ($this->id_ebay_profile);
+        $fields['id_ebay_profile'] = (int)($this->id_ebay_profile);
         $fields['type'] = pSQL($this->type);
         $fields['context'] = pSQL($this->context);
         $fields['data_sent'] = pSQL($this->data_sent);
         $fields['response'] = pSQL($this->response);
-        $fields['id_product'] = (int) $this->id_product;
-        $fields['id_order'] = (int) $this->id_order;
+        $fields['id_product'] = (int)$this->id_product;
+        $fields['id_order'] = (int)$this->id_order;
         $fields['date_add'] = pSQL($this->date_add);
 
         return $fields;
@@ -73,17 +73,17 @@ class EbayApiLog extends ObjectModel
     {
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
             self::$definition = array(
-                'table' => 'ebay_api_log',
+                'table'   => 'ebay_api_log',
                 'primary' => 'id_ebay_log',
-                'fields' => array(
+                'fields'  => array(
                     'id_ebay_profile' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-                    'type' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                    'context' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                    'data_sent' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                    'response' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                    'id_product' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-                    'id_order' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-                    'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
+                    'type'            => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+                    'context'         => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+                    'data_sent'       => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+                    'response'        => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+                    'id_product'      => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
+                    'id_order'        => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
+                    'date_add'        => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
                 ),
             );
         } else {
@@ -102,7 +102,7 @@ class EbayApiLog extends ObjectModel
         return Db::getInstance()->executeS('SELECT *
 			FROM `'._DB_PREFIX_.'ebay_api_log`
 			ORDER BY `id_ebay_api_log` DESC
-			LIMIT '.(int) $offset.', '.(int) $limit);
+			LIMIT '.(int)$offset.', '.(int)$limit);
     }
 
     public static function count()
@@ -111,9 +111,14 @@ class EbayApiLog extends ObjectModel
 			FROM `'._DB_PREFIX_.'ebay_api_log`');
     }
 
+    /**
+     * Delete Logs Older than nb_days
+     * @param int $nb_days
+     */
     public static function cleanOlderThan($nb_days)
     {
-        $date = date('Y-m-d\TH:i:s', strtotime('-1 day'));
+        $nb_days = $nb_days < 0 ? 0 : (int)$nb_days;
+        $date = date('Y-m-d\TH:i:s', strtotime('-'.$nb_days.' day'));
 
         Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_api_log`
 			WHERE `date_add` < \''.pSQL($date).'\'');

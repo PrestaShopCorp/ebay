@@ -1124,6 +1124,7 @@ class Ebay extends Module
         }
 
         if ($this->ebay_profile->getConfiguration('EBAY_SHIPPED_ORDER_STATE') == $id_order_state) {
+            // @todo: why we doesn't use id_carrier?
             $this->_orderHasShipped((int)$params['id_order'], (int)$params['cart']->id_carrier);
         }
     }

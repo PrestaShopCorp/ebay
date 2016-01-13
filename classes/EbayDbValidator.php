@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2015 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -35,260 +35,260 @@ class EbayDbValidator
         'ebay_api_log' => array(
             'id_ebay_api_log' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
             'id_ebay_profile' => array('type' => 'int', 'length' => 11, 'null' => true, 'unsigned' => true, 'default' => null),
-            'type' => array('type' => 'varchar', 'length' => 40),
-            'context' => array('type' => 'varchar', 'length' => 40),
-            'data_sent' => array('type' => 'text', 'length' => null),
-            'response' => array('type' => 'text', 'length' => null),
-            'id_product' => array('type' => 'int', 'length' => 11),
-            'id_order' => array('type' => 'int', 'length' => 11),
-            'date_add' => array('type' => 'datetime', 'length' => 11),
+            'type'            => array('type' => 'varchar', 'length' => 40),
+            'context'         => array('type' => 'varchar', 'length' => 40),
+            'data_sent'       => array('type' => 'text', 'length' => null),
+            'response'        => array('type' => 'text', 'length' => null),
+            'id_product'      => array('type' => 'int', 'length' => 11),
+            'id_order'        => array('type' => 'int', 'length' => 11),
+            'date_add'        => array('type' => 'datetime', 'length' => 11),
         ),
 
         'ebay_category' => array(
-            'id_category_ref' => array('type' => 'int', 'length' => 11),
-            'id_ebay_category' => array('type' => 'int', 'length' => 11),
+            'id_category_ref'        => array('type' => 'int', 'length' => 11),
+            'id_ebay_category'       => array('type' => 'int', 'length' => 11),
             'id_category_ref_parent' => array('type' => 'int', 'length' => 11),
-            'id_country' => array('type' => 'int', 'length' => 11),
-            'level' => array('type' => 'tinyint', 'length' => 1),
-            'is_multi_sku' => array('type' => 'tinyint', 'length' => 1, 'null' => true),
-            'name' => array('type' => 'varchar', 'length' => 255),
+            'id_country'             => array('type' => 'int', 'length' => 11),
+            'level'                  => array('type' => 'tinyint', 'length' => 1),
+            'is_multi_sku'           => array('type' => 'tinyint', 'length' => 1, 'null' => true),
+            'name'                   => array('type' => 'varchar', 'length' => 255),
         ),
 
         'ebay_category_condition' => array(
             'id_ebay_category_condition' => array('type' => 'int', 'length' => 11),
-            'id_ebay_profile' => array('type' => 'int', 'length' => 11),
-            'id_category_ref' => array('type' => 'int', 'length' => 11),
-            'id_condition_ref' => array('type' => 'int', 'length' => 11),
-            'name' => array('type' => 'varchar', 'length' => 256),
+            'id_ebay_profile'            => array('type' => 'int', 'length' => 11),
+            'id_category_ref'            => array('type' => 'int', 'length' => 11),
+            'id_condition_ref'           => array('type' => 'int', 'length' => 11),
+            'name'                       => array('type' => 'varchar', 'length' => 256),
         ),
 
         'ebay_category_condition_configuration' => array(
             'id_ebay_category_condition_configuration' => array('type' => 'int', 'length' => 11),
-            'id_ebay_profile' => array('type' => 'int', 'length' => 11),
-            'id_category_ref' => array('type' => 'int', 'length' => 11),
-            'condition_type' => array('type' => 'int', 'length' => 11),
-            'id_condition_ref' => array('type' => 'int', 'length' => 11),
+            'id_ebay_profile'                          => array('type' => 'int', 'length' => 11),
+            'id_category_ref'                          => array('type' => 'int', 'length' => 11),
+            'condition_type'                           => array('type' => 'int', 'length' => 11),
+            'id_condition_ref'                         => array('type' => 'int', 'length' => 11),
         ),
 
         'ebay_category_configuration' => array(
             'id_ebay_category_configuration' => array('type' => 'int', 'length' => 11),
-            'id_ebay_profile' => array('type' => 'int', 'length' => 11),
-            'id_country' => array('type' => 'int', 'length' => 11),
-            'id_ebay_category' => array('type' => 'int', 'length' => 11),
-            'id_category' => array('type' => 'int', 'length' => 11),
-            'percent' => array('type' => 'varchar', 'length' => 4),
-            'sync' => array('type' => 'tinyint', 'length' => 1),
-            'date_add' => array('type' => 'datetime', 'length' => null),
-            'date_upd' => array('type' => 'datetime', 'length' => null),
+            'id_ebay_profile'                => array('type' => 'int', 'length' => 11),
+            'id_country'                     => array('type' => 'int', 'length' => 11),
+            'id_ebay_category'               => array('type' => 'int', 'length' => 11),
+            'id_category'                    => array('type' => 'int', 'length' => 11),
+            'percent'                        => array('type' => 'varchar', 'length' => 4),
+            'sync'                           => array('type' => 'tinyint', 'length' => 1),
+            'date_add'                       => array('type' => 'datetime', 'length' => null),
+            'date_upd'                       => array('type' => 'datetime', 'length' => null),
         ),
 
         'ebay_category_specific' => array(
-            'id_ebay_category_specific' => array('type' => 'int', 'length' => 11),
-            'id_category_ref' => array('type' => 'int', 'length' => 11),
-            'name' => array('type' => 'varchar', 'length' => 40),
-            'required' => array('type' => 'tinyint', 'length' => 1),
-            'can_variation' => array('type' => 'tinyint', 'length' => 1),
-            'selection_mode' => array('type' => 'tinyint', 'length' => 1),
-            'id_attribute_group' => array('type' => 'int', 'length' => 11),
-            'id_feature' => array('type' => 'int', 'length' => 11),
+            'id_ebay_category_specific'       => array('type' => 'int', 'length' => 11),
+            'id_category_ref'                 => array('type' => 'int', 'length' => 11),
+            'name'                            => array('type' => 'varchar', 'length' => 40),
+            'required'                        => array('type' => 'tinyint', 'length' => 1),
+            'can_variation'                   => array('type' => 'tinyint', 'length' => 1),
+            'selection_mode'                  => array('type' => 'tinyint', 'length' => 1),
+            'id_attribute_group'              => array('type' => 'int', 'length' => 11),
+            'id_feature'                      => array('type' => 'int', 'length' => 11),
             'id_ebay_category_specific_value' => array('type' => 'int', 'length' => 11),
-            'is_brand' => array('type' => 'tinyint', 'length' => 1),
-            'ebay_site_id' => array('type' => 'int', 'length' => 11),
+            'is_brand'                        => array('type' => 'tinyint', 'length' => 1),
+            'ebay_site_id'                    => array('type' => 'int', 'length' => 11),
         ),
 
         'ebay_category_specific_value' => array(
             'id_ebay_category_specific_value' => array('type' => 'int', 'length' => 11),
-            'id_ebay_category_specific' => array('type' => 'int', 'length' => 11),
-            'value' => array('type' => 'varchar', 'length' => 50),
+            'id_ebay_category_specific'       => array('type' => 'int', 'length' => 11),
+            'value'                           => array('type' => 'varchar', 'length' => 50),
         ),
 
         'ebay_configuration' => array(
             'id_configuration' => array('type' => 'int', 'length' => 11),
-            'id_ebay_profile' => array('type' => 'int', 'length' => 11),
-            'name' => array('type' => 'varchar', 'length' => 32),
-            'value' => array('type' => 'text', 'length' => null),
+            'id_ebay_profile'  => array('type' => 'int', 'length' => 11),
+            'name'             => array('type' => 'varchar', 'length' => 32),
+            'value'            => array('type' => 'text', 'length' => null),
         ),
 
         'ebay_delivery_time_options' => array(
             'id_delivery_time_option' => array('type' => 'int', 'length' => 11),
-            'DispatchTimeMax' => array('type' => 'varchar', 'length' => 256),
-            'description' => array('type' => 'varchar', 'length' => 256),
+            'DispatchTimeMax'         => array('type' => 'varchar', 'length' => 256),
+            'description'             => array('type' => 'varchar', 'length' => 256),
         ),
 
         'ebay_log' => array(
             'id_ebay_log' => array('type' => 'int', 'length' => 11, 'primary' => true),
-            'text' => array('type' => 'text', 'length' => 11),
-            'type' => array('type' => 'varchar', 'length' => 32),
-            'date_add' => array('type' => 'datetime', 'length' => null),
+            'text'        => array('type' => 'text', 'length' => 11),
+            'type'        => array('type' => 'varchar', 'length' => 32),
+            'date_add'    => array('type' => 'datetime', 'length' => null),
         ),
 
         'ebay_order' => array(
             'id_ebay_order' => array('type' => 'int', 'length' => 11, 'primary' => true),
-            'id_order_ref' => array('type' => 'varchar', 'length' => 128),
-            'id_order' => array('type' => 'int', 'length' => 11),
+            'id_order_ref'  => array('type' => 'varchar', 'length' => 128),
+            'id_order'      => array('type' => 'int', 'length' => 11),
         ),
 
         'ebay_order_log' => array(
             'id_ebay_order_log' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
-            'id_ebay_profile' => array('type' => 'int', 'length' => 11),
-            'id_ebay_order' => array('type' => 'int', 'length' => 11),
-            'id_orders' => array('type' => 'varchar', 'length' => 255),
-            'type' => array('type' => 'varchar', 'length' => 40),
-            'success' => array('type' => 'tinyint', 'length' => 1),
-            'data' => array('type' => 'text', 'length' => null),
-            'date_add' => array('type' => 'datetime', 'length' => null),
-            'date_update' => array('type' => 'datetime', 'length' => null),
+            'id_ebay_profile'   => array('type' => 'int', 'length' => 11),
+            'id_ebay_order'     => array('type' => 'int', 'length' => 11),
+            'id_orders'         => array('type' => 'varchar', 'length' => 255),
+            'type'              => array('type' => 'varchar', 'length' => 40),
+            'success'           => array('type' => 'tinyint', 'length' => 1),
+            'data'              => array('type' => 'text', 'length' => null),
+            'date_add'          => array('type' => 'datetime', 'length' => null),
+            'date_update'       => array('type' => 'datetime', 'length' => null),
         ),
 
         'ebay_order_order' => array(
             'id_ebay_order_order' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
-            'id_ebay_order' => array('type' => 'int', 'length' => 11),
-            'id_order' => array('type' => 'int', 'length' => 11),
-            'id_shop' => array('type' => 'int', 'length' => 11),
-            'id_ebay_profile' => array('type' => 'int', 'length' => 11),
+            'id_ebay_order'       => array('type' => 'int', 'length' => 11),
+            'id_order'            => array('type' => 'int', 'length' => 11),
+            'id_shop'             => array('type' => 'int', 'length' => 11),
+            'id_ebay_profile'     => array('type' => 'int', 'length' => 11),
         ),
 
         'ebay_product' => array(
             'id_ebay_product' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
             'id_ebay_profile' => array('type' => 'int', 'length' => 11),
-            'id_country' => array('type' => 'int', 'length' => 11),
-            'id_product' => array('type' => 'int', 'length' => 11),
-            'id_attribute' => array('type' => 'int', 'length' => 11),
-            'id_product_ref' => array('type' => 'varchar', 'length' => 32),
-            'date_add' => array('type' => 'datetime', 'length' => null),
-            'date_upd' => array('type' => 'datetime', 'length' => null),
+            'id_country'      => array('type' => 'int', 'length' => 11),
+            'id_product'      => array('type' => 'int', 'length' => 11),
+            'id_attribute'    => array('type' => 'int', 'length' => 11),
+            'id_product_ref'  => array('type' => 'varchar', 'length' => 32),
+            'date_add'        => array('type' => 'datetime', 'length' => null),
+            'date_upd'        => array('type' => 'datetime', 'length' => null),
         ),
 
         'ebay_product_configuration' => array(
             'id_ebay_product_configuration' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
-            'id_product' => array('type' => 'int', 'length' => 11),
-            'id_ebay_profile' => array('type' => 'int', 'length' => 11),
-            'blacklisted' => array('type' => 'tinyint', 'length' => 1),
-            'extra_images' => array('type' => 'int', 'length' => 11),
+            'id_product'                    => array('type' => 'int', 'length' => 11),
+            'id_ebay_profile'               => array('type' => 'int', 'length' => 11),
+            'blacklisted'                   => array('type' => 'tinyint', 'length' => 1),
+            'extra_images'                  => array('type' => 'int', 'length' => 11),
         ),
 
         'ebay_product_image' => array(
             'id_ebay_product_image' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
-            'ps_image_url' => array('type' => 'varchar', 'length' => 255),
-            'ebay_image_url' => array('type' => 'varchar', 'length' => 255),
+            'ps_image_url'          => array('type' => 'varchar', 'length' => 255),
+            'ebay_image_url'        => array('type' => 'varchar', 'length' => 255),
         ),
 
         'ebay_product_modified' => array(
             'id_ebay_product_modified' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
-            'id_ebay_profile' => array('type' => 'int', 'length' => 11),
-            'id_product' => array('type' => 'int', 'length' => 11),
+            'id_ebay_profile'          => array('type' => 'int', 'length' => 11),
+            'id_product'               => array('type' => 'int', 'length' => 11),
         ),
 
         'ebay_profile' => array(
-            'id_ebay_profile' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
-            'id_lang' => array('type' => 'int', 'length' => 11),
-            'id_shop' => array('type' => 'int', 'length' => 11),
-            'ebay_user_identifier' => array('type' => 'varchar', 'length' => 255),
-            'ebay_site_id' => array('type' => 'int', 'length' => 11),
+            'id_ebay_profile'                      => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
+            'id_lang'                              => array('type' => 'int', 'length' => 11),
+            'id_shop'                              => array('type' => 'int', 'length' => 11),
+            'ebay_user_identifier'                 => array('type' => 'varchar', 'length' => 255),
+            'ebay_site_id'                         => array('type' => 'int', 'length' => 11),
             'id_ebay_returns_policy_configuration' => array('type' => 'int', 'length' => 11),
         ),
 
         'ebay_returns_policy' => array(
             'id_return_policy' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
-            'value' => array('type' => 'varchar', 'length' => 256),
-            'description' => array('type' => 'varchar', 'length' => 256),
+            'value'            => array('type' => 'varchar', 'length' => 256),
+            'description'      => array('type' => 'varchar', 'length' => 256),
         ),
 
         'ebay_returns_policy_configuration' => array(
             'id_ebay_returns_policy_configuration' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
-            'ebay_returns_within' => array('type' => 'varchar', 'length' => 255),
-            'ebay_returns_who_pays' => array('type' => 'varchar', 'length' => 255),
-            'ebay_returns_description' => array('type' => 'text', 'length' => null),
-            'ebay_returns_accepted_option' => array('type' => 'varchar', 'length' => 255),
+            'ebay_returns_within'                  => array('type' => 'varchar', 'length' => 255),
+            'ebay_returns_who_pays'                => array('type' => 'varchar', 'length' => 255),
+            'ebay_returns_description'             => array('type' => 'text', 'length' => null),
+            'ebay_returns_accepted_option'         => array('type' => 'varchar', 'length' => 255),
         ),
 
         'ebay_returns_policy_description' => array(
             'id_return_policy' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
-            'value' => array('type' => 'varchar', 'length' => 256),
-            'description' => array('type' => 'varchar', 'length' => 256),
+            'value'            => array('type' => 'varchar', 'length' => 256),
+            'description'      => array('type' => 'varchar', 'length' => 256),
         ),
 
         'ebay_shipping' => array(
             'id_ebay_shipping' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
-            'id_ebay_profile' => array('type' => 'int', 'length' => 11),
-            'ebay_carrier' => array('type' => 'varchar', 'length' => 256),
-            'ps_carrier' => array('type' => 'int', 'length' => 11),
-            'extra_fee' => array('type' => 'int', 'length' => 11),
-            'international' => array('type' => 'int', 'length' => 11),
-            'id_zone' => array('type' => 'int', 'length' => 11),
+            'id_ebay_profile'  => array('type' => 'int', 'length' => 11),
+            'ebay_carrier'     => array('type' => 'varchar', 'length' => 256),
+            'ps_carrier'       => array('type' => 'int', 'length' => 11),
+            'extra_fee'        => array('type' => 'int', 'length' => 11),
+            'international'    => array('type' => 'int', 'length' => 11),
+            'id_zone'          => array('type' => 'int', 'length' => 11),
         ),
 
         'ebay_shipping_international_zone' => array(
             'id_ebay_shipping' => array('type' => 'int', 'length' => 11),
-            'id_ebay_zone' => array('type' => 'varchar', 'length' => 256),
-            'id_ebay_profile' => array('type' => 'int', 'length' => 11),
+            'id_ebay_zone'     => array('type' => 'varchar', 'length' => 256),
+            'id_ebay_profile'  => array('type' => 'int', 'length' => 11),
         ),
 
         'ebay_shipping_location' => array(
             'id_ebay_location' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
-            'location' => array('type' => 'varchar', 'length' => 256),
-            'description' => array('type' => 'varchar', 'length' => 256),
+            'location'         => array('type' => 'varchar', 'length' => 256),
+            'description'      => array('type' => 'varchar', 'length' => 256),
         ),
 
         'ebay_shipping_service' => array(
-            'id_shipping_service' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
-            'description' => array('type' => 'varchar', 'length' => 256),
-            'shippingService' => array('type' => 'varchar', 'length' => 256),
-            'shippingServiceID' => array('type' => 'varchar', 'length' => 256),
+            'id_shipping_service'  => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
+            'description'          => array('type' => 'varchar', 'length' => 256),
+            'shippingService'      => array('type' => 'varchar', 'length' => 256),
+            'shippingServiceID'    => array('type' => 'varchar', 'length' => 256),
             'InternationalService' => array('type' => 'varchar', 'length' => 256),
-            'ServiceType' => array('type' => 'varchar', 'length' => 256),
-            'ebay_site_id' => array('type' => 'int', 'length' => 11),
+            'ServiceType'          => array('type' => 'varchar', 'length' => 256),
+            'ebay_site_id'         => array('type' => 'int', 'length' => 11),
         ),
 
         'ebay_shipping_zone_excluded' => array(
             'id_ebay_zone_excluded' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
-            'id_ebay_profile' => array('type' => 'int', 'length' => 11),
-            'region' => array('type' => 'varchar', 'length' => 255),
-            'location' => array('type' => 'varchar', 'length' => 255),
-            'description' => array('type' => 'varchar', 'length' => 255),
-            'excluded' => array('type' => 'int', 'length' => 11),
+            'id_ebay_profile'       => array('type' => 'int', 'length' => 11),
+            'region'                => array('type' => 'varchar', 'length' => 255),
+            'location'              => array('type' => 'varchar', 'length' => 255),
+            'description'           => array('type' => 'varchar', 'length' => 255),
+            'excluded'              => array('type' => 'int', 'length' => 11),
         ),
 
         'ebay_stat' => array(
-            'id_ebay_stat' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
+            'id_ebay_stat'    => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
             'id_ebay_profile' => array('type' => 'int', 'length' => 11),
-            'version' => array('type' => 'varchar', 'length' => 10),
-            'data' => array('type' => 'text', 'length' => null, 'null' => false),
-            'date_add' => array('type' => 'datetime', 'length' => null),
-            'tries' => array('type' => 'tinyint', 'length' => 3, 'unsigned' => true),
+            'version'         => array('type' => 'varchar', 'length' => 10),
+            'data'            => array('type' => 'text', 'length' => null, 'null' => false),
+            'date_add'        => array('type' => 'datetime', 'length' => null),
+            'tries'           => array('type' => 'tinyint', 'length' => 3, 'unsigned' => true),
         ),
 
         'ebay_store_category' => array(
-            'id_ebay_store_category' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
-            'id_ebay_profile' => array('type' => 'int', 'length' => 11),
-            'ebay_category_id' => array('type' => 'varchar', 'length' => 255),
-            'name' => array('type' => 'varchar', 'length' => 255),
-            'order' => array('type' => 'int', 'length' => 11),
+            'id_ebay_store_category'  => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
+            'id_ebay_profile'         => array('type' => 'int', 'length' => 11),
+            'ebay_category_id'        => array('type' => 'varchar', 'length' => 255),
+            'name'                    => array('type' => 'varchar', 'length' => 255),
+            'order'                   => array('type' => 'int', 'length' => 11),
             'ebay_parent_category_id' => array('type' => 'varchar', 'length' => 255),
         ),
 
         'ebay_store_category_configuration' => array(
             'id_ebay_store_category_configuration' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
-            'id_ebay_profile' => array('type' => 'int', 'length' => 11),
-            'ebay_category_id' => array('type' => 'varchar', 'length' => 255),
-            'id_category' => array('type' => 'int', 'length' => 11),
+            'id_ebay_profile'                      => array('type' => 'int', 'length' => 11),
+            'ebay_category_id'                     => array('type' => 'varchar', 'length' => 255),
+            'id_category'                          => array('type' => 'int', 'length' => 11),
         ),
 
         'ebay_sync_history' => array(
             'id_ebay_sync_history' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
-            'is_manual' => array('type' => 'tinyint', 'length' => 1),
-            'datetime' => array('type' => 'datetime', 'length' => null),
+            'is_manual'            => array('type' => 'tinyint', 'length' => 1),
+            'datetime'             => array('type' => 'datetime', 'length' => null),
         ),
 
         'ebay_sync_history_product' => array(
             'id_ebay_sync_history_product' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
-            'id_ebay_sync_history' => array('type' => 'int', 'length' => 11),
-            'id_product' => array('type' => 'int', 'length' => 11),
+            'id_ebay_sync_history'         => array('type' => 'int', 'length' => 11),
+            'id_product'                   => array('type' => 'int', 'length' => 11),
         ),
 
         'ebay_user_identifier_token' => array(
             'ebay_user_identifier' => array('type' => 'varchar', 'length' => 255, 'primary' => true, 'auto_increment' => true),
-            'token' => array('type' => 'text', 'length' => null),
+            'token'                => array('type' => 'text', 'length' => null),
         ),
     );
 
@@ -315,10 +315,12 @@ class EbayDbValidator
 
         if ($result === false) {
             $this->setLog($table, 'error', 'SQL REQUEST : SHOW TABLES LIKE "'._DB_PREFIX_.$table.'"', Db::getInstance()->getMsgError());
-        } else if (empty($result)) {
-            $this->repairTable($table);
         } else {
-            $this->checkField($table, $fields);
+            if (empty($result)) {
+                $this->repairTable($table);
+            } else {
+                $this->checkField($table, $fields);
+            }
         }
 
     }
@@ -331,10 +333,12 @@ class EbayDbValidator
 
             if ($result === false) {
                 $this->setLog($table, 'error', 'SQL REQUEST : '.Db::getInstance()->getMsgError());
-            } else if (empty($result)) {
-                $this->setLog($table, 'error', 'The '.$field.' column in '.$table.' table doesn\'t exist');
             } else {
-                $this->checkTypeFields($table, $field, $arguments);
+                if (empty($result)) {
+                    $this->setLog($table, 'error', 'The '.$field.' column in '.$table.' table doesn\'t exist');
+                } else {
+                    $this->checkTypeFields($table, $field, $arguments);
+                }
             }
 
         }
@@ -400,13 +404,15 @@ class EbayDbValidator
 
                 // is text
                 if (preg_match('/^text$/', $result[0]['Type'])
-                    && ($arguments['type'] != 'text')) {
+                    && ($arguments['type'] != 'text')
+                ) {
                     $reset = true;
                 }
 
                 // is datetime
                 if (preg_match('/^datetime$/', $result[0]['Type'])
-                    && ($arguments['type'] != 'datetime')) {
+                    && ($arguments['type'] != 'datetime')
+                ) {
                     $reset = true;
                 }
 
@@ -532,8 +538,10 @@ class EbayDbValidator
 
         if (!isset($arguments['null'])) {
             $sql .= 'NOT NULL ';
-        } else if ($arguments['null']) {
-            $sql .= 'NULL ';
+        } else {
+            if ($arguments['null']) {
+                $sql .= 'NULL ';
+            }
         }
 
         if (array_key_exists('default', $arguments)) {
@@ -561,18 +569,22 @@ class EbayDbValidator
     {
         $this->logs[$table][] = array('status' => $status, 'action' => $action, 'result' => $result);
     }
+
     public function getNbTable()
     {
         return count($this->database);
     }
+
     public function checkSpecificTable($id)
     {
         $array = array_keys($this->database);
 
         if (array_key_exists($id - 1, $array)) {
             $this->checkTable($array[$id - 1], $this->database[$array[$id - 1]]);
+
             return true;
         }
+
         return false;
 
     }
@@ -587,6 +599,7 @@ class EbayDbValidator
 
         return false;
     }
+
     public function getLog()
     {
         $result = array();

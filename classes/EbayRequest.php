@@ -45,14 +45,17 @@ class EbayRequest
     private $loginUrl;
     private $compatibility_level;
     private $debug;
-    private $dev = false;
+    private $dev = true;
     private $ebay_country;
 
     private $smarty_data;
 
     private $ebay_profile;
 
+    /** @var Context|null $context */
     private $context;
+    /** @var Smarty|null $smarty */
+    private $smarty;
 
     private $write_api_logs;
 
@@ -284,7 +287,7 @@ class EbayRequest
             return false;
         }
 
-        $returns_policies = $returns_within = array();
+        $returns_policies = $returns_within = $returns_whopays = array();
 
         foreach ($response->ReturnPolicyDetails as $return_policy_details) {
             foreach ($return_policy_details as $key => $returns) {
@@ -708,7 +711,9 @@ class EbayRequest
     /**
      * Set order status to "shipped"
      *
-     **/
+     * @param $id_order_ref
+     * @return bool
+     */
     public function orderHasShipped($id_order_ref)
     {
         if (!$id_order_ref) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -18,10 +18,10 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2016 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayReturnsPolicyConfiguration extends ObjectModel
@@ -54,7 +54,7 @@ class EbayReturnsPolicyConfiguration extends ObjectModel
     {
         parent::validateFields();
         if (isset($this->id)) {
-            $fields['id_ebay_returns_policy_configuration'] = (int) ($this->id);
+            $fields['id_ebay_returns_policy_configuration'] = (int)($this->id);
         }
 
         $fields['ebay_returns_within'] = pSQL($this->ebay_returns_within);
@@ -69,12 +69,12 @@ class EbayReturnsPolicyConfiguration extends ObjectModel
     {
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
             self::$definition = array(
-                'table' => 'ebay_returns_policy_configuration',
+                'table'   => 'ebay_returns_policy_configuration',
                 'primary' => 'id_ebay_returns_policy_configuration',
-                'fields' => array(
-                    'ebay_returns_within' => array('type' => self::TYPE_STRING, 'size' => 255, 'default' => self::DEFAULT_RETURNS_WITHIN),
-                    'ebay_returns_who_pays' => array('type' => self::TYPE_STRING, 'size' => 255, 'default' => self::DEFAULT_RETURNS_WHO_PAYS),
-                    'ebay_returns_description' => array('type' => self::TYPE_STRING, 'default' => self::DEFAULT_RETURNS_DESCRIPTION),
+                'fields'  => array(
+                    'ebay_returns_within'          => array('type' => self::TYPE_STRING, 'size' => 255, 'default' => self::DEFAULT_RETURNS_WITHIN),
+                    'ebay_returns_who_pays'        => array('type' => self::TYPE_STRING, 'size' => 255, 'default' => self::DEFAULT_RETURNS_WHO_PAYS),
+                    'ebay_returns_description'     => array('type' => self::TYPE_STRING, 'default' => self::DEFAULT_RETURNS_DESCRIPTION),
                     'ebay_returns_accepted_option' => array('type' => self::TYPE_STRING, 'size' => 255, 'default' => self::DEFAULT_RETURNS_ACCEPTED_OPTION),
                 ),
             );
@@ -82,9 +82,9 @@ class EbayReturnsPolicyConfiguration extends ObjectModel
             $tables = array('ebay_returns_policy_configuration');
             $fieldsRequired = array('ebay_returns_within', 'ebay_returns_who_pays', 'ebay_returns_description', 'ebay_returns_accepted_option');
             $fieldsSize = array('ebay_returns_within' => 255, 'ebay_returns_who_pays' => 255, 'ebay_returns_accepted_option' => 255);
-            $fieldsValidate = array(
-            );
+            $fieldsValidate = array();
         }
+
         return parent::__construct($id_ebay_returns_policy_configuration, $id_lang, $id_shop);
     }
 
@@ -111,6 +111,7 @@ class EbayReturnsPolicyConfiguration extends ObjectModel
         $returns_policy_configuration->ebay_returns_description = Configuration::get('EBAY_RETURNS_DESCRIPTION');
         $returns_policy_configuration->ebay_returns_accepted_option = Configuration::get('EBAY_RETURNS_ACCEPTED_OPTION');
         $returns_policy_configuration->save();
+
         return $returns_policy_configuration->id;
     }
 }

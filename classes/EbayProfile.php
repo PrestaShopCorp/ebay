@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -18,10 +18,10 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2016 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayProfile extends ObjectModel
@@ -57,14 +57,14 @@ class EbayProfile extends ObjectModel
     {
         parent::validateFields();
         if (isset($this->id)) {
-            $fields['id_ebay_profile'] = (int) ($this->id);
+            $fields['id_ebay_profile'] = (int)($this->id);
         }
 
-        $fields['id_lang'] = (int) ($this->id_lang);
-        $fields['id_shop'] = (int) ($this->id_shop);
+        $fields['id_lang'] = (int)($this->id_lang);
+        $fields['id_shop'] = (int)($this->id_shop);
         $fields['ebay_user_identifier'] = pSQL($this->ebay_user_identifier);
         $fields['ebay_site_id'] = pSQL($this->ebay_site_id);
-        $fields['id_ebay_returns_policy_configuration'] = (int) ($this->id_ebay_returns_policy_configuration);
+        $fields['id_ebay_returns_policy_configuration'] = (int)($this->id_ebay_returns_policy_configuration);
 
         return $fields;
     }
@@ -73,13 +73,13 @@ class EbayProfile extends ObjectModel
     {
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
             self::$definition = array(
-                'table' => 'ebay_profile',
+                'table'   => 'ebay_profile',
                 'primary' => 'id_ebay_profile',
-                'fields' => array(
-                    'id_lang' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-                    'id_shop' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-                    'ebay_user_identifier' => array('type' => self::TYPE_STRING, 'size' => 255),
-                    'ebay_site_id' => array('type' => self::TYPE_STRING, 'size' => 32),
+                'fields'  => array(
+                    'id_lang'                              => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
+                    'id_shop'                              => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
+                    'ebay_user_identifier'                 => array('type' => self::TYPE_STRING, 'size' => 255),
+                    'ebay_site_id'                         => array('type' => self::TYPE_STRING, 'size' => 32),
                     'id_ebay_returns_policy_configuration' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
                 ),
             );
@@ -88,11 +88,12 @@ class EbayProfile extends ObjectModel
             $fieldsRequired = array('id_lang', 'id_shop', 'ebay_user_identifier', 'ebay_site_id', 'id_ebay_returns_policy_configuration');
             $fieldsSize = array('ebay_user_identifier' => 32, 'ebay_site_id' => 32);
             $fieldsValidate = array(
-                'id_lang' => 'isUnsignedInt',
-                'id_shop' => 'isUnsignedInt',
+                'id_lang'                              => 'isUnsignedInt',
+                'id_shop'                              => 'isUnsignedInt',
                 'id_ebay_returns_policy_configuration' => 'isUnsignedInt',
             );
         }
+
         return parent::__construct($id, $id_lang, $id_shop);
     }
 
@@ -152,7 +153,7 @@ class EbayProfile extends ObjectModel
     {
         $sql = 'SELECT ec.`name`, ec.`value`
 				FROM `'._DB_PREFIX_.'ebay_configuration` ec
-				WHERE ec.`id_ebay_profile`= '.(int) $this->id;
+				WHERE ec.`id_ebay_profile`= '.(int)$this->id;
         $configurations = Db::getInstance()->executeS($sql);
 
         foreach ($configurations as $configuration) {
@@ -165,15 +166,15 @@ class EbayProfile extends ObjectModel
     {
         $data = array(
             'id_ebay_profile' => $this->id,
-            'name' => pSQL($name),
-            'value' => pSQL($value, $html),
+            'name'            => pSQL($name),
+            'value'           => pSQL($value, $html),
         );
 
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
             $res = Db::getInstance()->insert('ebay_configuration', $data, false, true, Db::REPLACE);
         } else {
             if ($this->hasConfiguration(pSQL($name))) {
-                $res = Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_configuration', array('value' => pSQL($value, $html)), 'UPDATE', '`id_ebay_profile` = '.(int) $this->id.' AND `name` = \''.pSQL($name).'\'');
+                $res = Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_configuration', array('value' => pSQL($value, $html)), 'UPDATE', '`id_ebay_profile` = '.(int)$this->id.' AND `name` = \''.pSQL($name).'\'');
             } else {
                 $res = Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_configuration', $data, 'INSERT');
             }
@@ -208,7 +209,7 @@ class EbayProfile extends ObjectModel
     {
         return Db::getInstance()->execute('
 		DELETE FROM `'._DB_PREFIX_.'ebay_configuration`
-		WHERE `id_ebay_profile` = '.(int) $this->id.'
+		WHERE `id_ebay_profile` = '.(int)$this->id.'
 		AND `name` = "'.pSQL($name).'"');
     }
 
@@ -217,6 +218,7 @@ class EbayProfile extends ObjectModel
      *
      * @param array $keys Keys wanted
      * @return array Values
+     * @throws PrestaShopException
      */
     public function getMultiple($keys)
     {
@@ -243,7 +245,7 @@ class EbayProfile extends ObjectModel
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
             $sql = 'SELECT `id_carrier`
 				FROM `'._DB_PREFIX_.'carrier_shop`
-				WHERE `id_shop` = '.(int) $this->id_shop;
+				WHERE `id_shop` = '.(int)$this->id_shop;
         } else {
             $sql = 'SELECT `id_carrier`
 				FROM `'._DB_PREFIX_.'carrier`';
@@ -284,27 +286,27 @@ class EbayProfile extends ObjectModel
     {
         // Default
         if ($medium = ImageType::getByNameNType('thickbox', 'products')) {
-            $sizeMedium = (int) $medium['id_image_type'];
+            $sizeMedium = (int)$medium['id_image_type'];
         } elseif ($medium = ImageType::getByNameNType('thickbox_default', 'products')) {
-            $sizeMedium = (int) $medium['id_image_type'];
+            $sizeMedium = (int)$medium['id_image_type'];
         } else {
             $sizeMedium = 0;
         }
 
         // Small
         if ($small = ImageType::getByNameNType('small', 'products')) {
-            $sizeSmall = (int) $small['id_image_type'];
+            $sizeSmall = (int)$small['id_image_type'];
         } elseif ($small = ImageType::getByNameNType('small_default', 'products')) {
-            $sizeSmall = (int) $small['id_image_type'];
+            $sizeSmall = (int)$small['id_image_type'];
         } else {
             $sizeSmall = 0;
         }
 
         // Large
         if ($large = ImageType::getByNameNType('large', 'products')) {
-            $sizeBig = (int) $large['id_image_type'];
+            $sizeBig = (int)$large['id_image_type'];
         } elseif ($large = ImageType::getByNameNType('large_default', 'products')) {
-            $sizeBig = (int) $large['id_image_type'];
+            $sizeBig = (int)$large['id_image_type'];
         } else {
             $sizeBig = 0;
         }
@@ -315,19 +317,19 @@ class EbayProfile extends ObjectModel
         $this->setConfiguration('EBAY_PICTURE_PER_LISTING', 0);
     }
 
-    /*
+    /**
      * returns true if all settings are properly configured in the settings tab
      * returns false otherwise
-     *
-     **/
+     * @return bool
+     */
     public function isAllSettingsConfigured()
     {
         $tabs = array(
-            'param' => EbayValidatorTab::getParametersTabConfiguration($this->id),
-            'categories' => EbayValidatorTab::getCategoryTabConfiguration($this->id),
+            'param'           => EbayValidatorTab::getParametersTabConfiguration($this->id),
+            'categories'      => EbayValidatorTab::getCategoryTabConfiguration($this->id),
             'items_specifics' => EbayValidatorTab::getitemSpecificsTabConfiguration($this->id),
-            'shipping' => EbayValidatorTab::getShippingTabConfiguration($this->id),
-            'template' => EbayValidatorTab::getTemplateTabConfiguration($this->id),
+            'shipping'        => EbayValidatorTab::getShippingTabConfiguration($this->id),
+            'template'        => EbayValidatorTab::getTemplateTabConfiguration($this->id),
         );
 
         $is_all_set = true;
@@ -344,8 +346,8 @@ class EbayProfile extends ObjectModel
 
     /**
      * Get token from the ebay_user_identifier
-     *
-     * @return token, null if no token
+     * returns token, null if no token
+     * @return string|null
      */
     public function getToken()
     {
@@ -362,6 +364,7 @@ class EbayProfile extends ObjectModel
     /**
      * Set token for this ebay_user_identifier
      *
+     * @param string $token
      * @return null
      */
     public function setToken($token)
@@ -395,7 +398,7 @@ class EbayProfile extends ObjectModel
         // check if one profile exists otherwise creates it
         $sql = 'SELECT `id_ebay_profile`
 			FROM `'._DB_PREFIX_.'ebay_profile` ep
-			WHERE ep.`id_shop` = '.(int) $id_shop;
+			WHERE ep.`id_shop` = '.(int)$id_shop;
         try {
             // will fail if the table doesn't exist (when doing a PS module autoupgrade for example)
             if ($profile_data = Db::getInstance()->getRow($sql)) {
@@ -428,23 +431,24 @@ class EbayProfile extends ObjectModel
     /**
      * Is the shop has changed, returns the first profile of the shop, returns the current profile otherwise
      *
+     * @param bool $check_current_shop
      * @return EbayProfile
      */
     public static function getCurrent($check_current_shop = true)
     {
-        $id_shop = (int) EbayProfile::_getIdShop(false);
+        $id_shop = (int)EbayProfile::_getIdShop(false);
 
         $current_profile = Configuration::get('EBAY_CURRENT_PROFILE');
         if ($current_profile) {
             $data = explode('_', $current_profile);
             if ($check_current_shop && $id_shop) {
-                $current_profile_id_shop = (int) $data[1];
+                $current_profile_id_shop = (int)$data[1];
                 if (($current_profile_id_shop == $id_shop) || ($current_profile_id_shop == 0)) {
-                    return new EbayProfile((int) $data[0]);
+                    return new EbayProfile((int)$data[0]);
                 }
 
             } else {
-                return new EbayProfile((int) $data[0]);
+                return new EbayProfile((int)$data[0]);
             }
 
         }
@@ -463,7 +467,7 @@ class EbayProfile extends ObjectModel
 
     public static function setProfile($id_ebay_profile)
     {
-        $id_shop = (int) EbayProfile::_getIdShop(false);
+        $id_shop = (int)EbayProfile::_getIdShop(false);
 
         // check that this profile is for the current shop
         $shop_profiles = EbayProfile::getProfilesByIdShop($id_shop);
@@ -493,7 +497,8 @@ class EbayProfile extends ObjectModel
 				FROM `'._DB_PREFIX_.'ebay_profile` ep
 				LEFT JOIN `'._DB_PREFIX_.'lang` l ON (ep.`id_lang` = l.`id_lang`)
 				'.(version_compare(_PS_VERSION_, '1.5', '>') ? 'LEFT JOIN `'._DB_PREFIX_.'shop` s ON (ep.`id_shop` = s.`id_shop`)' : '').'
-				'.($id_shop != 0 ? ' WHERE ep.`id_shop` = '.(int) $id_shop : '');
+				'.($id_shop != 0 ? ' WHERE ep.`id_shop` = '.(int)$id_shop : '');
+
         return Db::getInstance()->executeS($sql);
     }
 
@@ -508,7 +513,7 @@ class EbayProfile extends ObjectModel
         foreach ($res as $row) {
             $identifiers_data[] = array(
                 'identifier' => $row['identifier'],
-                'token' => $row['token'],
+                'token'      => $row['token'],
             );
         }
 
@@ -522,9 +527,9 @@ class EbayProfile extends ObjectModel
 
         $sql = 'SELECT `id_ebay_profile`
 			FROM `'._DB_PREFIX_.'ebay_profile` ep
-			WHERE ep.`id_lang` = '.(int) $id_lang.'
-			AND ep.`id_shop` = '.(int) $id_shop.'
-			AND ep.`ebay_site_id` = '.(int) $ebay_site_id.'
+			WHERE ep.`id_lang` = '.(int)$id_lang.'
+			AND ep.`id_shop` = '.(int)$id_shop.'
+			AND ep.`ebay_site_id` = '.(int)$ebay_site_id.'
 			AND ep.`ebay_user_identifier` = \''.pSQL($ebay_user_identifier).'\'';
 
         if ($id_profile = Db::getInstance()->getValue($sql)) {
@@ -565,7 +570,7 @@ class EbayProfile extends ObjectModel
             'ebay_profile',
         );
         foreach ($tables as $table) {
-            Db::getInstance()->delete(_DB_PREFIX_.$table, '`id_ebay_profile` = '.(int) $id_ebay_profile);
+            Db::getInstance()->delete(_DB_PREFIX_.$table, '`id_ebay_profile` = '.(int)$id_ebay_profile);
         }
 
         // if the profile deleted is the current one, we reset the EBAY_CURRENT_PROFILE

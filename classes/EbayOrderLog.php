@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2016 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -53,14 +53,14 @@ class EbayOrderLog extends ObjectModel
     {
         parent::validateFields();
         if (isset($this->id)) {
-            $fields['id_ebay_order_log'] = (int) ($this->id);
+            $fields['id_ebay_order_log'] = (int)($this->id);
         }
 
-        $fields['id_ebay_profile'] = (int) ($this->id_ebay_profile);
-        $fields['id_ebay_order'] = (int) ($this->id_ebay_order);
+        $fields['id_ebay_profile'] = (int)($this->id_ebay_profile);
+        $fields['id_ebay_order'] = (int)($this->id_ebay_order);
         $fields['id_orders'] = pSQL($this->id_orders);
         $fields['type'] = pSQL($this->type);
-        $fields['success'] = (int) ($this->success);
+        $fields['success'] = (int)($this->success);
         $fields['data'] = pSQL($this->data);
 
         $fields['date_add'] = pSQL($this->date_add);
@@ -73,17 +73,17 @@ class EbayOrderLog extends ObjectModel
     {
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
             self::$definition = array(
-                'table' => 'ebay_order_log',
+                'table'   => 'ebay_order_log',
                 'primary' => 'id_ebay_order_log',
-                'fields' => array(
+                'fields'  => array(
                     'id_ebay_profile' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-                    'id_ebay_order' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-                    'id_orders' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                    'type' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                    'success' => array('type' => self::TYPE_BOOL, 'validate' => 'isBool'),
-                    'data' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                    'date_add' => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
-                    'date_update' => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
+                    'id_ebay_order'   => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
+                    'id_orders'       => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+                    'type'            => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+                    'success'         => array('type' => self::TYPE_BOOL, 'validate' => 'isBool'),
+                    'data'            => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+                    'date_add'        => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
+                    'date_update'     => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
                 ),
             );
         } else {
@@ -102,7 +102,7 @@ class EbayOrderLog extends ObjectModel
         return Db::getInstance()->executeS('SELECT *
 			FROM `'._DB_PREFIX_.'ebay_order_log`
 			ORDER BY `id_ebay_order_log` DESC
-			LIMIT '.(int) $offset.', '.(int) $limit);
+			LIMIT '.(int)$offset.', '.(int)$limit);
     }
 
     public static function count()
@@ -113,7 +113,8 @@ class EbayOrderLog extends ObjectModel
 
     public static function cleanOlderThan($nb_days)
     {
-        $date = date('Y-m-d\TH:i:s', strtotime('-1 day'));
+        $nb_days = $nb_days < 0 ? 0 : (int)$nb_days;
+        $date = date('Y-m-d\TH:i:s', strtotime('-'.$nb_days.' day'));
 
         Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_order_log`
 			WHERE `date_add` < \''.pSQL($date).'\'');

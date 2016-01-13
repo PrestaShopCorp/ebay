@@ -157,9 +157,11 @@ class EbayCategory
     }
 
     /**
-     *
      * Returns the category conditions with the corresponding types on PrestaShop if set
      *
+     * @param int $id_ebay_profile
+     * @return array
+     * @throws PrestaShopDatabaseException
      */
     public function getConditionsWithConfiguration($id_ebay_profile)
     {
@@ -192,9 +194,11 @@ class EbayCategory
     }
 
     /**
-     *
      * Returns an array with the condition_type and corresponding ConditionID on eBay
      *
+     * @param int $id_ebay_profile
+     * @return
+     * @throws PrestaShopDatabaseException
      */
     public function getConditionsValues($id_ebay_profile)
     {
@@ -288,9 +292,12 @@ class EbayCategory
         Configuration::updateValue('EBAY_CATEGORY_MULTI_SKU_UPDATE', 1, false, 0, 0);
     }
 
-    /*
+    /**
      * Climbs up the categories hierarchy until finding the value inherited for is_multi_sku
      *
+     * @param int $id_category_ref
+     * @param int $ebay_site_id
+     * @return
      */
     public static function getInheritedIsMultiSku($id_category_ref, $ebay_site_id)
     {

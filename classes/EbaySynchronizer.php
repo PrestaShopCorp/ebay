@@ -260,7 +260,7 @@ class EbaySynchronizer
 
             } else {
                 // No Multi Sku case so we do multiple products from a multivariation product
-                $data['item_specifics'] = EbaySynchronizer::_getProductItemSpecifics($ebay_category, $product, $id_lang, true);
+                $data['item_specifics'] = EbaySynchronizer::_getProductItemSpecifics($ebay_category, $product, $id_lang);
 
                 foreach ($data['variations'] as $variation) {
                     $data_variation = EbaySynchronizer::_getVariationData($data, $variation, $id_currency);

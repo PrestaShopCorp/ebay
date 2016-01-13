@@ -31,9 +31,13 @@ if (file_exists(dirname(__FILE__).'/EbayRequest.php')) {
 class EbayCategoryCondition
 {
     /**
-     *
      * Parse the data returned by the API for the eBay Category Conditions
-     **/
+     *
+     * @param int  $id_ebay_profile
+     * @param bool $id_category
+     * @return bool
+     * @throws PrestaShopDatabaseException
+     */
     public static function loadCategoryConditions($id_ebay_profile, $id_category = false)
     {
         $request = new EbayRequest($id_ebay_profile);
