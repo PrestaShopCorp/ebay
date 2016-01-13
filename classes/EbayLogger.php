@@ -39,6 +39,7 @@ class EbayLogger
         'INFO'=>    self::INFO,
         'WARNING'=> self::WARNING,
         'ERROR'=>   self::ERROR,
+        'FATAL'=>   self::FATAL,
     );
 
     public function __construct($level='INFO',$context=null,$uid='')
