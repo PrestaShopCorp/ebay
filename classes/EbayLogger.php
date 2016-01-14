@@ -21,7 +21,7 @@
  * @author    PrestaShop SA <contact@prestashop.com>
  * @copyright 2007-2016 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
+ * International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayLogger
@@ -35,35 +35,37 @@ class EbayLogger
     private static $loggers = array();
 
     public static $severity = array(
-        'DEBUG'=>   self::DEBUG,
-        'INFO'=>    self::INFO,
-        'WARNING'=> self::WARNING,
-        'ERROR'=>   self::ERROR,
-        'FATAL'=>   self::FATAL,
+        'DEBUG'   => self::DEBUG,
+        'INFO'    => self::INFO,
+        'WARNING' => self::WARNING,
+        'ERROR'   => self::ERROR,
+        'FATAL'   => self::FATAL,
     );
 
-    public function __construct($level='INFO',$context=null,$uid='')
+    public function __construct($level = 'INFO', $context = null, $uid = '')
     {
         $this->level = self::$severity[strtoupper($level)];
-        $this->uid = uniqid($prefix=(string)$uid,True); 
+        $this->uid = uniqid($prefix = (string)$uid, true);
         $this->context = $context;
     }
 
-    public static function get($name=null,$level=null,$context=null)
+    public static function get($name = null, $level = null, $context = null)
     {
-        if ($name==null) {
+        if ($name == null) {
             // on recupere la derniere instance crée
-            $name = self::$loggers ? key( array_slice( self::$loggers, -1, 1, TRUE ) ) : '';
+            $name = self::$loggers ? key(array_slice(self::$loggers, -1, 1, true)) : '';
         }
         if (!array_key_exists($name, self::$loggers)) {
-            self::$loggers[$name] = new EbayLogger($level=$level,$context=$context,$uid=$name);
+            self::$loggers[$name] = new EbayLogger($level = $level, $context = $context, $uid = $name);
         }
+
         return self::$loggers[$name];
     }
 
-    public static function getLogs($uid=null,$keyword=null,$limit=200) {
+    public static function getLogs($uid = null, $keyword = null, $limit = 200)
+    {
         $levels = array_flip(self::$severity);
-		$sql = '
+        $sql = '
 			SELECT * FROM '._DB_PREFIX_.'ebay_logs
 		';
         $where = array();
@@ -74,7 +76,7 @@ class EbayLogger
             $where[] = 'uid = "'.$uid.'" ';
         }
         if ($where) {
-            $sql .= 'WHERE '.implode(' AND ',$where);
+            $sql .= 'WHERE '.implode(' AND ', $where);
         }
 
         $sql .= 'ORDER BY id_ebay_logs ASC ';
@@ -82,27 +84,29 @@ class EbayLogger
             $sql .= 'LIMIT '.(int)$limit;
         }
 
-		$rows = Db::getInstance()->ExecuteS($sql); 
-        foreach ( $rows as &$row) {
+        $rows = Db::getInstance()->ExecuteS($sql);
+        foreach ($rows as &$row) {
             $row['severity_label'] = $levels[(int)$row['severity']];
         }
+
         return $rows;
     }
 
-    public static function clear() {
-        return Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'ebay_logs'); 
+    public static function clear()
+    {
+        return Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'ebay_logs');
     }
 
 
+    public static function export($uid = null)
+    {
 
-    public static function export($uid=null) {
-
-        $logs = self::getLogs($uid=$uid);
+        $logs = self::getLogs($uid = $uid);
 
         $csvcontent = fopen('php://output', 'w');
-        fputcsv($csvcontent, array_keys($logs[0]) );
+        fputcsv($csvcontent, array_keys($logs[0]));
         foreach ($logs as $row) {
-            fputcsv($csvcontent, array_values($row) );
+            fputcsv($csvcontent, array_values($row));
         }
         header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
         header("Content-type: text/csv");
@@ -110,9 +114,8 @@ class EbayLogger
     }
 
 
-    
-
-    public static function display() {
+    public static function display()
+    {
 
         $currentIndex = 'index.php?controller=AdminModules&configure=ebay&&token='.Tools::getAdminTokenLite('AdminModules');
 
@@ -120,14 +123,18 @@ class EbayLogger
         $keyword = Tools::getValue('keyword');
         $uid = Tools::getValue('uid');
 
-        if ($action=='CLEAR') {
+        if ($action == 'CLEAR') {
             self::clear();
-        } else if ($action=='TEST') {
-            self::clear();
-            self::test();
-        } else if ($action=='EXPORT') {
-            return self::export();
-        } 
+        } else {
+            if ($action == 'TEST') {
+                self::clear();
+                self::test();
+            } else {
+                if ($action == 'EXPORT') {
+                    return self::export();
+                }
+            }
+        }
 
         //EbayLogger::test();
         $html = '<form method="GET" action="index.php" >';
@@ -146,8 +153,8 @@ class EbayLogger
         $html .= '<p></p>';
 
 
-        $logs = self::getLogs($uid=$uid,$keyword=$keyword); //self::getLogs();
-		
+        $logs = self::getLogs($uid = $uid, $keyword = $keyword); //self::getLogs();
+
 
         /*
 			'uid' => array(
@@ -162,65 +169,66 @@ class EbayLogger
 			),
         */
 
-		$fields_list = array(
+        $fields_list = array(
 
-			'datetime' => array(
-				'title' => 'Datetime',
-				'width' => 140,
-				'type' => 'text',
-			),
+            'datetime' => array(
+                'title' => 'Datetime',
+                'width' => 140,
+                'type'  => 'text',
+            ),
 
-			'severity_label' => array(
-				'title' => 'Severity',
-				'width' => 140,
-				'type' => 'text',
-			),
+            'severity_label' => array(
+                'title' => 'Severity',
+                'width' => 140,
+                'type'  => 'text',
+            ),
 
-			'message' => array(
-				'title' => 'Message',
-				'width' => 140,
-				'type' => 'text',
-			),
-			'context' => array(
-				'title' => 'Context',
-				'width' => 140,
-				'type' => 'text',
-			),
-			'uid' => array(
-				'title' => 'Operation',
-				'width' => 140,
-				'type' => 'hidden',
-			),
-		);
-		$helper = new HelperList();
-		$helper->shopLinkType = '';
-		$helper->simple_header = true;
-		$helper->actions = array('view');
-		$helper->identifier = 'uid';
-		$helper->show_toolbar = true;
-		$helper->title = 'logs ebay';
-		$helper->table = '_ebay_logs';
-		$helper->token = Tools::getAdminTokenLite('AdminModules');
-
+            'message' => array(
+                'title' => 'Message',
+                'width' => 140,
+                'type'  => 'text',
+            ),
+            'context' => array(
+                'title' => 'Context',
+                'width' => 140,
+                'type'  => 'text',
+            ),
+            'uid'     => array(
+                'title' => 'Operation',
+                'width' => 140,
+                'type'  => 'hidden',
+            ),
+        );
+        $helper = new HelperList();
+        $helper->shopLinkType = '';
+        $helper->simple_header = true;
+        $helper->actions = array('view');
+        $helper->identifier = 'uid';
+        $helper->show_toolbar = true;
+        $helper->title = 'logs ebay';
+        $helper->table = '_ebay_logs';
+        $helper->token = Tools::getAdminTokenLite('AdminModules');
 
 
         //$currentIndex = AdminController::$currentIndex.'&configure='.$this->name.'&totlookbook_edit='.Tools::getValue('totlookbook_edit', 'global');
-		$helper->currentIndex = $_SERVER['REQUEST_URI'];
+        $helper->currentIndex = $_SERVER['REQUEST_URI'];
 
 
         $html .= $helper->generateList($logs, $fields_list);
+
         return $html;
     }
 
-    public static function test() {
+    public static function test()
+    {
 
         $logger1 = new EbayLogger('DEBUG');
         $logger2 = new EbayLogger('INFO');
         $logger3 = new EbayLogger('WARNING');
-        $logger4 = new EbayLogger('INFO',array(
-            'user'=> 'testuser',
-            'shop' => 'shop',
-            'operation' => 'sync product',
+        $logger4 = new EbayLogger('INFO', array(
+            'user'       => 'testuser',
+            'shop'       => 'shop',
+            'operation'  => 'sync product',
             'id_product' => 123
         ));
 
@@ -241,13 +249,13 @@ class EbayLogger
 
 
         $logger4->info('start sync');
-        $logger4->info('start sync variation1',array('id_variation'=>1));
-        $logger4->info('start sync variation2',array('id_variation'=>2));
-        $logger4->info('start sync variation3',array('id_variation'=>3));
+        $logger4->info('start sync variation1', array('id_variation' => 1));
+        $logger4->info('start sync variation2', array('id_variation' => 2));
+        $logger4->info('start sync variation3', array('id_variation' => 3));
 
 
         // test recuperation d'un logger par nom
-        $log = EbayLogger::get('MYLOGGER','INFO',array('loggerused'=>'MYLOGGER'));
+        $log = EbayLogger::get('MYLOGGER', 'INFO', array('loggerused' => 'MYLOGGER'));
         $log->info('test MYLOGGER');
 
         $log = EbayLogger::get('MYLOGGER'); // doit etre la même instance
@@ -259,16 +267,15 @@ class EbayLogger
     }
 
 
-
-    private function log($severity, $msg, $context=null, $backtrace=null)
+    private function log($severity, $msg, $context = null, $backtrace = null)
     {
         if ($severity >= $this->level) {
             $datetime = date('Y-m-d H:i:s'); // Microseconds ???
 
-            $ctx = array_merge((array)$this->context,(array)$context);
+            $ctx = array_merge((array)$this->context, (array)$context);
 
             Db::getInstance()->insert(
-                'ebay_logs' , 
+                'ebay_logs',
                 array(
                     'uid'       => $this->uid,
                     'datetime'  => $datetime,
@@ -282,30 +289,30 @@ class EbayLogger
         }
     }
 
-	public function debug($msg, $context=null)
-	{
-        $this->log(self::DEBUG,$msg,$context);
-	}
+    public function debug($msg, $context = null)
+    {
+        $this->log(self::DEBUG, $msg, $context);
+    }
 
-	public function info($msg, $context=null)
-	{
-        $this->log(self::INFO,$msg,$context);
-	}
+    public function info($msg, $context = null)
+    {
+        $this->log(self::INFO, $msg, $context);
+    }
 
-	public function warning($msg, $context=null)
-	{
-        $this->log(self::WARNING,$msg,$context);
-	}
+    public function warning($msg, $context = null)
+    {
+        $this->log(self::WARNING, $msg, $context);
+    }
 
-	public function error($msg, $context=null,$backtrace=null)
-	{
-        $this->log(self::ERROR,$msg,$context,$backtrace);
-	}
+    public function error($msg, $context = null, $backtrace = null)
+    {
+        $this->log(self::ERROR, $msg, $context, $backtrace);
+    }
 
-	public function fatal($msg, $context=null,$backtrace=null)
-	{
+    public function fatal($msg, $context = null, $backtrace = null)
+    {
         //$backtrace = debug_backtrace();
         //$file = $backtrace[0]['file'] . ":" . $backtrace[0]['line'];
-        $this->log(self::FATAL,$msg,$context,$backtrace);
-	}
+        $this->log(self::FATAL, $msg, $context, $backtrace);
+    }
 }
