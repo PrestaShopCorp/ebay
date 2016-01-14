@@ -123,7 +123,8 @@ class Ebay extends Module
     /**
      * Construct Method
      *
-     **/
+     * @param null|int $id_ebay_profile
+     */
     public function __construct($id_ebay_profile = null)
     {
         $this->name = 'ebay';
@@ -153,6 +154,11 @@ class Ebay extends Module
         // Generate eBay Security Token if not exists
         if (!Configuration::get('EBAY_SECURITY_TOKEN')) {
             $this->setConfiguration('EBAY_SECURITY_TOKEN', Tools::passwdGen(30));
+        }
+
+        // Define a default name for order email
+        if (!Configuration::get('EBAY_IMPORT_ORDERS_EMAIL')) {
+            $this->setConfiguration('EBAY_IMPORT_ORDERS_EMAIL', 0);
         }
 
         // For 1.4.3 and less compatibility
@@ -804,10 +810,9 @@ class Ebay extends Module
 
             // no order in ebay order table with this order_ref
             if (!$order->hasValidContact()) {
-                $message = $this->l('Invalid e-mail');
-                $errors[] = $message;
-                $order->addErrorMessage($message);
-                continue;
+                $order->setEmail($order->generateEmail());
+                // show an alert to client
+                $this->setConfiguration('EBAY_IMPORT_ORDERS_EMAIL_ALERT', 3);
             }
 
             if (!$order->isCountryEnable()) {

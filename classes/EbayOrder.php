@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -21,7 +21,7 @@
  * @author    PrestaShop SA <contact@prestashop.com>
  * @copyright 2007-2016 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
+ * International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayOrder
@@ -156,6 +156,31 @@ class EbayOrder
         return Validate::isEmail($this->email)
         && $this->firstname
         && $this->familyname;
+    }
+
+    /**
+     * Generate an email like :
+     * order_from_ebay_{{Configuration::get(‘EBAY_IMPORT_ORDERS_EMAIL)}}@{{Configuration::get(PS_SHOP_EMAIL) | nom_de_domaine}}
+     * @return string
+     */
+    public function generateEmail()
+    {
+        // clear cache to generate each time a different mail
+        Configuration::loadConfiguration();
+
+        if (Configuration::get('PS_SHOP_EMAIL') && Validate::isEmail(Configuration::get('PS_SHOP_EMAIL'))) {
+            list($username, $domain) = explode('@', Configuration::get('PS_SHOP_EMAIL'));
+        } else {
+            $domain = Configuration::get('PS_SHOP_DOMAIN');
+        }
+
+        $mail = "order_from_ebay_";
+        $mail .= Configuration::get('EBAY_IMPORT_ORDERS_EMAIL');
+        Configuration::updateValue('EBAY_IMPORT_ORDERS_EMAIL', (int)Configuration::get('EBAY_IMPORT_ORDERS_EMAIL') + 1);
+        $mail .= "@";
+        $mail .= $domain;
+
+        return $mail;
     }
 
     public function getOrAddCustomer($ebay_profile)
@@ -651,6 +676,17 @@ class EbayOrder
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * @param string $email
+     * @return EbayOrder
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
     }
 
     public function getProducts()

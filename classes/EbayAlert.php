@@ -21,7 +21,7 @@
  * @author    PrestaShop SA <contact@prestashop.com>
  * @copyright 2007-2016 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
+ * International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayAlert
@@ -48,6 +48,7 @@ class EbayAlert
         $this->checkOrders();
         $this->checkUrlDomain();
         $this->checkCronTask();
+        $this->checkImportOrder();
 
         $this->build();
 
@@ -131,6 +132,28 @@ class EbayAlert
             $this->errors[] = array(
                 'type'    => 'error',
                 'message' => $this->ebay->l('You must enable the following countries : ').$list['country'].$this->ebay->l('. In order to import this eBay order(s) : ').$list['order'].'.',
+            );
+        }
+    }
+
+    /**
+     * Check alert for import order
+     */
+    public function checkImportOrder()
+    {
+        if ((int)Configuration::get('EBAY_IMPORT_ORDERS_EMAIL_ALERT') > 0) {
+            Configuration::updateValue('EBAY_IMPORT_ORDERS_EMAIL_ALERT', (int)Configuration::get('EBAY_IMPORT_ORDERS_EMAIL_ALERT') - 1);
+            $context = Context::getContext();
+            $this->warnings[] = array(
+                'type'      => 'warning',
+                'message'   => $this->ebay->l("You  have imported an ebay order with a mail which is not the customer's mail. To know more please click here : \"link to kb\""),
+                'link_warn' => 'http://help.202-ecommerce.com/ebay-for-prestashop/ebay-home/',
+                'kb'        => array(
+                    'errorcode'          => 'HELP-ALERT-DEFAULT-PS-URL',
+                    'lang'               => $context->language->iso_code,
+                    'module_version'     => $this->ebay->version,
+                    'prestashop_version' => _PS_VERSION_,
+                ),
             );
         }
     }
