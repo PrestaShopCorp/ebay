@@ -49,6 +49,7 @@ class EbayAlert
         $this->checkUrlDomain();
         $this->checkCronTask();
         $this->checkImportOrder();
+        $this->checkSelectedEbayShop();
 
         $this->build();
 
@@ -156,6 +157,24 @@ class EbayAlert
                 ),
             );
         }
+    }
+
+    public function checkSelectedEbayShop()
+    {
+
+        $id_shop = (int)EbayProfile::_getIdShop(false);
+
+        $current_profile = Configuration::get('EBAY_CURRENT_PROFILE');
+        $current_profile_shop = explode("_", $current_profile);
+
+        if (count($current_profile_shop) == 2 && $current_profile_shop[1] != $id_shop)
+        {
+            $this->warnings[] = array(
+                'type'      => 'error ',
+                'message'   => $this->ebay->l("You have to select an ebay shop"),
+            );
+        }
+
     }
 
     public function sendDailyMail()

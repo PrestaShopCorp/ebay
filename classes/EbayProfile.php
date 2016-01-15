@@ -443,9 +443,9 @@ class EbayProfile extends ObjectModel
             $data = explode('_', $current_profile);
             if ($check_current_shop && $id_shop) {
                 $current_profile_id_shop = (int)$data[1];
-                if (($current_profile_id_shop == $id_shop) || ($current_profile_id_shop == 0)) {
+//                if (($current_profile_id_shop == $id_shop) || ($current_profile_id_shop == 0)) {
                     return new EbayProfile((int)$data[0]);
-                }
+//                }
 
             } else {
                 return new EbayProfile((int)$data[0]);

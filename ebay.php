@@ -210,7 +210,7 @@ class Ebay extends Module
             }
 
             if (class_exists('EbayCountrySpec')) {
-                if (!$this->ebay_profile) {
+                if (!$this->ebay_profile) { //@todo
                     if ($id_ebay_profile) {
                         $this->ebay_profile = new EbayProfile($id_ebay_profile);
                     } else {
@@ -777,15 +777,21 @@ class Ebay extends Module
         EbayOrderErrors::truncate();
         $current_date = date('Y-m-d\TH:i:s').'.000Z';
 
-        if ($orders = $this->_getEbayLastOrders($current_date)) {
-            $this->importOrders($orders);
+        $i = 0;
+        foreach (EbayProfile::getProfilesByIdShop() as $ebay_profile) {
+            $i++;
+            $this->ebay_profile = new EbayProfile($ebay_profile['id_ebay_profile']);
+
+            if ($orders = $this->_getEbayLastOrders($current_date)) {
+                $this->importOrders($orders, $i);
+            }
         }
 
         // we set the new last update date after retrieving the last orders
         $this->ebay_profile->setConfiguration('EBAY_ORDER_LAST_UPDATE', $current_date);
     }
 
-    public function importOrders($orders)
+    public function importOrders($orders, $i = '')
     {
 
         $errors_email = array();
@@ -972,6 +978,7 @@ class Ebay extends Module
                 'id_order_ref'    => $order->getIdOrderRef(),
                 'id_order_seller' => $order->getIdOrderSeller(),
                 'amount'          => $order->getAmount(),
+                'seller'          => $this->ebay_profile->ebay_user_identifier,
                 'status'          => $order->getStatus(),
                 'date'            => $order->getDate(),
                 'email'           => $order->getEmail(),
@@ -980,7 +987,7 @@ class Ebay extends Module
             );
         }
 
-        file_put_contents(dirname(__FILE__).'/log/orders.php', "<?php\n\n".'$dateLastImport = '.'\''.date('d/m/Y H:i:s')."';\n\n".'$orders = '.var_export($orders_ar, true).";\n\n");
+        file_put_contents(dirname(__FILE__).'/log/orders'.$i.'.php', "<?php\n\n".'$dateLastImport = '.'\''.date('d/m/Y H:i:s')."';\n\n".'$orders = '.var_export($orders_ar, true).";\n\n");
 
         if (Configuration::get('EBAY_ACTIVATE_MAILS') && $errors_email) {
             $data = '';
@@ -1609,11 +1616,11 @@ class Ebay extends Module
         }
 
         $url = _MODULE_DIR_.'ebay/ajax/checkToken.php?'.http_build_query(
-            array(
-                'token' => Configuration::get('EBAY_SECURITY_TOKEN'),
-                'time'  => pSQL(date('Ymdhis'))
-            )
-        );
+                array(
+                    'token' => Configuration::get('EBAY_SECURITY_TOKEN'),
+                    'time'  => pSQL(date('Ymdhis'))
+                )
+            );
 
         $smarty_vars = array(
             'window_location_href' => $this->_getUrl($url_vars),
