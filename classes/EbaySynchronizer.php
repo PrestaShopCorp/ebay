@@ -43,14 +43,22 @@ class EbaySynchronizer
      */
     public static function syncProducts($products, $context, $id_lang, $request_context = null, $log_type = false)
     {
+        $logger = new EbayLogger('DEBUG');
+
         //Fix for orders that are passed in a country without taxes
         $context = Context::getContext();
-        $id_address = $context->cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
-        $address = new Address($id_address);
-        $country_address = $address->id_country;
-        $address->id_country = Configuration::get('PS_COUNTRY_DEFAULT');
-        $address->save();
-        //Fix for orders that are passed in a country without taxes
+        if ($context->cart) {
+            $id_address = $context->cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
+            if ($id_address != 0) {
+                $address = new Address($id_address);
+                $country_address = $address->id_country;
+                $address->id_country = Configuration::get('PS_COUNTRY_DEFAULT');
+                $address->save();
+            }
+            //Fix for orders that are passed in a country without taxes
+        } else {
+            $logger->error("syncProducts: No cart in context", $context);
+        }
 
         if (!$products) {
             return;
@@ -209,8 +217,10 @@ class EbaySynchronizer
         }
 
         //Fix for orders that are passed in a country without taxes
-        $address->id_country = $country_address;
-        $address->save();
+        if ($context->cart && $id_address != 0) {
+            $address->id_country = $country_address;
+            $address->save();
+        }
         //Fix for orders that are passed in a country without taxes
     }
 
@@ -1283,11 +1293,11 @@ class EbaySynchronizer
     /**
      * Returns the item specifics that correspond to a variation and not to the product in general
      *
-     * @param int  $product_id
-     * @param int  $product_attribute_id
-     * @param int  $id_lang
-     * @param int  $ebay_site_id
-     * @param bool $ebay_category
+     * @param int               $product_id
+     * @param int               $product_attribute_id
+     * @param int               $id_lang
+     * @param int               $ebay_site_id
+     * @param bool|EbayCategory $ebay_category
      * @return array
      * @throws PrestaShopDatabaseException
      */
@@ -1343,7 +1353,9 @@ class EbaySynchronizer
      * If there is a cover puts it at the top of the list
      * otherwise returns the images in their position order
      *
-     **/
+     * @param array $images
+     * @return array
+     */
     private static function orderImages($images)
     {
         $covers = array();

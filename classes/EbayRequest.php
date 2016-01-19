@@ -45,6 +45,7 @@ class EbayRequest
     private $loginUrl;
     private $compatibility_level;
     private $debug;
+    // @todo : pusher à false en version finale
     private $dev = true;
     private $ebay_country;
 
