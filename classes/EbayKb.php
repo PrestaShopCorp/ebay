@@ -190,7 +190,7 @@ class EbayKb extends ObjectModel
         if ($this->exist()) {
             $now = new DateTime(date('Y-m-d'));
             $expire = new DateTime($this->date_upd);
-            $interval = round(($now->format('U') - $now->format('U')) / (60 * 60 * 24));
+            $interval = round(($now->format('U') - $expire->format('U')) / (60 * 60 * 24));
 
             if ($interval > 4) {
                 if ($this->call()) {
