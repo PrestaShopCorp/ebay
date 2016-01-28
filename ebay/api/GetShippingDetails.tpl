@@ -1,5 +1,5 @@
 {*
-* 2007-2015 PrestaShop
+* 2007-2016 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2015 PrestaShop SA
+*  @copyright 2007-2016 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -26,28 +26,31 @@
 	<ExcludeShipToLocation>{$zone.location}</ExcludeShipToLocation>
 {/foreach} 
 
-{foreach from=$national_services key=service_name item=service}
-	{if $service.serviceCosts !== fase}
-		<ShippingServiceOptions>
-			<ShippingServicePriority>{$service.servicePriority}</ShippingServicePriority>
-			<ShippingService>{$service_name}</ShippingService>
-			<FreeShipping>false</FreeShipping>
-			<ShippingServiceCost currencyID="{$currency_id}">{$service.serviceCosts}</ShippingServiceCost>
-			<ShippingServiceAdditionalCost>{$service.serviceAdditionalCosts}</ShippingServiceAdditionalCost>
-		</ShippingServiceOptions>
-	{/if}
+{foreach from=$national_services key=service_name item=services}
+	{foreach from=$services item=service}
+		{if $service.serviceCosts !== false}
+			<ShippingServiceOptions>
+				<ShippingServicePriority>{$service.servicePriority}</ShippingServicePriority>
+				<ShippingService>{$service_name}</ShippingService>
+				<FreeShipping>false</FreeShipping>
+				<ShippingServiceCost currencyID="{$currency_id}">{$service.serviceCosts}</ShippingServiceCost>
+				<ShippingServiceAdditionalCost>{$service.serviceAdditionalCosts}</ShippingServiceAdditionalCost>
+			</ShippingServiceOptions>
+		{/if}
+	{/foreach}
 {/foreach}
-
-{foreach from=$international_services key=service_name item=service}
-	{if $service.serviceCosts !== false}
-		<InternationalShippingServiceOption>
-			<ShippingServicePriority>{$service.servicePriority}</ShippingServicePriority>
-			<ShippingService>{$service_name}</ShippingService>
-			<ShippingServiceCost currencyID="{$currency_id}">{$service.serviceCosts}</ShippingServiceCost>
-			<ShippingServiceAdditionalCost>{$service.serviceAdditionalCosts}</ShippingServiceAdditionalCost>
-			{foreach from=$service.locationsToShip item=location}
-				<ShipToLocation>{$location.id_ebay_zone}</ShipToLocation>
-			{/foreach}
-		</InternationalShippingServiceOption>
-	{/if}
+{foreach from=$international_services key=service_name item=services}
+	{foreach from=$services item=service}
+		{if $service.serviceCosts !== false}
+			<InternationalShippingServiceOption>
+				<ShippingServicePriority>{$service.servicePriority}</ShippingServicePriority>
+				<ShippingService>{$service_name}</ShippingService>
+				<ShippingServiceCost currencyID="{$currency_id}">{$service.serviceCosts}</ShippingServiceCost>
+				<ShippingServiceAdditionalCost>{$service.serviceAdditionalCosts}</ShippingServiceAdditionalCost>
+				{foreach from=$service.locationsToShip item=location}
+					<ShipToLocation>{$location.id_ebay_zone}</ShipToLocation>
+				{/foreach}
+			</InternationalShippingServiceOption>
+		{/if}
+	{/foreach}
 {/foreach}

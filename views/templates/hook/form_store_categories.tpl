@@ -1,5 +1,5 @@
 {*
-* 2007-2015 PrestaShop
+* 2007-2016 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2015 PrestaShop SA
+*  @copyright 2007-2016 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -39,7 +39,7 @@
         	</p>
         {else}
             <p>
-                <b><a href="http://cgi6.sandbox.ebay.fr/ws/eBayISAPI.dll?StoreCategoryMgmt" target="_blank">{l s="you don’t have any category in your shop, please refer to this page to create categories" mod='ebay'}</a></b>
+                <b><a href="http://cgi6.sandbox.ebay.fr/ws/eBayISAPI.dll?StoreCategoryMgmt" target="_blank">{l s='you don’t have any category in your shop, please refer to this page to create categories' mod='ebay'}</a><a class="kb-help" data-errorcode="{$help.code_store_category}" data-module="ebay" data-lang="{$help.lang}" module_version="{$help.module_version}" prestashop_version="{$help.ps_version}" href="" target="_blank"></a></b>
             </p> 
         {/if}
     {else}
@@ -47,16 +47,17 @@
         	<p>
         		<b>{l s='Your eBay account has no eBay shop registered.' mod='ebay'} </b>
             
-        		<a href="{$ebay_store_url}" target="_blank">{l s="An eBay shop subscription isn’t required but you may benefit. Find out if an eBay Shop is right for you." mod='ebay'}</a>
+        		<a href="{$ebay_store_url}" target="_blank">{l s='An eBay shop subscription isn’t required but you may benefit. Find out if an eBay Shop is right for you.' mod='ebay'}</a>
         	</p>
         </div>    
     {/if}
 
 </div>
 <br />
-
 {if $nb_categorie > 0}
-	<p id="textStoresPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nb_categorie / 20)|round:"0") mod='ebay'}</p>
+	{assign var="nbcat" value=($nb_categorie / 20)|round:"0"}
+	{if $nbcat > 1}
+	<p id="textStoresPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=$nbcat mod='ebay'}</p>
 	<ul id="stores_pagination" class="pagination">
 		<li class="prev"><</li>
 		{math equation="floor(x/20)" x=$nb_categorie assign=nb_pages} 
@@ -65,6 +66,7 @@
 		{/for}
 		<li class="next">></li>
 	</ul>
+	{/if}
 {/if}
 
 <form action="index.php?{if $isOneDotFive}controller={$controller|escape:'htmlall':'UTF-8'}{else}tab={$tab|escape:'htmlall':'UTF-8'}{/if}&configure={$configure|escape:'htmlall':'UTF-8'}&token={$token|escape:'htmlall':'UTF-8'}&tab_module={$tab_module|escape:'htmlall':'UTF-8'}&module_name={$module_name|escape:'htmlall':'UTF-8'}&id_tab=10&section=store_category" method="post" class="form" id="configFormStoreCategories"><table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
@@ -105,12 +107,14 @@
 		
 	var $selects = false;
 	
+	var admin_path = '{$admin_path|escape:'htmlall':'UTF-8'}';
 	var module_dir = '{$_module_dir_|escape:'htmlall':'UTF-8'}';
 	var ebay_token = '{$configs.EBAY_SECURITY_TOKEN|escape:'htmlall':'UTF-8'}';
 	var module_time = '{$date|escape:'htmlall':'UTF-8'}';
 	var module_path = '{$_path|escape:'htmlall':'UTF-8'}';
 	var id_lang = '{$id_lang|escape:'htmlall':'UTF-8'}';
 	var id_ebay_profile = '{$id_ebay_profile|escape:'htmlall':'UTF-8'}';
+	var id_shop = '{$id_shop|escape:'htmlall'}';
 	var store_categories_ebay_l = {ldelim}
 		'No category found'		 : "{l s='No category found' mod='ebay'}",
 		'You are not logged in': "{l s='You are not logged in' mod='ebay'}",

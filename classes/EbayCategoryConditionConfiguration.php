@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,40 +19,44 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
+ *  @copyright 2007-2016 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayCategoryConditionConfiguration
 {
-	const PS_CONDITION_NEW = 1;
-	const PS_CONDITION_USED = 2;
-	const PS_CONDITION_REFURBISHED = 3;
+    const PS_CONDITION_NEW = 1;
+    const PS_CONDITION_USED = 2;
+    const PS_CONDITION_REFURBISHED = 3;
 
-	public static function getPSConditions($condition_type = null)
-	{
-		$condition_types = array(
-			EbayCategoryConditionConfiguration::PS_CONDITION_NEW => 'new',
-			EbayCategoryConditionConfiguration::PS_CONDITION_USED => 'used',
-			EbayCategoryConditionConfiguration::PS_CONDITION_REFURBISHED => 'refurbished'
-		);
+    public static function getPSConditions($condition_type = null)
+    {
+        $condition_types = array(
+            EbayCategoryConditionConfiguration::PS_CONDITION_NEW => 'new',
+            EbayCategoryConditionConfiguration::PS_CONDITION_USED => 'used',
+            EbayCategoryConditionConfiguration::PS_CONDITION_REFURBISHED => 'refurbished',
+        );
 
-		if ($condition_type)
-			return $condition_types[$condition_type];
-		
-		return $condition_types;
-	}
+        if ($condition_type) {
+            return $condition_types[$condition_type];
+        }
 
-	public static function replace($data)
-	{
-		$to_insert = array();
-		foreach ($data as $key => $value)
-			$to_insert[bqSQL($key)] = pSQL($value);
+        return $condition_types;
+    }
 
-		if (version_compare(_PS_VERSION_, '1.5', '>'))
-			Db::getInstance()->insert('ebay_category_condition_configuration', $to_insert, false, false, Db::REPLACE);
-		else
-			Db::getInstance()->execute('REPLACE INTO `'._DB_PREFIX_.'ebay_category_condition_configuration` (`'.implode('` , `', array_keys($to_insert)).'`) VALUES (\''.implode('\', \'', $to_insert).'\')');
-	}
+    public static function replace($data)
+    {
+        $to_insert = array();
+        foreach ($data as $key => $value) {
+            $to_insert[bqSQL($key)] = pSQL($value);
+        }
+
+        if (version_compare(_PS_VERSION_, '1.5', '>')) {
+            Db::getInstance()->insert('ebay_category_condition_configuration', $to_insert, false, false, Db::REPLACE);
+        } else {
+            Db::getInstance()->execute('REPLACE INTO `'._DB_PREFIX_.'ebay_category_condition_configuration` (`'.implode('` , `', array_keys($to_insert)).'`) VALUES (\''.implode('\', \'', $to_insert).'\')');
+        }
+
+    }
 }

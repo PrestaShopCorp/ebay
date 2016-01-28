@@ -1,5 +1,5 @@
 {*
-* 2007-2015 PrestaShop
+* 2007-2016 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2015 PrestaShop SA
+*  @copyright 2007-2016 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -74,10 +74,10 @@
 	var ebay_token = "{$ebay_token|escape:'htmlall':'UTF-8'}";
 	
 	var l = {ldelim}
-		'Attributes'				 : "{l s="Attributes" mod='ebay'}",
-		'Features'  				 : "{l s="Features" mod='ebay'}",
-		'eBay Specifications': "{l s="eBay Specifications" mod='ebay'}",
-		'Brand'							 : "{l s="Brand" mod='ebay'}"
+		'Attributes'				 : "{l s='Attributes' mod='ebay'}",
+		'Features'  				 : "{l s='Features' mod='ebay'}",
+		'eBay Specifications': "{l s='eBay Specifications' mod='ebay'}",
+		'Brand'							 : "{l s='Brand' mod='ebay'}"
 	{rdelim};
 
 	var categories_to_load = new Array();
@@ -98,7 +98,9 @@
 		
 	var possible_features = new Array();
 	{foreach from=$possible_features item=feature}
-		possible_features[{$feature.id_feature|escape:'htmlall':'UTF-8'}] = "{$feature.name|escape:'htmlall':'UTF-8'}";
+		{if isset($feature.id_feature) && $feature.id_feature != ""}
+			possible_features[{$feature.id_feature|escape:'htmlall':'UTF-8'}] = "{$feature.name|escape:'htmlall':'UTF-8'}";
+		{/if}
 	{/foreach}
 
 	

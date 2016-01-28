@@ -1,5 +1,5 @@
 /*
-* 2007-2015 PrestaShop
+* 2007-2016 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *	@author    PrestaShop SA <contact@prestashop.com>
-*	@copyright	2007-2015 PrestaShop SA
+*	@copyright	2007-2016 PrestaShop SA
 *	@license   http://opensource.org/licenses/afl-3.0.php	Academic Free License (AFL 3.0)
 *	International Registered Trademark & Property of PrestaShop SA
 */
@@ -188,8 +188,9 @@ function initCategoriesPagination() {
 }
 
 function loadCategories(page, search) {
-  
-  var url = module_dir + "ebay/ajax/loadTableCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&ch_cat_str=' + categories_ebay_l['no category selected'] + '&ch_no_cat_str=' + categories_ebay_l['no category found'] + '&not_logged_str=' + categories_ebay_l['You are not logged in'] + '&unselect_product=' + categories_ebay_l['Unselect products'];
+ 
+  var url = module_dir + "ebay/ajax/loadTableCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&ch_cat_str=' + categories_ebay_l['no category selected'] + '&ch_no_cat_str=' + categories_ebay_l['no category found'] + '&not_logged_str=' + categories_ebay_l['You are not logged in'] + '&unselect_product=' + categories_ebay_l['Unselect products']+'&id_shop='+id_shop+'&admin_path='+admin_path;
+
   if (page != undefined)
     url += "&p=" + page;
   if (search != undefined)
@@ -242,3 +243,76 @@ $(document).ready(function() {
 		//$("#configForm2SuggestedCategories input[type=submit]").trigger("click");
 	}
 });
+
+
+// Import Category From eBay
+function loadCategoriesFromEbay(step, id_category, row) {
+		alertOnExit(true, alert_exit_import_categories);
+		step = typeof step !== 'undefined' ? step : 1;
+   		id_category = typeof id_category !== 'undefined' ? id_category : false;
+   		row = typeof row !== 'undefined' ? row : 2;
+
+		$.ajax({
+			type: "POST",
+			dataType: 'json',
+			url: module_dir + 'ebay/ajax/loadCategoriesFromEbay.php?token=' + ebay_token + "&profile=" + id_ebay_profile + "&step="+step + "&id_category=" + id_category + "&admin_path=" + admin_path,
+			success: function(data) {
+				if (data == "error")
+				{	
+					if (step == 1)
+					{
+						$('#cat_parent').addClass('error');
+						$('#cat_parent td:nth-child(3)').text(categories_ebay_l['An error has occurred']);
+					}
+					else if (step == 2)
+					{
+						$('#load_cat_ebay tbody tr:nth-child('+row+')').addClass('error');
+					}
+					alertOnExit(false, "");
+				}
+				else
+				{	
+					var output;
+
+					if (step == 1)
+					{
+						for (var i in data){
+							output +='<tr class="standby" data-id="' + data[i].CategoryID + '"><td></td><td>'+categories_ebay_l['Download subcategories of'] + ' ' + data[i].CategoryName + '</td><td>' + categories_ebay_l['Waiting'] + '</td></tr>';
+						}
+						var count = $.map(data, function(n, i) { return i; }).length;
+						$('#cat_parent').removeClass('load').addClass('success');
+						$('#cat_parent td:nth-child(3)').text(categories_ebay_l['Finish']+' - ' + count + ' '+categories_ebay_l['categories loaded success']);
+						$('#load_cat_ebay tbody').append(output);
+
+						$('#load_cat_ebay tbody tr:nth-child(2)').addClass('load');
+						loadCategoriesFromEbay(2, $('#load_cat_ebay tbody tr:nth-child(2)').attr('data-id'), 2);
+					}
+					else if (step == 2)
+					{
+						var count = $.map(data, function(n, i) { return i; }).length;
+						$('#load_cat_ebay tbody tr:nth-child('+row+')').removeClass('load').addClass('success');
+
+						$('#load_cat_ebay tbody tr:nth-child('+row+') td:nth-child(3)').text(categories_ebay_l['Finish']+' - ' + count + ' '+categories_ebay_l['categories loaded success']);
+
+						var next = row+1;
+						if ($('#load_cat_ebay tbody tr:nth-child('+next+')').length > 0){
+							$('#load_cat_ebay tbody tr:nth-child('+next+')').addClass('load');
+							loadCategoriesFromEbay(2, $('#load_cat_ebay tbody tr:nth-child('+next+')').attr('data-id'), next);
+						}
+						else
+						{
+							loadCategoriesFromEbay(3);
+							$('#load_cat_ebay').css('display', 'none');
+							$('.hidden.importCatEbay').removeClass('hidden').removeClass('importCatEbay');
+							alertOnExit(false, "");
+							return loadCategories();
+
+						}
+						alertOnExit(false, "");
+					}
+
+				}
+			}
+		});
+		
+	}

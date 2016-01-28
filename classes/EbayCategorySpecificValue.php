@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,41 +19,42 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
+ *  @copyright 2007-2016 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayCategorySpecificValue
 {
-	public static function insertIgnore($data)
-	{
-		if (!$data)
-			return false;
+    public static function insertIgnore($data)
+    {
+        if (!$data) {
+            return false;
+        }
 
-		$db = Db::getInstance();
+        $db = Db::getInstance();
 
-		if (version_compare(_PS_VERSION_, '1.5', '>'))
-			$db->insert('ebay_category_specific_value', $data, false, true, Db::INSERT_IGNORE);
-		else
-		{
-			// Check if $data is a list of row
-			$current = current($data);
+        if (version_compare(_PS_VERSION_, '1.5', '>')) {
+            $db->insert('ebay_category_specific_value', $data, false, true, Db::INSERT_IGNORE);
+        } else {
+            // Check if $data is a list of row
+            $current = current($data);
 
-			if (!is_array($current) || isset($current['type']))
-				$data = array($data);
+            if (!is_array($current) || isset($current['type'])) {
+                $data = array($data);
+            }
 
-			$keys = array_keys($data[0]);
-			$sql = 'INSERT IGNORE INTO `'._DB_PREFIX_.'ebay_category_specific_value`
+            $keys = array_keys($data[0]);
+            $sql = 'INSERT IGNORE INTO `'._DB_PREFIX_.'ebay_category_specific_value`
 				(`'.implode('`,`', $keys).'`) VALUES ';
-			$rows = array();
+            $rows = array();
 
-			foreach ($data as $values)
-				$rows[] = '(\''.implode('\',\'', $values).'\')';
-			
-			$sql .= implode(' , ', $rows);
-			$db->execute($sql);
-		}
-	}
+            foreach ($data as $values) {
+                $rows[] = '(\''.implode('\',\'', $values).'\')';
+            }
 
+            $sql .= implode(' , ', $rows);
+            $db->execute($sql);
+        }
+    }
 }

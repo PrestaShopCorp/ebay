@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,68 +19,67 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
+ *  @copyright 2007-2016 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayLog extends ObjectModel
 {
-	public $type;
-	public $text;
-	
-	/**
-	 * @see ObjectModel::$definition
-	 */
-	public static $definition;
-	
-	// for Prestashop 1.4
-	protected $tables;
-	protected $fieldsRequired;
-	protected $fieldsSize;
-	protected $fieldsValidate;
-	protected $table = 'ebay_log';
-	protected $identifier = 'id_ebay_log';    
-	
-	public function getFields()
-	{
-		parent::validateFields();
-		if (isset($this->id)) {
-			$fields['id_ebay_log'] = (int)($this->id);
-			$fields['text'] = pSQL($this->text);
-			$fields['type'] = pSQL($this->type);
-			$fields['date_add'] = date('Y-m-d H:i:s');
+    public $type;
+    public $text;
 
-			return $fields;
-		}
-	}        
-	
-	public function __construct($id = null, $id_lang = null, $id_shop = null) {
-		if (version_compare(_PS_VERSION_, '1.5', '>'))
-			self::$definition = array(
-				'table' => 'ebay_log',
-				'primary' => 'id_ebay_log',
-				'fields' => array(
-					'text' =>		array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-					'type' =>		array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-				),
-			);
-		else 
-		{
-			$tables = array ('ebay_log');
-			$fieldsRequired = array('text', 'type', 'date_add');
-			$fieldsValidate = array();
-		}
-		return parent::__construct($id, $id_lang, $id_shop);     
-	}
-	
-	public static function write($text, $type)
-	{
-		$ebay_log = new EbayLog();
-		$ebay_log->text = $text;
-		$ebay_log->type = $type;
-		
-		return $ebay_log->save();
-	}
+    /**
+     * @see ObjectModel::$definition
+     */
+    public static $definition;
 
+    // for Prestashop 1.4
+    protected $tables;
+    protected $fieldsRequired;
+    protected $fieldsSize;
+    protected $fieldsValidate;
+    protected $table = 'ebay_log';
+    protected $identifier = 'id_ebay_log';
+
+    public function getFields()
+    {
+        parent::validateFields();
+        if (isset($this->id)) {
+            $fields['id_ebay_log'] = (int) ($this->id);
+            $fields['text'] = pSQL($this->text);
+            $fields['type'] = pSQL($this->type);
+            $fields['date_add'] = date('Y-m-d H:i:s');
+
+            return $fields;
+        }
+    }
+
+    public function __construct($id = null, $id_lang = null, $id_shop = null)
+    {
+        if (version_compare(_PS_VERSION_, '1.5', '>')) {
+            self::$definition = array(
+                'table' => 'ebay_log',
+                'primary' => 'id_ebay_log',
+                'fields' => array(
+                    'text' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+                    'type' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+                ),
+            );
+        } else {
+            $tables = array('ebay_log');
+            $fieldsRequired = array('text', 'type', 'date_add');
+            $fieldsValidate = array();
+        }
+        return parent::__construct($id, $id_lang, $id_shop);
+    }
+
+    public static function write($text, $type)
+    {
+        $ebay_log = new EbayLog();
+        $ebay_log->text = $text;
+        $ebay_log->type = $type;
+
+        return $ebay_log->save();
+    }
 }
