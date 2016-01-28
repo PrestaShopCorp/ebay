@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,72 +19,85 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
+ *  @copyright 2007-2016 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-if (file_exists(dirname(__FILE__).'/EbayRequest.php'))
-	require_once(dirname(__FILE__).'/EbayRequest.php');
+if (file_exists(dirname(__FILE__).'/EbayRequest.php')) {
+    require_once dirname(__FILE__).'/EbayRequest.php';
+}
 
 class EbayCategoryCondition
 {
-	/**
-	 *
-	 * Parse the data returned by the API for the eBay Category Conditions
-	 **/
-	public static function loadCategoryConditions($id_ebay_profile)
-	{
-		$request = new EbayRequest($id_ebay_profile);
-		$ebay_category_ids = EbayCategoryConfiguration::getEbayCategoryIds((int)$id_ebay_profile);
-		$conditions = array();
-		
-		foreach ($ebay_category_ids as $category_id)
-		{
-			$xml_data = $request->GetCategoryFeatures($category_id);
-			
-			if (isset($xml_data->Category->ConditionEnabled))
-				$condition_enabled = $xml_data->Category->ConditionEnabled;
-			else
-				$condition_enabled = $xml_data->SiteDefaults->ConditionEnabled;
+    /**
+     *
+     * Parse the data returned by the API for the eBay Category Conditions
+     **/
+    public static function loadCategoryConditions($id_ebay_profile, $id_category = false)
+    {
+        $request = new EbayRequest($id_ebay_profile);
 
-			if (!$condition_enabled)
-				return;
+        if ($id_category) {
+            $ebay_category_ids = array($id_category);
+        } else {
+            $ebay_category_ids = EbayCategoryConfiguration::getEbayCategoryIds((int) $id_ebay_profile);
+        }
 
-			if (isset($xml_data->Category->ConditionValues->Condition))
-				$xml_conditions = $xml_data->Category->ConditionValues->Condition;
-			else
-				$xml_conditions = $xml_data->SiteDefaults->ConditionValues->Condition;
-			
-			if ($xml_conditions)
-				foreach ($xml_conditions as $xml_condition)
-					$conditions[] = array(
-						'id_ebay_profile'  => (int)$id_ebay_profile,
-						'id_category_ref' => (int)$category_id,
-						'id_condition_ref' => (int)$xml_condition->ID,
-						'name' => pSQL((string)$xml_condition->DisplayName)
-					);
+        $conditions = array();
 
-			//
-			Db::getInstance()->ExecuteS("SELECT 1");
-		}
+        foreach ($ebay_category_ids as $category_id) {
+            $xml_data = $request->getCategoryFeatures($category_id);
 
-		if ($conditions) // security to make sure there are values to enter befor truncating the table
-		{
-			$db = Db::getInstance();
-			$db->Execute('DELETE FROM '._DB_PREFIX_.'ebay_category_condition 
-				WHERE `id_ebay_profile` = '.(int)$id_ebay_profile);
+            if (isset($xml_data->Category->ConditionEnabled)) {
+                $condition_enabled = $xml_data->Category->ConditionEnabled;
+            } else {
+                $condition_enabled = $xml_data->SiteDefaults->ConditionEnabled;
+            }
 
-			if (version_compare(_PS_VERSION_, '1.5', '>'))
-				$db->insert('ebay_category_condition', $conditions);
-			else
-				foreach ($conditions as $condition)
-					$db->autoExecute(_DB_PREFIX_.'ebay_category_condition', $condition, 'INSERT');
+            if (!$condition_enabled) {
+                return;
+            }
 
-			return true;
-		}
+            if (isset($xml_data->Category->ConditionValues->Condition)) {
+                $xml_conditions = $xml_data->Category->ConditionValues->Condition;
+            } else {
+                $xml_conditions = $xml_data->SiteDefaults->ConditionValues->Condition;
+            }
 
-		return false;
-	}
+            if ($xml_conditions) {
+                foreach ($xml_conditions as $xml_condition) {
+                    $conditions[] = array(
+                        'id_ebay_profile' => (int) $id_ebay_profile,
+                        'id_category_ref' => (int) $category_id,
+                        'id_condition_ref' => (int) $xml_condition->ID,
+                        'name' => pSQL((string) $xml_condition->DisplayName),
+                    );
+                }
+            }
+
+            //
+            Db::getInstance()->ExecuteS("SELECT 1");
+        }
+
+        if ($conditions) // security to make sure there are values to enter befor truncating the table
+        {
+            $db = Db::getInstance();
+            $db->Execute('DELETE FROM '._DB_PREFIX_.'ebay_category_condition
+				WHERE `id_ebay_profile` = '.(int) $id_ebay_profile);
+
+            if (version_compare(_PS_VERSION_, '1.5', '>')) {
+                $db->insert('ebay_category_condition', $conditions);
+            } else {
+                foreach ($conditions as $condition) {
+                    $db->autoExecute(_DB_PREFIX_.'ebay_category_condition', $condition, 'INSERT');
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
 
 }

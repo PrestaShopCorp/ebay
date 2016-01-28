@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
+ *  @copyright 2007-2016 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -29,7 +29,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_user_identifier_token`
     `token` text NOT NULL,
     PRIMARY KEY (`ebay_user_identifier`)
 	) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
-    
+
 $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category` DROP INDEX `id_category_ref`';
 $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category` ADD UNIQUE (`id_category_ref`,`id_country`)';
 
@@ -42,4 +42,3 @@ $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_specific` ADD UNIQUE (`id_ca
 $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_product_configuration` ADD `id_ebay_profile` INT( 16 ) NOT NULL';
 $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_product_configuration` DROP INDEX `id_product`';
 $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_product_configuration` ADD UNIQUE (`id_product`, `id_ebay_profile`)';
-

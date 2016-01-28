@@ -1,5 +1,5 @@
 {*
-* 2007-2015 PrestaShop
+* 2007-2016 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2015 PrestaShop SA
+*  @copyright 2007-2016 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -30,7 +30,14 @@
 	</RequesterCredentials>
 	<CategorySiteID>{$category_site_id}</CategorySiteID>
 	<DetailLevel>ReturnAll</DetailLevel>
-	<LevelLimit>5</LevelLimit>
+	{if $root == true && $all == false}
+		<LevelLimit>1</LevelLimit>
+	{elseif $root == false && $all == true}
+		<LevelLimit>5</LevelLimit>
+	{else}
+		<LevelLimit>5</LevelLimit>
+		<CategoryParent>{$id_category}</CategoryParent>
+	{/if}
 	<ViewAllNodes>true</ViewAllNodes>
 </GetCategories>
 

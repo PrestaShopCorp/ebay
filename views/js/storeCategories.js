@@ -1,5 +1,5 @@
 /*
-* 2007-2015 PrestaShop
+* 2007-2016 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *	@author    PrestaShop SA <contact@prestashop.com>
-*	@copyright	2007-2015 PrestaShop SA
+*	@copyright	2007-2016 PrestaShop SA
 *	@license   http://opensource.org/licenses/afl-3.0.php	Academic Free License (AFL 3.0)
 *	International Registered Trademark & Property of PrestaShop SA
 */
@@ -61,7 +61,7 @@ $(document).ready(function() {
         {
 					$.ajax({
 						type: "POST",
-						url: module_dir + "ebay/ajax/loadTableStoreCategories.php?token=" + ebay_token + "&p=" + p + "&profile=" + id_ebay_profile + "&id_lang=" + id_lang + "&ch_no_cat_str=" + store_categories_ebay_l["no category found"] + "&not_logged_str=" + store_categories_ebay_l["You are not logged in"] + "&unselect_product=" + store_categories_ebay_l["Unselect products"]  ,
+						url: module_dir + "ebay/ajax/loadTableStoreCategories.php?token=" + ebay_token + "&p=" + p + "&profile=" + id_ebay_profile + "&id_lang=" + id_lang + "&ch_no_cat_str=" + store_categories_ebay_l["no category found"] + "&not_logged_str=" + store_categories_ebay_l["You are not logged in"] + "&unselect_product=" + store_categories_ebay_l["Unselect products"]+'&id_shop='+id_shop+'&admin_path='+admin_path,
 						success : function(data) {
 							$("form#configFormStoreCategories table tbody #removeRow").remove(); $("form#configFormStoreCategories table tbody").html(data);
 						}
@@ -74,7 +74,7 @@ $(document).ready(function() {
   
 	$.ajax({
 		type: "POST",
-		url: module_dir + "ebay/ajax/loadTableStoreCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&ch_no_cat_str=' + store_categories_ebay_l['no category found'] + '&not_logged_str=' + store_categories_ebay_l['You are not logged in'] + '&unselect_product=' + store_categories_ebay_l['Unselect products'],
+		url: module_dir + "ebay/ajax/loadTableStoreCategories.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile + '&ch_no_cat_str=' + store_categories_ebay_l['no category found'] + '&not_logged_str=' + store_categories_ebay_l['You are not logged in'] + '&unselect_product=' + store_categories_ebay_l['Unselect products']+'&id_shop='+id_shop+'&admin_path='+admin_path,
 		success : function(data) { $("form#configFormStoreCategories table tbody #removeRow").remove(); $("form#configFormStoreCategories table tbody").html(data); }
 	});
   

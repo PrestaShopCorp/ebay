@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,22 +19,21 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
+ *  @copyright 2007-2016 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-include_once (dirname(__FILE__).'/../../../config/config.inc.php');
+include_once dirname(__FILE__).'/../../../config/config.inc.php';
 include_once dirname(__FILE__).'/../ebay.php';
 
-$id_ebay_profile = (int)Tools::getValue('profile');
+$id_ebay_profile = (int) Tools::getValue('profile');
 
 $ebay = new Ebay($id_ebay_profile);
 
-if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
-{
-	echo Tools::safeOutput(Tools::getValue('not_logged_str'));
-	return;
+if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
+    echo Tools::safeOutput(Tools::getValue('not_logged_str'));
+    return;
 }
 
 $ebay_request = new EbayRequest();
@@ -43,74 +42,78 @@ $ebay_profile = new EbayProfile($id_ebay_profile);
 /* Loading categories */
 $category_config_list = array();
 $category_config_list_tmp = Db::getInstance()->executeS('SELECT *
-	FROM `'._DB_PREFIX_.'ebay_category_configuration` 
-	WHERE `id_ebay_profile` = '.(int)$ebay_profile->id);
+    FROM `'._DB_PREFIX_.'ebay_category_configuration`
+    WHERE `id_ebay_profile` = '.(int) $ebay_profile->id);
 
-foreach ($category_config_list_tmp as $category)
-	$category_config_list[$category['id_category']] = $category;
+foreach ($category_config_list_tmp as $category) {
+    $category_config_list[$category['id_category']] = $category;
+}
 
 /* Get categories */
 $category_list = Db::getInstance()->executeS('SELECT `id_category`, `name`
-	FROM `'._DB_PREFIX_.'category_lang`
-	WHERE `id_lang` = '.(int)Tools::getValue('id_lang').' '.(_PS_VERSION_ >= '1.5' ? $ebay->getContext()->shop->addSqlRestrictionOnLang() : ''));
+    FROM `'._DB_PREFIX_.'category_lang`
+    WHERE `id_lang` = '.(int) Tools::getValue('id_lang').' '.(_PS_VERSION_ >= '1.5' ? $ebay->getContext()->shop->addSqlRestrictionOnLang() : ''));
 
 /* GET One Product by category */
 $sql = 'SELECT pl.`name`, pl.`description`, p.`id_category_default`
-	FROM `'._DB_PREFIX_.'product` p
-	LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
-	ON (pl.`id_product` = p.`id_product`
-	AND pl.`id_lang` = '.(int)Tools::getValue('id_lang').'
-	'.(_PS_VERSION_ >= '1.5' ? $ebay->getContext()->shop->addSqlRestrictionOnLang('pl') : '').')
-	GROUP BY p.`id_category_default`';
+    FROM `'._DB_PREFIX_.'product` p
+    LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
+    ON (pl.`id_product` = p.`id_product`
+    AND pl.`id_lang` = '.(int) Tools::getValue('id_lang').'
+    '.(_PS_VERSION_ >= '1.5' ? $ebay->getContext()->shop->addSqlRestrictionOnLang('pl') : '').')
+    GROUP BY p.`id_category_default`';
 
 $products = Db::getInstance()->executeS($sql);
 
 /* Create array */
 $product_test = array();
 
-foreach ($products as $product)
-	$product_test[$product['id_category_default']] = array(
-		'description' => $product['description'],
-		'name' => $product['name']);
+foreach ($products as $product) {
+    $product_test[$product['id_category_default']] = array(
+        'description' => $product['description'],
+        'name' => $product['name']);
+}
 
 /* cats ref */
 $ref_cats = Db::getInstance()->executeS('SELECT `id_ebay_category`, `id_category_ref`
-	FROM `'._DB_PREFIX_.'ebay_category`
-	WHERE `id_country` = '.(int)$ebay->ebay_profile->ebay_site_id);
+    FROM `'._DB_PREFIX_.'ebay_category`
+    WHERE `id_country` = '.(int) $ebay->ebay_profile->ebay_site_id);
 
-if (!is_array($ref_cats) || !count($ref_cats))
-	return;
+if (!is_array($ref_cats) || !count($ref_cats)) {
+    return;
+}
 
-foreach ($ref_cats as $cat)
-	$ref_categories[$cat['id_category_ref']] = $cat['id_ebay_category'];
+foreach ($ref_cats as $cat) {
+    $ref_categories[$cat['id_category_ref']] = $cat['id_ebay_category'];
+}
 
 $i = 0;
 $sql = 'REPLACE INTO `'._DB_PREFIX_.'ebay_category_configuration` (`id_country`, `id_ebay_category`, `id_category`,`id_ebay_profile`, `percent`, `date_add`, `date_upd`) VALUES ';
 
-if (is_array($category_list) && count($category_list))
-{
-	/* while categoryList */
-	foreach ($category_list as $category)
-		if (!isset($category_config_list[$category['id_category']]) || !$category_config_list[$category['id_category']]['id_ebay_category'])
-		{
-			if (isset($product_test[$category['id_category']]) && !empty($product_test[$category['id_category']]))
-			{
-				echo $category['id_category'].'$';
-				$id_category_ref_suggested = $ebay_request->getSuggestedCategory($category['name'].' '.$product_test[$category['id_category']]['name']);
-				$id_ebay_category_suggested = isset($ref_categories[$id_category_ref_suggested]) ? $ref_categories[$id_category_ref_suggested] : 1;
+if (is_array($category_list) && count($category_list)) {
+    /* while categoryList */
+    foreach ($category_list as $category) {
+        if (!isset($category_config_list[$category['id_category']]) || !$category_config_list[$category['id_category']]['id_ebay_category']) {
+            if (isset($product_test[$category['id_category']]) && !empty($product_test[$category['id_category']])) {
+                echo $category['id_category'].'$';
+                $id_category_ref_suggested = $ebay_request->getSuggestedCategory($category['name'].' '.$product_test[$category['id_category']]['name']);
+                $id_ebay_category_suggested = isset($ref_categories[$id_category_ref_suggested]) ? $ref_categories[$id_category_ref_suggested] : 1;
 
-				if ((int)$id_ebay_category_suggested > 0)
-				{
-					if ($i)
-						$sql .= ', ';
-					$sql .= '(8, '.(int)$id_ebay_category_suggested.', '.(int)$category['id_category'].', '.$ebay_profile->id.', 0, NOW(), NOW()) ';
-					$i++;
-				}
-			}
-		}
-		
-	if ($i)
-		Db::getInstance()->execute($sql);
+                if ((int) $id_ebay_category_suggested > 0) {
+                    if ($i) {
+                        $sql .= ', ';
+                    }
 
-	echo $ebay->l('Settings updated');
+                    $sql .= '(8, '.(int) $id_ebay_category_suggested.', '.(int) $category['id_category'].', '.$ebay_profile->id.', 0, NOW(), NOW()) ';
+                    $i++;
+                }
+            }
+        }
+    }
+
+    if ($i) {
+        Db::getInstance()->execute($sql);
+    }
+
+    echo $ebay->l('Settings updated');
 }

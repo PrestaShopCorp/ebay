@@ -1,5 +1,5 @@
 {*
-* 2007-2015 PrestaShop
+* 2007-2016 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2015 PrestaShop SA
+*  @copyright 2007-2016 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -94,7 +94,7 @@
 		$("#button_ebay_sync1").css("background-color", "#D5D5D5");
 		$("#button_ebay_sync2").attr("disabled", "true");
 		$("#button_ebay_sync2").css("background-color", "#D5D5D5");
-		$("#resultSync").html("<img src=\"../modules/ebay/views/img/loading-small.gif\" border=\"0\" />");
+		$("#resultSync").html("<img src=\"../modules/ebay/views/img/ajax-loader-small.gif\" border=\"0\" />");
 		eBaySyncProduct(option);
 	}
 
@@ -110,11 +110,15 @@
 		$("#button_ebay_sync1").css("background-color", "#FFFAC6");
 		$("#button_ebay_sync2").removeAttr("disabled", "disabled");
 		$("#button_ebay_sync2").css("background-color", "#FFFAC6");
+
+		// Launch the KB
+		getKb();
 	}
 	
 	var counter = 0;
 	function eBaySyncProduct(option)
 	{
+		alertOnExit(true, "{/literal}{$sync_message_exit|escape:'htmlall':'UTF-8'}{literal}");
 		counter++;
 		$.ajax({
 			type: "POST",
@@ -125,8 +129,10 @@
 				$("#resultSync").html(tab[1]);
 				if (tab[0] != "OK")
 					eBaySyncProduct(option);
-				else
+				else {
 					reableSyncProduct();
+					alertOnExit(false, '');
+				}
 			}
 		});
 	}
@@ -138,7 +144,14 @@
 
 <form action="{$action_url|escape:'urlencode'}" method="post" class="form" id="configForm4">
 	<fieldset style="border: 0">
-
+		{if isset($img_alert) && !empty($img_alert)}
+			<div class="warning big">
+                {$img_alert['message']|escape:'htmlall':'UTF-8'}
+                {if isset($img_alert.kb)}
+					<a class="kb-help" data-errorcode="{$img_alert.kb.errorcode}" data-module="ebay" data-lang="{$img_alert.kb.lang}" module_version="{$img_alert.kb.module_version}" prestashop_version="{$img_alert.kb.prestashop_version}"></a>
+				{/if}
+            </div>
+		{/if}
         {if isset($category_alerts) && !empty($category_alerts)}
             <div class="warning big">
                 {$category_alerts|escape:'htmlall':'UTF-8'}
@@ -213,4 +226,3 @@
 		</div>
 	</fieldset>
 </form>
-				
