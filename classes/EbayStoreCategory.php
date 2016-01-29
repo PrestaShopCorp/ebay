@@ -18,10 +18,10 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2016 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- * International Registered Trademark & Property of PrestaShop SA
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2016 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayStoreCategory extends ObjectModel
@@ -49,13 +49,13 @@ class EbayStoreCategory extends ObjectModel
     {
         parent::validateFields();
         if (isset($this->id)) {
-            $fields['id_ebay_store_category'] = (int)($this->id);
+            $fields['id_ebay_store_category'] = (int) ($this->id);
         }
 
-        $fields['id_ebay_profile'] = (int)$this->id_ebay_profile;
+        $fields['id_ebay_profile'] = (int) $this->id_ebay_profile;
         $fields['ebay_category_id'] = pSQL($this->ebay_category_id);
         $fields['name'] = pSQL($this->name);
-        $fields['order'] = (int)$this->order;
+        $fields['order'] = (int) $this->order;
         $fields['ebay_parent_category_id'] = pSQL($this->ebay_parent_category_id);
 
         return $fields;
@@ -65,13 +65,13 @@ class EbayStoreCategory extends ObjectModel
     {
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
             self::$definition = array(
-                'table'   => 'ebay_store_category',
+                'table' => 'ebay_store_category',
                 'primary' => 'id_ebay_store_category',
-                'fields'  => array(
-                    'id_ebay_profile'         => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-                    'ebay_category_id'        => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                    'name'                    => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-                    'order'                   => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
+                'fields' => array(
+                    'id_ebay_profile' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
+                    'ebay_category_id' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+                    'name' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+                    'order' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
                     'ebay_parent_category_id' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
                 ),
             );
@@ -80,21 +80,18 @@ class EbayStoreCategory extends ObjectModel
             $fieldsRequired = array('id_ebay_profile', 'ebay_category_id', 'name', 'order');
             $fieldsValidate = array();
         }
-
         return parent::__construct($id, $id_lang, $id_shop);
     }
 
     /**
      * return compatible and not capatible categories, i.e. having children or being a child
-     * @param int $id_ebay_profile
-     * @return array
-     * @throws PrestaShopDatabaseException
-     */
+     *
+     **/
     public static function getStoreCategories($id_ebay_profile)
     {
         $store_categories = Db::getInstance()->executeS('SELECT *
 			FROM `'._DB_PREFIX_.'ebay_store_category`
-			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile);
+			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile);
 
         $compatible_store_categories = self::_filterCategories($store_categories);
 
@@ -119,16 +116,17 @@ class EbayStoreCategory extends ObjectModel
         }
 
         return array(
-            'compatible'     => $compatible_store_categories,
+            'compatible' => $compatible_store_categories,
             'not_compatible' => $not_compatible_store_categories,
         );
+
     }
 
     public static function updateStoreCategoryTable($store_categories, $ebay_profile)
     {
         // clean table before inserts
         Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_store_category`
-			WHERE `id_ebay_profile` = '.(int)$ebay_profile->id);
+			WHERE `id_ebay_profile` = '.(int) $ebay_profile->id);
 
         if ($store_categories) {
             foreach ($store_categories as $custom_cat) {
@@ -138,15 +136,16 @@ class EbayStoreCategory extends ObjectModel
 
         // make sure that all referenced categories still exists
         EbayStoreCategoryConfiguration::checkExistingCategories($ebay_profile->id);
+
     }
 
     private static function _writeStoreCategory($category_data, $id_ebay_profile, $ebay_parent_category_id = null)
     {
         $store_category = new EbayStoreCategory();
-        $store_category->id_ebay_profile = (int)$id_ebay_profile;
+        $store_category->id_ebay_profile = (int) $id_ebay_profile;
         $store_category->ebay_category_id = pSQL($category_data->CategoryID);
-        $store_category->name = (string)$category_data->Name;
-        $store_category->order = (int)$category_data->Order;
+        $store_category->name = (string) $category_data->Name;
+        $store_category->order = (int) $category_data->Order;
 
         if ($ebay_parent_category_id) {
             $store_category->ebay_parent_category_id = $ebay_parent_category_id;
@@ -161,6 +160,7 @@ class EbayStoreCategory extends ObjectModel
                 EbayStoreCategory::_writeStoreCategory($child_category, $id_ebay_profile, $store_category->ebay_category_id);
             }
         }
+
     }
 
     public static function getCategoriesWithConfiguration($id_ebay_profile)
@@ -170,7 +170,7 @@ class EbayStoreCategory extends ObjectModel
 			LEFT JOIN `'._DB_PREFIX_.'ebay_store_category_configuration` escc
 			ON esc.`ebay_category_id` = escc.`ebay_category_id`
 			AND esc.`id_ebay_profile` = escc.`id_ebay_profile`
-			WHERE esc.`id_ebay_profile` = '.(int)$id_ebay_profile.'
+			WHERE esc.`id_ebay_profile` = '.(int) $id_ebay_profile.'
 			ORDER BY `ebay_parent_category_id` ASC, `order` ASC');
 
         $categories = self::_filterCategories($categories);
@@ -196,11 +196,11 @@ class EbayStoreCategory extends ObjectModel
         return $final_categories;
     }
 
-    /**
+    /*
+     *
      * don't keep categories with subcategories
-     * @param array $store_categories
-     * @return array
-     */
+     *
+     **/
     private static function _filterCategories($store_categories)
     {
         $blacklist_ids = array();
@@ -221,5 +221,6 @@ class EbayStoreCategory extends ObjectModel
         }
 
         return $final_categories;
+
     }
 }

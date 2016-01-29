@@ -18,10 +18,10 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2016 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- * International Registered Trademark & Property of PrestaShop SA
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2016 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayShippingInternationalZone
@@ -30,14 +30,14 @@ class EbayShippingInternationalZone
     {
         return Db::getInstance()->ExecuteS('SELECT id_ebay_zone
 			FROM '._DB_PREFIX_.'ebay_shipping_international_zone
-			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
-			AND id_ebay_shipping = "'.(int)$id_ebay_shipping.'"');
+			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.'
+			AND id_ebay_shipping = "'.(int) $id_ebay_shipping.'"');
     }
 
     public static function insert($id_ebay_profile, $id_ebay_shipping, $id_ebay_zone)
     {
         $sql = 'INSERT INTO '._DB_PREFIX_.'ebay_shipping_international_zone(`id_ebay_shipping`, `id_ebay_zone`, `id_ebay_profile`)
-			VALUES(\''.(int)$id_ebay_shipping.'\', \''.pSQL($id_ebay_zone).'\', \''.pSQL($id_ebay_profile).'\')';
+			VALUES(\''.(int) $id_ebay_shipping.'\', \''.pSQL($id_ebay_zone).'\', \''.pSQL($id_ebay_profile).'\')';
 
         DB::getInstance()->Execute($sql);
     }
@@ -50,8 +50,8 @@ class EbayShippingInternationalZone
             //get All shipping location associated
             $carrier['shippingLocation'] = DB::getInstance()->ExecuteS('SELECT *
 				FROM '._DB_PREFIX_.'ebay_shipping_international_zone
-				WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
-				AND id_ebay_shipping = \''.(int)$carrier['id_ebay_shipping'].'\'');
+				WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.'
+				AND id_ebay_shipping = \''.(int) $carrier['id_ebay_shipping'].'\'');
         }
 
         return $existing_international_carriers;

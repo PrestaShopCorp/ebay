@@ -18,10 +18,10 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2016 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- * International Registered Trademark & Property of PrestaShop SA
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2016 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayStat
@@ -34,11 +34,6 @@ class EbayStat
     private $data;
     private $date_add;
 
-    /**
-     * EbayStat constructor.
-     * @param string $stats_version
-     * @param EbayProfile $ebay_profile
-     */
     public function __construct($stats_version, $ebay_profile)
     {
         $ebay = Module::getInstanceByName('ebay');
@@ -48,30 +43,30 @@ class EbayStat
         }
 
         $this->stats_version = $stats_version;
-        $this->id_ebay_profile = (int)$ebay_profile->id;
+        $this->id_ebay_profile = (int) $ebay_profile->id;
 
         $this->data = array(
-            'id'                                 => sha1($this->_getDefaultShopUrl()),
-            'profile'                            => $ebay_profile->id,
-            'ebay_username'                      => sha1($ebay_profile->ebay_user_identifier),
-            'ebay_site'                          => $ebay_profile->ebay_site_id,
-            'is_multishop'                       => (version_compare(_PS_VERSION_, '1.5', '>') && Shop::isFeatureActive()),
-            'install_date'                       => Configuration::get('EBAY_INSTALL_DATE'),
-            'nb_listings'                        => EbayProduct::getNbProducts($ebay_profile->id),
-            'percent_of_catalog'                 => EbayProduct::getPercentOfCatalog($ebay_profile),
-            'nb_prestashop_categories'           => EbayCategoryConfiguration::getNbPrestashopCategories($ebay_profile->id),
-            'nb_ebay_categories'                 => EbayCategoryConfiguration::getNbEbayCategories($ebay_profile->id),
-            'nb_optional_item_specifics'         => EbayCategorySpecific::getNbOptionalItemSpecifics($ebay_profile->id),
-            'nb_national_shipping_services'      => EbayShipping::getNbNationalShippings($ebay_profile->id),
+            'id' => sha1($this->_getDefaultShopUrl()),
+            'profile' => $ebay_profile->id,
+            'ebay_username' => sha1($ebay_profile->ebay_user_identifier),
+            'ebay_site' => $ebay_profile->ebay_site_id,
+            'is_multishop' => (version_compare(_PS_VERSION_, '1.5', '>') && Shop::isFeatureActive()),
+            'install_date' => Configuration::get('EBAY_INSTALL_DATE'),
+            'nb_listings' => EbayProduct::getNbProducts($ebay_profile->id),
+            'percent_of_catalog' => EbayProduct::getPercentOfCatalog($ebay_profile),
+            'nb_prestashop_categories' => EbayCategoryConfiguration::getNbPrestashopCategories($ebay_profile->id),
+            'nb_ebay_categories' => EbayCategoryConfiguration::getNbEbayCategories($ebay_profile->id),
+            'nb_optional_item_specifics' => EbayCategorySpecific::getNbOptionalItemSpecifics($ebay_profile->id),
+            'nb_national_shipping_services' => EbayShipping::getNbNationalShippings($ebay_profile->id),
             'nb_international_shipping_services' => EbayShipping::getNbInternationalShippings($ebay_profile->id),
-            'date_add'                           => date('Y-m-d H:i:s'),
-            'Configuration'                      => EbayConfiguration::getAll($ebay_profile->id, array('EBAY_PAYPAL_EMAIL')),
-            'impact_price'                       => EbayCategoryConfiguration::getImpactPrices($ebay_profile->id),
-            'return_policy'                      => ($ebay_profile->getReturnsPolicyConfiguration()->ebay_returns_description == '' ? 0 : 1),
-            'ps_version'                         => _PS_VERSION_,
-            'is_cloud'                           => defined('_PS_HOST_MODE_') ? true : false,
-            'module_version'                     => $ebay->version,
-            'ps_country'                         => Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')),
+            'date_add' => date('Y-m-d H:i:s'),
+            'Configuration' => EbayConfiguration::getAll($ebay_profile->id, array('EBAY_PAYPAL_EMAIL')),
+            'impact_price' => EbayCategoryConfiguration::getImpactPrices($ebay_profile->id),
+            'return_policy' => ($ebay_profile->getReturnsPolicyConfiguration()->ebay_returns_description == '' ? 0 : 1),
+            'ps_version' => _PS_VERSION_,
+            'is_cloud' => defined('_PS_HOST_MODE_') ? true : false,
+            'module_version' => $ebay->version,
+            'ps_country' => Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')),
         );
         $this->date_add = date('Y-m-d H:i:s');
     }
@@ -80,7 +75,6 @@ class EbayStat
     {
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
             $shop = new Shop(Configuration::get('PS_SHOP_DEFAULT'));
-
             return $shop->getBaseURL();
         } else {
             return __PS_BASE_URI__;
@@ -96,17 +90,17 @@ class EbayStat
 
         $sql = 'SELECT count(*)
 						FROM `'._DB_PREFIX_.'ebay_stat`
-						WHERE `id_ebay_profile` = '.(int)$this->id_ebay_profile;
+						WHERE `id_ebay_profile` = '.(int) $this->id_ebay_profile;
         $nb_rows = Db::getInstance()->getValue($sql);
         if ($nb_rows >= 2) {
             return false;
         }
 
         $data = array(
-            'id_ebay_profile' => (int)$this->id_ebay_profile,
-            'version'         => pSQL($this->stats_version),
-            'data'            => pSQL(Tools::jsonEncode($this->data)),
-            'date_add'        => pSQL($this->date_add),
+            'id_ebay_profile' => (int) $this->id_ebay_profile,
+            'version' => pSQL($this->stats_version),
+            'data' => pSQL(Tools::jsonEncode($this->data)),
+            'date_add' => pSQL($this->date_add),
         );
         Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_stat', $data, 'INSERT');
     }
@@ -124,13 +118,13 @@ class EbayStat
         foreach ($res as $row) {
             $data = array(
                 'version' => $row['version'],
-                'data'    => Tools::stripslashes($row['data']),
-                'date'    => $row['date_add'],
-                'sig'     => EbayStat::_computeSignature($row['version'], Tools::stripslashes($row['data']), $row['date_add']),
+                'data' => Tools::stripslashes($row['data']),
+                'date' => $row['date_add'],
+                'sig' => EbayStat::_computeSignature($row['version'], Tools::stripslashes($row['data']), $row['date_add']),
             );
             $opts = array('http' => array(
-                'method'  => 'POST',
-                'header'  => 'Content-type: application/x-www-form-urlencoded',
+                'method' => 'POST',
+                'header' => 'Content-type: application/x-www-form-urlencoded',
                 'content' => http_build_query($data),
             ),
             );
@@ -140,11 +134,11 @@ class EbayStat
             if (($ret == 'OK') || ($row['tries'] > 0)) {
                 // if upload is OK or if it's the second try already
                 $sql = 'DELETE FROM `'._DB_PREFIX_.'ebay_stat`
-										WHERE `id_ebay_stat` = '.(int)$row['id_ebay_stat'];
+										WHERE `id_ebay_stat` = '.(int) $row['id_ebay_stat'];
             } else {
                 $sql = 'UPDATE `'._DB_PREFIX_.'ebay_stat`
 										SET `tries` = `tries` + 1
-										WHERE `id_ebay_stat` = '.(int)$row['id_ebay_stat'];
+										WHERE `id_ebay_stat` = '.(int) $row['id_ebay_stat'];
             }
             Db::getInstance()->execute($sql);
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2015 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2016 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -61,16 +61,16 @@ class EbayConfiguration
     {
         return Db::getInstance()->getValue('SELECT `value`
 			FROM `'._DB_PREFIX_.'ebay_configuration`
-			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
+			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.'
 			AND `name` = "'.pSQL($name).'"');
     }
 
     public static function set($id_ebay_profile, $name, $value, $html = false)
     {
         $datas = array(
-            'id_ebay_profile' => (int)$id_ebay_profile,
-            'name'            => pSQL($name),
-            'value'           => pSQL($value, $html),
+            'id_ebay_profile' => (int) $id_ebay_profile,
+            'name' => pSQL($name),
+            'value' => pSQL($value, $html),
         );
         if (version_compare(_PS_VERSION_, '1.5', '<')) {
             return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_configuration', $datas, 'INSERT');
@@ -84,7 +84,7 @@ class EbayConfiguration
     {
         $sql = 'SELECT `name`, `value`
 			FROM `'._DB_PREFIX_.'ebay_configuration`
-			WHERE `id_ebay_profile` = "'.(int)$id_ebay_profile.'" AND name NOT IN ("'.implode('","', array_map('pSQL', $exceptions)).'")';
+			WHERE `id_ebay_profile` = "'.(int) $id_ebay_profile.'" AND name NOT IN ("'.implode('","', array_map('pSQL', $exceptions)).'")';
 
         return Db::getInstance()->executeS($sql);
     }
@@ -94,10 +94,7 @@ class EbayConfiguration
      *
      * Returns true is sucessful, false otherwise
      *
-     * @param int   $id_ebay_profile
-     * @param array $attributes
-     * @param array $attributes_html
-     * @return bool
+     * @return boolean
      */
     public static function PSConfigurationsToEbayConfigurations($id_ebay_profile, $attributes, $attributes_html)
     {

@@ -18,10 +18,10 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2016 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- * International Registered Trademark & Property of PrestaShop SA
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2016 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
  */
 
 class TotFormat
@@ -33,6 +33,7 @@ class TotFormat
         } else {
             return $pattern;
         }
+
     }
 
     /**
@@ -116,7 +117,6 @@ class TotFormat
     /**
      * Format product description by removing potential hazardous code
      * @param string $desc description to be cleaned
-     * @return string
      */
     public static function formatDescription($desc)
     {
@@ -131,7 +131,6 @@ class TotFormat
      * This function will take JSON string and indent it very readable.
      *
      * @param string $json to be formatted
-     * @return string
      */
     public static function prettyPrint($json)
     {
@@ -152,9 +151,9 @@ class TotFormat
             }
             if ($in_escape) {
                 $in_escape = false;
-            } elseif ($char === '"') {
+            } else if ($char === '"') {
                 $in_quotes = !$in_quotes;
-            } elseif (!$in_quotes) {
+            } else if (!$in_quotes) {
                 switch ($char) {
                     case '}':
                     case ']':
@@ -166,7 +165,6 @@ class TotFormat
                     case '{':
                     case '[':
                         $level++;
-                        // no break
                     case ',':
                         $ends_line_level = $level;
                         break;
@@ -184,7 +182,7 @@ class TotFormat
                         $new_line_level = null;
                         break;
                 }
-            } elseif ($char === '\\') {
+            } else if ($char === '\\') {
                 $in_escape = true;
             }
             if ($new_line_level !== null) {

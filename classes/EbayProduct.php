@@ -18,10 +18,10 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2016 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- * International Registered Trademark & Property of PrestaShop SA
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2016 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayProduct
@@ -33,11 +33,11 @@ class EbayProduct
 			INNER JOIN `'._DB_PREFIX_.'ebay_profile` ep1
 			ON ep.`id_ebay_profile` = ep1.`id_ebay_profile`
 			AND ep1.`ebay_user_identifier` = \''.pSQL($ebay_identifier).'\'
-			AND ep1.`ebay_site_id` = '.(int)$ebay_site_id.'
-			WHERE ep.`id_product` = '.(int)$id_product;
+			AND ep1.`ebay_site_id` = '.(int) $ebay_site_id.'
+			WHERE ep.`id_product` = '.(int) $id_product;
 
         if ($id_attribute) {
-            $query .= ' AND ep.`id_attribute` = '.(int)$id_attribute;
+            $query .= ' AND ep.`id_attribute` = '.(int) $id_attribute;
         }
 
         return Db::getInstance()->getValue($query);
@@ -49,7 +49,7 @@ class EbayProduct
             $id_shop = $ebay_profile->id_shop;
             $sql = 'SELECT `id_product`
 				FROM `'._DB_PREFIX_.'product_shop`
-				WHERE `id_shop` = '.(int)$id_shop;
+				WHERE `id_shop` = '.(int) $id_shop;
         } else {
             $sql = 'SELECT `id_product`
 				FROM `'._DB_PREFIX_.'product`';
@@ -65,7 +65,6 @@ class EbayProduct
 				FROM `'._DB_PREFIX_.'ebay_product`
 				WHERE `id_product` IN ('.implode(',', $id_shop_products).') GROUP BY `id_product`';
             $nb_synchronized_products = Db::getInstance()->getValue($sql2);
-
             return number_format($nb_synchronized_products / $nb_shop_products * 100.0, 2);
         } else {
             return '-';
@@ -75,17 +74,17 @@ class EbayProduct
 
     public static function getProductsIdFromTable($a)
     {
-        return (int)$a['id_product'];
+        return (int) $a['id_product'];
     }
 
     public static function getProductsIdFromItemId($itemID)
     {
         $row = Db::getInstance()->getRow('SELECT id_product, id_attribute
 			FROM `'._DB_PREFIX_.'ebay_product`
-			WHERE `id_product_ref` = '.(int)$itemID);
+			WHERE `id_product_ref` = '.(int) $itemID);
 
-        if ((int)$row['id_product']) {
-            return array('id_product' => (int)$row['id_product'], 'id_product_attribute' => (int)$row['id_attribute']);
+        if ((int) $row['id_product']) {
+            return array('id_product' => (int) $row['id_product'], 'id_product_attribute' => (int) $row['id_attribute']);
         } else {
             return false;
         }
@@ -96,7 +95,7 @@ class EbayProduct
     {
         return Db::getInstance()->getValue('SELECT count(*)
 			FROM `'._DB_PREFIX_.'ebay_product`
-			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile);
+			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile);
     }
 
     public static function getNbProductsByIdEbayProfiles($id_ebay_profiles = array())
@@ -122,8 +121,8 @@ class EbayProduct
     {
         return Db::getInstance()->ExecuteS('SELECT ep.id_product_ref, ep.id_product
 			FROM '._DB_PREFIX_.'ebay_product AS ep
-			WHERE NOW() > DATE_ADD(ep.date_upd, INTERVAL '.(int)$not_update_for_days.' DAY)
-			LIMIT '.(int)$limit);
+			WHERE NOW() > DATE_ADD(ep.date_upd, INTERVAL '.(int) $not_update_for_days.' DAY)
+			LIMIT '.(int) $limit);
     }
 
     public static function insert($data)
@@ -162,8 +161,8 @@ class EbayProduct
 			LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc ON (epc.`id_product` = ep.`id_product`)
 			LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.`id_product` = ep.`id_product`)
 			LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
-			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = '.(int)$id_lang.')
-			WHERE ep.`id_ebay_profile` = '.(int)$id_ebay_profile;
+			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = '.(int) $id_lang.')
+			WHERE ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
         if ($no_blacklisted) {
             $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
         }

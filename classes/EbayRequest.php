@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
+ *  @copyright 2007-2016 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -45,7 +45,6 @@ class EbayRequest
     private $loginUrl;
     private $compatibility_level;
     private $debug;
-    // @todo : pusher à false en version finale
     private $dev = true;
     private $ebay_country;
 
@@ -53,10 +52,7 @@ class EbayRequest
 
     private $ebay_profile;
 
-    /** @var Context|null $context */
     private $context;
-    /** @var Smarty|null $smarty */
-    private $smarty;
 
     private $write_api_logs;
 
@@ -288,7 +284,7 @@ class EbayRequest
             return false;
         }
 
-        $returns_policies = $returns_within = $returns_whopays = array();
+        $returns_policies = $returns_within = array();
 
         foreach ($response->ReturnPolicyDetails as $return_policy_details) {
             foreach ($return_policy_details as $key => $returns) {
@@ -712,9 +708,7 @@ class EbayRequest
     /**
      * Set order status to "shipped"
      *
-     * @param $id_order_ref
-     * @return bool
-     */
+     **/
     public function orderHasShipped($id_order_ref)
     {
         if (!$id_order_ref) {

@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2016 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2016 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -32,15 +32,14 @@ abstract class EbayLoadLogs
     public function getLogs()
     {
         if (!Configuration::get('EBAY_SECURITY_TOKEN')
-            || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')
-        ) {
+            || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
             return Tools::safeOutput(Tools::getValue('not_logged_str'));
         }
 
         $ebay = new Ebay();
-//        $ebay_profile = new EbayProfile((int)Tools::getValue('profile'));
+        $ebay_profile = new EbayProfile((int) Tools::getValue('profile'));
 
-        $page = (int)Tools::getValue('p', 0);
+        $page = (int) Tools::getValue('p', 0);
         $nb_results = 20;
         if ($page < 2) {
             $page = 1;
@@ -54,14 +53,13 @@ abstract class EbayLoadLogs
 
         /* Smarty datas */
         $template_vars = array(
-            'logs'       => $logs,
-            'p'          => $page,
+            'logs' => $logs,
+            'p' => $page,
             'noLogFound' => Tools::getValue('no_logs_str'),
-            'showStr'    => Tools::getValue('show_str'),
+            'showStr' => Tools::getValue('show_str'),
         );
 
         $smarty->assign($template_vars);
-
         return $ebay->display(realpath(dirname(__FILE__).'/../'), $this->file);
     }
 

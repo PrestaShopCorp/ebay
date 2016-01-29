@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2015 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2016 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -31,13 +31,9 @@ if (file_exists(dirname(__FILE__).'/EbayRequest.php')) {
 class EbayCategoryCondition
 {
     /**
-     * Parse the data returned by the API for the eBay Category Conditions
      *
-     * @param int  $id_ebay_profile
-     * @param bool $id_category
-     * @return bool
-     * @throws PrestaShopDatabaseException
-     */
+     * Parse the data returned by the API for the eBay Category Conditions
+     **/
     public static function loadCategoryConditions($id_ebay_profile, $id_category = false)
     {
         $request = new EbayRequest($id_ebay_profile);
@@ -45,7 +41,7 @@ class EbayCategoryCondition
         if ($id_category) {
             $ebay_category_ids = array($id_category);
         } else {
-            $ebay_category_ids = EbayCategoryConfiguration::getEbayCategoryIds((int)$id_ebay_profile);
+            $ebay_category_ids = EbayCategoryConfiguration::getEbayCategoryIds((int) $id_ebay_profile);
         }
 
         $conditions = array();
@@ -72,10 +68,10 @@ class EbayCategoryCondition
             if ($xml_conditions) {
                 foreach ($xml_conditions as $xml_condition) {
                     $conditions[] = array(
-                        'id_ebay_profile'  => (int)$id_ebay_profile,
-                        'id_category_ref'  => (int)$category_id,
-                        'id_condition_ref' => (int)$xml_condition->ID,
-                        'name'             => pSQL((string)$xml_condition->DisplayName),
+                        'id_ebay_profile' => (int) $id_ebay_profile,
+                        'id_category_ref' => (int) $category_id,
+                        'id_condition_ref' => (int) $xml_condition->ID,
+                        'name' => pSQL((string) $xml_condition->DisplayName),
                     );
                 }
             }
@@ -84,11 +80,11 @@ class EbayCategoryCondition
             Db::getInstance()->ExecuteS("SELECT 1");
         }
 
-        // security to make sure there are values to enter befor truncating the table
-        if ($conditions) {
+        if ($conditions) // security to make sure there are values to enter befor truncating the table
+        {
             $db = Db::getInstance();
             $db->Execute('DELETE FROM '._DB_PREFIX_.'ebay_category_condition
-				WHERE `id_ebay_profile` = '.(int)$id_ebay_profile);
+				WHERE `id_ebay_profile` = '.(int) $id_ebay_profile);
 
             if (version_compare(_PS_VERSION_, '1.5', '>')) {
                 $db->insert('ebay_category_condition', $conditions);
@@ -103,4 +99,5 @@ class EbayCategoryCondition
 
         return false;
     }
+
 }

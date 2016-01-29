@@ -18,10 +18,10 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2016 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- * International Registered Trademark & Property of PrestaShop SA
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2016 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayShippingZoneExcluded
@@ -30,7 +30,7 @@ class EbayShippingZoneExcluded
     {
         return Db::getInstance()->ExecuteS('SELECT *
 			FROM `'._DB_PREFIX_.'ebay_shipping_zone_excluded`
-			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
+			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.'
 			ORDER BY region, description');
     }
 
@@ -38,7 +38,7 @@ class EbayShippingZoneExcluded
     {
         return Db::getInstance()->ExecuteS('SELECT *
 			FROM `'._DB_PREFIX_.'ebay_shipping_zone_excluded`
-			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
+			WHERE `id_ebay_profile` = '.(int) $id_ebay_profile.'
 			AND excluded = 1');
     }
 
@@ -85,9 +85,9 @@ class EbayShippingZoneExcluded
             }
 
             $all[$zone['region']]['country'][] = array(
-                'location'    => $zone['location'],
+                'location' => $zone['location'],
                 'description' => $zone['description'],
-                'excluded'    => $zone['excluded'],
+                'excluded' => $zone['excluded'],
             );
         }
 
@@ -111,7 +111,7 @@ class EbayShippingZoneExcluded
         }
 
         return array(
-            'all'      => $all,
+            'all' => $all,
             'excluded' => $excluded,
         );
     }
