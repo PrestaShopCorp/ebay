@@ -824,18 +824,42 @@ class EbayRequest
 
     private function _getProductListingDetails($data)
     {
-        if (Configuration::get('EBAY_SYNCHRONIZE_EAN')) {
-            $vars = array(
-                'ean13' => $data['ean13'],
-            );
-        } else {
-            $vars = array(
-                'ean13' => 0,
-            );
-        }
+        $vars = array(
+            'ean'  => $this->getEANValues($data, Configuration::get('EBAY_SYNCHRONIZE_EAN')),
+            'mpn'   => $this->getEANValues($data, Configuration::get('EBAY_SYNCHRONIZE_MPN')),
+            'upc'  => $this->getEANValues($data, Configuration::get('EBAY_SYNCHRONIZE_UPC')),
+            'isbn' => $this->getEANValues($data, Configuration::get('EBAY_SYNCHRONIZE_ISBN')),
+        );
 
         $this->smarty->assign($vars);
+
         return $this->smarty->fetch(dirname(__FILE__).'/../ebay/api/GetProductListingDetails.tpl');
+    }
+
+    /**
+     * getEANValues
+     *
+     * @param array $data
+     * @param string $type
+     * @return string
+     */
+    private function getEANValues($data, $type)
+    {
+        if ($type == "EAN") {
+            return $data['ean13'];
+        }
+//        currently, we do not support supplier reference
+//        if ($type == "SUP_REF") {
+//            return $data['supplier_reference'];
+//        }
+        if ($type == "REF") {
+            return $data['reference'];
+        }
+        if ($type == "UPC") {
+            return $data['upc'];
+        }
+
+        return "";
     }
 
     private function _getVariations($data)

@@ -89,7 +89,7 @@
 						<Name><![CDATA[{$name}]]></Name>
 						<Value><![CDATA[{$value}]]></Value>
 					</NameValueList>
-				{/foreach}				
+				{/foreach}
 			</ItemSpecifics>
 		{$return_policy}
 		{if isset($site)}

@@ -118,7 +118,10 @@ class EbaySynchronizer
                 'id_lang' => $id_lang,
                 'real_id_product' => (int) $p['id_product'],
                 'ebay_store_category_id' => $ebay_store_category_id,
-                'ean13' => $product->ean13 != 0 ? $product->ean13 : null,
+                'ean13' => $product->ean13 != 0 ? (string)$product->ean13 : null,
+                'upc' => (string)$product->upc,
+                'supplier_reference' => (string)$product->supplier_reference,
+                'reference' => (string)$product->reference
             );
 
             $data = array_merge($data, EbaySynchronizer::_getProductData($product, $ebay_profile));
@@ -201,7 +204,9 @@ class EbaySynchronizer
             'description' => $product->description,
             'description_short' => $product->description_short,
             'manufacturer_name' => $product->manufacturer_name,
-            'ean13' => $product->ean13,
+            'ean13' => (string)$product->ean13,
+            'upc' => (string)$product->upc,
+            'supplier_reference' => (string)$product->supplier_reference,
             'titleTemplate' => $ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE'),
         );
     }
@@ -464,7 +469,9 @@ class EbaySynchronizer
             $variation = array(
                 'id_attribute' => $combinaison['id_product_attribute'],
                 'reference' => $combinaison['reference'],
-                'ean13' => $combinaison['ean13'],
+                'ean13' => self::getEANVariationValues($combinaison, Configuration::get('EBAY_SYNCHRONIZE_EAN')),
+                'upc' => self::getEANVariationValues($combinaison, Configuration::get('EBAY_SYNCHRONIZE_UPC')),
+                'isbn' => self::getEANVariationValues($combinaison, Configuration::get('EBAY_SYNCHRONIZE_ISBN')),
                 'quantity' => $combinaison['quantity'],
                 'price_static' => $price,
                 'variation_specifics' => EbaySynchronizer::_getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $ebay_profile->id_lang, $ebay_profile->ebay_site_id, $ebay_category),
@@ -513,6 +520,32 @@ class EbaySynchronizer
         }
 
         return $variations;
+    }
+
+    /**
+     * getEANVariationValues
+     *
+     * @param array $data
+     * @param string $type
+     * @return string
+     */
+    private static function getEANVariationValues($data, $type)
+    {
+        if ($type == "EAN") {
+            return $data['ean13'];
+        }
+//        currently, we do not support supplier reference
+//        if ($type == "SUP_REF") {
+//            return $data['supplier_reference'];
+//        }
+        if ($type == "REF") {
+            return $data['reference'];
+        }
+        if ($type == "UPC") {
+            return $data['upc'];
+        }
+
+        return "";
     }
 
     public static function getIdAttributeGroup($row)

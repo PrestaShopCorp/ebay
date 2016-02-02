@@ -55,9 +55,13 @@
                     <SoldOffeBay>true</SoldOffeBay>
                 </DiscountPriceInfo>
             {/if}
-            {if isset($variation.ean13) && $variation.ean13 != ''}
+            {if (isset($variation.ean13) && $variation.ean13 != '')
+			|| (isset($variation.isbn) && $variation.isbn != '')
+			|| (isset($variation.upc) && $variation.upc != '')}
             <VariationProductListingDetails>
-            	<EAN>{$variation.ean13}</EAN>
+				{if isset($variation.ean13) && $variation.ean13 != ''}<EAN>{$variation.ean13}</EAN>{/if}
+				{if isset($variation.isbn) && $variation.isbn != ''}<ISBN>{$variation.isbn}</ISBN>{/if}
+				{if isset($variation.upc) && $variation.upc != ''}<UPC>{$variation.upc}</UPC>{/if}
             </VariationProductListingDetails>
             {/if}  
 		</Variation>
