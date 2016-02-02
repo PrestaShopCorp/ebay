@@ -124,7 +124,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '1.12.0';
+        $this->version = '1.12.2';
         $this->stats_version = '1.0';
 
         $this->author = 'PrestaShop';
@@ -2024,6 +2024,7 @@ class Ebay extends Module
             $data['manufacturer_name'] = $p['manufacturer_name'];
             $data['reference'] = $p['reference'];
             $data['ean13'] = $p['ean13'];
+            $data['upc'] = $p['upc'];
             $reference_ebay = $p['id_product_ref'];
             $product = new Product((int) $p['id_product'], true, $id_lang);
             if ((int) $p['id_attribute'] > 0) {
@@ -2033,6 +2034,7 @@ class Ebay extends Module
 
                 $data['reference'] = $combinaison['reference'];
                 $data['ean13'] = $combinaison['ean13'];
+                $data['upc'] = $combinaison['upc'];
                 $variation_specifics = EbaySynchronizer::_getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $id_lang, $this->ebay_profile->ebay_site_id);
                 foreach ($variation_specifics as $variation_specific) {
                     $data['name'] .= ' '.$variation_specific;

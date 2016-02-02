@@ -825,10 +825,10 @@ class EbayRequest
     private function _getProductListingDetails($data)
     {
         $vars = array(
-            'ean'  => $this->getEANValues($data, Configuration::get('EBAY_SYNCHRONIZE_EAN')),
-            'mpn'   => $this->getEANValues($data, Configuration::get('EBAY_SYNCHRONIZE_MPN')),
-            'upc'  => $this->getEANValues($data, Configuration::get('EBAY_SYNCHRONIZE_UPC')),
-            'isbn' => $this->getEANValues($data, Configuration::get('EBAY_SYNCHRONIZE_ISBN')),
+            'ean'  => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_EAN')),
+            'mpn'  => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_MPN')),
+            'upc'  => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_UPC')),
+            'isbn' => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_ISBN')),
         );
 
         $this->smarty->assign($vars);
@@ -837,13 +837,14 @@ class EbayRequest
     }
 
     /**
-     * getEANValues
+     * configurationValues
+     * Getting the rights values selected in the configuration
      *
      * @param array $data
      * @param string $type
      * @return string
      */
-    private function getEANValues($data, $type)
+    private function configurationValues($data, $type)
     {
         if ($type == "EAN") {
             return $data['ean13'];
@@ -866,16 +867,16 @@ class EbayRequest
     {
         $variation_pictures = array();
         $variation_specifics_set = array();
-        $synchronize_ean = Configuration::get('EBAY_SYNCHRONIZE_EAN');
 
         if (isset($data['variations'])) {
             $last_specific_name = '';
             $attribute_used = array();
 
             foreach ($data['variations'] as $key => $variation) {
-                if (!$synchronize_ean) {
-                    $data['variations'][$key]['ean13'] = '';
-                }
+                $data['variations'][$key]['ean13'] = $this->configurationValues($data['variations'][$key], 'EBAY_SYNCHRONIZE_EAN');
+                $data['variations'][$key]['mpn'] = $this->configurationValues($data['variations'][$key], 'EBAY_SYNCHRONIZE_MPN');
+                $data['variations'][$key]['upc'] = $this->configurationValues($data['variations'][$key], 'EBAY_SYNCHRONIZE_UPC');
+                $data['variations'][$key]['isbn'] = $this->configurationValues($data['variations'][$key], 'EBAY_SYNCHRONIZE_ISBN');
 
                 if (isset($variation['variations'])) {
                     foreach ($variation['variations'] as $variation_key => $variation_element) {

@@ -129,9 +129,9 @@ class EbaySynchronizer
             // Fix hook update product
             if (Tools::getValue('id_product_attribute')) {
                 $id_product_attribute_fix = (int) Tools::getValue('id_product_attribute');
-                $key = $product_id.'-'.$id_product_attribute_fix.'_'.$ebay_profile->id;
+                $key = $product->id.'-'.$id_product_attribute_fix.'_'.$ebay_profile->id;
                 if (isset($data['variations'][$key]['quantity'])) {
-                    $data['variations'][$key]['quantity'] = EbaySynchronizer::_fixHookUpdateProduct($context, $product_id, $data['variations'][$key]['quantity']);
+                    $data['variations'][$key]['quantity'] = EbaySynchronizer::_fixHookUpdateProduct($context, $product->id, $data['variations'][$key]['quantity']);
                 }
 
             }
@@ -469,9 +469,8 @@ class EbaySynchronizer
             $variation = array(
                 'id_attribute' => $combinaison['id_product_attribute'],
                 'reference' => $combinaison['reference'],
-                'ean13' => self::getEANVariationValues($combinaison, Configuration::get('EBAY_SYNCHRONIZE_EAN')),
-                'upc' => self::getEANVariationValues($combinaison, Configuration::get('EBAY_SYNCHRONIZE_UPC')),
-                'isbn' => self::getEANVariationValues($combinaison, Configuration::get('EBAY_SYNCHRONIZE_ISBN')),
+                'ean13' => $combinaison['ean13'],
+                'upc' => $combinaison['upc'],
                 'quantity' => $combinaison['quantity'],
                 'price_static' => $price,
                 'variation_specifics' => EbaySynchronizer::_getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $ebay_profile->id_lang, $ebay_profile->ebay_site_id, $ebay_category),
@@ -520,32 +519,6 @@ class EbaySynchronizer
         }
 
         return $variations;
-    }
-
-    /**
-     * getEANVariationValues
-     *
-     * @param array $data
-     * @param string $type
-     * @return string
-     */
-    private static function getEANVariationValues($data, $type)
-    {
-        if ($type == "EAN") {
-            return $data['ean13'];
-        }
-//        currently, we do not support supplier reference
-//        if ($type == "SUP_REF") {
-//            return $data['supplier_reference'];
-//        }
-        if ($type == "REF") {
-            return $data['reference'];
-        }
-        if ($type == "UPC") {
-            return $data['upc'];
-        }
-
-        return "";
     }
 
     public static function getIdAttributeGroup($row)
@@ -792,6 +765,8 @@ class EbaySynchronizer
         $data['item_specifics'] = array_merge($data['item_specifics'], $variation['variation_specifics']);
 
         $data['ean13'] = $variation['ean13'];
+        $data['upc'] = $variation['upc'];
+        $data['isbn'] = $variation['isbn'];
         $data['reference'] = $variation['reference'];
         return $data;
     }
