@@ -409,11 +409,13 @@ class EbaySynchronizer
             $pictures_medium[] = EbaySynchronizer::_getPictureLink($product->id, $image['id_image'], $context->link, $small->name);
             $pictures_large[] = EbaySynchronizer::_getPictureLink($product->id, $image['id_image'], $context->link, $large->name);
 
-            if (count($pictures) >= $nb_pictures || count($pictures) >= 12) {
+            if (count($pictures) >= 12) {
                 break;
             }
 
         }
+        // limit the numbers of picture send to ebay with the EBAY_PICTURE_PER_LISTING parameter.
+        $pictures = array_slice($pictures, 0, $nb_pictures);
 
         return array(
             'general' => $pictures,
