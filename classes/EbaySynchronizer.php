@@ -121,7 +121,8 @@ class EbaySynchronizer
                 'ean13' => $product->ean13 != 0 ? (string)$product->ean13 : null,
                 'upc' => (string)$product->upc,
                 'supplier_reference' => (string)$product->supplier_reference,
-                'reference' => (string)$product->reference
+                'reference' => (string)$product->reference,
+                'ean_not_applicable' => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
             );
 
             $data = array_merge($data, EbaySynchronizer::_getProductData($product, $ebay_profile));

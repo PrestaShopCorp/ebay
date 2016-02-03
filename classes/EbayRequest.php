@@ -873,10 +873,10 @@ class EbayRequest
             $attribute_used = array();
 
             foreach ($data['variations'] as $key => $variation) {
-                $data['variations'][$key]['ean13'] = $this->configurationValues($data['variations'][$key], 'EBAY_SYNCHRONIZE_EAN');
-                $data['variations'][$key]['mpn'] = $this->configurationValues($data['variations'][$key], 'EBAY_SYNCHRONIZE_MPN');
-                $data['variations'][$key]['upc'] = $this->configurationValues($data['variations'][$key], 'EBAY_SYNCHRONIZE_UPC');
-                $data['variations'][$key]['isbn'] = $this->configurationValues($data['variations'][$key], 'EBAY_SYNCHRONIZE_ISBN');
+                $data['variations'][$key]['ean13'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_EAN'));
+                $data['variations'][$key]['mpn'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_MPN'));
+                $data['variations'][$key]['upc'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_UPC'));
+                $data['variations'][$key]['isbn'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_ISBN'));
 
                 if (isset($variation['variations'])) {
                     foreach ($variation['variations'] as $variation_key => $variation_element) {
@@ -912,6 +912,7 @@ class EbayRequest
             'variations_pictures' => $variation_pictures,
             'price_update' => !isset($data['noPriceUpdate']),
             'variation_specifics_set' => $variation_specifics_set,
+            'ean_not_applicable' => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
         );
 
         $this->smarty->assign($vars);

@@ -74,9 +74,11 @@
 			{/foreach}
 		</ItemSpecifics>
 		{$return_policy}
-		{if isset($variations)}
-			{$variations}
-		{/if}
+        {if isset($variations)}
+            {$variations}
+        {elseif isset($product_listing_details)}
+            {$product_listing_details}
+        {/if}
 		<ShippingDetails>{$shipping_details}</ShippingDetails>
 		{$buyer_requirements_details}
 		<Site>{$site}</Site>
@@ -91,11 +93,8 @@
         {if isset($ebay_store_category_id)}
             <Storefront>
                   <StoreCategoryID>{$ebay_store_category_id}</StoreCategoryID>
-                  <!--<StoreCategoryName> string </StoreCategoryName>-->
+                  {*<!--<StoreCategoryName> string </StoreCategoryName>-->*}
             </Storefront>
-        {/if}
-        {if isset($product_listing_details)}
-            {$product_listing_details}
         {/if}
 	</Item>
 	<RequesterCredentials>
