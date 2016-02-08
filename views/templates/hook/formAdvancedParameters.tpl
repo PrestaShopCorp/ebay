@@ -170,7 +170,7 @@
 			</select>
 		</div>
 		<label>
-			{l s='Option \'Does Not Apply\'' mod='ebay'}
+			{l s='Option \'Does not apply\'' mod='ebay'}
 		</label>
 		<div class="margin-form">
 			<input type="checkbox" name="ean_not_applicable" value="1"{if $ean_not_applicable} checked="checked"{/if} data-inlinehelp="{l s='If you check this box, the module will send EAN value &quot;Does not apply&quot; when none of EAN, ISBN or UPC is set.' mod='ebay'}">

@@ -60,6 +60,6 @@
 </ProductListingDetails>
 {elseif isset($ean_not_applicable) && $ean_not_applicable == 1}
 <ProductListingDetails>
-    <EAN>Does Not Apply</EAN>
+    <EAN>Does not apply</EAN>
 </ProductListingDetails>
 {/if}

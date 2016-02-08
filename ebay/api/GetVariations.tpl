@@ -65,7 +65,7 @@
 				</VariationProductListingDetails>
 			{elseif isset($ean_not_applicable) && $ean_not_applicable == 1}
 				<VariationProductListingDetails>
-					<EAN>Does Not Apply</EAN>
+					<EAN>Does not apply</EAN>
 				</VariationProductListingDetails>
 			{/if}
 		</Variation>
