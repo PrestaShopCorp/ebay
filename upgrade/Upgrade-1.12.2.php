@@ -34,5 +34,7 @@ function upgrade_module_1_12_2($module)
         $module->setConfiguration('EBAY_SYNCHRONIZE_EAN', 'EAN');
     }
 
+    $module->ebay_profile->deleteConfigurationByName('EBAY_SPECIFICS_LAST_UPDATE');
+
     return true;
 }
