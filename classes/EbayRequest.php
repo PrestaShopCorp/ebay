@@ -825,10 +825,11 @@ class EbayRequest
     private function _getProductListingDetails($data)
     {
         $vars = array(
-            'ean'  => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_EAN')),
-            'mpn'  => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_MPN')),
-            'upc'  => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_UPC')),
-            'isbn' => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_ISBN')),
+            'ean'               => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_EAN')),
+            'mpn'               => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_MPN')),
+            'upc'               => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_UPC')),
+            'isbn'              => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_ISBN')),
+            'manufacturer_name' => $data['manufacturer_name'],
         );
 
         $this->smarty->assign($vars);

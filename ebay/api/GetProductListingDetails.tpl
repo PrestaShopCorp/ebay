@@ -35,10 +35,10 @@
             {*<MPN>{$sku}</MPN>*}
         {*</BrandMPN>*}
     {*{/if}*}
-    {if ((isset($mpn) && $mpn != "") && isset($brand))}
+    {if (isset($mpn) && $mpn != "" && isset($manufacturer_name) && $manufacturer_name != "")}
     <BrandMPN>
-        {if isset($brand)}<Brand>{$brand}</Brand>{/if}
-        {if isset($mpn) && $mpn != ""}<MPN>{$mpn}</MPN>{/if}
+        <Brand>{$manufacturer_name}</Brand>
+        <MPN>{$mpn}</MPN>
     </BrandMPN>
     {/if}
     {if isset($ean) && $ean != ""}<EAN>{$ean}</EAN>{/if}

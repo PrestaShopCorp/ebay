@@ -72,7 +72,7 @@ function insertCategoryRow(category_id, data)
 		if (!parseInt(specific.required))
 			tds += '<option value=""></option>';
 		else
-			tds += '<option value="">-- You have to select a value --</option>';
+			tds += '<option value="">' + l['-- You have to select a value --'] + '</option>';
 
 		if (specific.selection_mode == 0)
 		{

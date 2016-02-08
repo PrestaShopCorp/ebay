@@ -118,10 +118,6 @@ class EbaySynchronizer
                 'id_lang' => $id_lang,
                 'real_id_product' => (int) $p['id_product'],
                 'ebay_store_category_id' => $ebay_store_category_id,
-                'ean13' => $product->ean13 != 0 ? (string)$product->ean13 : null,
-                'upc' => (string)$product->upc,
-                'supplier_reference' => (string)$product->supplier_reference,
-                'reference' => (string)$product->reference,
                 'ean_not_applicable' => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
             );
 
@@ -205,7 +201,7 @@ class EbaySynchronizer
             'description' => $product->description,
             'description_short' => $product->description_short,
             'manufacturer_name' => $product->manufacturer_name,
-            'ean13' => (string)$product->ean13,
+            'ean13' => $product->ean13 != 0 ? (string)$product->ean13 : null,
             'upc' => (string)$product->upc,
             'supplier_reference' => (string)$product->supplier_reference,
             'titleTemplate' => $ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE'),
