@@ -765,6 +765,7 @@ class Ebay extends Module
 
         $errors_email = array();
 
+        /** @var EbayOrder $order */
         foreach ($orders as $order) {
             $errors = array();
 
@@ -893,6 +894,12 @@ class Ebay extends Module
                 }
 
                 $cart = $order->addCart($ebay_profile, $this->ebay_country); //Create a Cart for the order
+                if (!($cart instanceof Cart)) {
+                    $message = $this->l('Error while creating a cart for the order');
+                    $errors[] = $message;
+                    $order->addErrorMessage($message);
+                    continue;
+                }
 
                 if (!$order->updateCartQuantities($ebay_profile)) {
                     // if products in the cart
@@ -915,6 +922,7 @@ class Ebay extends Module
 
                 // Validate order
                 $id_order = $order->validate($ebay_profile->id_shop, $this->ebay_profile->id);
+                // @todo: verrifier la valeur de $id_order. Si validate ne fonctionne pas, on a quoi ??
                 // we now disable the carrier if required
                 if ($has_disabled_carrier) {
                     $carrier->active = false;
@@ -2124,5 +2132,36 @@ class Ebay extends Module
             readfile($full_path);
             exit;
         }
+    }
+
+    ############################################################################################################
+    # Logger // Debug
+    ############################################################################################################
+
+    /**
+     * Fonction de log
+     *
+     * Enregistre dans /modules/ebay/log/debug.log
+     *
+     * @param     $object
+     * @param int $error_level
+     */
+    public static function debug($object, $error_level = 0)
+    {
+        $error_type = array(
+            0 => "[ALL]",
+            1 => "[DEBUG]",
+            2 => "[INFO]",
+            3 => "[WARN]",
+            4 => "[ERROR]",
+            5 => "[FATAL]"
+        );
+        $module_name = "ebay";
+        $backtrace = debug_backtrace();
+        $date = date("<Y-m-d(H:i:s)>");
+        $file = $backtrace[0]['file'].":".$backtrace[0]['line'];
+        $stderr = fopen(_PS_MODULE_DIR_.'/'.$module_name.'/log/debug.log', 'a');
+        fwrite($stderr, $error_type[$error_level]." ".$date." ".$file."\n".print_r($object, true)."\n\n");
+        fclose($stderr);
     }
 }

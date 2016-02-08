@@ -115,6 +115,12 @@ class EbayOrder
         $this->write_logs = (bool) Configuration::get('EBAY_ACTIVATE_LOGS');
     }
 
+    /**
+     * Define if order is complete
+     * with status[Complete], amount > 0.1, and contain products
+     *
+     * @return bool
+     */
     public function isCompleted()
     {
         return $this->status == 'Complete'
@@ -122,13 +128,14 @@ class EbayOrder
         && !empty($this->product_list);
     }
 
+    /**
+     * Define if order has a country active in Prestashop configuration.
+     * @return bool
+     */
     public function isCountryEnable()
     {
         if (!Tools::isEmpty($this->country_iso_code)) {
-
-            $country = new Country(Country::getByIso($this->country_iso_code), (int) Configuration::get('PS_LANG_DEFAULT'));
-
-            if ($country->active) {
+            if (Country::getByIso($this->country_iso_code, true)) {
                 return true;
             } else {
                 $order_error = new EbayOrderErrors();
@@ -140,8 +147,13 @@ class EbayOrder
                 return false;
             }
         }
+        return false;
     }
 
+    /**
+     * Define if order already exist with ps_ebay_order.id_order_ref
+     * @return bool
+     */
     public function exists()
     {
         return (boolean) Db::getInstance()->getValue('SELECT `id_ebay_order`
@@ -149,6 +161,10 @@ class EbayOrder
 			WHERE `id_order_ref` = \''.pSQL($this->id_order_ref).'\'');
     }
 
+    /**
+     * Define if order has a valid email, firstname, and familyname
+     * @return bool
+     */
     public function hasValidContact()
     {
         return Validate::isEmail($this->email)
@@ -254,17 +270,32 @@ class EbayOrder
         return array_map(create_function('$product', 'return (int)$product[\'id_product\'];'), $this->product_list);
     }
 
+    /**
+     * Get eBay profile and Products and attribute by shop
+     * @return array All product in an array like
+     *      $res[$id_shop]
+     *          ['id_ebay_profiles']
+     *               [0]
+     *               [1]
+     *          ['id_products']
+     *               [0]
+     *                  ['id_product']
+     *                  ['id_product_attribute']
+     *               [1]
+     *                  ['id_product']
+     *                  ['id_product_attribute']
+     */
     public function getProductsAndProfileByShop()
     {
         $res = array();
         foreach ($this->product_list as $product) {
             if ($product['id_ebay_profile']) {
-                $ebay_profile = new EbayProfile((int) $product['id_ebay_profile']);
+                $ebay_profile = new EbayProfile((int)$product['id_ebay_profile']);
             } else {
                 $sql = 'SELECT epr.`id_ebay_profile`
 				FROM `'._DB_PREFIX_.'ebay_product` epr
-				WHERE epr.`id_product` = '.(int) $product['id_product'];
-                $id_ebay_profile = (int) Db::getInstance()->getValue($sql);
+				WHERE epr.`id_product` = '.(int)$product['id_product'];
+                $id_ebay_profile = (int)Db::getInstance()->getValue($sql);
                 if ($id_ebay_profile) {
                     $ebay_profile = new EbayProfile($id_ebay_profile);
                 } else {
@@ -274,8 +305,8 @@ class EbayOrder
 							FROM `'._DB_PREFIX_.'ebay_profile` ep
 							LEFT JOIN `'._DB_PREFIX_.'product_shop` ps
 							ON ep.`id_shop` = ps.`id_shop`
-							AND ps.`id_product` = '.(int) $product['id_product'];
-                        $id_ebay_profile = (int) Db::getInstance()->getValue($sql);
+							AND ps.`id_product` = '.(int)$product['id_product'];
+                        $id_ebay_profile = (int)Db::getInstance()->getValue($sql);
                         $ebay_profile = new EbayProfile($id_ebay_profile);
                     } else {
                         $ebay_profile = EbayProfile::getCurrent();
@@ -286,26 +317,34 @@ class EbayOrder
             if (!isset($res[$ebay_profile->id_shop])) {
                 $res[$ebay_profile->id_shop] = array(
                     'id_ebay_profiles' => array($ebay_profile->id),
-                    'id_products' => array(),
+                    'id_products'      => array(),
                 );
             } elseif (!in_array($ebay_profile->id, $res[$ebay_profile->id_shop]['id_ebay_profiles'])) {
                 $res[$ebay_profile->id_shop]['id_ebay_profiles'][] = $ebay_profile->id;
             }
 
             // $res[$ebay_profile->id_shop]['id_products'][] = $product['id_product'];
-            $res[$ebay_profile->id_shop]['id_products'][] = array('id_product' => $product['id_product'], 'id_product_attribute' => $product['id_product_attribute']);
+            $res[$ebay_profile->id_shop]['id_products'][] = array(
+                'id_product'           => $product['id_product'],
+                'id_product_attribute' => $product['id_product_attribute']
+            );
         }
 
         return $res;
     }
 
+    /**
+     * Define if product and attribute exist in Prestashop.
+     * @return bool
+     */
     public function hasAllProductsWithAttributes()
     {
         foreach ($this->product_list as $product) {
-            if ((int) $product['id_product'] < 1
+            if ((int)$product['id_product'] < 1
                 || !Db::getInstance()->getValue('SELECT `id_product`
 					FROM `'._DB_PREFIX_.'product`
-					WHERE `id_product` = '.(int) $product['id_product'])) {
+					WHERE `id_product` = '.(int)$product['id_product'])
+            ) {
                 return false;
             }
 
@@ -313,15 +352,22 @@ class EbayOrder
                 && $product['id_product_attribute'] > 0
                 && !Db::getInstance()->getValue('SELECT `id_product_attribute`
 					FROM `'._DB_PREFIX_.'product_attribute`
-					WHERE `id_product` = '.(int) $product['id_product'].'
-					AND `id_product_attribute` = '.(int) $product['id_product_attribute'])) {
+					WHERE `id_product` = '.(int)$product['id_product'].'
+					AND `id_product_attribute` = '.(int)$product['id_product_attribute'])
+            ) {
                 return false;
             }
-
         }
+
         return true;
     }
 
+    /**
+     * Add a new Cart with order content, and save it in database
+     * @param EbayProfile     $ebay_profile
+     * @param EbayCountrySpec $ebay_country
+     * @return Cart
+     */
     public function addCart($ebay_profile, $ebay_country)
     {
         $id_carrier = (int) EbayShipping::getPsCarrierByEbayCarrier($ebay_profile->id, $this->shippingService);
@@ -354,7 +400,9 @@ class EbayOrder
         return $this->carts[$id_shop]->delete();
     }
 
-    /* returns true is still products in the cart, false otherwise */
+    /**
+     * @return bool true is still products in the cart, false otherwise
+     */
     public function updateCartQuantities($ebay_profile)
     {
         $id_lang = (int) Configuration::get('PS_LANG_DEFAULT');
@@ -428,18 +476,26 @@ class EbayOrder
         return (boolean) $cart_nb_products;
     }
 
+    /**
+     * Validate an order in database
+     * @param int      $id_shop
+     * @param int|null $id_ebay_profile
+     * @return int Current order's id
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function validate($id_shop, $id_ebay_profile = null)
     {
         $customer = new Customer($this->id_customers[$id_shop]);
-        $paiement = new EbayPayment();
+        $payment = new EbayPayment();
 
         //Change context's currency
         $this->context->currency = new Currency($this->carts[$id_shop]->id_currency);
 
-        $paiement->validateOrder(
+        $payment->validateOrder(
             (int) $this->carts[$id_shop]->id,
             Configuration::get('PS_OS_PAYMENT'),
-            (float) $this->carts[$id_shop]->getOrderTotal(true, 3),
+            (float) $this->carts[$id_shop]->getOrderTotal(true, Cart::BOTH),
             'eBay '.$this->payment_method.' '.$this->id_order_seller,
             null,
             array(),
@@ -449,16 +505,22 @@ class EbayOrder
             version_compare(_PS_VERSION_, '1.5', '>') ? new Shop((int) $id_shop) : null
         );
 
-        $this->id_orders[$id_shop] = $paiement->currentOrder;
+        $this->id_orders[$id_shop] = $payment->currentOrder;
 
         $this->_writeLog($id_ebay_profile, 'validate_order', true, 'End of validate order');
 
         // Fix on date
         Db::getInstance()->autoExecute(_DB_PREFIX_.'orders', array('date_add' => pSQL($this->date_add)), 'UPDATE', '`id_order` = '.(int) $this->id_orders[$id_shop]);
 
-        return $paiement->currentOrder;
+        return $payment->currentOrder;
     }
 
+    /**
+     * Update price of the current Order
+     * @param EbayProfile $ebay_profile
+     * @return bool
+     * @throws PrestaShopDatabaseException
+     */
     public function updatePrice($ebay_profile)
     {
         $total_price_tax_excl = 0;
@@ -520,7 +582,7 @@ class EbayOrder
             $total_price_tax_excl += (float) (($product['price'] / $coef_rate) * $product['quantity']);
         }
 
-        $total_shipping_tax_incl += $this->shippingServiceCost;
+        $total_shipping_tax_incl += (float)$this->shippingServiceCost;
         $total_shipping_tax_excl += $this->shippingServiceCost / (1 + ($carrier_tax_rate / 100));
 
         $data = array(
@@ -597,6 +659,11 @@ class EbayOrder
         return DB::getInstance()->getValue($sql);
     }
 
+    /**
+     * Insert the orders in the database in the table ps_ebay_order_order
+     * @param int|null $id_ebay_profile Ebay Profile ID's
+     * @throws PrestaShopDatabaseException
+     */
     public function add($id_ebay_profile = null)
     {
         $this->id_ebay_order = EbayOrder::insert(array(
@@ -644,6 +711,9 @@ class EbayOrder
         return $this->email;
     }
 
+    /**
+     * @return array $this->product_list
+     */
     public function getProducts()
     {
         return $this->product_list;
