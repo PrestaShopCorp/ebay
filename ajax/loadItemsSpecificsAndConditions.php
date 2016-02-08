@@ -57,14 +57,12 @@ if (Tools::jsonDecode($last_upd) === null) {
     $last_update = array();
     $update = true;
 } else {
-
     $last_update = get_object_vars(Tools::jsonDecode($last_upd));
 
     if (!isset($last_update[$category->getIdCategoryRef()])
         || ($last_update[$category->getIdCategoryRef()] < date('Y-m-d\TH:i:s', strtotime('-3 days')).'.000Z')) {
         $update = true;
     }
-
 }
 
 if ($update) {
