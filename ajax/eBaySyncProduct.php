@@ -59,7 +59,6 @@ if (Module::isInstalled('ebay')) {
     }
 
     if ($enable) {
-        global $cookie;
         $cookie = new Cookie('psEbay', '', 3600);
 
         $ebay = new eBay((int) Tools::getValue('profile'));
