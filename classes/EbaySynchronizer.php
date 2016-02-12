@@ -176,19 +176,20 @@ class EbaySynchronizer
 
         }
 
+        $context = Context::getContext();
         if (count($tab_error)) {
-            if (isset($all_error)) {
-                foreach ($all_error as $key => $value) {
+            if (isset($context->all_error)) {
+                foreach ($context->all_error as $key => $value) {
                     if (isset($tab_error[$key])) {
-                        $tab_error[$key]['products'] = array_merge($all_error[$key]['products'], $tab_error[$key]['products']);
+                        $tab_error[$key]['products'] = array_merge($context->all_error[$key]['products'], $tab_error[$key]['products']);
                     } else {
-                        $tab_error[$key] = $all_error[$key];
+                        $tab_error[$key] = $context->all_error[$key];
                     }
 
                 }
             }
 
-            file_put_contents(dirname(__FILE__).'/../log/syncError.php', '<?php $all_error = '.var_export($tab_error, true).'; '.($ebay->itemConditionError ? '$itemConditionError = true; ' : '$itemConditionError = false;').' ?>');
+            file_put_contents(dirname(__FILE__).'/../log/syncError.php', '<?php $context->all_error = '.var_export($tab_error, true).'; '.($ebay->itemConditionError ? '$itemConditionError = true; ' : '$itemConditionError = false;').' ?>');
         }
     }
 
