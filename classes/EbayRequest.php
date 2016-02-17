@@ -830,6 +830,8 @@ class EbayRequest
             'upc'               => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_UPC')),
             'isbn'              => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_ISBN')),
             'manufacturer_name' => $data['manufacturer_name'],
+            'ean_not_applicable' => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
+
         );
 
         $this->smarty->assign($vars);
