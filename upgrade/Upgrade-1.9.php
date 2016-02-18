@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,29 +19,35 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
+ *  @copyright 2007-2016 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
 function upgrade_module_1_9($module)
 {
-    include(dirname(__FILE__).'/sql/sql-upgrade-1-9.php');
+    include dirname(__FILE__).'/sql/sql-upgrade-1-9.php';
 
-    if (!empty($sql) && is_array($sql))
-        foreach ($sql as $request)
-            if (!Db::getInstance()->execute($request))
+    if (!empty($sql) && is_array($sql)) {
+        foreach ($sql as $request) {
+            if (!Db::getInstance()->execute($request)) {
                 return false;
-    
-    if (!Configuration::get('EBAY_ORDERS_DAYS_BACKWARD'))
+            }
+        }
+    }
+
+    if (!Configuration::get('EBAY_ORDERS_DAYS_BACKWARD')) {
         Configuration::updateValue('EBAY_ORDERS_DAYS_BACKWARD', 30, false, 0, 0);
-    
-    if (!Configuration::get('EBAY_LOGS_DAYS'))
+    }
+
+    if (!Configuration::get('EBAY_LOGS_DAYS')) {
         Configuration::updateValue('EBAY_LOGS_DAYS', 30, false, 0, 0);
-    
-	$hook_update_order_status = version_compare(_PS_VERSION_, '1.5', '>') ? 'actionOrderStatusUpdate' : 'updateOrderStatus';
-	if (!$module->registerHook($hook_update_order_status))
-		return false;    
-    
+    }
+
+    $hook_update_order_status = version_compare(_PS_VERSION_, '1.5', '>') ? 'actionOrderStatusUpdate' : 'updateOrderStatus';
+    if (!$module->registerHook($hook_update_order_status)) {
+        return false;
+    }
+
     return true;
 }

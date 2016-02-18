@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2015 PrestaShop SA
+*  @copyright 2007-2016 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -74,7 +74,7 @@
 			{l s='Number of additional pictures (0 will send one picture)' mod='ebay'}
 		</label>
 		<div class="margin-form">
-			<input type="text" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall':'UTF-8'}">
+			<input type="text" name="picture_per_listing" value="{$picture_per_listing|escape:'htmlall':'UTF-8'}" onchange="checkInputParameters()">
 		</div>
 		<div style="clear:both;"></div>
 		<label>
@@ -125,7 +125,61 @@
         
 	</fieldset>
     
-    
+    <fieldset style="margin-top:10px;">
+       
+        <legend>{l s='EAN Sync' mod='ebay'}</legend>
+
+		<label>{l s='Synchronize EAN with :' mod='ebay'}</label>
+		<div class="margin-form">
+			<select name="synchronize_ean" class="ebay_select">
+				<option value="">{l s='Do not synchronise' mod='ebay'}</option>
+				<option value="EAN"{if "EAN" == $synchronize_ean} selected{/if}>{l s='EAN' mod='ebay'}</option>
+				{*<option value="SUP_REF"{if "SUP_REF" == $synchronize_ean} selected{/if}>{l s='Supplier Reference' mod='ebay'}</option>*}
+				<option value="REF"{if "REF" == $synchronize_ean} selected{/if}>{l s='Reference' mod='ebay'}</option>
+				<option value="UPC"{if "UPC" == $synchronize_ean} selected{/if}>{l s='UPC' mod='ebay'}</option>
+			</select>
+		</div>
+		<label>{l s='Synchronize MPN with :' mod='ebay'}</label>
+		<div class="margin-form">
+			<select name="synchronize_mpn" class="ebay_select">
+				<option value="">{l s='Do not synchronise' mod='ebay'}</option>
+				<option value="EAN"{if "EAN" == $synchronize_mpn} selected{/if}>{l s='EAN' mod='ebay'}</option>
+				{*<option value="SUP_REF"{if "SUP_REF" == $synchronize_mpn} selected{/if}>{l s='Supplier Reference' mod='ebay'}</option>*}
+				<option value="REF"{if "REF" == $synchronize_mpn} selected{/if}>{l s='Reference' mod='ebay'}</option>
+				<option value="UPC"{if "UPC" == $synchronize_mpn} selected{/if}>{l s='UPC' mod='ebay'}</option>
+			</select>
+		</div>
+		<label>{l s='Synchronize UPC with :' mod='ebay'}</label>
+		<div class="margin-form">
+			<select name="synchronize_upc" class="ebay_select">
+				<option value="">{l s='Do not synchronise' mod='ebay'}</option>
+				<option value="EAN"{if "EAN" == $synchronize_upc} selected{/if}>{l s='EAN' mod='ebay'}</option>
+				{*<option value="SUP_REF"{if "SUP_REF" == $synchronize_upc} selected{/if}>{l s='Supplier Reference' mod='ebay'}</option>*}
+				<option value="REF"{if "REF" == $synchronize_upc} selected{/if}>{l s='Reference' mod='ebay'}</option>
+				<option value="UPC"{if "UPC" == $synchronize_upc} selected{/if}>{l s='UPC' mod='ebay'}</option>
+			</select>
+		</div>
+		<label>{l s='Synchronize ISBN with :' mod='ebay'}</label>
+		<div class="margin-form">
+			<select name="synchronize_isbn" class="ebay_select">
+				<option value="">{l s='Do not synchronise' mod='ebay'}</option>
+				<option value="EAN"{if "EAN" == $synchronize_isbn} selected{/if}>{l s='EAN' mod='ebay'}</option>
+				{*<option value="SUP_REF"{if "SUP_REF" == $synchronize_isbn} selected{/if}>{l s='Supplier Reference' mod='ebay'}</option>*}
+				<option value="REF"{if "REF" == $synchronize_isbn} selected{/if}>{l s='Reference' mod='ebay'}</option>
+				<option value="UPC"{if "UPC" == $synchronize_isbn} selected{/if}>{l s='UPC' mod='ebay'}</option>
+			</select>
+		</div>
+		<label>
+			{l s='Option \'Does not apply\'' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<input type="checkbox" name="ean_not_applicable" value="1"{if $ean_not_applicable} checked="checked"{/if} data-inlinehelp="{l s='If you check this box, the module will send EAN value &quot;Does not apply&quot; when none of EAN, ISBN or UPC is set.' mod='ebay'}">
+		</div>
+
+        <div style="clear:both;"></div>
+        
+    </fieldset>
+
 	<fieldset style="margin-top:10px;">
         
 		<legend>{l s='Sync' mod='ebay'}</legend>
@@ -164,7 +218,42 @@
 		<div style="clear:both;"></div>
         
     </fieldset>
-    
+      
+    <fieldset style="margin-top:10px;">
+       
+		<legend>{l s='Check Database' mod='ebay'}</legend>
+		<label>{l s='Click on "Start checking" if you want to proceed to verify your eBay database' mod='ebay'} : </label>
+		<div class="margin-form">
+        	<a id="check_database" href="#" target="_blank" class="button">Start checking</a>
+		</div>
+		<div style="clear:both;"></div>
+		<div id="check_database_progress" style="display:none;">
+			<div class="progress">
+			  <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="">
+			  </div>
+			</div>	
+		</div>
+		<div id="check_database_logs" style="display:none;">
+			<table class="table tableDnD" cellpadding="0" cellspacing="0" style="width: 100%;">
+				<thead>
+					<tr class="nodrag nodrop">
+						<th style="width:10%">
+							{l s='Status' mod='ebay'}
+						</th>
+						<th style="width:45%">
+							{l s='Description' mod='ebay'}
+						</th>
+						<th style="width:45%">
+							{l s='Result' mod='ebay'}
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+        
+    </fieldset>
     
    <fieldset style="margin-top:10px;">
        
@@ -187,6 +276,7 @@
     
 	{literal}
 		<script>
+			var token = "{/literal}{$ebay_token|escape:'urlencode'}{literal}";
 			$(document).ready(function() {
 				setTimeout(function(){					
 					$('#ebay_returns_description').val($('#ebayreturnshide').html());
@@ -214,7 +304,7 @@
             });
 
             $(function() {
-				$('#reset-image').on('click', function(e){
+				$('#reset-image').click(function(e){
 					e.preventDefault();
 					$.ajax({
 						type: 'POST',
@@ -233,7 +323,30 @@
 					})
 				});
 			});
+
+			$(function() {
+				$('#check_database').click(function(e){
+					e.preventDefault();
+					// Premier tour : Récuperer le nombre de table
+					// Foreach de toutes les tables
+					$.ajax({
+						type: 'POST',
+						url: module_dir + 'ebay/ajax/checkDatabase.php',
+						data: "token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=getNbTable",
+						beforeSend: function() {
+							$('#check_database_logs tbody tr').remove();
+						    // $('#reset-image-result').css('color', 'orange').text("{/literal}{l s='Activation in progress...' mod='ebay'}{literal}");
+						},
+						success: function( data ){
+							$('#check_database_progress').attr('data-nb_database', data);
+							$('#check_database_progress').show();
+							$('#check_database_logs').show();
+							launchDatabaseChecking(1);
+						}
+					});
+				});
+			});
 		</script>
 	{/literal}    
-    
+<script type="text/javascript" src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/js/advancedParameters.js"></script>
 </form>

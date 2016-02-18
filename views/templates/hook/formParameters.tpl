@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2015 PrestaShop SA
+*  @copyright 2007-2016 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -28,11 +28,14 @@
 	<script>
 		$(document).ready(function() {
 			win = window.location = '{/literal}{$redirect_url|escape:'urlencode'}{literal}';
-		});
+		});		
 	</script>
 	{/literal}
 {/if}
 <script type="text/javascript">
+	var tooltip_numeric = "{l s='You must enter a number.' mod='ebay'}";
+	var tooltip_max_pictures = "{l s='The maximum number is 12, so you can put up to 11 in this field.' mod='ebay'}";
+
 	$(document).ready(function(){ldelim}
 		if(regenerate_token_show)
 		{ldelim}
@@ -67,7 +70,7 @@
 		<div class="margin-form">
 
 			<input type="text" size="20" name="ebay_paypal_email" value="{$ebay_paypal_email|escape:'htmlall':'UTF-8'}"/>
-			<p>{l s='You have to set your PayPal e-mail account, it\'s the only payment available with this module' mod='ebay'}</p>
+			<p>{l s='You have to set your PayPal e-mail account, it\'s the only payment available with this module' mod='ebay'}<a class="kb-help" data-errorcode="{$help.code_payment_solution}" data-module="ebay" data-lang="{$help.lang}" module_version="{$help.module_version}" prestashop_version="{$help.ps_version}" href="" target="_blank"></a></p>
 		</div>
         
 		<label>
@@ -211,36 +214,4 @@
 	</div>
 
 	<div id="ebayreturnshide" style="display:none;">{$ebayReturns|escape:'htmlall':'UTF-8'}</div>
-
 </form>
-
-{if $catLoaded}
-	{literal}
-	<script>
-		var percent = 0;
-		function checkCategories()
-		{
-			percent++;
-			if (percent > 100)
-				percent = 100;
-			
-			$("#categoriesProgression").html("{/literal}{l s='Categories loading' mod='ebay'}{literal}  <div>" + percent + " %</div>");
-			if (percent < 100)
-				setTimeout ("checkCategories()", 1000);
-		}
-
-		$(function(){
-			$j("#displayFancybox").fancybox({
-				beforeShow : function(){
-					checkCategories();
-					$("#save_ebay_parameters").parents('form').submit();
-				},
-				onStart : function(){
-					checkCategories();
-					$("#save_ebay_parameters").parents('form').submit();
-				}
-			});
-		});
-	</script>
-	{/literal}
-{/if}

@@ -1,0 +1,3 @@
+{shop_name} Recap eBay Module
+
+{content}

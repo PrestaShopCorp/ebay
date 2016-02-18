@@ -1,5 +1,5 @@
 {*
-* 2007-2015 PrestaShop
+* 2007-2016 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2015 PrestaShop SA
+*  @copyright 2007-2016 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -55,7 +55,19 @@
                     <SoldOffeBay>true</SoldOffeBay>
                 </DiscountPriceInfo>
             {/if}
-                    
+            {if (isset($variation.ean13) && $variation.ean13 != '')
+			|| (isset($variation.isbn) && $variation.isbn != '')
+			|| (isset($variation.upc) && $variation.upc != '')}
+				<VariationProductListingDetails>
+					{if isset($variation.ean13) && $variation.ean13 != ''}<EAN>{$variation.ean13}</EAN>{/if}
+					{if isset($variation.isbn) && $variation.isbn != ''}<ISBN>{$variation.isbn}</ISBN>{/if}
+					{if isset($variation.upc) && $variation.upc != ''}<UPC>{$variation.upc}</UPC>{/if}
+				</VariationProductListingDetails>
+			{elseif isset($ean_not_applicable) && $ean_not_applicable == 1}
+				<VariationProductListingDetails>
+					<EAN>Does not apply</EAN>
+				</VariationProductListingDetails>
+			{/if}
 		</Variation>
 	{/foreach}
 	<Pictures>

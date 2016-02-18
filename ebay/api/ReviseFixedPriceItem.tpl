@@ -1,5 +1,5 @@
 {*
-* 2007-2015 PrestaShop
+* 2007-2016 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2015 PrestaShop SA
+*  @copyright 2007-2016 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -87,18 +87,20 @@
 				{foreach from=$item_specifics key=name item=value}
 					<NameValueList>
 						<Name><![CDATA[{$name}]]></Name>
-						<Value><![CDATA[{$value}]]></Value>
-					</NameValueList>
-				{/foreach}				
-			</ItemSpecifics>
-		{$return_policy}
-		{if isset($site)}
-			<Site>{$site}</Site>
+                        <Value><![CDATA[{$value}]]></Value>
+                    </NameValueList>
+                {/foreach}
+            </ItemSpecifics>
+        {$return_policy}
+        {if isset($site)}
+            <Site>{$site}</Site>{/if}
+        {if isset($variations)}
+            {$variations}
 		{/if}
-		{if isset($variations)}
-			{$variations}
-		{/if}
-        
+		{if isset($product_listing_details)}
+            {$product_listing_details}
+        {/if}
+
         {if isset($price_original)}
             <DiscountPriceInfo>
                 <OriginalRetailPrice>{$price_original}</OriginalRetailPrice>
@@ -111,8 +113,7 @@
                   <StoreCategoryID>{$ebay_store_category_id}</StoreCategoryID>
                   <!--<StoreCategoryName> string </StoreCategoryName>-->
             </Storefront>
-        {/if}        
-                
+        {/if} 
 	</Item>
 	<RequesterCredentials>
 		<eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>

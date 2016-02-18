@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,43 +19,45 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
+ *  @copyright 2007-2016 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayShippingService
 {
-	public static function getAll($ebay_site_id)
-	{
-		return Db::getInstance()->ExecuteS('SELECT *
+    public static function getAll($ebay_site_id)
+    {
+        return Db::getInstance()->ExecuteS('SELECT *
 			FROM '._DB_PREFIX_.'ebay_shipping_service
-			WHERE `ebay_site_id` = '.(int)$ebay_site_id);
-	}
+			WHERE `ebay_site_id` = '.(int) $ebay_site_id);
+    }
 
-	public static function getTotal($ebay_site_id)
-	{
-		return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
+    public static function getTotal($ebay_site_id)
+    {
+        return Db::getInstance()->getValue('SELECT COUNT(*) AS nb
 			FROM '._DB_PREFIX_.'ebay_shipping_service
-			WHERE `ebay_site_id` = '.(int)$ebay_site_id);
-	}
+			WHERE `ebay_site_id` = '.(int) $ebay_site_id);
+    }
 
-	public static function insert($data)
-	{
-		return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_service', $data, 'INSERT');
-	}
-	
-	public static function getCarriers($ebay_site_id)
-	{
-		if (EbayShippingService::getTotal($ebay_site_id))
-			return EbayShippingService::getAll($ebay_site_id);
+    public static function insert($data)
+    {
+        return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_service', $data, 'INSERT');
+    }
 
-		$ebay = new EbayRequest();
-		$carriers = $ebay->getCarriers();
+    public static function getCarriers($ebay_site_id)
+    {
+        if (EbayShippingService::getTotal($ebay_site_id)) {
+            return EbayShippingService::getAll($ebay_site_id);
+        }
 
-		foreach ($carriers as $carrier)
-			EbayShippingService::insert(array_map('pSQL', $carrier));
+        $ebay = new EbayRequest();
+        $carriers = $ebay->getCarriers();
 
-		return $carriers;
-	}
+        foreach ($carriers as $carrier) {
+            EbayShippingService::insert(array_map('pSQL', $carrier));
+        }
+
+        return $carriers;
+    }
 }
