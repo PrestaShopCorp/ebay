@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,9 +19,9 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2015 PrestaShop SA
+ * @copyright 2007-2016 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
+ * International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayTab
@@ -35,7 +35,7 @@ class EbayTab
     protected $context;
     protected $path;
 
-    function __construct($ebay, $smarty, $context = null, $path = null)
+    public function __construct($ebay, $smarty, $context = null, $path = null)
     {
         $this->ebay = $ebay;
         $this->ebay_profile = $ebay->ebay_profile;
@@ -48,7 +48,7 @@ class EbayTab
     {
         $this->smarty->assign($template_vars);
 
-        return $this->ebay->display(dirname(__FILE__) . '/../../ebay.php', '/views/templates/hook/' . $template);
+        return $this->ebay->display(dirname(__FILE__).'/../../ebay.php', '/views/templates/hook/'.$template);
     }
 
     protected function _getUrl($extra_vars = array())
@@ -60,7 +60,7 @@ class EbayTab
             'module_name' => Tools::getValue('module_name'),
         );
 
-        return 'index.php?' . http_build_query(array_merge($url_vars, $extra_vars));
+        return 'index.php?'.http_build_query(array_merge($url_vars, $extra_vars));
     }
 
     /**
@@ -69,6 +69,6 @@ class EbayTab
      **/
     protected function _getModuleUrl()
     {
-        return Tools::getShopDomain(true) . __PS_BASE_URI__ . 'modules/ebay/';
+        return Tools::getShopDomain(true).__PS_BASE_URI__.'modules/ebay/';
     }
 }

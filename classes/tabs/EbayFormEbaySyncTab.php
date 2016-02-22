@@ -1,7 +1,6 @@
 <?php
-
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -20,13 +19,13 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2015 PrestaShop SA
+ * @copyright 2007-2016 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
+ * International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayFormEbaySyncTab extends EbayTab
 {
-
     function getContent()
     {
         // Check if the module is configured
@@ -89,8 +88,8 @@ class EbayFormEbaySyncTab extends EbayTab
             }
         }
 
-        $nb_products_sync_url = _MODULE_DIR_ . 'ebay/ajax/getNbProductsSync.php?token=' . Configuration::get('EBAY_SECURITY_TOKEN') . '&time=' . pSQL(date('Ymdhis')) . '&profile=' . $this->ebay_profile->id;
-        $sync_products_url = _MODULE_DIR_ . 'ebay/ajax/eBaySyncProduct.php?token=' . Configuration::get('EBAY_SECURITY_TOKEN') . '&option=\'+option+\'&profile=' . $this->ebay_profile->id . '&admin_path=' . basename(_PS_ADMIN_DIR_) . '&time=' . pSQL(date('Ymdhis'));
+        $nb_products_sync_url = _MODULE_DIR_.'ebay/ajax/getNbProductsSync.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')).'&profile='.$this->ebay_profile->id;
+        $sync_products_url = _MODULE_DIR_.'ebay/ajax/eBaySyncProduct.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&option=\'+option+\'&profile='.$this->ebay_profile->id.'&admin_path='.basename(_PS_ADMIN_DIR_).'&time='.pSQL(date('Ymdhis'));
 
         $ebay_alert = new EbayAlert($this->ebay);
         $smarty_vars = array(
@@ -118,10 +117,9 @@ class EbayFormEbaySyncTab extends EbayTab
         );
 
         return $this->display('formEbaySync.tpl', $smarty_vars);
-
     }
 
-    function postProcess()
+    public function postProcess()
     {
 
         // Update Sync Option
@@ -129,14 +127,13 @@ class EbayFormEbaySyncTab extends EbayTab
             return;
         }
 
-        $this->ebay_profile->setConfiguration('EBAY_SYNC_OPTION_RESYNC',
-            (Tools::getValue('ebay_sync_option_resync') == 1 ? 1 : 0));
+        $this->ebay_profile->setConfiguration('EBAY_SYNC_OPTION_RESYNC', (Tools::getValue('ebay_sync_option_resync') == 1 ? 1 : 0));
 
         // Empty error result
         $this->ebay_profile->setConfiguration('EBAY_SYNC_LAST_PRODUCT', 0);
 
-        if (file_exists(dirname(__FILE__) . '/../../log/syncError.php')) {
-            @unlink(dirname(__FILE__) . '/../../log/syncError.php');
+        if (file_exists(dirname(__FILE__).'/../../log/syncError.php')) {
+            @unlink(dirname(__FILE__).'/../../log/syncError.php');
         }
 
         $this->ebay_profile->setConfiguration('EBAY_SYNC_MODE', Tools::getValue('ebay_sync_mode'));
@@ -150,12 +147,10 @@ class EbayFormEbaySyncTab extends EbayTab
             if (Tools::getValue('category')) {
                 EbayCategoryConfiguration::updateByIdProfile($this->ebay_profile->id, array('sync' => 0));
                 foreach (Tools::getValue('category') as $id_category) {
-                    EbayCategoryConfiguration::updateByIdProfileAndIdCategory((int)$this->ebay_profile->id,
-                        $id_category, array('id_ebay_profile' => $this->ebay_profile->id, 'sync' => 1));
+                    EbayCategoryConfiguration::updateByIdProfileAndIdCategory((int) $this->ebay_profile->id, $id_category, array('id_ebay_profile' => $this->ebay_profile->id, 'sync' => 1));
                 }
             }
         }
-
     }
 
     /*
@@ -173,18 +168,13 @@ class EbayFormEbaySyncTab extends EbayTab
 
         if (count($cat_with_problem) > 0) {
             if (count($cat_with_problem) == 1) {
-                $alert = $this->ebay->l('You have chosen eBay category : ',
-                        'ebayformebaysynctab') . ' "' . $var . '" ' . $this->ebay->l(' which does not support multivariation products. Each variation of a product will generate a new product in eBay',
-                        'ebayformebaysynctab');
+                $alert = $this->ebay->l('You have chosen eBay category : ', 'ebayformebaysynctab').' "'.$var.'" '.$this->ebay->l(' which does not support multivariation products. Each variation of a product will generate a new product in eBay', 'ebayformebaysynctab');
             } else {
-                $alert = $this->ebay->l('You have chosen eBay categories : ',
-                        'ebayformebaysynctab') . ' "' . $var . '" ' . $this->ebay->l(' which do not support multivariation products. Each variation of a product will generate a new product in eBay',
-                        'ebayformebaysynctab');
+                $alert = $this->ebay->l('You have chosen eBay categories : ', 'ebayformebaysynctab').' "'.$var.'" '.$this->ebay->l(' which do not support multivariation products. Each variation of a product will generate a new product in eBay', 'ebayformebaysynctab');
             }
+
         }
 
         return $alert;
     }
-
 }
-

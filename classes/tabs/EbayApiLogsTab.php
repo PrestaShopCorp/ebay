@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
+ *  @copyright 2007-2016 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -27,17 +27,15 @@
 class EbayApiLogsTab extends EbayTab
 {
 
-	function getContent()
-	{
-		// Load prestashop ebay's configuration
-		$configs = Configuration::getMultiple(array('EBAY_SECURITY_TOKEN'));        
-		
-		return $this->display('api_logs.tpl', array(
-			'nb_logs' => EbayApiLog::count(),
-			'configs' => $configs,
-			'api_not_configured' => !Configuration::get('EBAY_API_LOGS')
-		));
-	}
-	
-}
+    public function getContent()
+    {
+        // Load prestashop ebay's configuration
+        $configs = Configuration::getMultiple(array('EBAY_SECURITY_TOKEN'));
 
+        return $this->display('api_logs.tpl', array(
+            'nb_logs' => EbayApiLog::count(),
+            'configs' => $configs,
+            'api_not_configured' => !Configuration::get('EBAY_API_LOGS'),
+        ));
+    }
+}

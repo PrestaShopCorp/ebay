@@ -19,266 +19,277 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
+ *  @copyright 2007-2016 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayAlert
 {
-	private $ebay_profile;
-	private $ebay;
-	private $errors		= array();
-	private $warnings	= array();
-	private $infos		= array();
+    private $ebay_profile;
+    private $ebay;
+    private $errors = array();
+    private $warnings = array();
+    private $infos = array();
 
-	private $alerts;
+    private $alerts;
 
-	public function __construct(Ebay $obj){
-		$this->ebay = $obj;
-		$this->ebay_profile = $obj->ebay_profile;
-	}
+    public function __construct(Ebay $obj)
+    {
+        $this->ebay = $obj;
+        $this->ebay_profile = $obj->ebay_profile;
+    }
 
-	public function getAlerts(){
-		$this->reset();
-		$this->checkOrders();
-		$this->checkUrlDomain();
-		$this->checkCronTask();
+    public function getAlerts()
+    {
+        $this->reset();
+        $this->checkOrders();
+        $this->checkUrlDomain();
+        $this->checkCronTask();
 
-		$this->build();
+        $this->build();
 
-		return $this->alerts;
-	}
-	private function reset(){
-		$this->errors	= array();
-		$this->warnings	= array();
-		$this->infos	= array();
-	}
-	private function build(){
-		$this->alerts = array_merge($this->errors, $this->warnings, $this->infos);
-	}
+        return $this->alerts;
+    }
+    private function reset()
+    {
+        $this->errors = array();
+        $this->warnings = array();
+        $this->infos = array();
+    }
+    private function build()
+    {
+        $this->alerts = array_merge($this->errors, $this->warnings, $this->infos);
+    }
 
-	public function checkNumberPhoto(){
-		$context = Context::getContext();
-		if ($this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING') > 0){
-			$link = new EbayCountrySpec();
-			$link->getPictureUrl();
-			return array(
-				'type' => 'warning', 
-				'message' => $this->ebay->l('You will send more than one image. This can have financial consequences. Please verify this link'),
-				'link_warn' => $link->getPictureUrl(),
-				'kb'	=> array(
-							'errorcode' => 'PICTURES_NUMBER_ABOVE_ZERO', 
-							'lang' => $context->language->iso_code, 
-							'module_version' => $this->ebay->version, 
-							'prestashop_version' => _PS_VERSION_
-							),
-				);
-		}
+    public function checkNumberPhoto()
+    {
+        $context = Context::getContext();
+        if ($this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING') > 0) {
+            $link = new EbayCountrySpec();
+            $link->getPictureUrl();
+            return array(
+                'type' => 'warning',
+                'message' => $this->ebay->l('You will send more than one image. This can have financial consequences. Please verify this link'),
+                'link_warn' => $link->getPictureUrl(),
+                'kb' => array(
+                    'errorcode' => 'PICTURES_NUMBER_ABOVE_ZERO',
+                    'lang' => $context->language->iso_code,
+                    'module_version' => $this->ebay->version,
+                    'prestashop_version' => _PS_VERSION_,
+                ),
+            );
+        }
 
-		if ($this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING') >= 12)
-			return array(
-				'type' => 'error', 
-				'message' => $this->ebay->l('You can\'t send more than 12 pictures per product. Please configure in Advanced Settings'),
-				'kb'	=> array(
-							'errorcode' => 'PICTURES_NUMBER_ABOVE_TWELVE', 
-							'lang' => $context->language->iso_code, 
-							'module_version' => $this->ebay->version, 
-							'prestashop_version' => _PS_VERSION_
-							),
-				);
-		return false;
-	}
+        if ($this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING') >= 12) {
+            return array(
+                'type' => 'error',
+                'message' => $this->ebay->l('You can\'t send more than 12 pictures per product. Please configure in Advanced Settings'),
+                'kb' => array(
+                    'errorcode' => 'PICTURES_NUMBER_ABOVE_TWELVE',
+                    'lang' => $context->language->iso_code,
+                    'module_version' => $this->ebay->version,
+                    'prestashop_version' => _PS_VERSION_,
+                ),
+            );
+        }
 
-	private function checkOrders(){
-		$this->checkOrdersCountry();
-	}
+        return false;
+    }
 
-	private function checkOrdersCountry(){
-		if ($countries = EbayOrderErrors::getEbayOrdersCountry()){
-			$list = array('country' => '', 'order' => '');
+    private function checkOrders()
+    {
+        $this->checkOrdersCountry();
+    }
 
-			foreach ($countries as $key => $orders) {
-				
-				$country = new Country(Country::getByIso($key), (int)Configuration::get('PS_LANG_DEFAULT'));
-				
-				if ($country->active)
-					continue;
+    private function checkOrdersCountry()
+    {
+        if ($countries = EbayOrderErrors::getEbayOrdersCountry()) {
+            $list = array('country' => '', 'order' => '');
 
-				Tools::isEmpty($list['country']) ? ($list['country'] .= $country->name) : ($list['country'] .= ', '.$country->name);
+            foreach ($countries as $key => $orders) {
 
-				foreach ($orders as $order)
-					Tools::isEmpty($list['order']) ? ($list['order'] .= $order['id_order_seller']) : ($list['order'] .= ', '.$order['id_order_seller']);
-			}
-			
-			$this->errors[] = array(
-				'type' => 'error', 
-				'message' => $this->ebay->l('You must enable the following countries : ').$list['country'].$this->ebay->l('. In order to import this eBay order(s) : ').$list['order'].'.',
-					);
-		}
-	}
+                $country = new Country(Country::getByIso($key), (int) Configuration::get('PS_LANG_DEFAULT'));
 
-	public function sendDailyMail(){
-		$this->getAlerts();
+                if ($country->active) {
+                    continue;
+                }
 
-		if (!$this->formatEmail()) {
-			return;
-		}
+                Tools::isEmpty($list['country']) ? ($list['country'] .= $country->name) : ($list['country'] .= ', '.$country->name);
 
-		$template_vars = array('{content}' 	=> $this->formatEmail());
+                foreach ($orders as $order) {
+                    Tools::isEmpty($list['order']) ? ($list['order'] .= $order['id_order_seller']) : ($list['order'] .= ', '.$order['id_order_seller']);
+                }
 
-		Mail::Send(
-			(int)Configuration::get('PS_LANG_DEFAULT'),
-			'ebayAlert',
-			Mail::l('Recap of your eBay module', (int)Configuration::get('PS_LANG_DEFAULT')),
-			$template_vars,
-			strval(Configuration::get('PS_SHOP_EMAIL')),
-			null,
-			strval(Configuration::get('PS_SHOP_EMAIL')),
-			strval(Configuration::get('PS_SHOP_NAME')),
-			null,
-			null,
-			dirname(__FILE__).'/../views/templates/mails/'
-		);
-		$this->reset();
-	}
+            }
 
-	public function formatEmail(){
+            $this->errors[] = array(
+                'type' => 'error',
+                'message' => $this->ebay->l('You must enable the following countries : ').$list['country'].$this->ebay->l('. In order to import this eBay order(s) : ').$list['order'].'.',
+            );
+        }
+    }
 
-		$templates_vars = array();
+    public function sendDailyMail()
+    {
+        $this->getAlerts();
 
-		(!empty($this->errors)) 	?  $templates_vars['errors'] 	= $this->errors 	: '';
-		(!empty($this->warnings))	?  $templates_vars['warnings'] 	= $this->warnings 	: '';
-		(!empty($this->infos))		?  $templates_vars['infos'] 	= $this->infos 		: '';
+        if (!$this->formatEmail()) {
+            return;
+        }
 
-		if (empty($templates_vars)) {
-			return false;
-		}
-		
-		$smarty = Context::getContext()->smarty;
-		$smarty->assign($templates_vars);
+        $template_vars = array('{content}' => $this->formatEmail());
 
-		return $this->ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/alert_mail.tpl');
-	}
+        Mail::Send(
+            (int) Configuration::get('PS_LANG_DEFAULT'),
+            'ebayAlert',
+            Mail::l('Recap of your eBay module', (int) Configuration::get('PS_LANG_DEFAULT')),
+            $template_vars,
+            strval(Configuration::get('PS_SHOP_EMAIL')),
+            null,
+            strval(Configuration::get('PS_SHOP_EMAIL')),
+            strval(Configuration::get('PS_SHOP_NAME')),
+            null,
+            null,
+            dirname(__FILE__).'/../views/templates/mails/'
+        );
+        $this->reset();
+    }
 
-	public function checkUrlDomain(){
-		// check domain
-		if (version_compare(_PS_VERSION_, '1.5', '>')) {
-			$shop = $this->ebay_profile instanceof EbayProfile ? new Shop($this->ebay_profile->id_shop) : new Shop();
-			$wrong_domain = ($_SERVER['HTTP_HOST'] != $shop->domain && $_SERVER['HTTP_HOST'] != $shop->domain_ssl && Tools::getValue('ajax') == false);
-			$domain = isset($shop->domain_ssl) ? $shop->domain_ssl : $shop->domain.DIRECTORY_SEPARATOR.$shop->physical_uri;
-		}
-		else {
-			$wrong_domain = ($_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN') && $_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN_SSL'));
-			$domain = isset($shop->domain_ssl) ? Configuration::get('PS_SHOP_DOMAIN_SSL') : Configuration::get('PS_SHOP_DOMAIN');
-		}
+    public function formatEmail()
+    {
 
-		if ($wrong_domain) {
-			$url_vars = array();
-			// if (version_compare(_PS_VERSION_, '1.5', '>'))
-			// 	$url_vars['controller'] = 'AdminMeta';
-			// else
-			// 	$url_vars['tab'] = 'AdminMeta';
-			// $warning_url = $this->_getUrl($url_vars);
+        $templates_vars = array();
 
-			$context = Context::getContext();
-			$protocol = Configuration::get('PS_SSL_ENABLED') ? 'https' : 'http';
-			$this->warnings[] = array(
-				'type' => 'warning', 
-				'message' => $this->ebay->l('You are currently connected to the Prestashop Back Office using a different URL than set up, this module will not work properly. Please log in using @link@this url.@/link@'),
-				'link_warn' => $protocol.'://'.$domain.DIRECTORY_SEPARATOR.basename(_PS_ADMIN_DIR_).DIRECTORY_SEPARATOR,
-				'kb'	=> array(
-							'errorcode' => 'HELP-ALERT-DEFAULT-PS-URL', 
-							'lang' => $context->language->iso_code, 
-							'module_version' => $this->ebay->version, 
-							'prestashop_version' => _PS_VERSION_
-							),
-				);
+        (!empty($this->errors)) ? $templates_vars['errors'] = $this->errors : '';
+        (!empty($this->warnings)) ? $templates_vars['warnings'] = $this->warnings : '';
+        (!empty($this->infos)) ? $templates_vars['infos'] = $this->infos : '';
 
-		}
-	}
+        if (empty($templates_vars)) {
+            return false;
+        }
 
-	private function _getUrl($extra_vars = array())
-	{
-		$url_vars = array(
-			'configure' => Tools::getValue('configure'),
-			'token' => version_compare(_PS_VERSION_, '1.5', '>') ? Tools::getAdminTokenLite($extra_vars['controller']) : Tools::getAdminTokenLite($extra_vars['tab']),
-			'tab_module' => Tools::getValue('tab_module'),
-			'module_name' => Tools::getValue('module_name'),
-		);
+        $smarty = Context::getContext()->smarty;
+        $smarty->assign($templates_vars);
 
-		return 'index.php?'.http_build_query(array_merge($url_vars, $extra_vars));
-	}
+        return $this->ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/alert_mail.tpl');
+    }
 
-	private function checkCronTask(){
-		$cron_task = array();
+    public function checkUrlDomain()
+    {
+        // check domain
+        if (version_compare(_PS_VERSION_, '1.5', '>')) {
+            $shop = $this->ebay_profile instanceof EbayProfile ? new Shop($this->ebay_profile->id_shop) : new Shop();
+            $wrong_domain = ($_SERVER['HTTP_HOST'] != $shop->domain && $_SERVER['HTTP_HOST'] != $shop->domain_ssl && Tools::getValue('ajax') == false);
+            $domain = isset($shop->domain_ssl) ? $shop->domain_ssl : $shop->domain.DIRECTORY_SEPARATOR.$shop->physical_uri;
+        } else {
+            $wrong_domain = ($_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN') && $_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN_SSL'));
+            $domain = isset($shop->domain_ssl) ? Configuration::get('PS_SHOP_DOMAIN_SSL') : Configuration::get('PS_SHOP_DOMAIN');
+        }
 
-		// PRODUCTS
-		if ((int)Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON') == 1)
-		{
-			if ($last_sync_datetime = Configuration::get('DATE_LAST_SYNC_PRODUCTS'))
-			{
-				$warning_date = strtotime(date('Y-m-d').' - 2 days');
+        if ($wrong_domain) {
+            $url_vars = array();
+            // if (version_compare(_PS_VERSION_, '1.5', '>'))
+            //     $url_vars['controller'] = 'AdminMeta';
+            // else
+            //     $url_vars['tab'] = 'AdminMeta';
+            // $warning_url = $this->_getUrl($url_vars);
 
-				$date = date('Y-m-d', strtotime($last_sync_datetime));
-				$time =date('H:i:s', strtotime($last_sync_datetime));
-				$msg = $this->ebay->l('Last product synchronization has been done the ').$date.$this->ebay->l(' at ').$time.$this->ebay->l(' and it tried to synchronize ').Configuration::get('NB_PRODUCTS_LAST');
+            $context = Context::getContext();
+            $protocol = Configuration::get('PS_SSL_ENABLED') ? 'https' : 'http';
+            $this->warnings[] = array(
+                'type' => 'warning',
+                'message' => $this->ebay->l('You are currently connected to the Prestashop Back Office using a different URL than set up, this module will not work properly. Please log in using @link@this url.@/link@'),
+                'link_warn' => $protocol.'://'.$domain.DIRECTORY_SEPARATOR.basename(_PS_ADMIN_DIR_).DIRECTORY_SEPARATOR,
+                'kb' => array(
+                    'errorcode' => 'HELP-ALERT-DEFAULT-PS-URL',
+                    'lang' => $context->language->iso_code,
+                    'module_version' => $this->ebay->version,
+                    'prestashop_version' => _PS_VERSION_,
+                ),
+            );
 
-				if (strtotime($last_sync_datetime) < $warning_date)
-					$this->warnings[] = array(
-						'type' => 'warning',
-						'message' => $msg,
-						);
-				else
-					$this->infos[] = array(
-						'type' => 'info',
-						'message' => $msg,
-						);
-			}
-			else
-			{
-				$this->errors[] = array(
-					'type' => 'error',
-					'message' => $this->ebay->l('The product cron job has never been run.'),
-					);
-			}
+        }
+    }
 
-			
-		}
+    private function _getUrl($extra_vars = array())
+    {
+        $url_vars = array(
+            'configure' => Tools::getValue('configure'),
+            'token' => version_compare(_PS_VERSION_, '1.5', '>') ? Tools::getAdminTokenLite($extra_vars['controller']) : Tools::getAdminTokenLite($extra_vars['tab']),
+            'tab_module' => Tools::getValue('tab_module'),
+            'module_name' => Tools::getValue('module_name'),
+        );
 
-		// ORDERS
-		if ((int)Configuration::get('EBAY_SYNC_ORDERS_BY_CRON') == 1)
-		{
-			if ($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE') != null)
-			{
-				$datetime = new DateTime($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE'));
+        return 'index.php?'.http_build_query(array_merge($url_vars, $extra_vars));
+    }
 
-				$date = date('Y-m-d', strtotime($datetime->format('Y-m-d H:i:s'))); 
-				$time = date('H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
+    private function checkCronTask()
+    {
+        $cron_task = array();
 
-				$datetime2 = new DateTime();
-				
-				$interval = round(($datetime2->format('U') - $datetime->format('U')) / (60*60*24));
+        // PRODUCTS
+        if ((int) Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON') == 1) {
+            if ($last_sync_datetime = Configuration::get('DATE_LAST_SYNC_PRODUCTS')) {
+                $warning_date = strtotime(date('Y-m-d').' - 2 days');
 
-				if ($interval->format('%a') >= 1)
-					$this->errors[] = array(
-						'type' => 'error', 
-						'message' => $this->ebay->l('Last order synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
-						);
-				else
-					$this->infos[] = array(
-						'type' => 'info', 
-						'message' => $this->ebay->l('Last order synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
-						);
+                $date = date('Y-m-d', strtotime($last_sync_datetime));
+                $time = date('H:i:s', strtotime($last_sync_datetime));
+                $msg = $this->ebay->l('Last product synchronization has been done the ').$date.$this->ebay->l(' at ').$time.$this->ebay->l(' and it tried to synchronize ').Configuration::get('NB_PRODUCTS_LAST');
 
-			}
-			else
-				$this->errors[] = array(
-					'type' => 'error', 
-					'message' => $this->ebay->l('Order cron job has never been run.'),
-					);
-		}   
+                if (strtotime($last_sync_datetime) < $warning_date) {
+                    $this->warnings[] = array(
+                        'type' => 'warning',
+                        'message' => $msg,
+                    );
+                } else {
+                    $this->infos[] = array(
+                        'type' => 'info',
+                        'message' => $msg,
+                    );
+                }
 
-	}
+            } else {
+                $this->errors[] = array(
+                    'type' => 'error',
+                    'message' => $this->ebay->l('The product cron job has never been run.'),
+                );
+            }
 
+        }
+
+        // ORDERS
+        if ((int) Configuration::get('EBAY_SYNC_ORDERS_BY_CRON') == 1) {
+            if ($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE') != null) {
+                $datetime = new DateTime($this->ebay_profile->getConfiguration('EBAY_ORDER_LAST_UPDATE'));
+
+                $date = date('Y-m-d', strtotime($datetime->format('Y-m-d H:i:s')));
+                $time = date('H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
+
+                $datetime2 = new DateTime();
+
+                $interval = round(($datetime2->format('U') - $datetime->format('U')) / (60 * 60 * 24));
+
+                if ($interval >= 1) {
+                    $this->errors[] = array(
+                        'type' => 'error',
+                        'message' => $this->ebay->l('Last order synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
+                    );
+                } else {
+                    $this->infos[] = array(
+                        'type' => 'info',
+                        'message' => $this->ebay->l('Last order synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
+                    );
+                }
+
+            } else {
+                $this->errors[] = array(
+                    'type' => 'error',
+                    'message' => $this->ebay->l('Order cron job has never been run.'),
+                );
+            }
+
+        }
+
+    }
 }

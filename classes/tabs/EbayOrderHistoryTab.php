@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
+ *  @copyright 2007-2016 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -27,28 +27,28 @@
 class EbayOrderHistoryTab extends EbayTab
 {
 
-	function getContent()
-	{
-		// Check if the module is configured
-		if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'))
-			return '<p><b>'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayorderhistorytab').'</b></p><br />';
+    public function getContent()
+    {
+        // Check if the module is configured
+        if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {
+            return '<p><b>'.$this->ebay->l('Please configure the \'General settings\' tab before using this tab', 'ebayorderhistorytab').'</b></p><br />';
+        }
 
-		$dateLastImport = '-';
+        $dateLastImport = '-';
 
-		if (file_exists(dirname(__FILE__).'/../../log/orders.php'))
-			include(dirname(__FILE__).'/../../log/orders.php');
+        if (file_exists(dirname(__FILE__).'/../../log/orders.php')) {
+            include dirname(__FILE__).'/../../log/orders.php';
+        }
 
-		$template_vars = array(
-			'date_last_import' => $dateLastImport,
-			'orders' => isset($orders) ? $orders : array(),
-			'help'	=> array(
-				'lang' => $this->context->country->iso_code,
-				'module_version' => $this->ebay->version,
-				'ps_version' => _PS_VERSION_,)
-		);
+        $template_vars = array(
+            'date_last_import' => $dateLastImport,
+            'orders' => isset($orders) ? $orders : array(),
+            'help' => array(
+                'lang' => $this->context->country->iso_code,
+                'module_version' => $this->ebay->version,
+                'ps_version' => _PS_VERSION_),
+        );
 
-		return $this->display('ordersHistory.tpl', $template_vars);
-	}
-	
+        return $this->display('ordersHistory.tpl', $template_vars);
+    }
 }
-

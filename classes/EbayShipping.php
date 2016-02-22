@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -20,25 +20,25 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2015 PrestaShop SA
+ * @copyright 2007-2016 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
+ * International Registered Trademark & Property of PrestaShop SA
  */
 class EbayShipping
 {
     public static function getPsCarrierByEbayCarrier($id_ebay_profile, $ebay_carrier)
     {
         return Db::getInstance()->getValue('SELECT `ps_carrier`
-			FROM `' . _DB_PREFIX_ . 'ebay_shipping`
-			WHERE `id_ebay_profile` = ' . (int)$id_ebay_profile . '
-			AND `ebay_carrier` = \'' . pSQL($ebay_carrier) . '\'');
+			FROM `'._DB_PREFIX_.'ebay_shipping`
+			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
+			AND `ebay_carrier` = \''.pSQL($ebay_carrier).'\'');
     }
 
     public static function getNationalShippings($id_ebay_profile, $id_product = null)
     {
         $shippings = Db::getInstance()->ExecuteS('SELECT *
-			FROM ' . _DB_PREFIX_ . 'ebay_shipping
-			WHERE `id_ebay_profile` = ' . (int)$id_ebay_profile . '
+			FROM '._DB_PREFIX_.'ebay_shipping
+			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
 			AND international = 0');
 
         //Check if product can be shipped because of weight or dimension
@@ -50,12 +50,9 @@ class EbayShipping
                 $product = new Product($id_product);
                 if ($carrier->range_behavior) {
                     if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT
-                            && (!Carrier::checkDeliveryPriceByWeight($carrier->id, $product->weight,
-                                $value['id_zone'])))
+                        && (!Carrier::checkDeliveryPriceByWeight($carrier->id, $product->weight, $value['id_zone'])))
                         || ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE
-                            && (!Carrier::checkDeliveryPriceByPrice($carrier->id, $product->weight, $value['id_zone'],
-                                Configuration::get('PS_CURRENCY_DEFAULT'))))
-                    ) {
+                            && (!Carrier::checkDeliveryPriceByPrice($carrier->id, $product->weight, $value['id_zone'], Configuration::get('PS_CURRENCY_DEFAULT'))))) {
                         $exclude[] = $key;
                     }
                 }
@@ -74,7 +71,7 @@ class EbayShipping
 
         if ($id_product && version_compare(_PS_VERSION_, '1.5', '>')) {
             $shippings_product = Db::getInstance()->ExecuteS('SELECT id_carrier_reference as ps_carrier
-			FROM ' . _DB_PREFIX_ . 'product_carrier WHERE id_product = ' . (int)$id_product);
+			FROM '._DB_PREFIX_.'product_carrier WHERE id_product = '.(int)$id_product);
             if (count($shippings_product) > 0) {
                 if (array_intersect_assoc($shippings, $shippings_product)) {
                     $shippings = array_intersect_assoc($shippings, $shippings_product);
@@ -88,7 +85,7 @@ class EbayShipping
     public static function internationalShippingsHaveZone($shippings)
     {
         foreach ($shippings as $shipping) {
-            if (!Db::getInstance()->getValue('SELECT * FROM ' . _DB_PREFIX_ . 'ebay_shipping_international_zone WHERE id_ebay_shipping = ' . (int)$shipping['id_ebay_shipping'])) {
+            if (!Db::getInstance()->getValue('SELECT * FROM '._DB_PREFIX_.'ebay_shipping_international_zone WHERE id_ebay_shipping = '.(int)$shipping['id_ebay_shipping'])) {
                 return false;
             }
         }
@@ -99,8 +96,8 @@ class EbayShipping
     public static function getInternationalShippings($id_ebay_profile, $id_product = null)
     {
         $shippings = Db::getInstance()->ExecuteS('SELECT *
-			FROM ' . _DB_PREFIX_ . 'ebay_shipping
-			WHERE `id_ebay_profile` = ' . (int)$id_ebay_profile . '
+			FROM '._DB_PREFIX_.'ebay_shipping
+			WHERE `id_ebay_profile` = '.(int)$id_ebay_profile.'
 			AND international = 1');
 
         //Check if product can be shipped because of weight or dimension
@@ -112,12 +109,9 @@ class EbayShipping
                 $product = new Product($id_product);
                 if ($carrier->range_behavior) {
                     if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT
-                            && (!Carrier::checkDeliveryPriceByWeight($carrier->id, $product->weight,
-                                $value['id_zone'])))
+                        && (!Carrier::checkDeliveryPriceByWeight($carrier->id, $product->weight, $value['id_zone'])))
                         || ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE
-                            && (!Carrier::checkDeliveryPriceByPrice($carrier->id, $product->weight, $value['id_zone'],
-                                Configuration::get('PS_CURRENCY_DEFAULT'))))
-                    ) {
+                            && (!Carrier::checkDeliveryPriceByPrice($carrier->id, $product->weight, $value['id_zone'], Configuration::get('PS_CURRENCY_DEFAULT'))))) {
                         $exclude[] = $key;
                     }
                 }
@@ -137,7 +131,7 @@ class EbayShipping
         // We keep only the selected transport
         if ($id_product && version_compare(_PS_VERSION_, '1.5', '>')) {
             $shippings_product = Db::getInstance()->ExecuteS('SELECT id_carrier_reference as ps_carrier
-			FROM ' . _DB_PREFIX_ . 'product_carrier WHERE id_product = ' . (int)$id_product);
+			FROM '._DB_PREFIX_.'product_carrier WHERE id_product = '.(int)$id_product);
 
             $simple_shippings_product = array();
             foreach ($shippings_product as $key => $value) {
@@ -181,18 +175,18 @@ class EbayShipping
         $sql = 'INSERT INTO `' . _DB_PREFIX_ . 'ebay_shipping` (
 			`id_ebay_profile`, 
 			`ebay_carrier`, 
-			`ps_carrier`, 
+			`ps_carrier`,
 			`extra_fee`,
 			`international`,
 			`id_zone`
 			)
 			VALUES(
-			\'' . (int)$id_ebay_profile . '\',
-			\'' . pSQL($ebay_carrier) . '\',
-			\'' . (int)$ps_carrier . '\',
-			\'' . (float)$extra_fee . '\',
-			\'' . (int)$international . '\',
-			\'' . (int)$id_zone . '\')';
+			\''.(int) $id_ebay_profile.'\',
+			\''.pSQL($ebay_carrier).'\',
+			\''.(int) $ps_carrier.'\',
+			\''.(float) $extra_fee.'\',
+			\''.(int) $international.'\',
+			\''.(int) $id_zone.'\')';
 
         DB::getInstance()->Execute($sql);
     }

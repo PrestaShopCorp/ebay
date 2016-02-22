@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,41 +19,42 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
+ *  @copyright 2007-2016 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-if (!defined('TMP_DS'))
+if (!defined('TMP_DS')) {
     define('TMP_DS', DIRECTORY_SEPARATOR);
+}
 
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
 
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR : INVALID TOKEN');
+}
 
-$id_ebay_profile = (int)Tools::getValue('profile');
-$sql = 'SELECT * FROM '._DB_PREFIX_.'ebay_shipping_zone_excluded 
-    WHERE `id_ebay_profile` = '.$id_ebay_profile.' 
+$id_ebay_profile = (int) Tools::getValue('profile');
+$sql = 'SELECT * FROM '._DB_PREFIX_.'ebay_shipping_zone_excluded
+    WHERE `id_ebay_profile` = '.$id_ebay_profile.'
     AND region = \''.pSQL(Tools::getValue('region')).'\'';
 $countries = Db::getInstance()->ExecuteS($sql);
 
-if (count($countries))
-{
+if (count($countries)) {
     $string = '';
 
-    foreach ($countries as $country)
-    {
+    foreach ($countries as $country) {
         $string .= '<div class="excludeCountry">
             <input type="checkbox" name="excludeLocation['.Tools::safeOutput($country['location']).']" ';
 
-        if ($country['excluded'] == 1)
+        if ($country['excluded'] == 1) {
             $string .= ' checked="checked" ';
+        }
 
         $string .= '/>'.Tools::safeOutput($country['description']).'</div>';
     }
-    
+
     echo $string;
-}
-else
+} else {
     echo 'No countries were found for this region';
+}

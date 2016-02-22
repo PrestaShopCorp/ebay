@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,27 +19,30 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
+ *  @copyright 2007-2016 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-if (!defined('TMP_DS'))
+if (!defined('TMP_DS')) {
     define('TMP_DS', DIRECTORY_SEPARATOR);
+}
 
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
 
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR: Invalid Token');
-
-include(dirname(__FILE__).'/../classes/EbayProductImage.php');
-
-if (Tools::getValue('action') == 'delete-all')
-{
-    if (EbayProductImage::removeAllProductImage() === true)
-        echo 'success';
-    else
-        echo 'error';
 }
-else
+
+include dirname(__FILE__).'/../classes/EbayProductImage.php';
+
+if (Tools::getValue('action') == 'delete-all') {
+    if (EbayProductImage::removeAllProductImage() === true) {
+        echo 'success';
+    } else {
+        echo 'error';
+    }
+
+} else {
     die('ERROR: Invalid arguments');
+}

@@ -365,7 +365,7 @@ textarea + .tooltip {
 }
 
 #content .ebay_wrong.big{
-	background : url('../img/big-error.png') no-repeat 2px 50% #fff;;
+	background : url('../img/big-error.png') no-repeat 17px 50% #fff;
 }
 
 .menu-msg { display: none; }
@@ -845,7 +845,7 @@ margin-bottom: 3px;
 
 .module_confirmation
 {
-	background: #DFF2BF url(/../img/admin/icon-valid.png) no-repeat scroll 6px 6px;
+	background: #DFF2BF url('/../img/admin/icon-valid.png') no-repeat scroll 6px 6px;
 	border: 1px solid #4F8A10;
 	color: #4F8A10;
 	border-radius: 3px;
@@ -879,7 +879,7 @@ margin-bottom: 3px;
 	background-image: url('../img/ajax-loader-small.gif');
 }
 #load_cat_ebay tr.error td:nth-child(1){
-	background-image: url('../img//big-error.png');
+	background-image: url('../img/big-error.png');
 }
 #load_cat_ebay tr.success td:nth-child(1){
 	background-image: url('../img/bg-li-tabs-finished.png');

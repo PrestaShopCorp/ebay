@@ -1,5 +1,5 @@
 {*
-* 2007-2015 PrestaShop
+* 2007-2016 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2015 PrestaShop SA
+*  @copyright 2007-2016 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -77,7 +77,7 @@
 		{/foreach}
 		createSelecstShipping += "</select></div></td>";
 		// end carrier eBay
-		
+
 		if (currentName == 'internationalShipping')
 		{
 			createSelecstShipping += "<td style='visibility:hidden;clear:left;' class='shipping_destinations'><p>{l s='Select the countries you will ship to:' mod='ebay'}</p>";
@@ -231,8 +231,8 @@
 	function addShippingFee(show, internationalOnly, idEbayCarrier, idPSCarrier, additionalFee){
 	{/literal}
 		var currentShippingService = -1;
-		
-	
+
+
 		if(internationalOnly == 1)
 		{literal}{{/literal}
 			var lastId = $('#internationalCarrier .internationalShipping').length;
@@ -240,11 +240,11 @@
 		}
 		else
 		{literal}{{/literal}
-			
+
 			var lastId = $('#nationalCarrier tr').length;
 			internationsuffix = '';
 		}
-			
+
 
 
 
@@ -297,7 +297,7 @@
 		stringShippingFee += 		"<input type='text' name='extrafee"+internationsuffix+"["+lastId+"]' value='"+additionalFee+"'>";
 		stringShippingFee += 	"</td>";
 		stringShippingFee += 	"<td>";
-		stringShippingFee += 	"<img src='../img/admin/delete.gif' title='Delete' class='deleteCarrier' />";	
+		stringShippingFee += 	"<img src='../img/admin/delete.gif' title='Delete' class='deleteCarrier' />";
 		stringShippingFee += 	"</td>";
 		stringShippingFee += "</tr>";
 
@@ -307,7 +307,7 @@
 			return stringShippingFee;
 	}
 
-	
+
 	function getShippingLocation(lastId, zone)
 	{literal}{{/literal}
 		var string = '';
@@ -320,7 +320,7 @@
 			{literal}{{/literal}
 			string += '<div class="shippinglocationOption"><input type="checkbox" name="internationalShippingLocation['+lastId+'][{$shippingLocation.location|escape:'htmlall':'UTF-8'}] value="{$shippingLocation.location|escape:'htmlall':'UTF-8'}">{$shippingLocation.description|escape:'htmlall':'UTF-8'}</div>';
 			}
-			
+
 		{/foreach}
 		return string;
 	}
@@ -348,7 +348,7 @@
 	{literal}{{/literal}
 		string = '<input type="hidden" value="1" name="excludeLocationHidden"/>'
 		string += '<table class="allregion table">';
-		
+
 		{foreach from=$excludeShippingLocation.all item=region key=regionvalue name=count}
 			{if $smarty.foreach.count.index % 4 == 0}
 				string += "<tr>";
@@ -372,7 +372,7 @@
 		return string;
 	}
 
-	jQuery(document).ready(function($) 
+	jQuery(document).ready(function($)
 	{literal}{{/literal}
 		/* INIT */
 		{foreach from=$existingNationalCarrier item=nationalCarrier}
@@ -393,7 +393,7 @@
 			addInternationalShippingFee('{$internationalCarrier.ebay_carrier|escape:'htmlall':'UTF-8'}', '{$internationalCarrier.ps_carrier|escape:'htmlall':'UTF-8'}', '{$internationalCarrier.extra_fee|escape:'htmlall':'UTF-8'}', zone, zoneExcluded);
 		{/foreach}
 
-		
+
 		showExcludeLocation();
 
 		{foreach from=$existingNationalCarrier item=nationalCarrier key=i}
@@ -427,8 +427,8 @@
 	{literal}{{/literal}
 		$('#nolist').fadeOut('normal', function()
 		{literal}{{/literal}
-			$('#list').html(excludeLocation());	
-			
+			$('#list').html(excludeLocation());
+
 		{literal}
 		$('.showCountries').each(function()
 		{
@@ -501,7 +501,7 @@
 			if(el.find('input').filter(':checked').length == 0)
 				is_configured = false;
 		}
-		
+
 		if(el.find('.prestaCarrier').val() == '')
 			is_configured = false;
 
@@ -535,12 +535,12 @@
 			$(this).before(excluded);
 		});
 
-		
+
 		$('#addNationalCarrier').unbind().click(function(){literal}{{/literal}
 			addShippingFee(1, 0);
 			bindElements();
 		});
-		
+
 		$('#addInternationalCarrier').unbind().click(function(){literal}{{/literal}
 			addInternationalShippingFee();
 			bindElements();
@@ -616,11 +616,11 @@
 	.excludeCountry input{
 		margin-right:5px;
 	}
-	
+
 	.allregion tr td{
 		vertical-align: top;
 	}
-	
+
 	.showCountries{
 		color:blue;
 		font-size:9px;
@@ -691,7 +691,7 @@
 				closeClick	: false,
 				openEffect	: 'none',
 				closeEffect	: 'none'
-			});	
+			});
 		}
 		else{
 			$(".fancyboxeBay").click(function(){
@@ -707,7 +707,7 @@
 
 <fieldset style="margin-top:10px;">
 	<legend><span data-dialoghelp="#DomShipp" data-inlinehelp="{l s='You must specify at least one domestic shipping method. ' mod='ebay'}">{l s='Domestic shipping' mod='ebay'}</span></legend>
-	
+
 	<div id="domesticShipping"></div>
 	<a id="domesticShippingButton" class="button bold"><img src="../img/admin/add.gif">{l s='Add new domestic carrier' mod='ebay'}</a>
 </fieldset>
@@ -727,7 +727,7 @@
 		<div id="nolist">
 		</div>
 		<div id="list">
-			
+
 		</div>
 	</div>
 </fieldset>

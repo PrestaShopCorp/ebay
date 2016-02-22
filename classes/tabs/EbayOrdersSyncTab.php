@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
+ *  @copyright 2007-2016 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -27,23 +27,22 @@
 class EbayOrdersSyncTab extends EbayTab
 {
 
-	function getContent()
-	{
-		
-		$url_vars = array(
-			'id_tab' => '14',
-			'section' => 'parameters'
-		);
+    public function getContent()
+    {
 
-		if (version_compare(_PS_VERSION_, '1.5', '>'))
-			$url_vars['controller'] = Tools::getValue('controller');
-		else
-			$url_vars['tab'] = Tools::getValue('tab');
+        $url_vars = array(
+            'id_tab' => '14',
+            'section' => 'parameters',
+        );
 
-		$url = $this->_getUrl($url_vars);        
-		
-		return $this->display('orders_sync.tpl', array('url' => $url));
-	}
-	
+        if (version_compare(_PS_VERSION_, '1.5', '>')) {
+            $url_vars['controller'] = Tools::getValue('controller');
+        } else {
+            $url_vars['tab'] = Tools::getValue('tab');
+        }
+
+        $url = $this->_getUrl($url_vars);
+
+        return $this->display('orders_sync.tpl', array('url' => $url));
+    }
 }
-

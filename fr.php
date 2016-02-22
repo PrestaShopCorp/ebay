@@ -18,7 +18,6 @@ $_MODULE['<{ebay}prestashop>ebay_5f8d9c30e0606a91c5d7b6e1bf1217ac'] = 'N\'a pas 
 $_MODULE['<{ebay}prestashop>ebay_5862386337fb6101d8edc33a9345b46e'] = 'Votre email Paypal n\'est pas spécifié ou est invalide';
 $_MODULE['<{ebay}prestashop>ebay_458d329d5eb1caf63615141fb51e8329'] = 'Votre code postal n\'est pas spécifié ou est invalide';
 $_MODULE['<{ebay}prestashop>ebay_1e3dacdfaddde2a9a6992d0f9d4af8a5'] = 'Votre profil est prêt. Accédez à la section Synchronisation pour mettre vos produits en vente';
-$_MODULE['<{ebay}prestashop>ebay_614f922668fa52a03e400087c792de0c'] = 'Pour appliquer ces modifications sur des annonces en cours, vous devez synchroniser vos objets';
 $_MODULE['<{ebay}prestashop>ebay_27560c2d2e07f0c3f9839d728e6b03b1'] = 'Importation de la catégorie eBay en cours.';
 $_MODULE['<{ebay}prestashop>ebay_dbd4457258add3475ca1ba82d1305ed5'] = 'Impossible de modifier le profil';
 $_MODULE['<{ebay}prestashop>ebay_c888438d14855d7d96a2724ee9c306bd'] = 'Configuration mise à jour';
@@ -198,7 +197,7 @@ $_MODULE['<{ebay}prestashop>formadvancedparameters_2b100896fd5ace4912e319bc7463b
 $_MODULE['<{ebay}prestashop>formadvancedparameters_801ab24683a4a8c433c6eb40c48bcd9d'] = 'Télécharger';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_d2fd2db4137a11bdbd6c63750d7f875f'] = 'Durée de conservation des journaux';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_e8605220e0fd610c52ec6fdd43035528'] = 'Synchro EAN';
-$_MODULE['<{ebay}prestashop>formadvancedparameters_5b69be52cfc307fdebc04f850acb8566'] = 'Synchroniser les EAN';
+$_MODULE['<{ebay}prestashop>formadvancedparameters_6f98ebbeea0eb89cd394d88336a146ae'] = 'Si vous cochez cette case, le module enverra la valeur &quot;Non applicable&quot; (&quot;Does not apply&quot;) pour l\'EAN quand aucun des champs EAN, ISBN ou UPC n\'est défini.';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_d8e87c0927539672f54462c837be0b7f'] = 'Synchroniser';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_31bb5929dfddc4a33bfb7d035e4d7be0'] = 'Synchroniser les commandes';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_88470e0a387c590e7520820a4d665bb7'] = 'toutes les 30 minutes lors du chargement de la page';

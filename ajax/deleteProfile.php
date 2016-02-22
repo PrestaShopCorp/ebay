@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,30 +19,34 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2015 PrestaShop SA
+ *  @copyright 2007-2016 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-if (!defined('TMP_DS'))
+if (!defined('TMP_DS')) {
     define('TMP_DS', DIRECTORY_SEPARATOR);
+}
 
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
 
-if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR: Invalid Token');
+}
 
-require_once(dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php');
+require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
 
-if (Module::isInstalled('ebay'))
-{   
+if (Module::isInstalled('ebay')) {
     $ebay = Module::getInstanceByName('ebay');
 
-    if (version_compare(_PS_VERSION_,'1.5','<'))
+    if (version_compare(_PS_VERSION_, '1.5', '<')) {
         $enable = $ebay->active;
-    else
+    } else {
         $enable = Module::isEnabled('ebay');
+    }
 
-    if($enable)
-       die(EbayProfile::deleteById((int)Tools::getValue('profile')));
+    if ($enable) {
+        die(EbayProfile::deleteById((int) Tools::getValue('profile')));
+    }
+
 }

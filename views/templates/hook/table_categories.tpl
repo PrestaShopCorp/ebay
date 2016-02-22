@@ -1,5 +1,5 @@
 {*
-* 2007-2015 PrestaShop
+* 2007-2016 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2015 PrestaShop SA
+*  @copyright 2007-2016 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -29,11 +29,11 @@
 {else}
     {if $nbCategories > 20}
         <div id="cat-pagination" style="display:none">
-        	<p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nbCategories / 20)|round:"0") mod='ebay'}</p>
+        	<p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nbCategories / 20)|ceil) mod='ebay'}</p>
         	<ul id="pagination" class="pagination">
         		<li class="prev"><</li>
-        		{assign var="nbcat" value=($nbCategories / 20)|round:"0"}
-        		{for $i=1 to $nbcat}
+        		{assign var="nb_pages" value=($nbCategories / 20)|ceil}
+        		{for $i=1 to $nb_pages}
         			<li{if $i == $p} class="current"{/if}>{$i}</li>
         		{/for}
         		<li class="next">></li>

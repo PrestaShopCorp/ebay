@@ -1,5 +1,5 @@
 {*
-* 2007-2015 PrestaShop
+* 2007-2016 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2015 PrestaShop SA
+*  @copyright 2007-2016 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -74,9 +74,12 @@
 			{/foreach}
 		</ItemSpecifics>
 		{$return_policy}
-		{if isset($variations)}
-			{$variations}
+        {if isset($variations)}
+            {$variations}
 		{/if}
+		{if isset($product_listing_details)}
+            {$product_listing_details}
+        {/if}
 		<ShippingDetails>{$shipping_details}</ShippingDetails>
 		{$buyer_requirements_details}
 		<Site>{$site}</Site>
@@ -91,11 +94,8 @@
         {if isset($ebay_store_category_id)}
             <Storefront>
                   <StoreCategoryID>{$ebay_store_category_id}</StoreCategoryID>
-                  <!--<StoreCategoryName> string </StoreCategoryName>-->
+                  {*<!--<StoreCategoryName> string </StoreCategoryName>-->*}
             </Storefront>
-        {/if}
-        {if isset($product_listing_details)}
-            {$product_listing_details}
         {/if}
 	</Item>
 	<RequesterCredentials>

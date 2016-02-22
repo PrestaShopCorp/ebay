@@ -1,5 +1,5 @@
 {*
-* 2007-2015 PrestaShop
+* 2007-2016 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,12 +18,14 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2015 PrestaShop SA
+*  @copyright 2007-2016 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 <?xml version="1.0" encoding="utf-8" ?>';
 <FetchTokenRequest xmlns="urn:ebay:apis:eBLBaseComponents">
-	<RequesterCredentials><Username>{$username}</Username></RequesterCredentials>
-	<SessionID>{$session_id}</SessionID>
+    <RequesterCredentials>
+        <Username>{$username}</Username>
+    </RequesterCredentials>
+    <SessionID>{$session_id}</SessionID>
 </FetchTokenRequest>

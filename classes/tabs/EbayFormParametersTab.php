@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,9 +19,9 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2015 PrestaShop SA
+ * @copyright 2007-2016 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
+ * International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayFormParametersTab extends EbayTab
@@ -50,21 +50,18 @@ class EbayFormParametersTab extends EbayTab
 
         $ebay_country = EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'));
 
-        $createShopUrl = 'http://cgi3.ebay.' . $ebay_country->getSiteExtension() . '/ws/eBayISAPI.dll?CreateProductSubscription&&productId=3&guest=1';
+        $createShopUrl = 'http://cgi3.ebay.'.$ebay_country->getSiteExtension().'/ws/eBayISAPI.dll?CreateProductSubscription&&productId=3&guest=1';
 
         $ebay_request = new EbayRequest();
 
-        $ebay_sign_in_url = $ebay_request->getLoginUrl() . '?SignIn&runame=' . $ebay_request->runame . '&SessID=' . $this->context->cookie->eBaySession;
+        $ebay_sign_in_url = $ebay_request->getLoginUrl().'?SignIn&runame='.$ebay_request->runame.'&SessID='.$this->context->cookie->eBaySession;
 
         $returns_policy_configuration = $this->ebay_profile->getReturnsPolicyConfiguration();
 
-        $returnsConditionAccepted = Tools::getValue('ebay_returns_accepted_option',
-            Configuration::get('EBAY_RETURNS_ACCEPTED_OPTION'));
+        $returnsConditionAccepted = Tools::getValue('ebay_returns_accepted_option', Configuration::get('EBAY_RETURNS_ACCEPTED_OPTION'));
 
-        $ebay_paypal_email = Tools::getValue('ebay_paypal_email',
-            $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'));
-        $shopPostalCode = Tools::getValue('ebay_shop_postalcode',
-            $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'));
+        $ebay_paypal_email = Tools::getValue('ebay_paypal_email', $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL'));
+        $shopPostalCode = Tools::getValue('ebay_shop_postalcode', $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'));
         $shopCountry = Tools::getValue('ebay_shop_country', $this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY'));
         $ebayListingDuration = $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') ? $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') : 'GTC';
 
@@ -76,7 +73,8 @@ class EbayFormParametersTab extends EbayTab
         $current_order_state = $this->ebay_profile->getConfiguration('EBAY_SHIPPED_ORDER_STATE');
         if ($current_order_state === null) {
             foreach ($order_states as $order_state) {
-                if ($order_state['template'] === 'shipped') { // NDRArbuz: is this the best way to find it with no doubt?
+                if ($order_state['template'] === 'shipped') {
+                    // NDRArbuz: is this the best way to find it with no doubt?
                     $current_order_state = $order_state['id_order_state'];
                     break;
                 }
@@ -154,7 +152,7 @@ class EbayFormParametersTab extends EbayTab
         return $currency['id_currency'];
     }
 
-    function postProcess()
+    public function postProcess()
     {
 
         // we retrieve the potential currencies to make sure the selected currency exists in this shop
@@ -163,37 +161,31 @@ class EbayFormParametersTab extends EbayTab
 
         if ($this->ebay_profile->setConfiguration('EBAY_PAYPAL_EMAIL', pSQL(Tools::getValue('ebay_paypal_email')))
             && $this->ebay_profile->setConfiguration('EBAY_SHOP', pSQL(Tools::getValue('ebay_shop')))
-            && $this->ebay_profile->setConfiguration('EBAY_SHOP_POSTALCODE',
-                pSQL(Tools::getValue('ebay_shop_postalcode')))
+            && $this->ebay_profile->setConfiguration('EBAY_SHOP_POSTALCODE', pSQL(Tools::getValue('ebay_shop_postalcode')))
             && $this->ebay_profile->setConfiguration('EBAY_SHOP_COUNTRY', pSQL(Tools::getValue('ebay_shop_country')))
             && $this->ebay_profile->setConfiguration('EBAY_LISTING_DURATION', Tools::getValue('listingdurations'))
-            && $this->ebay_profile->setConfiguration('EBAY_AUTOMATICALLY_RELIST',
-                Tools::getValue('automaticallyrelist'))
+            && $this->ebay_profile->setConfiguration('EBAY_AUTOMATICALLY_RELIST', Tools::getValue('automaticallyrelist'))
             && $this->ebay_profile->setReturnsPolicyConfiguration(
                 pSQL(Tools::getValue('returnswithin')),
                 pSQL(Tools::getValue('returnswhopays')),
-                (version_compare(_PS_VERSION_, '1.5',
-                    '>') ? Tools::nl2br(Tools::getValue('ebay_returns_description')) : nl2br2(Tools::getValue('ebay_returns_description'))),
+                (version_compare(_PS_VERSION_, '1.5', '>') ? Tools::nl2br(Tools::getValue('ebay_returns_description')) : nl2br2(Tools::getValue('ebay_returns_description'))),
                 pSQL(Tools::getValue('ebay_returns_accepted_option'))
             )
             && $this->ebay->setConfiguration('EBAY_ACTIVATE_MAILS', Tools::getValue('activate_mails') ? 1 : 0)
-            && in_array((int)Tools::getValue('currency'), $currencies_ids)
-            && $this->ebay_profile->setConfiguration('EBAY_CURRENCY', (int)Tools::getValue('currency'))
-            && $this->ebay_profile->setConfiguration('EBAY_SEND_TRACKING_CODE',
-                (int)Tools::getValue('send_tracking_code'))
-            && $this->ebay_profile->setConfiguration('EBAY_SHIPPED_ORDER_STATE',
-                (int)Tools::getValue('shipped_order_state'))
-            && $this->ebay_profile->setConfiguration('EBAY_IMMEDIATE_PAYMENT',
-                (int)Tools::getValue('immediate_payment'))
+            && in_array((int) Tools::getValue('currency'), $currencies_ids)
+            && $this->ebay_profile->setConfiguration('EBAY_CURRENCY', (int) Tools::getValue('currency'))
+            && $this->ebay_profile->setConfiguration('EBAY_SEND_TRACKING_CODE', (int) Tools::getValue('send_tracking_code'))
+            && $this->ebay_profile->setConfiguration('EBAY_SHIPPED_ORDER_STATE', (int) Tools::getValue('shipped_order_state'))
+            && $this->ebay_profile->setConfiguration('EBAY_IMMEDIATE_PAYMENT', (int) Tools::getValue('immediate_payment'))
         ) {
             if (version_compare(_PS_VERSION_, '1.5', '>')) {
                 $link = new Link();
                 $url = $link->getAdminLink('AdminModules');
             } else {
-                $url = 'index.php?tab_module=market_place&section=parameters&tab=AdminModules&token=' . Tools::getAdminTokenLite('AdminModules');
+                $url = 'index.php?tab_module=market_place&section=parameters&tab=AdminModules&token='.Tools::getAdminTokenLite('AdminModules');
             }
 
-            Tools::redirectAdmin($url . '&configure=ebay&module_name=ebay&id_tab=2');
+            Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=2');
         } else {
             return $this->ebay->displayError($this->ebay->l('Settings failed'));
         }
