@@ -135,10 +135,54 @@
     <fieldset style="margin-top:10px;">
        
         <legend>{l s='EAN Sync' mod='ebay'}</legend>
-        <label>{l s='Synchronise EAN.' mod='ebay'} : </label>
-        <div class="margin-form">
-            <input type="checkbox" name="synchronize_ean" value="1"{if $synchronize_ean} checked="checked"{/if}>
-        </div>
+
+		<label>{l s='Synchronize EAN with :' mod='ebay'}</label>
+		<div class="margin-form">
+			<select name="synchronize_ean" class="ebay_select">
+				<option value="">{l s='Do not synchronise' mod='ebay'}</option>
+				<option value="EAN"{if "EAN" == $synchronize_ean} selected{/if}>{l s='EAN' mod='ebay'}</option>
+				{*<option value="SUP_REF"{if "SUP_REF" == $synchronize_ean} selected{/if}>{l s='Supplier Reference' mod='ebay'}</option>*}
+				<option value="REF"{if "REF" == $synchronize_ean} selected{/if}>{l s='Reference' mod='ebay'}</option>
+				<option value="UPC"{if "UPC" == $synchronize_ean} selected{/if}>{l s='UPC' mod='ebay'}</option>
+			</select>
+		</div>
+		<label>{l s='Synchronize MPN with :' mod='ebay'}</label>
+		<div class="margin-form">
+			<select name="synchronize_mpn" class="ebay_select">
+				<option value="">{l s='Do not synchronise' mod='ebay'}</option>
+				<option value="EAN"{if "EAN" == $synchronize_mpn} selected{/if}>{l s='EAN' mod='ebay'}</option>
+				{*<option value="SUP_REF"{if "SUP_REF" == $synchronize_mpn} selected{/if}>{l s='Supplier Reference' mod='ebay'}</option>*}
+				<option value="REF"{if "REF" == $synchronize_mpn} selected{/if}>{l s='Reference' mod='ebay'}</option>
+				<option value="UPC"{if "UPC" == $synchronize_mpn} selected{/if}>{l s='UPC' mod='ebay'}</option>
+			</select>
+		</div>
+		<label>{l s='Synchronize UPC with :' mod='ebay'}</label>
+		<div class="margin-form">
+			<select name="synchronize_upc" class="ebay_select">
+				<option value="">{l s='Do not synchronise' mod='ebay'}</option>
+				<option value="EAN"{if "EAN" == $synchronize_upc} selected{/if}>{l s='EAN' mod='ebay'}</option>
+				{*<option value="SUP_REF"{if "SUP_REF" == $synchronize_upc} selected{/if}>{l s='Supplier Reference' mod='ebay'}</option>*}
+				<option value="REF"{if "REF" == $synchronize_upc} selected{/if}>{l s='Reference' mod='ebay'}</option>
+				<option value="UPC"{if "UPC" == $synchronize_upc} selected{/if}>{l s='UPC' mod='ebay'}</option>
+			</select>
+		</div>
+		<label>{l s='Synchronize ISBN with :' mod='ebay'}</label>
+		<div class="margin-form">
+			<select name="synchronize_isbn" class="ebay_select">
+				<option value="">{l s='Do not synchronise' mod='ebay'}</option>
+				<option value="EAN"{if "EAN" == $synchronize_isbn} selected{/if}>{l s='EAN' mod='ebay'}</option>
+				{*<option value="SUP_REF"{if "SUP_REF" == $synchronize_isbn} selected{/if}>{l s='Supplier Reference' mod='ebay'}</option>*}
+				<option value="REF"{if "REF" == $synchronize_isbn} selected{/if}>{l s='Reference' mod='ebay'}</option>
+				<option value="UPC"{if "UPC" == $synchronize_isbn} selected{/if}>{l s='UPC' mod='ebay'}</option>
+			</select>
+		</div>
+		<label>
+			{l s='Option \'Does not apply\'' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<input type="checkbox" name="ean_not_applicable" value="1"{if $ean_not_applicable} checked="checked"{/if} data-inlinehelp="{l s='If you check this box, the module will send EAN value &quot;Does not apply&quot; when none of EAN, ISBN or UPC is set.' mod='ebay'}">
+		</div>
+
         <div style="clear:both;"></div>
         
     </fieldset>

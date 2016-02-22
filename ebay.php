@@ -124,7 +124,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '1.12.0';
+        $this->version = '1.12.2';
         $this->stats_version = '1.0';
 
         $this->author = 'PrestaShop';
@@ -765,6 +765,7 @@ class Ebay extends Module
 
         $errors_email = array();
 
+        /** @var EbayOrder $order */
         foreach ($orders as $order) {
             $errors = array();
 
@@ -893,6 +894,12 @@ class Ebay extends Module
                 }
 
                 $cart = $order->addCart($ebay_profile, $this->ebay_country); //Create a Cart for the order
+                if (!($cart instanceof Cart)) {
+                    $message = $this->l('Error while creating a cart for the order');
+                    $errors[] = $message;
+                    $order->addErrorMessage($message);
+                    continue;
+                }
 
                 if (!$order->updateCartQuantities($ebay_profile)) {
                     // if products in the cart
@@ -915,6 +922,7 @@ class Ebay extends Module
 
                 // Validate order
                 $id_order = $order->validate($ebay_profile->id_shop, $this->ebay_profile->id);
+                // @todo: verrifier la valeur de $id_order. Si validate ne fonctionne pas, on a quoi ??
                 // we now disable the carrier if required
                 if ($has_disabled_carrier) {
                     $carrier->active = false;
@@ -1777,7 +1785,6 @@ class Ebay extends Module
         $nb_products = EbaySynchronizer::getNbSynchronizableProducts($this->ebay_profile);
         $products = EbaySynchronizer::getProductsToSynchronize($this->ebay_profile, Tools::getValue('option'));
         $nb_products_less = EbaySynchronizer::getNbProductsLess($this->ebay_profile, Tools::getValue('option'), (int) $this->ebay_profile->getConfiguration('EBAY_SYNC_LAST_PRODUCT'));
-
         // Send each product on eBay
         if (count($products)) {
             $this->ebay_profile->setConfiguration('EBAY_SYNC_LAST_PRODUCT', (int) $products[0]['id_product']);
@@ -1789,10 +1796,9 @@ class Ebay extends Module
             echo 'KO|<div class="box_sync_ajax"><img src="'.$this->getPath().'/views/img/ajax-loader-small.gif" border="0" style="width:32px;height:32px;vertical-align:middle" /> '.$this->l('Products').' : '.$nb_products_done.' / '.$nb_products.'</div>';
         } else {
             if (file_exists(dirname(__FILE__).'/log/syncError.php')) {
-                global $all_error;
+                $context = Context::getContext();
                 include dirname(__FILE__).'/log/syncError.php';
-
-                if (count($all_error) == 0) {
+                if (count($context->all_error) == 0) {
                     $msg = $this->l('Settings updated').' ('.$this->l('Option').' '.$this->ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE').' : '.($nb_products - $nb_products_less).' / '.$nb_products.' '.$this->l('product(s) sync with eBay').')<br/><br/>';
                 } else {
                     $msg = '';
@@ -1800,7 +1806,7 @@ class Ebay extends Module
 
                 $msg .= $this->l('Some products have not been listed successfully due to the error(s) below').'<br/>';
 
-                foreach ($all_error as $error) {
+                foreach ($context->all_error as $error) {
                     $products_details = '<br /><u>'.$this->l('Product(s) concerned').' :</u>';
 
                     foreach ($error['products'] as $product) {
@@ -2024,6 +2030,7 @@ class Ebay extends Module
             $data['manufacturer_name'] = $p['manufacturer_name'];
             $data['reference'] = $p['reference'];
             $data['ean13'] = $p['ean13'];
+            $data['upc'] = $p['upc'];
             $reference_ebay = $p['id_product_ref'];
             $product = new Product((int) $p['id_product'], true, $id_lang);
             if ((int) $p['id_attribute'] > 0) {
@@ -2033,6 +2040,7 @@ class Ebay extends Module
 
                 $data['reference'] = $combinaison['reference'];
                 $data['ean13'] = $combinaison['ean13'];
+                $data['upc'] = $combinaison['upc'];
                 $variation_specifics = EbaySynchronizer::_getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $id_lang, $this->ebay_profile->ebay_site_id);
                 foreach ($variation_specifics as $variation_specific) {
                     $data['name'] .= ' '.$variation_specific;
@@ -2098,29 +2106,35 @@ class Ebay extends Module
 
     }
 
-    private function __postProcessDownloadLog()
+
+    ############################################################################################################
+    # Logger // Debug
+    ############################################################################################################
+
+    /**
+     * Fonction de log
+     *
+     * Enregistre dans /modules/ebay/log/debug.log
+     *
+     * @param     $object
+     * @param int $error_level
+     */
+    public static function debug($object, $error_level = 0)
     {
-        $full_path = _PS_MODULE_DIR_.'ebay/log/request.txt';
-        if (file_exists($full_path)) {
-            $file_name = basename($full_path);
-
-            $date = gmdate(DATE_RFC1123);
-
-            header('Pragma: public');
-            header('Cache-Control: must-revalidate, pre-check=0, post-check=0, max-age=0');
-
-            header('Content-Tranfer-Encoding: none');
-            header('Content-Length: '.filesize($full_path));
-            header('Content-MD5: '.base64_encode(md5_file($full_path)));
-            header('Content-Type: application/octetstream; name="'.$file_name.'"');
-            header('Content-Disposition: attachment; filename="'.$file_name.'"');
-
-            header('Date: '.$date);
-            header('Expires: '.gmdate(DATE_RFC1123, time() + 1));
-            header('Last-Modified: '.gmdate(DATE_RFC1123, filemtime($full_path)));
-
-            readfile($full_path);
-            exit;
-        }
+        $error_type = array(
+            0 => "[ALL]",
+            1 => "[DEBUG]",
+            2 => "[INFO]",
+            3 => "[WARN]",
+            4 => "[ERROR]",
+            5 => "[FATAL]"
+        );
+        $module_name = "ebay";
+        $backtrace = debug_backtrace();
+        $date = date("<Y-m-d(H:i:s)>");
+        $file = $backtrace[0]['file'].":".$backtrace[0]['line'];
+        $stderr = fopen(_PS_MODULE_DIR_.'/'.$module_name.'/log/debug.log', 'a');
+        fwrite($stderr, $error_type[$error_level]." ".$date." ".$file."\n".print_r($object, true)."\n\n");
+        fclose($stderr);
     }
 }

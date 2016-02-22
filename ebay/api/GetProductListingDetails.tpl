@@ -22,14 +22,44 @@
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-{if (isset($ean13) && $ean13 != 0) || (isset($brand) && isset($sku))}
+{if ((isset($ean) && $ean != "")
+    || (isset($isbn) && $isbn != "")
+    || (isset($upc) && $upc != "")
+    || (((isset($mpn) && $mpn != "") || isset($sku)) && isset($brand))
+    || (isset($ean) && $ean != ""))
+}
 <ProductListingDetails>
-    {if isset($brand) && isset($sku)}
+    {*{if isset($brand) && isset($sku)}*}
+        {*<BrandMPN>*}
+            {*<Brand>{$brand}</Brand>*}
+            {*<MPN>{$sku}</MPN>*}
+        {*</BrandMPN>*}
+    {*{/if}*}
+    {if (isset($mpn) && $mpn != "" && isset($manufacturer_name) && $manufacturer_name != "")}
     <BrandMPN>
-        <Brand>{$brand}</Brand>
-        <MPN>{$sku}</MPN>
+        <Brand>{$manufacturer_name}</Brand>
+        <MPN>{$mpn}</MPN>
     </BrandMPN>
     {/if}
-    {if isset($ean13) && $ean13 != 0}<EAN>{$ean13}</EAN>{/if}
+    {if isset($ean) && $ean != ""}<EAN>{$ean}</EAN>{/if}
+    {*<IncludeeBayProductDetails> boolean </IncludeeBayProductDetails>*}
+    {*<IncludeStockPhotoURL> boolean </IncludeStockPhotoURL>*}
+    {if isset($isbn) && $isbn != ""}<ISBN>{$isbn}</ISBN>{/if}
+    {*<ProductID> string </ProductID>*}
+    {*<ProductReferenceID> string </ProductReferenceID>*}
+    {*<ReturnSearchResultOnDuplicates> boolean </ReturnSearchResultOnDuplicates>*}
+    {*<TicketListingDetails> TicketListingDetailsType*}
+        {*<EventTitle> string </EventTitle>*}
+        {*<PrintedDate> string </PrintedDate>*}
+        {*<PrintedTime> string </PrintedTime>*}
+        {*<Venue> string </Venue>*}
+    {*</TicketListingDetails>*}
+    {if isset($upc) && $upc != ""}<UPC>{$upc}</UPC>{/if}
+    {*<UseFirstProduct> boolean </UseFirstProduct>*}
+    {*<UseStockPhotoURLAsGallery> boolean </UseStockPhotoURLAsGallery>*}
+</ProductListingDetails>
+{elseif isset($ean_not_applicable) && $ean_not_applicable == 1}
+<ProductListingDetails>
+    <EAN>Does not apply</EAN>
 </ProductListingDetails>
 {/if}

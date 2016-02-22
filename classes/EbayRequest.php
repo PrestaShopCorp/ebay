@@ -45,7 +45,7 @@ class EbayRequest
     private $loginUrl;
     private $compatibility_level;
     private $debug;
-    private $dev = true;
+    private $dev = false;
     private $ebay_country;
 
     private $smarty_data;
@@ -824,34 +824,62 @@ class EbayRequest
 
     private function _getProductListingDetails($data)
     {
-        if (Configuration::get('EBAY_SYNCHRONIZE_EAN')) {
-            $vars = array(
-                'ean13' => $data['ean13'],
-            );
-        } else {
-            $vars = array(
-                'ean13' => 0,
-            );
-        }
+        $vars = array(
+            'ean'               => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_EAN')),
+            'mpn'               => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_MPN')),
+            'upc'               => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_UPC')),
+            'isbn'              => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_ISBN')),
+            'manufacturer_name' => $data['manufacturer_name'],
+            'ean_not_applicable' => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
+
+        );
 
         $this->smarty->assign($vars);
+
         return $this->smarty->fetch(dirname(__FILE__).'/../ebay/api/GetProductListingDetails.tpl');
+    }
+
+    /**
+     * configurationValues
+     * Getting the rights values selected in the configuration
+     *
+     * @param array $data
+     * @param string $type
+     * @return string
+     */
+    private function configurationValues($data, $type)
+    {
+        if ($type == "EAN") {
+            return $data['ean13'];
+        }
+//        currently, we do not support supplier reference
+//        if ($type == "SUP_REF") {
+//            return $data['supplier_reference'];
+//        }
+        if ($type == "REF") {
+            return $data['reference'];
+        }
+        if ($type == "UPC") {
+            return $data['upc'];
+        }
+
+        return "";
     }
 
     private function _getVariations($data)
     {
         $variation_pictures = array();
         $variation_specifics_set = array();
-        $synchronize_ean = Configuration::get('EBAY_SYNCHRONIZE_EAN');
 
         if (isset($data['variations'])) {
             $last_specific_name = '';
             $attribute_used = array();
 
             foreach ($data['variations'] as $key => $variation) {
-                if (!$synchronize_ean) {
-                    $data['variations'][$key]['ean13'] = '';
-                }
+                $data['variations'][$key]['ean13'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_EAN'));
+                $data['variations'][$key]['mpn'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_MPN'));
+                $data['variations'][$key]['upc'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_UPC'));
+                $data['variations'][$key]['isbn'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_ISBN'));
 
                 if (isset($variation['variations'])) {
                     foreach ($variation['variations'] as $variation_key => $variation_element) {
@@ -887,6 +915,7 @@ class EbayRequest
             'variations_pictures' => $variation_pictures,
             'price_update' => !isset($data['noPriceUpdate']),
             'variation_specifics_set' => $variation_specifics_set,
+            'ean_not_applicable' => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
         );
 
         $this->smarty->assign($vars);

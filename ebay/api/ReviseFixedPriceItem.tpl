@@ -87,18 +87,20 @@
 				{foreach from=$item_specifics key=name item=value}
 					<NameValueList>
 						<Name><![CDATA[{$name}]]></Name>
-						<Value><![CDATA[{$value}]]></Value>
-					</NameValueList>
-				{/foreach}				
-			</ItemSpecifics>
-		{$return_policy}
-		{if isset($site)}
-			<Site>{$site}</Site>
+                        <Value><![CDATA[{$value}]]></Value>
+                    </NameValueList>
+                {/foreach}
+            </ItemSpecifics>
+        {$return_policy}
+        {if isset($site)}
+            <Site>{$site}</Site>{/if}
+        {if isset($variations)}
+            {$variations}
 		{/if}
-		{if isset($variations)}
-			{$variations}
-		{/if}
-        
+		{if isset($product_listing_details)}
+            {$product_listing_details}
+        {/if}
+
         {if isset($price_original)}
             <DiscountPriceInfo>
                 <OriginalRetailPrice>{$price_original}</OriginalRetailPrice>
@@ -112,10 +114,6 @@
                   <!--<StoreCategoryName> string </StoreCategoryName>-->
             </Storefront>
         {/if} 
-        {if isset($product_listing_details)}
-            {$product_listing_details}
-        {/if}       
-                
 	</Item>
 	<RequesterCredentials>
 		<eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>

@@ -34,6 +34,7 @@ class EbaySynchronizer
         return $product['id_product'];
     }
 
+
     /**
      * @param array        $products
      * @param Context      $context
@@ -83,6 +84,7 @@ class EbaySynchronizer
         }
 
         foreach ($products as $p) {
+
             $product = new Product((int)$p['id_product'], true, $id_lang);
 
             $product_configuration = EbayProductConfiguration::getByProductIdAndProfile($p['id_product'], $p['id_ebay_profile']);
@@ -95,9 +97,11 @@ class EbaySynchronizer
             $quantity_product = EbaySynchronizer::_getProductQuantity($product, (int)$p['id_product']);
 
             $ebay_profile = new EbayProfile((int)$p['id_ebay_profile']);
+
             if (!$ebay_profile->getConfiguration('EBAY_HAS_SYNCED_PRODUCTS')) {
                 $ebay_profile->setConfiguration('EBAY_HAS_SYNCED_PRODUCTS', 1);
             }
+
 
             /** @var EbayCategory $ebay_category */
             $ebay_category = EbaySynchronizer::_getEbayCategory($product->id_category_default, $ebay_profile);
@@ -143,7 +147,7 @@ class EbaySynchronizer
                 'id_lang'                => $id_lang,
                 'real_id_product'        => (int)$p['id_product'],
                 'ebay_store_category_id' => $ebay_store_category_id,
-                'ean13'                  => $product->ean13 != 0 ? $product->ean13 : null,
+                'ean_not_applicable'     => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
             );
 
             $data = array_merge($data, EbaySynchronizer::_getProductData($product, $ebay_profile));
@@ -201,19 +205,18 @@ class EbaySynchronizer
 
         }
 
+        $context = Context::getContext();
         if (count($tab_error)) {
-            if (isset($all_error)) {
-                foreach ($all_error as $key => $value) {
+            if (isset($context->all_error)) {
+                foreach ($context->all_error as $key => $value) {
                     if (isset($tab_error[$key])) {
-                        $tab_error[$key]['products'] = array_merge($all_error[$key]['products'], $tab_error[$key]['products']);
+                        $tab_error[$key]['products'] = array_merge($context->all_error[$key]['products'], $tab_error[$key]['products']);
                     } else {
-                        $tab_error[$key] = $all_error[$key];
+                        $tab_error[$key] = $context->all_error[$key];
                     }
-
                 }
             }
-
-            file_put_contents(dirname(__FILE__).'/../log/syncError.php', '<?php $all_error = '.var_export($tab_error, true).'; '.($ebay->itemConditionError ? '$itemConditionError = true; ' : '$itemConditionError = false;').' ?>');
+            file_put_contents(dirname(__FILE__).'/../log/syncError.php', '<?php $context->all_error = '.var_export($tab_error, true).'; '.($ebay->itemConditionError ? '$itemConditionError = true; ' : '$itemConditionError = false;').' ?>');
         }
 
         //Fix for orders that are passed in a country without taxes
@@ -232,14 +235,16 @@ class EbaySynchronizer
     private static function _getProductData($product, $ebay_profile)
     {
         return array(
-            'id_product'        => $product->id,
-            'reference'         => $product->reference,
-            'name'              => str_replace('&', '&amp;', $product->name),
-            'description'       => $product->description,
-            'description_short' => $product->description_short,
-            'manufacturer_name' => $product->manufacturer_name,
-            'ean13'             => $product->ean13,
-            'titleTemplate'     => $ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE'),
+            'id_product'         => $product->id,
+            'reference'          => $product->reference,
+            'name'               => str_replace('&', '&amp;', $product->name),
+            'description'        => $product->description,
+            'description_short'  => $product->description_short,
+            'manufacturer_name'  => $product->manufacturer_name,
+            'ean13'              => $product->ean13 != 0 ? (string)$product->ean13 : null,
+            'upc'                => (string)$product->upc,
+            'supplier_reference' => (string)$product->supplier_reference,
+            'titleTemplate'      => $ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE'),
         );
     }
 
@@ -500,11 +505,13 @@ class EbaySynchronizer
             $pictures_medium[] = EbaySynchronizer::_getPictureLink($product->id, $image['id_image'], $context->link, $small->name);
             $pictures_large[] = EbaySynchronizer::_getPictureLink($product->id, $image['id_image'], $context->link, $large->name);
 
-            if (count($pictures) >= $nb_pictures || count($pictures) >= 12) {
+            if (count($pictures) >= 12) {
                 break;
             }
 
         }
+        // limit the numbers of picture send to ebay with the EBAY_PICTURE_PER_LISTING parameter.
+        $pictures = array_slice($pictures, 0, $nb_pictures);
 
         return array(
             'general' => $pictures,
@@ -568,6 +575,7 @@ class EbaySynchronizer
                 'id_attribute'        => $combinaison['id_product_attribute'],
                 'reference'           => $combinaison['reference'],
                 'ean13'               => $combinaison['ean13'],
+                'upc'                 => $combinaison['upc'],
                 'quantity'            => $combinaison['quantity'],
                 'price_static'        => $price,
                 'variation_specifics' => EbaySynchronizer::_getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $ebay_profile->id_lang, $ebay_profile->ebay_site_id, $ebay_category),
@@ -588,10 +596,8 @@ class EbaySynchronizer
 
             if ($ebay_category->getPercent() < 0) {
                 $variation['price_original'] = round($price_original, 2);
-            } else {
-                if ($price_original > $price) {
-                    $variation['price_original'] = round($price_original, 2);
-                }
+            } else if ($price_original > $price) {
+                $variation['price_original'] = round($price_original, 2);
             }
 
             if (isset($variation['price_original'])) {
@@ -895,6 +901,8 @@ class EbaySynchronizer
         $data['item_specifics'] = array_merge($data['item_specifics'], $variation['variation_specifics']);
 
         $data['ean13'] = $variation['ean13'];
+        $data['upc'] = $variation['upc'];
+        $data['isbn'] = $variation['isbn'];
         $data['reference'] = $variation['reference'];
 
         return $data;
@@ -962,7 +970,6 @@ class EbaySynchronizer
 
         if ($carrier->shipping_method == 0) {
             // Default
-
             if (Configuration::get('PS_SHIPPING_METHOD') == 1) {
                 // Shipping by weight
                 $price = $carrier->getDeliveryPriceByWeight($product->weight, $zone);
@@ -970,7 +977,6 @@ class EbaySynchronizer
                 // Shipping by price
                 $price = $carrier->getDeliveryPriceByPrice($product->price, $zone);
             }
-
         } elseif ($carrier->shipping_method == 1) {
             // Shipping by weight
             $price = $carrier->getDeliveryPriceByWeight($product->weight, $zone);
@@ -1178,6 +1184,7 @@ class EbaySynchronizer
         return Db::getInstance()->getValue($sql);
     }
 
+
     /**
      * @param EbayCategory $ebay_category
      * @param Product      $product
@@ -1283,7 +1290,6 @@ class EbaySynchronizer
                 ) {
                     $quantity += (int)$action * (int)$quantity_fix;
                 }
-
             }
         }
 

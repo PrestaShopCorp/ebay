@@ -217,6 +217,7 @@ class EbayProfile extends ObjectModel
      *
      * @param array $keys Keys wanted
      * @return array Values
+     * @throws PrestaShopException
      */
     public function getMultiple($keys)
     {

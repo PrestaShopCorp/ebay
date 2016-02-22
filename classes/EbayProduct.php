@@ -155,7 +155,7 @@ class EbayProduct
     public static function getProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted)
     {
         $sql = 'SELECT ep.`id_product`, ep.`id_attribute`, ep.`id_product_ref`,
-			p.`id_category_default`, p.`reference`, p.`ean13`,
+			p.`id_category_default`, p.`reference`, p.`ean13`, p.`upc`,
 			pl.`name`, m.`name` as manufacturer_name
 			FROM `'._DB_PREFIX_.'ebay_product` ep
 			LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc ON (epc.`id_product` = ep.`id_product`)

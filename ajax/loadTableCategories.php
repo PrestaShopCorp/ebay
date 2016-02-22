@@ -37,9 +37,9 @@ if (EbayTools::getValue('admin_path')) {
 require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'config'.TMP_DS.'config.inc.php';
 
 if (version_compare(_PS_VERSION_, '1.5', '>')) {
-    require_once _PS_ADMIN_DIR_.'init.php';
+    include_once _PS_ADMIN_DIR_.'init.php';
 } else {
-    require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
+    include_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
 }
 
 if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
