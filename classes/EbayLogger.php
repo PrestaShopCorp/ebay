@@ -49,6 +49,26 @@ class EbayLogger
         $this->context = $context;
     }
 
+    public static function install()
+    {
+        // Create ebay_logs Table in Database
+        $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_logs` (
+            `id_ebay_logs` INT(16) NOT NULL AUTO_INCREMENT,
+            `datetime` DATETIME NOT NULL,
+            `severity` TINYINT(1) NOT NULL DEFAULT 0,
+            `code` INT(11) NOT NULL DEFAULT 0,
+            `message` TEXT,
+            `context` TEXT,
+            `backtrace` TEXT,
+            `uid` TEXT,
+            PRIMARY KEY (`id_ebay_logs`)
+        ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+
+        foreach ($sql as $q) {
+            Db::getInstance()->Execute($q);
+        }
+    }
+
     public static function get($name = null, $level = null, $context = null)
     {
         if ($name == null) {
