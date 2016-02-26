@@ -25,16 +25,9 @@
 {if ((isset($ean) && $ean != "")
     || (isset($isbn) && $isbn != "")
     || (isset($upc) && $upc != "")
-    || (((isset($mpn) && $mpn != "") || isset($sku)) && isset($brand))
-    || (isset($ean) && $ean != ""))
+    || (isset($mpn) && $mpn != "" && isset($manufacturer_name) && $manufacturer_name != ""))
 }
 <ProductListingDetails>
-    {*{if isset($brand) && isset($sku)}*}
-        {*<BrandMPN>*}
-            {*<Brand>{$brand}</Brand>*}
-            {*<MPN>{$sku}</MPN>*}
-        {*</BrandMPN>*}
-    {*{/if}*}
     {if (isset($mpn) && $mpn != "" && isset($manufacturer_name) && $manufacturer_name != "")}
     <BrandMPN>
         <Brand>{$manufacturer_name}</Brand>
@@ -42,21 +35,8 @@
     </BrandMPN>
     {/if}
     {if isset($ean) && $ean != ""}<EAN>{$ean}</EAN>{/if}
-    {*<IncludeeBayProductDetails> boolean </IncludeeBayProductDetails>*}
-    {*<IncludeStockPhotoURL> boolean </IncludeStockPhotoURL>*}
     {if isset($isbn) && $isbn != ""}<ISBN>{$isbn}</ISBN>{/if}
-    {*<ProductID> string </ProductID>*}
-    {*<ProductReferenceID> string </ProductReferenceID>*}
-    {*<ReturnSearchResultOnDuplicates> boolean </ReturnSearchResultOnDuplicates>*}
-    {*<TicketListingDetails> TicketListingDetailsType*}
-        {*<EventTitle> string </EventTitle>*}
-        {*<PrintedDate> string </PrintedDate>*}
-        {*<PrintedTime> string </PrintedTime>*}
-        {*<Venue> string </Venue>*}
-    {*</TicketListingDetails>*}
     {if isset($upc) && $upc != ""}<UPC>{$upc}</UPC>{/if}
-    {*<UseFirstProduct> boolean </UseFirstProduct>*}
-    {*<UseStockPhotoURLAsGallery> boolean </UseStockPhotoURLAsGallery>*}
 </ProductListingDetails>
 {elseif isset($ean_not_applicable) && $ean_not_applicable == 1}
 <ProductListingDetails>

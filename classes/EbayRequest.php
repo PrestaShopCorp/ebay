@@ -834,6 +834,19 @@ class EbayRequest
 
         );
 
+        if ($vars['ean'] == 0) {
+            $vars['ean'] = '';
+        }
+        if ($vars['mpn'] == 0) {
+            $vars['mpn'] = '';
+        }
+        if ($vars['upc'] == 0) {
+            $vars['upc'] = '';
+        }
+        if ($vars['isbn'] == 0) {
+            $vars['isbn'] = '';
+        }
+
         $this->smarty->assign($vars);
 
         return $this->smarty->fetch(dirname(__FILE__).'/../ebay/api/GetProductListingDetails.tpl');
@@ -880,6 +893,19 @@ class EbayRequest
                 $data['variations'][$key]['mpn'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_MPN'));
                 $data['variations'][$key]['upc'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_UPC'));
                 $data['variations'][$key]['isbn'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_ISBN'));
+
+                if ($data['variations'][$key]['ean13'] == 0) {
+                    $data['variations'][$key]['ean13'] = "";
+                }
+                if ($data['variations'][$key]['mpn'] == 0) {
+                    $data['variations'][$key]['mpn'] = "";
+                }
+                if ($data['variations'][$key]['upc'] == 0) {
+                    $data['variations'][$key]['upc'] = "";
+                }
+                if ($data['variations'][$key]['isbn'] == 0) {
+                    $data['variations'][$key]['isbn'] = "";
+                }
 
                 if (isset($variation['variations'])) {
                     foreach ($variation['variations'] as $variation_key => $variation_element) {
