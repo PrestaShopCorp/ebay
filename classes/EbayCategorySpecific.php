@@ -163,7 +163,7 @@ class EbayCategorySpecific
 
     public static function isConfigured($item_specific)
     {
-        if ($item_specific['id_attribute_group'] != 0 || $item_specific['id_feature'] != 0 || $item_specific['id_ebay_category_specific_value'] != 0 || $item_specific['is_brand'] != 0) {
+        if ($item_specific['id_attribute_group'] != 0 || $item_specific['id_feature'] != 0 || $item_specific['id_ebay_category_specific_value'] != 0 || $item_specific['is_brand'] != 0 || $item_specific['is_reference'] != 0 || $item_specific['is_ean'] != 0 || $item_specific['is_upc'] != 0) {
             return true;
         }
 
