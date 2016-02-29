@@ -33,10 +33,13 @@ class EbayCategorySpecific
     const SELECTION_MODE_SELECTION_ONLY = 1;
 
     private static $prefix_to_field_names = array(
-        'attr' => 'id_attribute_group',
-        'feat' => 'id_feature',
-        'spec' => 'id_ebay_category_specific_value',
-        'brand' => 'is_brand',
+        'attr'      => 'id_attribute_group',
+        'feat'      => 'id_feature',
+        'spec'      => 'id_ebay_category_specific_value',
+        'brand'     => 'is_brand', // item specifics brand
+        'reference' => 'is_reference',
+        'ean'       => 'is_ean',
+        'upc'       => 'is_upc',
     );
 
     /**

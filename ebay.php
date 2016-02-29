@@ -124,7 +124,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '1.12.2';
+        $this->version = '1.12.3';
         $this->stats_version = '1.0';
 
         $this->author = 'PrestaShop';

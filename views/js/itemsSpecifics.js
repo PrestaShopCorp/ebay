@@ -82,8 +82,12 @@ function insertCategoryRow(category_id, data)
 				tds += writeOptions('attr', possible_attributes, specific.id_attribute_group);		
 			}
 			
-			tds += '<option disabled="disabled">' + l['Features'] + '</option>';
+			tds += '<option disabled="disabled">' + l['Product Attributes'] + '</option>';
 			tds += '<option value="brand-1" ' + (specific.is_brand == 1 ? 'selected' : '') + '>' + l['Brand'] + '</option>';
+			tds += '<option value="reference-1" ' + (specific.is_reference == 1 ? 'selected' : '') + '>' + l['Reference'] + '</option>';
+			tds += '<option value="ean-1" ' + (specific.is_ean == 1 ? 'selected' : '') + '>' + l['EAN'] + '</option>';
+			tds += '<option value="upc-1" ' + (specific.is_upc == 1 ? 'selected' : '') + '>' + l['UPC'] + '</option>';
+			tds += '<option disabled="disabled">' + l['Features'] + '</option>';
 			tds += writeOptions('feat', possible_features, specific.id_feature);
 		}
 
