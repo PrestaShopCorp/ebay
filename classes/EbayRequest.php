@@ -831,7 +831,10 @@ class EbayRequest
             'isbn'              => $this->configurationValues($data, Configuration::get('EBAY_SYNCHRONIZE_ISBN')),
             'manufacturer_name' => $data['manufacturer_name'],
             'ean_not_applicable' => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
-
+            'synchronize_ean'    => (string)Configuration::get('EBAY_SYNCHRONIZE_EAN'),
+            'synchronize_mpn'    => (string)Configuration::get('EBAY_SYNCHRONIZE_MPN'),
+            'synchronize_upc'    => (string)Configuration::get('EBAY_SYNCHRONIZE_UPC'),
+            'synchronize_isbn'   => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
         );
 
         if ($vars['ean'] == 0) {
@@ -942,6 +945,10 @@ class EbayRequest
             'price_update' => !isset($data['noPriceUpdate']),
             'variation_specifics_set' => $variation_specifics_set,
             'ean_not_applicable' => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
+            'synchronize_ean'    => (string)Configuration::get('EBAY_SYNCHRONIZE_EAN'),
+            'synchronize_mpn'    => (string)Configuration::get('EBAY_SYNCHRONIZE_MPN'),
+            'synchronize_upc'    => (string)Configuration::get('EBAY_SYNCHRONIZE_UPC'),
+            'synchronize_isbn'   => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
         );
 
         $this->smarty->assign($vars);

@@ -126,6 +126,10 @@ class EbaySynchronizer
                 'real_id_product' => (int) $p['id_product'],
                 'ebay_store_category_id' => $ebay_store_category_id,
                 'ean_not_applicable' => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
+                'synchronize_ean'    => (string)Configuration::get('EBAY_SYNCHRONIZE_EAN'),
+                'synchronize_mpn'    => (string)Configuration::get('EBAY_SYNCHRONIZE_MPN'),
+                'synchronize_upc'    => (string)Configuration::get('EBAY_SYNCHRONIZE_UPC'),
+                'synchronize_isbn'   => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
             );
 
             $data = array_merge($data, EbaySynchronizer::_getProductData($product, $ebay_profile));
