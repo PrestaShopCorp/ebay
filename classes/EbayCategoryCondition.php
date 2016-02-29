@@ -21,7 +21,7 @@
  * @author    PrestaShop SA <contact@prestashop.com>
  * @copyright 2007-2016 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
+ * International Registered Trademark & Property of PrestaShop SA
  */
 
 if (file_exists(dirname(__FILE__).'/EbayRequest.php')) {
@@ -31,9 +31,12 @@ if (file_exists(dirname(__FILE__).'/EbayRequest.php')) {
 class EbayCategoryCondition
 {
     /**
-     *
      * Parse the data returned by the API for the eBay Category Conditions
-     **/
+     * @param int  $id_ebay_profile
+     * @param bool $id_category
+     * @return bool
+     * @throws PrestaShopDatabaseException
+     */
     public static function loadCategoryConditions($id_ebay_profile, $id_category = false)
     {
         $request = new EbayRequest($id_ebay_profile);
@@ -80,8 +83,8 @@ class EbayCategoryCondition
             Db::getInstance()->ExecuteS("SELECT 1");
         }
 
-        if ($conditions) // security to make sure there are values to enter befor truncating the table
-        {
+        // security to make sure there are values to enter befor truncating the table
+        if ($conditions) {
             $db = Db::getInstance();
             if (!$id_category) {
                 $db->Execute('DELETE FROM '._DB_PREFIX_.'ebay_category_condition
@@ -105,5 +108,4 @@ class EbayCategoryCondition
 
         return false;
     }
-
 }
