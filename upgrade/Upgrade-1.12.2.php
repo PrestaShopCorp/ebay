@@ -35,7 +35,7 @@ function upgrade_module_1_12_2($module)
     }
 
     if ($module->ebay_profile) {
-        $module->ebay_profile->deleteConfigurationByName('EBAY_SPECIFICS_LAST_UPDATE');
+        $module->ebay_profile->setConfiguration('EBAY_SPECIFICS_LAST_UPDATE', null);
     }
 
     return true;

@@ -544,6 +544,20 @@ class Ebay extends Module
                 upgrade_module_1_12($this);
             }
         }
+
+        if (version_compare($version, '1.12.2', '<')) {
+            if (version_compare(_PS_VERSION_, '1.5', '<')) {
+                include_once dirname(__FILE__).'/upgrade/Upgrade-1.12.2.php';
+                upgrade_module_1_12_2($this);
+            }
+        }
+
+        if (version_compare($version, '1.12.3', '<')) {
+            if (version_compare(_PS_VERSION_, '1.5', '<')) {
+                include_once dirname(__FILE__).'/upgrade/Upgrade-1.12.3.php';
+                upgrade_module_1_12_3($this);
+            }
+        }
     }
 
     /**
