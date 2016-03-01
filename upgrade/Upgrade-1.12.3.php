@@ -43,6 +43,8 @@ function upgrade_module_1_12_3($module)
         $module->ebay_profile->setConfiguration('EBAY_SPECIFICS_LAST_UPDATE', null);
     }
 
+    $module->setConfiguration('EBAY_VERSION', $module->version);
+
     return true;
 }
 
