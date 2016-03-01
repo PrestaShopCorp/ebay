@@ -72,13 +72,17 @@
 	var id_lang = "{$id_lang|escape:'htmlall':'UTF-8'}";
     var id_ebay_profile = "{$id_ebay_profile|escape:'htmlall':'UTF-8'}";
 	var ebay_token = "{$ebay_token|escape:'htmlall':'UTF-8'}";
-	
+
 	var l = {ldelim}
 		'Attributes'						: "{l s='Attributes' mod='ebay'}",
 		'Features'							: "{l s='Features' mod='ebay'}",
 		'eBay Specifications'				: "{l s='eBay Specifications' mod='ebay'}",
 		'Brand'								: "{l s='Brand' mod='ebay'}",
-		'-- You have to select a value --'	: "{l s='-- You have to select a value --' mod='ebay'}"
+		'-- You have to select a value --'	: "{l s='-- You have to select a value --' mod='ebay'}",
+		'Product Attributes'				: "{l s='Product Attributes' mod='ebay'}",
+		'Reference'							: "{l s='Reference' mod='ebay'}",
+		'EAN'								: "{l s='EAN' mod='ebay'}",
+		'UPC'								: "{l s='UPC' mod='ebay'}",
 	{rdelim};
 
 	var categories_to_load = new Array();
