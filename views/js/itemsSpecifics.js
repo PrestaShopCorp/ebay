@@ -78,18 +78,24 @@ function insertCategoryRow(category_id, data)
 		{
 			if (!data.is_multi_sku || specific.can_variation)
 			{
-				tds += '<option disabled="disabled">' + l['Attributes'] + '</option>';
-				tds += writeOptions('attr', possible_attributes, specific.id_attribute_group);		
+				tds += '<optgroup label="' + l['Attributes'] + '">';
+				tds += writeOptions('attr', possible_attributes, specific.id_attribute_group);
+				tds += '</optgroup>';
 			}
-			
-			tds += '<option disabled="disabled">' + l['Features'] + '</option>';
+			tds += '<optgroup label="' + l['Product Attributes'] + '">';
 			tds += '<option value="brand-1" ' + (specific.is_brand == 1 ? 'selected' : '') + '>' + l['Brand'] + '</option>';
+			tds += '<option value="reference-1" ' + (specific.is_reference == 1 ? 'selected' : '') + '>' + l['Reference'] + '</option>';
+			tds += '<option value="ean-1" ' + (specific.is_ean == 1 ? 'selected' : '') + '>' + l['EAN'] + '</option>';
+			tds += '<option value="upc-1" ' + (specific.is_upc == 1 ? 'selected' : '') + '>' + l['UPC'] + '</option>';
+			tds += '</optgroup>';
+			tds += '<optgroup label="' + l['Features'] + '">';
 			tds += writeOptions('feat', possible_features, specific.id_feature);
+			tds += '</optgroup>';
 		}
 
-		tds += '<option disabled="disabled">' + l['eBay Specifications'] + '</option>';
+		tds += '<optgroup label="' + l['eBay Specifications'] + '">';
 		tds += writeOptions('spec', specific.values, specific.id_specific_value);
-		
+		tds += '</optgroup>';
 		tds += '</select></td>';
 
 		if (parseInt(specific.required))

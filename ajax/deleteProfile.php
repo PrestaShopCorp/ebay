@@ -34,7 +34,7 @@ if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get(
     die('ERROR: Invalid Token');
 }
 
-require_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
+include_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
 
 if (Module::isInstalled('ebay')) {
     $ebay = Module::getInstanceByName('ebay');

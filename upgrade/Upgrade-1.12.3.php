@@ -28,10 +28,15 @@
  * @param Ebay $module
  * @return bool
  */
-function upgrade_module_1_12_2($module)
+function upgrade_module_1_12_3($module)
 {
-    if (Configuration::get('EBAY_SYNCHRONIZE_EAN')) {
-        $module->setConfiguration('EBAY_SYNCHRONIZE_EAN', 'EAN');
+    $sql = sql_1_12_3();
+    if (!empty($sql) && is_array($sql)) {
+        foreach ($sql as $request) {
+            if (!Db::getInstance()->execute($request)) {
+                return false;
+            }
+        }
     }
 
     if ($module->ebay_profile) {
@@ -41,4 +46,14 @@ function upgrade_module_1_12_2($module)
     $module->setConfiguration('EBAY_VERSION', $module->version);
 
     return true;
+}
+
+function sql_1_12_3()
+{
+    $sql = array();
+    $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_specific` ADD `is_reference` tinyint(1) NULL';
+    $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_specific` ADD `is_ean` tinyint(1) NULL';
+    $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_specific` ADD `is_upc` tinyint(1) NULL';
+
+    return $sql;
 }
