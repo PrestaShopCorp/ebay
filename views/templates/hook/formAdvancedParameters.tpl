@@ -127,7 +127,7 @@
     
     <fieldset style="margin-top:10px;">
        
-        <legend>{l s='EAN Sync' mod='ebay'}</legend>
+        <legend>{l s='EAN Sync' mod='ebay'} <a class="kb-help" data-errorcode="{$help_ean.error_code}" data-module="ebay" data-lang="{$help_ean.lang}" module_version="{$help_ean.module_version}" prestashop_version="{$help_ean.ps_version}" href="" target="_blank"></a></legend>
 
 		<label>{l s='Synchronize EAN with :' mod='ebay'}</label>
 		<div class="margin-form">

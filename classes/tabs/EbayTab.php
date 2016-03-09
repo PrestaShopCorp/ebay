@@ -29,6 +29,7 @@ class EbayTab
     protected $ebay;
     protected $smarty;
     protected $ebay_profile;
+    /** @var Context $context */
     protected $context;
     protected $path;
 

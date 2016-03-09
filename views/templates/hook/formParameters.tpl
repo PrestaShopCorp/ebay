@@ -28,7 +28,7 @@
 	<script>
 		$(document).ready(function() {
 			win = window.location = '{/literal}{$redirect_url|escape:'urlencode'}{literal}';
-		});		
+		});
 	</script>
 	{/literal}
 {/if}
@@ -54,25 +54,25 @@
 	{if isset($check_token_tpl)}
 	<fieldset id="regenerate_token">
 		<legend>{l s='Token' mod='ebay'}</legend>
-			{$check_token_tpl}	
-	</fieldset>	
+			{$check_token_tpl}
+	</fieldset>
 	{/if}
-	
+
 <form action="{$url|escape:'urlencode'}" method="post" class="form" id="configForm1">
-    
+
 	<fieldset style="margin-top:10px;">
 		<legend>{l s='Account details' mod='ebay'}</legend>
 		<h4>{l s='To list your products on eBay, you need to create' mod='ebay'} <a href="https://www.paypal.com/" target="_blank">{l s='a PayPal account.' mod='ebay'}</a></h4>
-        
-		<input type="hidden" name="ebay_shop" value="{$ebayShopValue|escape:'htmlall':'UTF-8'}" />            
-        
+
+		<input type="hidden" name="ebay_shop" value="{$ebayShopValue|escape:'htmlall':'UTF-8'}" />
+
 		<label>{l s='Paypal email address' mod='ebay'} : </label>
 		<div class="margin-form">
 
 			<input type="text" size="20" name="ebay_paypal_email" value="{$ebay_paypal_email|escape:'htmlall':'UTF-8'}"/>
 			<p>{l s='You have to set your PayPal e-mail account, it\'s the only payment available with this module' mod='ebay'}<a class="kb-help" data-errorcode="{$help.code_payment_solution}" data-module="ebay" data-lang="{$help.lang}" module_version="{$help.module_version}" prestashop_version="{$help.ps_version}" href="" target="_blank"></a></p>
 		</div>
-        
+
 		<label>
 			{l s='Currency' mod='ebay'}
 		</label>
@@ -84,8 +84,8 @@
 					{/foreach}
 				{/if}
 			</select>
-		</div>        
-        
+		</div>
+
 		<label>{l s='Item location' mod='ebay'} : </label>
 		<div class="margin-form">
 			<input type="text" size="20" name="ebay_shop_postalcode" value="{$shopPostalCode|escape:'htmlall':'UTF-8'}"/>
@@ -97,16 +97,16 @@
                 <option value=""></option>
 			{foreach from=$ebay_shop_countries item=ebay_shop_country}
 				<option value="{$ebay_shop_country.iso_code|escape:'htmlall':'UTF-8'}" {if $current_ebay_shop_country == $ebay_shop_country.iso_code} selected="selected"{/if}>{$ebay_shop_country.site_name|escape:'htmlall':'UTF-8'}</option>
-			{/foreach}							   
-			</select>            
+			{/foreach}
+			</select>
 			<p>{l s='Your shop\'s country' mod='ebay'}</p>
-		</div>     
+		</div>
 		<label>
 			{l s='Immediate Payment' mod='ebay'}
 		</label>
 		<div class="margin-form">
 			<input type="checkbox" name="immediate_payment" value="1"{if $immediate_payment} checked="checked"{/if}>
-		</div>           
+		</div>
 
 		<div class="show regenerate_token_click" style="display:block;text-align:center;cursor:pointer">
 			<span data-inlinehelp="{l s='Use only if you get a message saying that your authentication is expired.' mod='ebay'}">{l s='Click here to generate a new authentication token.' mod='ebay'}</span>
@@ -118,7 +118,7 @@
 			</a>
 		</div>
 	</fieldset>
-        
+
    <fieldset style="margin-top:10px;">
 		<legend>{l s='Returns policy' mod='ebay'}</legend>
 		<label>{l s='Please define your returns policy' mod='ebay'} : </label>
@@ -126,7 +126,7 @@
 			<select name="ebay_returns_accepted_option" data-dialoghelp="#returnsAccepted" data-inlinehelp="{l s='eBay business sellers must accept returns under the Distance Selling Regulations.' mod='ebay'}" class="ebay_select">
 			{foreach from=$policies item=policy}
 				<option value="{$policy.value|escape:'htmlall':'UTF-8'}" {if $returnsConditionAccepted == $policy.value} selected="selected"{/if}>{$policy.description|escape:'htmlall':'UTF-8'}</option>
-			{/foreach}							   
+			{/foreach}
 			</select>
 		</div>
 		<div style="clear:both;"></div>
@@ -156,8 +156,8 @@
 			<textarea name="ebay_returns_description" cols="120" rows="10" data-inlinehelp="{l s='This description will be displayed in the returns policy section of the listing page.' mod='ebay'}">{$ebayReturns|escape:'htmlall':'UTF-8'}</textarea>
 		</div>
 	</fieldset>
-             
-	
+
+
     <fieldset style="margin-top:10px;">
  		<legend>{l s='Order Synchronization from PrestaShop to eBay' mod='ebay'}</legend>
 		<label>
@@ -166,7 +166,7 @@
 		<div class="margin-form">
 			<input type="checkbox" name="send_tracking_code" value="1"{if $send_tracking_code} checked="checked"{/if}>
 		</div>
-        
+
 		<label>
 			{l s='Status used to indicate product has been shipped' mod='ebay'}
 		</label>
@@ -179,16 +179,16 @@
 					{/foreach}
 				{/if}
 			</select>
-		</div>        
-        
+		</div>
+
  		<div style="clear:both;"></div>
-     </fieldset>    
-     
-     
+     </fieldset>
+
+
 	<!-- Listing Durations -->
 	<fieldset style="margin-top:10px;">
 		<legend>{l s='Listing Duration' mod='ebay'}</legend>
-		
+
 		<label>
 			{l s='Listing duration' mod='ebay'}
 		</label>
@@ -200,12 +200,35 @@
 				{/foreach}
 			</select>
 		</div>
-		
+
         <label for="">{l s='Do you want to automatically relist' mod='ebay'}</label>
 		<div class="margin-form"><input type="checkbox" name="automaticallyrelist" {if $automaticallyRelist == 'on'} checked="checked" {/if} /></div>
+
+		<label>
+			{l s='Mimumum stock before sending to eBay' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<select name="minimum_stock" data-dialoghelp="{l s='http://pages.ebay.com/help/sell/duration.html' mod='ebay'}" data-inlinehelp="{l s='The minimum stock holding necessary before a listing will be created on eBay.' mod='ebay'}" class="ebay_select">
+				{foreach from=$minimumQuantities item=listing key=key}
+					<option value="{$key|escape:'htmlall':'UTF-8'}" {if $ebayminimumstock == $key}selected="selected" {/if}>{$listing|escape:'htmlall':'UTF-8'}</option>
+				{/foreach}
+			</select>
+		</div>
+
+		<label>
+			{l s='Maximum quantity to list on eBay' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<select name="maximum_quantity" data-dialoghelp="{l s='http://pages.ebay.com/help/sell/duration.html' mod='ebay'}" data-inlinehelp="{l s='The maximum quantity to be listed on eBay.' mod='ebay'}" class="ebay_select">
+				{foreach from=$maximumQuantities item=listing key=key}
+					<option value="{$key|escape:'htmlall':'UTF-8'}" {if $ebaymaximumqty == $key}selected="selected" {/if}>{$listing|escape:'htmlall':'UTF-8'}</option>
+				{/foreach}
+			</select>
+		</div>
+
 	</fieldset>
-    
-        
+
+
 	<div class="margin-form" id="buttonEbayParameters" style="margin-top:5px;">
 		<a href="#categoriesProgression" {if $catLoaded}id="displayFancybox"{/if}>
 			<input class="primary button" name="submitSave" type="hidden" value="{l s='Save and continue' mod='ebay'}" />

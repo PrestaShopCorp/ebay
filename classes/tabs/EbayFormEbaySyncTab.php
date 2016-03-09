@@ -38,6 +38,10 @@ class EbayFormEbaySyncTab extends EbayTab
             return '<p class="error"><b>'.$this->ebay->l('Please configure the \'Category settings\' tab before using this tab', 'ebayformebaysynctab').'</b></p><br /><script type="text/javascript">$("#menuTab5").addClass("wrong")</script>';
         }
 
+    	if ( ($minqty = $this->ebay_profile->getConfiguration('EBAY_MINQTY')) == null) {
+    		$minqty = 0;
+    	}
+
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
             $sql = '
 				SELECT COUNT( * ) FROM (
@@ -48,7 +52,7 @@ class EbayFormEbaySyncTab extends EbayTab
 						INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
 						ON p.id_product = ps.id_product
 						AND ps.id_shop = '.(int) $this->ebay_profile->id_shop;
-            $sql .= ' WHERE s.`quantity` > 0
+        	$sql .= ' WHERE s.`quantity` > ' . $minqty . '
 						AND  p.`active` = 1
 						AND  p.`id_category_default`
 						IN (
@@ -72,7 +76,7 @@ class EbayFormEbaySyncTab extends EbayTab
 						INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
 						ON p.id_product = ps.id_product
 						AND ps.id_shop = '.(int) $this->ebay_profile->id_shop;
-            $sql .= ' WHERE s.`quantity` > 0
+        	$sql .= ' WHERE s.`quantity` > ' . $minqty . '
 						AND  p.`active` = 1
 						AND  p.`id_category_default`
 						IN (
@@ -96,7 +100,7 @@ class EbayFormEbaySyncTab extends EbayTab
 				AND ps.id_shop = '.(int) $this->ebay_profile->id_shop;
             }
 
-            $sql .= ' WHERE p.`quantity` > 0
+        	$sql .= ' WHERE p.`quantity` > ' . $minqty . '
 				AND p.`active` = 1
 				AND p.`id_category_default` IN (
 					SELECT `id_category`
@@ -114,7 +118,7 @@ class EbayFormEbaySyncTab extends EbayTab
 				AND ps.id_shop = '.(int) $this->ebay_profile->id_shop;
             }
 
-            $sql .= ' WHERE p.`quantity` > 0
+        	$sql .= ' WHERE p.`quantity` > ' . $minqty . '
 				AND p.`active` = 1
 				AND p.`id_category_default` IN (
 					SELECT `id_category`
