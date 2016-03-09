@@ -65,6 +65,8 @@ class EbayFormParametersTab extends EbayTab
         $shopPostalCode = Tools::getValue('ebay_shop_postalcode', $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE'));
         $shopCountry = Tools::getValue('ebay_shop_country', $this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY'));
         $ebayListingDuration = $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') ? $this->ebay_profile->getConfiguration('EBAY_LISTING_DURATION') : 'GTC';
+    	$ebayMinimumStock = $this->ebay_profile->getConfiguration('EBAY_MINQTY') ? $this->ebay_profile->getConfiguration('EBAY_MINQTY') : '0';
+    	$ebayMaximumQuantity = $this->ebay_profile->getConfiguration('EBAY_MAXQTY') ? $this->ebay_profile->getConfiguration('EBAY_MAXQTY') : '9999';
 
         $user_profile = $ebay_request->getUserProfile($this->ebay_profile->ebay_user_identifier);
 
@@ -95,6 +97,10 @@ class EbayFormParametersTab extends EbayTab
             'ebayShopValue' => $ebayShopValue,
             'shopPostalCode' => Tools::getValue('ebay_shop_postalcode', $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE')),
             'listingDurations' => $this->_getListingDurations(),
+	        'minimumQuantities' => $this->_getMinimumQuantities(),
+	        'ebayminimumstock' => $ebayMinimumStock,
+	        'ebaymaximumqty' => $ebayMaximumQuantity,
+	        'maximumQuantities' => $this->_getMaximumQuantities(),
             'ebayShop' => $this->ebay_profile->getConfiguration('EBAY_SHOP'),
             'ebay_paypal_email' => Tools::getValue('ebay_paypal_email', $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')),
             'returnsConditionAccepted' => Tools::getValue('ebay_returns_accepted_option', $returns_policy_configuration->ebay_returns_accepted_option),
@@ -161,7 +167,9 @@ class EbayFormParametersTab extends EbayTab
             && $this->ebay_profile->setConfiguration('EBAY_SHOP_POSTALCODE', pSQL(Tools::getValue('ebay_shop_postalcode')))
             && $this->ebay_profile->setConfiguration('EBAY_SHOP_COUNTRY', pSQL(Tools::getValue('ebay_shop_country')))
             && $this->ebay_profile->setConfiguration('EBAY_LISTING_DURATION', Tools::getValue('listingdurations'))
-            && $this->ebay_profile->setConfiguration('EBAY_AUTOMATICALLY_RELIST', Tools::getValue('automaticallyrelist'))
+        	&& $this->ebay_profile->setConfiguration('EBAY_MINQTY', (int) Tools::getValue('minimum_stock'))
+        	&& $this->ebay_profile->setConfiguration('EBAY_MAXQTY', (int) Tools::getValue('maximum_quantity'))
+        	&& $this->ebay_profile->setConfiguration('EBAY_AUTOMATICALLY_RELIST', Tools::getValue('automaticallyrelist'))
             && $this->ebay_profile->setReturnsPolicyConfiguration(
                 pSQL(Tools::getValue('returnswithin')),
                 pSQL(Tools::getValue('returnswhopays')),
@@ -201,4 +209,38 @@ class EbayFormParametersTab extends EbayTab
             'GTC' => $this->ebay->l('Good \'Till Canceled'),
         );
     }
+
+	private function _getMinimumQuantities()
+	{
+		return array(
+		    '1' => $this->ebay->l('In stock'),
+		    '2' => $this->ebay->l('2 units'),
+			'3' => $this->ebay->l('3 units'),
+			'5' => $this->ebay->l('5 units'),
+			'10' => $this->ebay->l('10 units'),
+			'50' => $this->ebay->l('50 units'),
+			'100' => $this->ebay->l('100 units'),
+		);
+	}
+
+	private function _getMaximumQuantities()
+	{
+		return array(
+			'100' => $this->ebay->l('100 units'),
+			'50' => $this->ebay->l('50 units'),
+			'10' => $this->ebay->l('10 units'),
+			'5' => $this->ebay->l('5 units'),
+			'3' => $this->ebay->l('3 units'),
+			'2' => $this->ebay->l('2 units'),
+			'1' => $this->ebay->l('1 unit'),
+			'0' => $this->ebay->l('All items'),
+			'-1' => $this->ebay->l('All but 1 unit'),
+			'-2' => $this->ebay->l('All but 2 units'),
+			'-3' => $this->ebay->l('All but 3 units'),
+			'-5' => $this->ebay->l('All but 5 units'),
+			'-10' => $this->ebay->l('All but 10 units'),
+			'-50' => $this->ebay->l('All but 50 units'),
+	);
+	}
+
 }

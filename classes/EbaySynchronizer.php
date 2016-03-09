@@ -75,7 +75,7 @@ class EbaySynchronizer
                 continue;
             }
 
-            $quantity_product = EbaySynchronizer::_getProductQuantity($product, (int) $p['id_product']);
+            $quantity_product = EbaySynchronizer::_getProductQuantity($product, (int) $p['id_product'], $p['id_ebay_profile']);
 
             $ebay_profile = new EbayProfile((int) $p['id_ebay_profile']);
             if (!$ebay_profile->getConfiguration('EBAY_HAS_SYNCED_PRODUCTS')) {
@@ -235,6 +235,11 @@ class EbaySynchronizer
         $ebay_profile = new EbayProfile($id_ebay_profile);
         $id_currency = (int) $ebay_profile->getConfiguration('EBAY_CURRENCY');
 
+    	if ( ($minqty = $ebay_profile->getConfiguration('EBAY_MINQTY')) == null) {
+    		$minqty = 0;
+    	}
+
+
         if (count($data['variations'])) {
             // the product is multivariation
             if (EbaySynchronizer::_isProductMultiSku($ebay_category, $product->id, $id_lang, $ebay_profile->ebay_site_id)) {
@@ -289,7 +294,7 @@ class EbaySynchronizer
                 $data['itemID'] = $itemID;
 
                 // Delete or Update
-                if ($data['quantity'] < 1) {
+            	if ($data['quantity'] <= $minqty) {
                     EbaySynchronizer::endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $itemID);
                 } else {
                     EbaySynchronizer::_updateItem($product->id, $data, $id_ebay_profile, $ebay, $date);
@@ -429,7 +434,7 @@ class EbaySynchronizer
                 $pictures[] = $pictures_default;
             } elseif (count($pictures) < $nb_pictures) {
                 // we upload every image if there are extra pictures
-                $pictures[] = EbayProductImage::getEbayUrl($pictures_default, $product->name.'_'.(count($pictures) + 1));
+            	$pictures[] = EbayProductImage::getEbayUrl($pictures_default, str_replace('&', '&amp;', $product->name).'_'.(count($pictures) + 1));
             }
 
             $pictures_medium[] = EbaySynchronizer::_getPictureLink($product->id, $image['id_image'], $context->link, $small->name);
@@ -455,17 +460,33 @@ class EbaySynchronizer
      * @param int     $id_product
      * @return int
      */
-    private static function _getProductQuantity(Product $product, $id_product)
-    {
-        if (version_compare(_PS_VERSION_, '1.5', '<')) {
+	private static function _getProductQuantity(Product $product, $id_product, $id_ebay_profile = null)
+	{
+		if ($id_ebay_profile == null) {
+			$maxqty = 0;
+		} else {
+			$ebay_profile = new EbayProfile($id_ebay_profile);
+			if ( ($maxqty = $ebay_profile->getConfiguration('EBAY_MAXQTY')) == null) {
+				$maxqty = 0;
+			}
+		}
+
+		if (version_compare(_PS_VERSION_, '1.5', '<')) {
             $product_for_quantity = new Product($id_product);
             $quantity_product = $product_for_quantity->quantity;
         } else {
             $quantity_product = $product->quantity;
         }
 
-        return $quantity_product;
-    }
+		// if maxqty is -ve, reduce quantity returned by this amount.
+		// if maxqty is +ve, limit quantity returned to this amount.
+
+		if ($maxqty > 0) {
+			return ($quantity_product < $maxqty ? $quantity_product : $maxqty);
+		} else {
+			return ($quantity_product + $maxqty < 1 ? 0 : $quantity_product + $maxqty);
+		}
+	}
 
     /**
      * Returns the eBay category object. Check if that has been loaded before
@@ -689,7 +710,7 @@ class EbaySynchronizer
                 $ebay_profile->ebay_user_identifier,
                 $ebay_profile->getConfiguration('EBAY_SHOP'),
                 '',
-                $product->name,
+        	    str_replace('&', '&amp;', $product->name),
                 $product->reference,
                 Manufacturer::getNameById($product->id_manufacturer),
                 $product->id_manufacturer,
@@ -935,8 +956,13 @@ class EbaySynchronizer
         return $price;
     }
 
-    public static function getNbSynchronizableProducts($ebay_profile)
+ 	public static function getNbSynchronizableProducts($ebay_profile)
     {
+ 		if ( ($minqty = $ebay_profile->getConfiguration('EBAY_MINQTY')) == null) {
+ 			$minqty = 0;
+ 		}
+
+
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
             // Retrieve total nb products for eBay (which have matched categories)
             $sql = '
@@ -951,7 +977,8 @@ class EbaySynchronizer
                         AND ps.id_shop = '.(int) $ebay_profile->id_shop;
             }
 
-            $sql .= ' WHERE s.`quantity` > 0
+        	$sql .= ' WHERE s.`quantity` > ' . $minqty . '
+
 						AND  p.`id_category_default`
 						IN (
 							SELECT  `id_category`
@@ -977,7 +1004,7 @@ class EbaySynchronizer
                 AND ps.id_shop = '.(int) $ebay_profile->id_shop;
             }
 
-            $sql .= ' WHERE p.`quantity` > 0
+        	$sql .= ' WHERE p.`quantity` > ' . $minqty . '
 				AND p.`id_category_default` IN (
 					SELECT `id_category`
 					FROM `'._DB_PREFIX_.'ebay_category_configuration`
@@ -995,6 +1022,10 @@ class EbaySynchronizer
 
     public static function getProductsToSynchronize($ebay_profile, $option)
     {
+    	if ( ($minqty = $ebay_profile->getConfiguration('EBAY_MINQTY')) == null) {
+    		$minqty = 0;
+    	}
+
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
             $sql = '
 				SELECT p.`id_product`, '.(int) $ebay_profile->id.' AS `id_ebay_profile`
@@ -1004,7 +1035,7 @@ class EbaySynchronizer
                 INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
                 ON p.id_product = ps.id_product
                 AND ps.id_shop = '.(int) $ebay_profile->id_shop;
-            $sql .= ' WHERE s.`quantity` > 0
+        	$sql .= ' WHERE s.`quantity` > ' . $minqty . '
 				AND  p.`id_category_default`
 					IN (
 						SELECT  `id_category`
@@ -1023,7 +1054,7 @@ class EbaySynchronizer
             $sql = '
 				SELECT `id_product`, '.(int) $ebay_profile->id.' AS `id_ebay_profile`
 				FROM `'._DB_PREFIX_.'product` AS p';
-            $sql .= ' WHERE p.`quantity` > 0
+        	$sql .= ' WHERE p.`quantity` > ' . $minqty . '
 				AND p.`id_category_default` IN (
 					SELECT `id_category`
 					FROM `'._DB_PREFIX_.'ebay_category_configuration`
@@ -1043,6 +1074,10 @@ class EbaySynchronizer
 
     public static function getNbProductsLess($ebay_profile, $option, $ebay_sync_last_product)
     {
+    	if ( ($minqty = $ebay_profile->getConfiguration('EBAY_MINQTY')) == null) {
+    		$minqty = 0;
+    	}
+
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
             $sql = '
 				SELECT COUNT(id_supplier) FROM(
@@ -1058,7 +1093,7 @@ class EbaySynchronizer
             }
 
             $sql .= '
-						WHERE s.`quantity` >0
+						WHERE s.`quantity` > ' . $minqty . '
 						AND  p.`active` =1
 						AND  p.`id_category_default`
 						IN (
@@ -1087,7 +1122,7 @@ class EbaySynchronizer
             }
 
             $sql .= '
-				WHERE p.`quantity` > 0
+				WHERE p.`quantity` > ' . $minqty . '
 				AND p.`active` = 1
 				AND p.`id_category_default` IN (
 					SELECT `id_category`

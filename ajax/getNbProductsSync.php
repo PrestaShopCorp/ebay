@@ -41,6 +41,11 @@ $ebay_profile = new EbayProfile($id_ebay_profile);
 
 Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_category_configuration', array('sync' => (int) Tools::getValue('action')), 'UPDATE', '`id_category` = '.(int) Tools::getValue('id_category').' AND `id_ebay_profile` = '.(int) $ebay_profile->id);
 
+if ( ($minqty = $ebay_profile->getConfiguration('EBAY_MINQTY')) == null) {
+	$minqty = 0;
+}
+
+
 if (version_compare(_PS_VERSION_, '1.5', '>')) {
     $sql = 'SELECT COUNT(*) AS nb FROM(
         SELECT p.id_product
@@ -53,7 +58,7 @@ if (version_compare(_PS_VERSION_, '1.5', '>')) {
         AND ps.id_shop = '.(int) $ebay_profile->id_shop.'
         AND ps.active = 1';
 
-    $sql .= ' WHERE s.`quantity` > 0
+    $sql .= ' WHERE s.`quantity` > ' . $minqty . '
         AND p.`id_category_default` IN (
             SELECT `id_category`
             FROM `'._DB_PREFIX_.'ebay_category_configuration`
@@ -65,7 +70,7 @@ if (version_compare(_PS_VERSION_, '1.5', '>')) {
 } else {
     $sql = 'SELECT COUNT(`id_product`) as nb
         FROM `'._DB_PREFIX_.'product` AS p
-        WHERE p.`quantity` > 0
+        WHERE p.`quantity` > ' . $minqty . '
         AND p.`active` = 1
         AND p.`id_category_default` IN (
             SELECT `id_category`
