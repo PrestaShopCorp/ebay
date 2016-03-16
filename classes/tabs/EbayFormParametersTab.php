@@ -26,7 +26,7 @@
 
 class EbayFormParametersTab extends EbayTab
 {
-    function getContent()
+    public function getContent()
     {
         // Loading config currency
         $config_currency = new Currency((int)$this->ebay_profile->getConfiguration('EBAY_CURRENCY'));

@@ -26,7 +26,7 @@
 
 class EbayFormEbaySyncTab extends EbayTab
 {
-    function getContent()
+    public function getContent()
     {
         // Check if the module is configured
         if (!$this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')) {

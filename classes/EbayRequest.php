@@ -290,16 +290,11 @@ class EbayRequest
             foreach ($return_policy_details as $key => $returns) {
                 if ($key == 'ReturnsAccepted') {
                     $returns_policies[] = array('value' => (string)$returns->ReturnsAcceptedOption, 'description' => (string)$returns->Description);
-                } else {
-                    if ($key == 'ReturnsWithin') {
-                        $returns_within[] = array('value' => (string)$returns->ReturnsWithinOption, 'description' => (string)$returns->Description);
-                    } else {
-                        if ($key == 'ShippingCostPaidBy') {
-                            $returns_whopays[] = array('value' => (string)$returns->ShippingCostPaidByOption, 'description' => (string)$returns->Description);
-                        }
-                    }
+                } elseif ($key == 'ReturnsWithin') {
+                    $returns_within[] = array('value' => (string)$returns->ReturnsWithinOption, 'description' => (string)$returns->Description);
+                } elseif ($key == 'ShippingCostPaidBy') {
+                    $returns_whopays[] = array('value' => (string)$returns->ShippingCostPaidByOption, 'description' => (string)$returns->Description);
                 }
-
             }
         }
 
