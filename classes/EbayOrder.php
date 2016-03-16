@@ -135,7 +135,9 @@ class EbayOrder
     public function isCountryEnable()
     {
         if (!Tools::isEmpty($this->country_iso_code)) {
-            if (Country::getByIso($this->country_iso_code, true)) {
+            $country = new Country(Country::getByIso($this->country_iso_code), (int)Configuration::get('PS_LANG_DEFAULT'));
+
+            if ($country->active) {
                 return true;
             } else {
                 $order_error = new EbayOrderErrors();
