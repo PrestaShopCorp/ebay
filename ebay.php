@@ -85,6 +85,7 @@ $classes_to_load = array(
     'EbayOrderErrors',
     'EbayDbValidator',
     'EbayKb',
+    'EbayLogger',
 );
 
 foreach ($classes_to_load as $classname) {
