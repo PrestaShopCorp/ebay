@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,9 +19,9 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2015 PrestaShop SA
+ * @copyright 2007-2016 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
+ * International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayCategory
@@ -107,9 +107,8 @@ class EbayCategory
         return $this->percent;
     }
 
-    /*
+    /**
      * returns the percent, without the percent sign if there is one
-     *
      */
     public function getCleanPercent()
     {
@@ -117,13 +116,11 @@ class EbayCategory
     }
 
     /**
-     *
      * Returns the items specifics with the PrestaShop attribute group / feature / of eBay specifics matching
-     *
      */
     public function getItemsSpecifics()
     {
-        $sql = 'SELECT e.`name`, e.`id_ebay_category_specific` as id, e.`required`, e.`selection_mode`, e.`id_attribute_group`, e.`id_feature`, e.`id_ebay_category_specific_value` as id_specific_value, e.`is_brand`, e.`can_variation`
+        $sql = 'SELECT e.`name`, e.`id_ebay_category_specific` as id, e.`required`, e.`selection_mode`, e.`id_attribute_group`, e.`id_feature`, e.`id_ebay_category_specific_value` as id_specific_value, e.`is_brand`, e.`can_variation`, e.`is_reference`, e.`is_ean`, e.`is_upc`
 			FROM `'._DB_PREFIX_.'ebay_category_specific` e
 			WHERE e.`id_category_ref` = '.(int)$this->id_category_ref.'
 			AND e.`ebay_site_id` = '.(int)$this->id_country;
@@ -132,9 +129,7 @@ class EbayCategory
     }
 
     /**
-     *
      * Returns the items specifics with the full value for ebay_specific_attributes
-     *
      */
     public function getItemsSpecificValues()
     {
@@ -143,7 +138,8 @@ class EbayCategory
                 $this->_loadFromDb();
             }
 
-            $sql = 'SELECT e.`name`, e.`can_variation`, e.`id_attribute_group`, e.`id_feature`, ec.`value` AS specific_value, e.`is_brand`
+            $sql = 'SELECT e.`name`, e.`can_variation`, e.`id_attribute_group`, e.`id_feature`,
+                ec.`value` AS specific_value, e.`is_brand`, e.`is_reference`, e.`is_ean`, e.`is_upc`
 				FROM `'._DB_PREFIX_.'ebay_category_specific` e
 				LEFT JOIN `'._DB_PREFIX_.'ebay_category_specific_value` ec
 				ON e.`id_ebay_category_specific_value` = ec.`id_ebay_category_specific_value`
@@ -158,7 +154,6 @@ class EbayCategory
 
     /**
      * Returns the category conditions with the corresponding types on PrestaShop if set
-     *
      * @param int $id_ebay_profile
      * @return array
      * @throws PrestaShopDatabaseException
@@ -195,7 +190,6 @@ class EbayCategory
 
     /**
      * Returns an array with the condition_type and corresponding ConditionID on eBay
-     *
      * @param int $id_ebay_profile
      * @return
      * @throws PrestaShopDatabaseException
@@ -294,7 +288,6 @@ class EbayCategory
 
     /**
      * Climbs up the categories hierarchy until finding the value inherited for is_multi_sku
-     *
      * @param int $id_category_ref
      * @param int $ebay_site_id
      * @return

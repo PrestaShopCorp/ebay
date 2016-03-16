@@ -18,10 +18,10 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2016 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayCategoryConditionConfiguration
@@ -33,8 +33,8 @@ class EbayCategoryConditionConfiguration
     public static function getPSConditions($condition_type = null)
     {
         $condition_types = array(
-            EbayCategoryConditionConfiguration::PS_CONDITION_NEW => 'new',
-            EbayCategoryConditionConfiguration::PS_CONDITION_USED => 'used',
+            EbayCategoryConditionConfiguration::PS_CONDITION_NEW         => 'new',
+            EbayCategoryConditionConfiguration::PS_CONDITION_USED        => 'used',
             EbayCategoryConditionConfiguration::PS_CONDITION_REFURBISHED => 'refurbished',
         );
 
@@ -57,6 +57,5 @@ class EbayCategoryConditionConfiguration
         } else {
             Db::getInstance()->execute('REPLACE INTO `'._DB_PREFIX_.'ebay_category_condition_configuration` (`'.implode('` , `', array_keys($to_insert)).'`) VALUES (\''.implode('\', \'', $to_insert).'\')');
         }
-
     }
 }

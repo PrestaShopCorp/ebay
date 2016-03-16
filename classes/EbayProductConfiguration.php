@@ -26,7 +26,6 @@
 
 class EbayProductConfiguration
 {
-
     public static function getByProductIdAndProfile($product_id, $id_ebay_profile)
     {
         if (!$product_id) {

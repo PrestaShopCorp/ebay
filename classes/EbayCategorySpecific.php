@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,9 +19,9 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2015 PrestaShop SA
+ * @copyright 2007-2016 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
+ * International Registered Trademark & Property of PrestaShop SA
  */
 
 require_once dirname(__FILE__).'/EbayRequest.php';
@@ -33,15 +33,17 @@ class EbayCategorySpecific
     const SELECTION_MODE_SELECTION_ONLY = 1;
 
     private static $prefix_to_field_names = array(
-        'attr'  => 'id_attribute_group',
-        'feat'  => 'id_feature',
-        'spec'  => 'id_ebay_category_specific_value',
-        'brand' => 'is_brand',
+        'attr'      => 'id_attribute_group',
+        'feat'      => 'id_feature',
+        'spec'      => 'id_ebay_category_specific_value',
+        'brand'     => 'is_brand', // item specifics brand
+        'reference' => 'is_reference',
+        'ean'       => 'is_ean',
+        'upc'       => 'is_upc',
     );
 
     /**
      * Returns an array containing the correspondance between the form select fields prefix and the table field name
-     *
      * @return array
      */
     public static function getPrefixToFieldNames()
@@ -161,7 +163,7 @@ class EbayCategorySpecific
 
     public static function isConfigured($item_specific)
     {
-        if ($item_specific['id_attribute_group'] != 0 || $item_specific['id_feature'] != 0 || $item_specific['id_ebay_category_specific_value'] != 0 || $item_specific['is_brand'] != 0) {
+        if ($item_specific['id_attribute_group'] != 0 || $item_specific['id_feature'] != 0 || $item_specific['id_ebay_category_specific_value'] != 0 || $item_specific['is_brand'] != 0 || $item_specific['is_reference'] != 0 || $item_specific['is_ean'] != 0 || $item_specific['is_upc'] != 0) {
             return true;
         }
 

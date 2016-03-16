@@ -176,6 +176,9 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_category_specific` (
 		  `id_ebay_category_specific_value` int(16) NULL,
 		  `is_brand` tinyint(1) NULL,
           `ebay_site_id` int(16) NOT NULL,
+          `is_reference` tinyint(1) NULL,
+          `is_ean` tinyint(1) NULL,
+          `is_upc` tinyint(1) NULL,
 		  UNIQUE(`id_category_ref`, `ebay_site_id`, `name`),
 		  PRIMARY KEY (`id_ebay_category_specific`)
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';

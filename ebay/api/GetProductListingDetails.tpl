@@ -22,44 +22,17 @@
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-{if ((isset($ean) && $ean != "")
-    || (isset($isbn) && $isbn != "")
-    || (isset($upc) && $upc != "")
-    || (((isset($mpn) && $mpn != "") || isset($sku)) && isset($brand))
-    || (isset($ean) && $ean != ""))
-}
-<ProductListingDetails>
-    {*{if isset($brand) && isset($sku)}*}
-        {*<BrandMPN>*}
-            {*<Brand>{$brand}</Brand>*}
-            {*<MPN>{$sku}</MPN>*}
-        {*</BrandMPN>*}
-    {*{/if}*}
-    {if (isset($mpn) && $mpn != "" && isset($manufacturer_name) && $manufacturer_name != "")}
-    <BrandMPN>
-        <Brand>{$manufacturer_name}</Brand>
-        <MPN>{$mpn}</MPN>
-    </BrandMPN>
-    {/if}
-    {if isset($ean) && $ean != ""}<EAN>{$ean}</EAN>{/if}
-    {*<IncludeeBayProductDetails> boolean </IncludeeBayProductDetails>*}
-    {*<IncludeStockPhotoURL> boolean </IncludeStockPhotoURL>*}
-    {if isset($isbn) && $isbn != ""}<ISBN>{$isbn}</ISBN>{/if}
-    {*<ProductID> string </ProductID>*}
-    {*<ProductReferenceID> string </ProductReferenceID>*}
-    {*<ReturnSearchResultOnDuplicates> boolean </ReturnSearchResultOnDuplicates>*}
-    {*<TicketListingDetails> TicketListingDetailsType*}
-        {*<EventTitle> string </EventTitle>*}
-        {*<PrintedDate> string </PrintedDate>*}
-        {*<PrintedTime> string </PrintedTime>*}
-        {*<Venue> string </Venue>*}
-    {*</TicketListingDetails>*}
-    {if isset($upc) && $upc != ""}<UPC>{$upc}</UPC>{/if}
-    {*<UseFirstProduct> boolean </UseFirstProduct>*}
-    {*<UseStockPhotoURLAsGallery> boolean </UseStockPhotoURLAsGallery>*}
-</ProductListingDetails>
-{elseif isset($ean_not_applicable) && $ean_not_applicable == 1}
-<ProductListingDetails>
-    <EAN>Does not apply</EAN>
-</ProductListingDetails>
+{if (isset($ean_not_applicable) && $ean_not_applicable == 1)}
+    {assign var="does_not_apply" value="Does not apply"}
+{else}
+    {assign var="does_not_apply" value=""}
 {/if}
+<ProductListingDetails>
+    {if ($synchronize_mpn != "")}<BrandMPN>
+        <Brand>{if (isset($manufacturer_name) && $manufacturer_name != "")}{$manufacturer_name}{else}{if ($does_not_apply != "")}Unbranded{/if}{/if}</Brand>
+        <MPN>{if (isset($mpn) && $mpn != "")}{$mpn}{else}{$does_not_apply}{/if}</MPN>
+    </BrandMPN>{/if}
+    {if ($synchronize_ean != "")}<EAN>{if (isset($ean) && $ean != "")}{$ean}{else}{$does_not_apply}{/if}</EAN>{/if}
+    {if ($synchronize_isbn != "")}<ISBN>{if (isset($isbn) && $isbn != "")}{$isbn}{else}{$does_not_apply}{/if}</ISBN>{/if}
+    {if ($synchronize_upc != "")}<UPC>{if (isset($upc) && $upc != "")}{$upc}{else}{$does_not_apply}{/if}</UPC>{/if}
+</ProductListingDetails>

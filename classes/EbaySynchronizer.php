@@ -34,7 +34,6 @@ class EbaySynchronizer
         return $product['id_product'];
     }
 
-
     /**
      * @param array        $products
      * @param Context      $context
@@ -101,7 +100,6 @@ class EbaySynchronizer
                 $ebay_profile->setConfiguration('EBAY_HAS_SYNCED_PRODUCTS', 1);
             }
 
-
             /** @var EbayCategory $ebay_category */
             $ebay_category = EbaySynchronizer::_getEbayCategory($product->id_category_default, $ebay_profile);
 
@@ -147,6 +145,10 @@ class EbaySynchronizer
                 'real_id_product'        => (int)$p['id_product'],
                 'ebay_store_category_id' => $ebay_store_category_id,
                 'ean_not_applicable'     => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
+                'synchronize_ean'        => (string)Configuration::get('EBAY_SYNCHRONIZE_EAN'),
+                'synchronize_mpn'        => (string)Configuration::get('EBAY_SYNCHRONIZE_MPN'),
+                'synchronize_upc'        => (string)Configuration::get('EBAY_SYNCHRONIZE_UPC'),
+                'synchronize_isbn'       => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
             );
 
             $data = array_merge($data, EbaySynchronizer::_getProductData($product, $ebay_profile));
@@ -519,6 +521,11 @@ class EbaySynchronizer
         );
     }
 
+    /**
+     * @param Product $product
+     * @param int     $id_product
+     * @return int
+     */
     private static function _getProductQuantity(Product $product, $id_product)
     {
         if (version_compare(_PS_VERSION_, '1.5', '<')) {
@@ -534,7 +541,10 @@ class EbaySynchronizer
     /**
      * Returns the eBay category object. Check if that has been loaded before
      *
-     **/
+     * @param int         $category_id
+     * @param EbayProfile $ebay_profile
+     * @return
+     */
     public static function _getEbayCategory($category_id, $ebay_profile)
     {
         if (!isset(EbaySynchronizer::$ebay_categories[$category_id.'_'.$ebay_profile->id])) {
@@ -595,7 +605,7 @@ class EbaySynchronizer
 
             if ($ebay_category->getPercent() < 0) {
                 $variation['price_original'] = round($price_original, 2);
-            } else if ($price_original > $price) {
+            } elseif ($price_original > $price) {
                 $variation['price_original'] = round($price_original, 2);
             }
 
@@ -763,11 +773,11 @@ class EbaySynchronizer
     /**
      * @param EbayRequest $ebay
      * @param EbayProfile $ebay_profile
-     * @param  Context    $context
-     * @param   int       $id_lang
-     * @param   int       $ebay_item_id
-     * @param null        $product_id
-     * @return mixed
+     * @param Context     $context
+     * @param int         $id_lang
+     * @param int         $ebay_item_id
+     * @param int|null    $product_id
+     * @return EbayRequest
      */
     public static function endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $ebay_item_id, $product_id = null)
     {
@@ -1051,7 +1061,7 @@ class EbaySynchronizer
                     AND `id_ebay_category` > 0
                     AND `id_ebay_profile` = '.(int)$ebay_profile->id.
                 ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') != 'A' ? ' AND `sync` = 1' : '').'
-                
+                )
                 AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($ebay_profile->id).')';
             $nb_products = Db::getInstance()->getValue($sql);
         }
@@ -1183,7 +1193,6 @@ class EbaySynchronizer
         return Db::getInstance()->getValue($sql);
     }
 
-
     /**
      * @param EbayCategory $ebay_category
      * @param Product      $product
@@ -1201,6 +1210,12 @@ class EbaySynchronizer
                 $value = EbaySynchronizer::_getFeatureValue($product->id, $item_specific['id_feature'], $id_lang);
             } elseif ($item_specific['is_brand']) {
                 $value = $product->manufacturer_name;
+            } elseif ($item_specific['is_reference']) {
+                $value = $product->reference;
+            } elseif ($item_specific['is_ean']) {
+                $value = $product->ean13;
+            } elseif ($item_specific['is_upc']) {
+                $value = $product->upc;
             } else {
                 $value = $item_specific['specific_value'];
             }
@@ -1301,7 +1316,7 @@ class EbaySynchronizer
      * @param int               $product_attribute_id
      * @param int               $id_lang
      * @param int               $ebay_site_id
-     * @param bool|EbayCategory $ebay_category
+     * @param EbayCategory|bool $ebay_category
      * @return array
      * @throws PrestaShopDatabaseException
      */
