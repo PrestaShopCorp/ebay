@@ -27,6 +27,10 @@
 {else}
     {assign var="does_not_apply" value=""}
 {/if}
+
+{assign var="synch_product_listing_details" value=($synchronize_ean || $synchronize_isbn || $synchronize_upc || $synchronize_mpn)}
+
+{if $synch_product_listing_details}
 <ProductListingDetails>
     {if ($synchronize_mpn != "")}<BrandMPN>
         <Brand>{if (isset($manufacturer_name) && $manufacturer_name != "")}{$manufacturer_name}{else}{if ($does_not_apply != "")}Unbranded{/if}{/if}</Brand>
@@ -36,3 +40,4 @@
     {if ($synchronize_isbn != "")}<ISBN>{if (isset($isbn) && $isbn != "")}{$isbn}{else}{$does_not_apply}{/if}</ISBN>{/if}
     {if ($synchronize_upc != "")}<UPC>{if (isset($upc) && $upc != "")}{$upc}{else}{$does_not_apply}{/if}</UPC>{/if}
 </ProductListingDetails>
+{/if}
