@@ -27,6 +27,7 @@
 class EbaySynchronizer
 {
 
+    /** @var $ebay_categories EbayCategory[]  */
     private static $ebay_categories = array();
 
     public static function getIdProduct($product)
@@ -260,7 +261,7 @@ class EbaySynchronizer
      * @param string       $date
      * @param Context      $context
      * @param int          $id_lang
-     * @return mixed
+     * @return EbayRequest
      */
     private static function _exportProductToEbay($product, $data, $id_ebay_profile, $ebay_category, $ebay, $date, $context, $id_lang)
     {
@@ -279,13 +280,13 @@ class EbaySynchronizer
                     //if product already exists on eBay
                     $data['itemID'] = $item_id;
                     if (!EbaySynchronizer::_hasVariationProducts($data['variations'])) {
-                        EbaySynchronizer::endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $item_id);
+                        $ebay = EbaySynchronizer::endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $item_id);
                     } else {
                         $ebay = EbaySynchronizer::_updateMultiSkuItem($product->id, $data, $id_ebay_profile, $ebay, $date);
                     }
 
                 } else {
-                    EbaySynchronizer::_addMultiSkuItem($product->id, $data, $id_ebay_profile, $ebay, $date);
+                    $ebay = EbaySynchronizer::_addMultiSkuItem($product->id, $data, $id_ebay_profile, $ebay, $date);
                 }
 
             } else {
@@ -301,15 +302,14 @@ class EbaySynchronizer
 
                         if ($data_variation['quantity'] < 1) {
                             // no more products
-                            EbaySynchronizer::endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $itemID);
+                            $ebay = EbaySynchronizer::endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $itemID);
                         } else {
-                            EbaySynchronizer::_updateItem($product->id, $data_variation, $id_ebay_profile, $ebay, $date, $data_variation['id_attribute']);
+                            $ebay = EbaySynchronizer::_updateItem($product->id, $data_variation, $id_ebay_profile, $ebay, $date, $data_variation['id_attribute']);
                         }
 
                     } else {
-                        EbaySynchronizer::_addItem($product->id, $data_variation, $id_ebay_profile, $ebay, $date, $data_variation['id_attribute']);
+                        $ebay = EbaySynchronizer::_addItem($product->id, $data_variation, $id_ebay_profile, $ebay, $date, $data_variation['id_attribute']);
                     }
-
                 }
             }
         } else {
@@ -323,13 +323,13 @@ class EbaySynchronizer
 
                 // Delete or Update
                 if ($data['quantity'] < 1) {
-                    EbaySynchronizer::endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $itemID);
+                    $ebay = EbaySynchronizer::endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $itemID);
                 } else {
-                    EbaySynchronizer::_updateItem($product->id, $data, $id_ebay_profile, $ebay, $date);
+                    $ebay = EbaySynchronizer::_updateItem($product->id, $data, $id_ebay_profile, $ebay, $date);
                 }
 
             } else {
-                EbaySynchronizer::_addItem($product->id, $data, $id_ebay_profile, $ebay, $date);
+                $ebay = EbaySynchronizer::_addItem($product->id, $data, $id_ebay_profile, $ebay, $date);
             }
 
         }
@@ -543,7 +543,7 @@ class EbaySynchronizer
      *
      * @param int         $category_id
      * @param EbayProfile $ebay_profile
-     * @return
+     * @return EbayCategory
      */
     public static function _getEbayCategory($category_id, $ebay_profile)
     {
@@ -700,8 +700,10 @@ class EbaySynchronizer
      */
     private static function _getPrices($product_id, $percent, $ebay_profile)
     {
-        $context = clone Context::getContext();
+        $context = Context::cloneContext();
         $context->shop = new Shop($ebay_profile->id_shop);
+        // Use currency of ebay_profile
+        $context->currency = new Currency($ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
         $specific_price_output = null;
 
@@ -710,11 +712,6 @@ class EbaySynchronizer
         $specific_price_output = null;
 
         $price_original = Product::getPriceStatic((int)$product_id, true, null, 6, null, false, false, 1, false, null, null, null, $specific_price_output, true, true, $context);
-
-        // convert price to destination currency
-        $currency = new Currency($ebay_profile->getConfiguration('EBAY_CURRENCY'));
-        $price *= $currency->conversion_rate;
-        $price_original *= $currency->conversion_rate;
 
         if (preg_match('#[-]{0,1}[0-9]{1,2}%$#is', $percent)) {
             $price *= (1 + ($percent / 100));
