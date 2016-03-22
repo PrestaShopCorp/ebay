@@ -59,6 +59,7 @@ class EbayOrder
     private $id_customers;
     private $id_address;
     private $id_orders;
+    /** @var $carts Cart[] */
     private $carts;
 
     public function __construct(SimpleXMLElement $order_xml = null)
@@ -260,7 +261,8 @@ class EbayOrder
      * Formats the family name to match eBay constraints:
      * - length < 32 chars
      * - no brackets ()
-     *
+     * @param $family_name
+     * @return mixed
      */
     private function _formatFamilyName($family_name)
     {
@@ -403,6 +405,7 @@ class EbayOrder
     }
 
     /**
+     * @param EbayProfile $ebay_profile
      * @return bool true is still products in the cart, false otherwise
      */
     public function updateCartQuantities($ebay_profile)

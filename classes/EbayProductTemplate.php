@@ -26,6 +26,11 @@
 
 class EbayProductTemplate extends ObjectModel
 {
+    /**
+     * @param Ebay $ebay
+     * @param Smarty $smarty
+     * @return bool|Smarty_Internal_Template
+     */
     public static function getContent($ebay, $smarty)
     {
         $logo_url = version_compare(_PS_VERSION_, '1.5', '>') ? (Tools::getShopDomain(true).'/'.__PS_BASE_URI__.'/'._PS_IMG_.Configuration::get('PS_LOGO').'?'.Configuration::get('PS_IMG_UPDATE_TIME')) : (Tools::getShopDomain(true).'/'.__PS_BASE_URI__.'/img/logo.jpg');

@@ -142,7 +142,9 @@ class EbayRequest
     /**
      * Get User Profile Information
      *
-     **/
+     * @param $username
+     * @return array|bool
+     */
     public function getUserProfile($username)
     {
         //Change API URL
@@ -284,7 +286,7 @@ class EbayRequest
             return false;
         }
 
-        $returns_policies = $returns_within = array();
+        $returns_policies = $returns_within = $returns_whopays = array();
 
         foreach ($response->ReturnPolicyDetails as $return_policy_details) {
             foreach ($return_policy_details as $key => $returns) {
