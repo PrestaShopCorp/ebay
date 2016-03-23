@@ -28,7 +28,7 @@ class EbayTab
 {
     /** @var Ebay $ebay */
     protected $ebay;
-    /** @var Smarty $smarty */
+    /** @var Smarty_Data $smarty */
     protected $smarty;
     /** @var EbayProfile $ebay_profile */
     protected $ebay_profile;

@@ -26,7 +26,6 @@
 
 class EbaySynchronizer
 {
-
     /** @var $ebay_categories EbayCategory[]  */
     private static $ebay_categories = array();
 
@@ -93,7 +92,7 @@ class EbaySynchronizer
                 continue;
             }
 
-            $quantity_product = EbaySynchronizer::_getProductQuantity($product, (int)$p['id_product']);
+            $quantity_product = EbaySynchronizer::__getProductQuantity($product, (int)$p['id_product']);
 
             $ebay_profile = new EbayProfile((int)$p['id_ebay_profile']);
 
@@ -102,9 +101,9 @@ class EbaySynchronizer
             }
 
             /** @var EbayCategory $ebay_category */
-            $ebay_category = EbaySynchronizer::_getEbayCategory($product->id_category_default, $ebay_profile);
+            $ebay_category = EbaySynchronizer::__getEbayCategory($product->id_category_default, $ebay_profile);
 
-            $variations = EbaySynchronizer::_loadVariations($product, $ebay_profile, $context, $ebay_category);
+            $variations = EbaySynchronizer::__loadVariations($product, $ebay_profile, $context, $ebay_category);
 
             $ebay = new EbayRequest((int)$p['id_ebay_profile'], $request_context);
 
@@ -114,7 +113,7 @@ class EbaySynchronizer
                 $ebay = EbaySynchronizer::endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, null, $product->id);
 
                 if (!empty($ebay->error)) {
-                    $tab_error = EbaySynchronizer::_updateTabError($ebay, str_replace('&', '&amp;', $product->name));
+                    $tab_error = EbaySynchronizer::__updateTabError($ebay, str_replace('&', '&amp;', $product->name));
                     if ($log_type) {
                         EbayLog::write('Error: '.$ebay->error, $log_type);
                     }
@@ -123,10 +122,10 @@ class EbaySynchronizer
                 continue;
             }
 
-            $pictures = EbaySynchronizer::_getPictures($product, $ebay_profile, $id_lang, $context, $variations);
+            $pictures = EbaySynchronizer::__getPictures($product, $ebay_profile, $id_lang, $context, $variations);
 
             // Load basic price
-            list($price, $price_original) = EbaySynchronizer::_getPrices($product->id, $ebay_category->getPercent(), $ebay_profile);
+            list($price, $price_original) = EbaySynchronizer::__getPrices($product->id, $ebay_category->getPercent(), $ebay_profile);
             $conditions = $ebay_category->getConditionsValues($p['id_ebay_profile']);
 
             $ebay_store_category_id = pSQL(EbayStoreCategoryConfiguration::getEbayStoreCategoryIdByIdProfileAndIdCategory($ebay_profile->id, $product->id_category_default));
@@ -141,7 +140,7 @@ class EbaySynchronizer
                 'picturesMedium'         => $pictures['medium'],
                 'picturesLarge'          => $pictures['large'],
                 'condition'              => $conditions[$product->condition],
-                'shipping'               => EbaySynchronizer::_getShippingDetailsForProduct($product, $ebay_profile),
+                'shipping'               => EbaySynchronizer::__getShippingDetailsForProduct($product, $ebay_profile),
                 'id_lang'                => $id_lang,
                 'real_id_product'        => (int)$p['id_product'],
                 'ebay_store_category_id' => $ebay_store_category_id,
@@ -152,14 +151,14 @@ class EbaySynchronizer
                 'synchronize_isbn'       => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
             );
 
-            $data = array_merge($data, EbaySynchronizer::_getProductData($product, $ebay_profile));
+            $data = array_merge($data, EbaySynchronizer::__getProductData($product, $ebay_profile));
 
             // Fix hook update product
             if (Tools::getValue('id_product_attribute')) {
                 $id_product_attribute_fix = (int)Tools::getValue('id_product_attribute');
                 $key = $product->id.'-'.$id_product_attribute_fix.'_'.$ebay_profile->id;
                 if (isset($data['variations'][$key]['quantity'])) {
-                    $data['variations'][$key]['quantity'] = EbaySynchronizer::_fixHookUpdateProduct($context, $product->id, $data['variations'][$key]['quantity']);
+                    $data['variations'][$key]['quantity'] = EbaySynchronizer::__fixHookUpdateProduct($context, $product->id, $data['variations'][$key]['quantity']);
                 }
 
             }
@@ -182,16 +181,16 @@ class EbaySynchronizer
                 $data['price_percent'] = round(($price_original - $price) / $price_original * 100.0);
             }
 
-            $data['description'] = EbaySynchronizer::_getEbayDescription($product, $ebay_profile, $id_lang);
+            $data['description'] = EbaySynchronizer::__getEbayDescription($product, $ebay_profile, $id_lang);
 
             // Export to eBay
-            $ebay = EbaySynchronizer::_exportProductToEbay($product, $data, $p['id_ebay_profile'], $ebay_category, $ebay, $date, $context, $id_lang);
+            $ebay = EbaySynchronizer::__exportProductToEbay($product, $data, $p['id_ebay_profile'], $ebay_category, $ebay, $date, $context, $id_lang);
 
             $handle = fopen(dirname(__FILE__).'/log-error.txt', 'w');
 
             if (!empty($ebay->error)) {
                 // Check for errors
-                $tab_error = EbaySynchronizer::_updateTabError($ebay, $data['name']);
+                $tab_error = EbaySynchronizer::__updateTabError($ebay, $data['name']);
 
                 if ($log_type) {
                     EbayLog::write('Error: '.$ebay->error, $log_type);
@@ -234,7 +233,7 @@ class EbaySynchronizer
      * @param EbayProfile $ebay_profile
      * @return array
      */
-    private static function _getProductData($product, $ebay_profile)
+    private static function __getProductData($product, $ebay_profile)
     {
         return array(
             'id_product'         => $product->id,
@@ -263,7 +262,7 @@ class EbaySynchronizer
      * @param int          $id_lang
      * @return EbayRequest
      */
-    private static function _exportProductToEbay($product, $data, $id_ebay_profile, $ebay_category, $ebay, $date, $context, $id_lang)
+    private static function __exportProductToEbay($product, $data, $id_ebay_profile, $ebay_category, $ebay, $date, $context, $id_lang)
     {
 
         $ebay_profile = new EbayProfile($id_ebay_profile);
@@ -271,30 +270,30 @@ class EbaySynchronizer
 
         if (count($data['variations'])) {
             // the product is multivariation
-            if (EbaySynchronizer::_isProductMultiSku($ebay_category, $product->id, $id_lang, $ebay_profile->ebay_site_id)) {
+            if (EbaySynchronizer::__isProductMultiSku($ebay_category, $product->id, $id_lang, $ebay_profile->ebay_site_id)) {
                 // the category accepts multisku products and there is variables matching
-                $data['item_specifics'] = EbaySynchronizer::_getProductItemSpecifics($ebay_category, $product, $id_lang);
-                $data['description'] = EbaySynchronizer::_getMultiSkuItemDescription($data, $id_currency);
+                $data['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $id_lang);
+                $data['description'] = EbaySynchronizer::__getMultiSkuItemDescription($data, $id_currency);
 
                 if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id)) {
                     //if product already exists on eBay
                     $data['itemID'] = $item_id;
-                    if (!EbaySynchronizer::_hasVariationProducts($data['variations'])) {
+                    if (!EbaySynchronizer::__hasVariationProducts($data['variations'])) {
                         $ebay = EbaySynchronizer::endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $item_id);
                     } else {
-                        $ebay = EbaySynchronizer::_updateMultiSkuItem($product->id, $data, $id_ebay_profile, $ebay, $date);
+                        $ebay = EbaySynchronizer::__updateMultiSkuItem($product->id, $data, $id_ebay_profile, $ebay, $date);
                     }
 
                 } else {
-                    $ebay = EbaySynchronizer::_addMultiSkuItem($product->id, $data, $id_ebay_profile, $ebay, $date);
+                    $ebay = EbaySynchronizer::__addMultiSkuItem($product->id, $data, $id_ebay_profile, $ebay, $date);
                 }
 
             } else {
                 // No Multi Sku case so we do multiple products from a multivariation product
-                $data['item_specifics'] = EbaySynchronizer::_getProductItemSpecifics($ebay_category, $product, $id_lang);
+                $data['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $id_lang);
 
                 foreach ($data['variations'] as $variation) {
-                    $data_variation = EbaySynchronizer::_getVariationData($data, $variation, $id_currency);
+                    $data_variation = EbaySynchronizer::__getVariationData($data, $variation, $id_currency);
 
                     // Check if product exists on eBay
                     if ($itemID = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $data_variation['id_attribute'])) {
@@ -304,18 +303,18 @@ class EbaySynchronizer
                             // no more products
                             $ebay = EbaySynchronizer::endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $itemID);
                         } else {
-                            $ebay = EbaySynchronizer::_updateItem($product->id, $data_variation, $id_ebay_profile, $ebay, $date, $data_variation['id_attribute']);
+                            $ebay = EbaySynchronizer::__updateItem($product->id, $data_variation, $id_ebay_profile, $ebay, $date, $data_variation['id_attribute']);
                         }
 
                     } else {
-                        $ebay = EbaySynchronizer::_addItem($product->id, $data_variation, $id_ebay_profile, $ebay, $date, $data_variation['id_attribute']);
+                        $ebay = EbaySynchronizer::__addItem($product->id, $data_variation, $id_ebay_profile, $ebay, $date, $data_variation['id_attribute']);
                     }
                 }
             }
         } else {
             // the product is not a multivariation product
-            $data['item_specifics'] = EbaySynchronizer::_getProductItemSpecifics($ebay_category, $product, $id_lang);
-            $data['description'] = EbaySynchronizer::_getItemDescription($data, $id_currency);
+            $data['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $id_lang);
+            $data['description'] = EbaySynchronizer::__getItemDescription($data, $id_currency);
 
             // Check if product exists on eBay
             if ($itemID = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id)) {
@@ -325,11 +324,11 @@ class EbaySynchronizer
                 if ($data['quantity'] < 1) {
                     $ebay = EbaySynchronizer::endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $itemID);
                 } else {
-                    $ebay = EbaySynchronizer::_updateItem($product->id, $data, $id_ebay_profile, $ebay, $date);
+                    $ebay = EbaySynchronizer::__updateItem($product->id, $data, $id_ebay_profile, $ebay, $date);
                 }
 
             } else {
-                $ebay = EbaySynchronizer::_addItem($product->id, $data, $id_ebay_profile, $ebay, $date);
+                $ebay = EbaySynchronizer::__addItem($product->id, $data, $id_ebay_profile, $ebay, $date);
             }
 
         }
@@ -346,16 +345,16 @@ class EbaySynchronizer
      * @param int          $ebay_site_id
      * @return bool
      */
-    public static function _isProductMultiSku($ebay_category, $product_id, $id_lang, $ebay_site_id)
+    private static function __isProductMultiSku($ebay_category, $product_id, $id_lang, $ebay_site_id)
     {
-        return $ebay_category->isMultiSku() && EbaySynchronizer::_hasVariationsMatching($product_id, $id_lang, $ebay_category, $ebay_site_id);
+        return $ebay_category->isMultiSku() && EbaySynchronizer::__hasVariationsMatching($product_id, $id_lang, $ebay_category, $ebay_site_id);
     }
 
     /**
      * @param array $variations
      * @return bool
      */
-    private static function _hasVariationProducts($variations)
+    private static function __hasVariationProducts($variations)
     {
         foreach ($variations as $variation) {
             if ($variation['quantity'] >= 1) {
@@ -375,11 +374,11 @@ class EbaySynchronizer
      * @param int         $id_attribute
      * @return mixed
      */
-    private static function _addItem($product_id, $data, $id_ebay_profile, $ebay, $date, $id_attribute = 0)
+    private static function __addItem($product_id, $data, $id_ebay_profile, $ebay, $date, $id_attribute = 0)
     {
         $ebay->addFixedPriceItem($data);
         if ($ebay->itemID > 0) {
-            EbaySynchronizer::_insertEbayProduct($product_id, $id_ebay_profile, $ebay->itemID, $date, $id_attribute);
+            EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, $ebay->itemID, $date, $id_attribute);
         }
 
         return $ebay;
@@ -394,7 +393,7 @@ class EbaySynchronizer
      * @param int         $id_attribute
      * @return mixed
      */
-    private static function _updateItem($product_id, $data, $id_ebay_profile, $ebay, $date, $id_attribute = 0)
+    private static function __updateItem($product_id, $data, $id_ebay_profile, $ebay, $date, $id_attribute = 0)
     {
         if ($ebay->reviseFixedPriceItem($data)) {
             EbayProduct::updateByIdProductRef($data['itemID'], array('date_upd' => pSQL($date)));
@@ -404,7 +403,7 @@ class EbaySynchronizer
         if ($ebay->errorCode == 291) {
             // We delete from DB and Add it on eBay
             EbayProduct::deleteByIdProductRef($data['itemID']);
-            EbaySynchronizer::_addItem($product_id, $data, $id_ebay_profile, $ebay, $date, $id_attribute);
+            EbaySynchronizer::__addItem($product_id, $data, $id_ebay_profile, $ebay, $date, $id_attribute);
         }
 
         return $ebay;
@@ -418,12 +417,12 @@ class EbaySynchronizer
      * @param string      $date
      * @return mixed
      */
-    private static function _addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date)
+    private static function __addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date)
     {
         $ebay->addFixedPriceItemMultiSku($data);
 
         if ($ebay->itemID > 0) {
-            EbaySynchronizer::_insertEbayProduct($product_id, $id_ebay_profile, $ebay->itemID, $date);
+            EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, $ebay->itemID, $date);
         }
 
         return $ebay;
@@ -437,7 +436,7 @@ class EbaySynchronizer
      * @param string      $date
      * @return mixed
      */
-    private static function _updateMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date)
+    private static function __updateMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date)
     {
         if ($ebay->reviseFixedPriceItemMultiSku($data)) {
             EbayProduct::updateByIdProductRef($data['itemID'], array('date_upd' => pSQL($date)));
@@ -447,13 +446,13 @@ class EbaySynchronizer
         if ($ebay->errorCode == 291) {
             // We delete from DB and Add it on eBay
             EbayProduct::deleteByIdProductRef($data['itemID']);
-            $ebay = EbaySynchronizer::_addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date);
+            $ebay = EbaySynchronizer::__addMultiSkuItem($product_id, $data, $id_ebay_profile, $ebay, $date);
         }
 
         return $ebay;
     }
 
-    private static function _updateTabError($ebay_error, $name)
+    private static function __updateTabError($ebay_error, $name)
     {
         $error_key = md5($ebay_error->error);
         $tab_error[$error_key]['msg'] = '<hr/>'.$ebay_error->error;
@@ -481,7 +480,7 @@ class EbaySynchronizer
      * @param array       $variations
      * @return array
      */
-    public static function _getPictures($product, $ebay_profile, $id_lang, $context, $variations)
+    public static function __getPictures($product, $ebay_profile, $id_lang, $context, $variations)
     {
         $pictures = array();
         $pictures_medium = array();
@@ -493,9 +492,9 @@ class EbaySynchronizer
         $default = new ImageType((int)$ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_DEFAULT'));
 
         foreach (EbaySynchronizer::orderImages($product->getImages($id_lang)) as $image) {
-            $pictures_default = EbaySynchronizer::_getPictureLink($product->id, $image['id_image'], $context->link, $default->name);
+            $pictures_default = EbaySynchronizer::__getPictureLink($product->id, $image['id_image'], $context->link, $default->name);
 
-            if (((count($pictures) == 0) && ($nb_pictures == 1)) || self::_hasVariationProducts($variations)) {
+            if (((count($pictures) == 0) && ($nb_pictures == 1)) || self::__hasVariationProducts($variations)) {
                 // no extra picture, we don't upload the image
                 $pictures[] = $pictures_default;
             } elseif (count($pictures) < $nb_pictures) {
@@ -503,8 +502,8 @@ class EbaySynchronizer
                 $pictures[] = EbayProductImage::getEbayUrl($pictures_default, $product->name.'_'.(count($pictures) + 1));
             }
 
-            $pictures_medium[] = EbaySynchronizer::_getPictureLink($product->id, $image['id_image'], $context->link, $small->name);
-            $pictures_large[] = EbaySynchronizer::_getPictureLink($product->id, $image['id_image'], $context->link, $large->name);
+            $pictures_medium[] = EbaySynchronizer::__getPictureLink($product->id, $image['id_image'], $context->link, $small->name);
+            $pictures_large[] = EbaySynchronizer::__getPictureLink($product->id, $image['id_image'], $context->link, $large->name);
 
             if (count($pictures) >= 12) {
                 break;
@@ -526,7 +525,7 @@ class EbaySynchronizer
      * @param int     $id_product
      * @return int
      */
-    private static function _getProductQuantity(Product $product, $id_product)
+    private static function __getProductQuantity(Product $product, $id_product)
     {
         if (version_compare(_PS_VERSION_, '1.5', '<')) {
             $product_for_quantity = new Product($id_product);
@@ -545,7 +544,7 @@ class EbaySynchronizer
      * @param EbayProfile $ebay_profile
      * @return EbayCategory
      */
-    public static function _getEbayCategory($category_id, $ebay_profile)
+    public static function __getEbayCategory($category_id, $ebay_profile)
     {
         if (!isset(EbaySynchronizer::$ebay_categories[$category_id.'_'.$ebay_profile->id])) {
             EbaySynchronizer::$ebay_categories[$category_id.'_'.$ebay_profile->id] = new EbayCategory($ebay_profile, null, $category_id);
@@ -561,7 +560,7 @@ class EbaySynchronizer
      * @param EbayCategory $ebay_category
      * @return array
      */
-    private static function _loadVariations($product, $ebay_profile, $context, $ebay_category)
+    private static function __loadVariations($product, $ebay_profile, $context, $ebay_category)
     {
         $variations = array();
 
@@ -587,7 +586,7 @@ class EbaySynchronizer
                 'upc'                 => $combinaison['upc'],
                 'quantity'            => $combinaison['quantity'],
                 'price_static'        => $price,
-                'variation_specifics' => EbaySynchronizer::_getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $ebay_profile->id_lang, $ebay_profile->ebay_site_id, $ebay_category),
+                'variation_specifics' => EbaySynchronizer::__getVariationSpecifics($combinaison['id_product'], $combinaison['id_product_attribute'], $ebay_profile->id_lang, $ebay_profile->ebay_site_id, $ebay_category),
                 'variations'          => array(
                     array(
                         'name'  => $combinaison['group_name'],
@@ -627,7 +626,7 @@ class EbaySynchronizer
             foreach ($combination_images as $combination_image) {
                 foreach ($combination_image as $image) {
                     // If issue, it's because of https/http in the url
-                    $link = EbaySynchronizer::_getPictureLink($product->id, $image['id_image'], $context->link, $large->name);
+                    $link = EbaySynchronizer::__getPictureLink($product->id, $image['id_image'], $context->link, $large->name);
                     $variations[$product->id.'-'.$image['id_product_attribute'].'_'.$ebay_profile->id]['pictures'][] = $link;
                 }
             }
@@ -649,7 +648,7 @@ class EbaySynchronizer
      * @return bool
      * @throws PrestaShopDatabaseException
      */
-    private static function _hasVariationsMatching($product_id, $id_lang, $ebay_category, $ebay_site_id)
+    private static function __hasVariationsMatching($product_id, $id_lang, $ebay_category, $ebay_site_id)
     {
         $product = new Product($product_id);
         $attribute_groups = $product->getAttributesGroups($id_lang);
@@ -698,9 +697,9 @@ class EbaySynchronizer
      * @param EbayProfile $ebay_profile
      * @return array
      */
-    private static function _getPrices($product_id, $percent, $ebay_profile)
+    private static function __getPrices($product_id, $percent, $ebay_profile)
     {
-        $context = Context::cloneContext();
+        $context = Context::getContext()->cloneContext();
         $context->shop = new Shop($ebay_profile->id_shop);
         // Use currency of ebay_profile
         $context->currency = new Currency($ebay_profile->getConfiguration('EBAY_CURRENCY'));
@@ -730,7 +729,7 @@ class EbaySynchronizer
      * @param int         $id_lang
      * @return mixed
      */
-    private static function _getEbayDescription($product, $ebay_profile, $id_lang)
+    private static function __getEbayDescription($product, $ebay_profile, $id_lang)
     {
         $features_html = '';
 
@@ -780,11 +779,11 @@ class EbaySynchronizer
     {
         if ($product_id) {
             $product = new Product((int)$product_id, true, $id_lang);
-            $ebay_category = EbaySynchronizer::_getEbayCategory($product->id_category_default, $ebay_profile);
-            $variations = EbaySynchronizer::_loadVariations($product, $ebay_profile, $context, $ebay_category);
+            $ebay_category = EbaySynchronizer::__getEbayCategory($product->id_category_default, $ebay_profile);
+            $variations = EbaySynchronizer::__loadVariations($product, $ebay_profile, $context, $ebay_category);
 
             //case where the product is multisku and could have been sent a several products
-            if (count($variations) && !EbaySynchronizer::_isProductMultiSku($ebay_category, $product->id, $id_lang, $ebay_profile->ebay_site_id)) {
+            if (count($variations) && !EbaySynchronizer::__isProductMultiSku($ebay_category, $product->id, $id_lang, $ebay_profile->ebay_site_id)) {
                 foreach ($variations as $variation) {
                     if ($itemID = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $variation['id_attribute'])) {
                         $ebay->endFixedPriceItem($itemID);
@@ -808,7 +807,7 @@ class EbaySynchronizer
         return $ebay;
     }
 
-    private static function _getPriceDescriptionStr($price, $price_percent, $id_currency)
+    private static function __getPriceDescriptionStr($price, $price_percent, $id_currency)
     {
         $ebay = new Ebay();
         $price_str = $ebay->l('instead of', 'ebay').' <del> %price_original% </del> ('.$ebay->l('promotion of', 'ebay').' %percent%%)';
@@ -820,19 +819,19 @@ class EbaySynchronizer
         );
     }
 
-    private static function _getItemDescription($data, $id_currency)
+    private static function __getItemDescription($data, $id_currency)
     {
-        $price_str = (isset($data['price_original']) ? EbaySynchronizer::_getPriceDescriptionStr($data['price_original'], $data['price_percent'], $id_currency) : '');
+        $price_str = (isset($data['price_original']) ? EbaySynchronizer::__getPriceDescriptionStr($data['price_original'], $data['price_percent'], $id_currency) : '');
 
-        return EbaySynchronizer::_fillDescription($data['description'], $data['picturesMedium'], $data['picturesLarge'], Tools::displayPrice($data['price'], $id_currency), $price_str);
+        return EbaySynchronizer::__fillDescription($data['description'], $data['picturesMedium'], $data['picturesLarge'], Tools::displayPrice($data['price'], $id_currency), $price_str);
     }
 
-    private static function _getMultiSkuItemDescription($data, $id_currency)
+    private static function __getMultiSkuItemDescription($data, $id_currency)
     {
-        return EbaySynchronizer::_getItemDescription($data, $id_currency);
+        return EbaySynchronizer::__getItemDescription($data, $id_currency);
     }
 
-    private static function _fillDescription($description, $medium_pictures, $large_pictures, $product_price = '', $product_price_discount = '')
+    private static function __fillDescription($description, $medium_pictures, $large_pictures, $product_price = '', $product_price_discount = '')
     {
         return str_replace(
             array('{MAIN_IMAGE}', '{MEDIUM_IMAGE_1}', '{MEDIUM_IMAGE_2}', '{MEDIUM_IMAGE_3}', '{PRODUCT_PRICE}', '{PRODUCT_PRICE_DISCOUNT}'),
@@ -848,7 +847,7 @@ class EbaySynchronizer
         );
     }
 
-    private static function _insertEbayProduct($id_product, $id_ebay_profile, $ebay_item_id, $date, $id_attribute = 0)
+    private static function __insertEbayProduct($id_product, $id_ebay_profile, $ebay_item_id, $date, $id_attribute = 0)
     {
         EbayProduct::insert(array(
             'id_country'      => 8, // NOTE RArbuz: why is this hardcoded?
@@ -864,7 +863,7 @@ class EbaySynchronizer
         Configuration::updateValue('EBAY_CONFIGURATION_OK', true);
     }
 
-    private static function _getVariationData($data, $variation, $id_currency)
+    private static function __getVariationData($data, $variation, $id_currency)
     {
         if (!empty($variation['pictures'])) {
             $data['pictures'] = $variation['pictures'];
@@ -895,12 +894,12 @@ class EbaySynchronizer
         //unset($data['variationsList']);
 
         // Load eBay Description
-        $data['description'] = EbaySynchronizer::_fillDescription(
+        $data['description'] = EbaySynchronizer::__fillDescription(
             $data['description'],
             $data['picturesMedium'],
             $data['picturesLarge'],
             Tools::displayPrice($data['price'], $id_currency),
-            isset($data['price_original']) ? EbaySynchronizer::_getPriceDescriptionStr($data['price_original'], $data['price_percent'], $id_currency) : ''
+            isset($data['price_original']) ? EbaySynchronizer::__getPriceDescriptionStr($data['price_original'], $data['price_percent'], $id_currency) : ''
         );
 
         $data['id_product'] .= '-'.(int)$data['id_attribute'];
@@ -914,7 +913,7 @@ class EbaySynchronizer
         return $data;
     }
 
-    private static function _getShippingDetailsForProduct($product, $ebay_profile)
+    private static function __getShippingDetailsForProduct($product, $ebay_profile)
     {
         $national_ship = array();
         $international_ship = array();
@@ -930,7 +929,7 @@ class EbaySynchronizer
             $national_ship[$carrier['ebay_carrier']][] = array(
                 'servicePriority'        => $service_priority,
                 'serviceAdditionalCosts' => $carrier['extra_fee'],
-                'serviceCosts'           => EbaySynchronizer::_getShippingPriceForProduct($product, $carrier['id_zone'], $carrier['ps_carrier']),
+                'serviceCosts'           => EbaySynchronizer::__getShippingPriceForProduct($product, $carrier['id_zone'], $carrier['ps_carrier']),
             );
 
             $service_priority++;
@@ -947,7 +946,7 @@ class EbaySynchronizer
             $international_ship[$carrier['ebay_carrier']][] = array(
                 'servicePriority'        => $service_priority,
                 'serviceAdditionalCosts' => $carrier['extra_fee'],
-                'serviceCosts'           => EbaySynchronizer::_getShippingPriceForProduct($product, $carrier['id_zone'], $carrier['ps_carrier']),
+                'serviceCosts'           => EbaySynchronizer::__getShippingPriceForProduct($product, $carrier['id_zone'], $carrier['ps_carrier']),
                 'locationsToShip'        => EbayShippingInternationalZone::getIdEbayZonesByIdEbayShipping($ebay_profile->id, $carrier['id_ebay_shipping']),
             );
 
@@ -961,7 +960,7 @@ class EbaySynchronizer
         );
     }
 
-    private static function _getPictureLink($id_product, $id_image, $context_link, $size)
+    private static function __getPictureLink($id_product, $id_image, $context_link, $size)
     {
         //Fix for payment modules validating orders out of context, $link will not  generate fatal error.
         $link = is_object($context_link) ? $context_link : new Link();
@@ -970,7 +969,7 @@ class EbaySynchronizer
         return str_replace('https://', 'http://', $prefix.$link->getImageLink('ebay', $id_product.'-'.$id_image, $size));
     }
 
-    private static function _getShippingPriceForProduct($product, $zone, $carrier_id)
+    private static function __getShippingPriceForProduct($product, $zone, $carrier_id)
     {
         $carrier = new Carrier($carrier_id);
 
@@ -1035,7 +1034,7 @@ class EbaySynchronizer
                 ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') != 'A' ? ' AND `sync` = 1' : '').
                 ')
                         AND p.id_product NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($ebay_profile->id).')'.
-                EbaySynchronizer::_addSqlRestrictionOnLang('s').'
+                EbaySynchronizer::__addSqlRestrictionOnLang('s').'
                         GROUP BY p.id_product
                 )TableReponse';
             $nb_products = Db::getInstance()->getValue($sql);
@@ -1093,9 +1092,9 @@ class EbaySynchronizer
                         AND  `id_ebay_profile` = '.(int)$ebay_profile->id.
                 ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') != 'A' ? ' AND `sync` = 1' : '').
                 ')
-				'.($option == 1 ? EbaySynchronizer::_addSqlCheckProductInexistence('p') : '').'
+				'.($option == 1 ? EbaySynchronizer::__addSqlCheckProductInexistence('p') : '').'
 					AND p.`id_product` > '.(int)$ebay_profile->getConfiguration('EBAY_SYNC_LAST_PRODUCT').'
-					'.EbaySynchronizer::_addSqlRestrictionOnLang('s').'
+					'.EbaySynchronizer::__addSqlRestrictionOnLang('s').'
 				ORDER BY  p.`id_product`
 				LIMIT 1';
         } else {
@@ -1111,7 +1110,7 @@ class EbaySynchronizer
                     AND `id_ebay_profile` = '.(int)$ebay_profile->id.
                 ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') != 'A' ? ' AND `sync` = 1' : '').'
                 )
-                '.($option == 1 ? EbaySynchronizer::_addSqlCheckProductInexistence('p') : '').'
+                '.($option == 1 ? EbaySynchronizer::__addSqlCheckProductInexistence('p') : '').'
                 AND `id_product` > '.(int)$ebay_profile->getConfiguration('EBAY_SYNC_LAST_PRODUCT').'
                 ORDER BY `id_product`
                 LIMIT 1';
@@ -1154,10 +1153,10 @@ class EbaySynchronizer
                             AND  `id_ebay_profile` = '.(int)$ebay_profile->id.
                 ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') != 'A' ? ' AND `sync` = 1' : '').
                 ')
-                        '.(Tools::getValue('option') == 1 ? EbaySynchronizer::_addSqlCheckProductInexistence('p') : '').'
+                        '.(Tools::getValue('option') == 1 ? EbaySynchronizer::__addSqlCheckProductInexistence('p') : '').'
                         AND p.`id_product` >'.(int)$ebay_sync_last_product.'
                         AND p.`id_product` NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($ebay_profile->id).')
-                        '.EbaySynchronizer::_addSqlRestrictionOnLang('s').'
+                        '.EbaySynchronizer::__addSqlRestrictionOnLang('s').'
                         GROUP BY p.id_product
                 )TableRequete';
         } else {
@@ -1182,7 +1181,7 @@ class EbaySynchronizer
                     AND `id_ebay_profile` = '.(int)$ebay_profile->id.
                 ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') != 'A' ? ' AND `sync` = 1' : '').'
                 )
-                '.(Tools::getValue('option') == 1 ? EbaySynchronizer::_addSqlCheckProductInexistence('p') : '').'
+                '.(Tools::getValue('option') == 1 ? EbaySynchronizer::__addSqlCheckProductInexistence('p') : '').'
                 AND p.`id_product` > '.(int)$ebay_sync_last_product.'
                 AND p.`id_product` NOT IN ('.EbayProductConfiguration::getBlacklistedProductIdsQuery($ebay_profile->id).')';
         }
@@ -1196,7 +1195,7 @@ class EbaySynchronizer
      * @param int          $id_lang
      * @return array
      */
-    private static function _getProductItemSpecifics($ebay_category, $product, $id_lang)
+    private static function __getProductItemSpecifics($ebay_category, $product, $id_lang)
     {
         $item_specifics = $ebay_category->getItemsSpecificValues();
         $item_specifics_pairs = array();
@@ -1204,7 +1203,7 @@ class EbaySynchronizer
         foreach ($item_specifics as $item_specific) {
             $value = null;
             if ($item_specific['id_feature']) {
-                $value = EbaySynchronizer::_getFeatureValue($product->id, $item_specific['id_feature'], $id_lang);
+                $value = EbaySynchronizer::__getFeatureValue($product->id, $item_specific['id_feature'], $id_lang);
             } elseif ($item_specific['is_brand']) {
                 $value = $product->manufacturer_name;
             } elseif ($item_specific['is_reference']) {
@@ -1231,7 +1230,7 @@ class EbaySynchronizer
      * @param int $id_lang
      * @return false|null|string
      */
-    private static function _getAttributeValue($id_product, $id_attribute_group, $id_lang)
+    private static function __getAttributeValue($id_product, $id_attribute_group, $id_lang)
     {
         return Db::getInstance()->getValue('SELECT al.`name`
             FROM `'._DB_PREFIX_.'attribute_lang` al
@@ -1252,7 +1251,7 @@ class EbaySynchronizer
      * @param int $id_lang
      * @return false|null|string
      */
-    private static function _getFeatureValue($id_product, $id_feature, $id_lang)
+    private static function __getFeatureValue($id_product, $id_feature, $id_lang)
     {
         return Db::getInstance()->getValue('SELECT fvl.`value`
             FROM `'._DB_PREFIX_.'feature_value_lang` fvl
@@ -1271,7 +1270,7 @@ class EbaySynchronizer
      * @param int     $quantity
      * @return int
      */
-    private static function _fixHookUpdateProduct($context, $product_id, $quantity)
+    private static function __fixHookUpdateProduct($context, $product_id, $quantity)
     {
         if (isset($context->employee)
             && (int)$context->employee->id
@@ -1317,7 +1316,7 @@ class EbaySynchronizer
      * @return array
      * @throws PrestaShopDatabaseException
      */
-    public static function _getVariationSpecifics($product_id, $product_attribute_id, $id_lang, $ebay_site_id, $ebay_category = false)
+    public static function __getVariationSpecifics($product_id, $product_attribute_id, $id_lang, $ebay_site_id, $ebay_category = false)
     {
         $variation_specifics_pairs = array();
 
@@ -1349,14 +1348,14 @@ class EbaySynchronizer
         return $variation_specifics_pairs;
     }
 
-    private static function _addSqlRestrictionOnLang($alias)
+    private static function __addSqlRestrictionOnLang($alias)
     {
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
             Shop::addSqlRestrictionOnLang($alias);
         }
     }
 
-    private static function _addSqlCheckProductInexistence($alias = null)
+    private static function __addSqlCheckProductInexistence($alias = null)
     {
         return 'AND '.($alias ? $alias.'.' : '').'`id_product` NOT IN (
 			SELECT `id_product`

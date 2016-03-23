@@ -710,7 +710,9 @@ class EbayRequest
     /**
      * Set order status to "shipped"
      *
-     **/
+     * @param int $id_order_ref
+     * @return bool
+     */
     public function orderHasShipped($id_order_ref)
     {
         if (!$id_order_ref) {
@@ -997,6 +999,12 @@ class EbayRequest
         return $headers;
     }
 
+    /**
+     * @param       $api_call
+     * @param array $vars
+     * @param bool  $shoppingEndPoint
+     * @return bool|SimpleXMLElement
+     */
     private function _makeRequest($api_call, $vars = array(), $shoppingEndPoint = false)
     {
         $vars = array_merge($vars, array(
@@ -1052,6 +1060,10 @@ class EbayRequest
         return simplexml_load_string($response);
     }
 
+    /**
+     * @param $response
+     * @return bool
+     */
     private function _checkForErrors($response)
     {
         $this->error = '';

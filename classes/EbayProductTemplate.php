@@ -28,7 +28,7 @@ class EbayProductTemplate extends ObjectModel
 {
     /**
      * @param Ebay $ebay
-     * @param Smarty $smarty
+     * @param Smarty_Data $smarty
      * @return bool|Smarty_Internal_Template
      */
     public static function getContent($ebay, $smarty)
@@ -38,7 +38,7 @@ class EbayProductTemplate extends ObjectModel
         $smarty->assign(array(
             'shop_logo' => $logo_url,
             'shop_name' => Configuration::get('PS_SHOP_NAME'),
-            'module_url' => self::_getModuleUrl(),
+            'module_url' => self::__getModuleUrl(),
         ));
 
         return $ebay->display(dirname(__FILE__).'/../ebay.php', 'ebay/ebay.tpl');
@@ -49,7 +49,7 @@ class EbayProductTemplate extends ObjectModel
      * Returns the module url
      *
      **/
-    protected static function _getModuleUrl()
+    protected static function __getModuleUrl()
     {
         return Tools::getShopDomain(true).__PS_BASE_URI__.'modules/ebay/';
     }
