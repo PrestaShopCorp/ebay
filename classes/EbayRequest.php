@@ -142,7 +142,9 @@ class EbayRequest
     /**
      * Get User Profile Information
      *
-     **/
+     * @param $username
+     * @return array|bool
+     */
     public function getUserProfile($username)
     {
         //Change API URL
@@ -284,7 +286,7 @@ class EbayRequest
             return false;
         }
 
-        $returns_policies = $returns_within = array();
+        $returns_policies = $returns_within = $returns_whopays = array();
 
         foreach ($response->ReturnPolicyDetails as $return_policy_details) {
             foreach ($return_policy_details as $key => $returns) {
@@ -708,7 +710,9 @@ class EbayRequest
     /**
      * Set order status to "shipped"
      *
-     **/
+     * @param int $id_order_ref
+     * @return bool
+     */
     public function orderHasShipped($id_order_ref)
     {
         if (!$id_order_ref) {
@@ -837,22 +841,23 @@ class EbayRequest
             'synchronize_isbn'   => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
         );
 
-        if ($vars['ean'] == 0) {
-            $vars['ean'] = '';
-        }
-        if ($vars['mpn'] == 0) {
-            $vars['mpn'] = '';
-        }
-        if ($vars['upc'] == 0) {
-            $vars['upc'] = '';
-        }
-        if ($vars['isbn'] == 0) {
-            $vars['isbn'] = '';
-        }
-
         $this->smarty->assign($vars);
 
         return $this->smarty->fetch(dirname(__FILE__).'/../ebay/api/GetProductListingDetails.tpl');
+    }
+
+    /**
+     * Return empty if we get a 0, else the original value
+     * @param $value
+     * @return string
+     */
+    private function zeroIsEmpty($value)
+    {
+        if ($value === 0 || $value === "0") {
+            return "";
+        }
+
+        return $value;
     }
 
     /**
@@ -866,17 +871,17 @@ class EbayRequest
     private function configurationValues($data, $type)
     {
         if ($type == "EAN") {
-            return $data['ean13'];
+            return $this->zeroIsEmpty($data['ean13']);
         }
 //        currently, we do not support supplier reference
 //        if ($type == "SUP_REF") {
-//            return $data['supplier_reference'];
+//            return $this->zeroIsEmpty($data['supplier_reference']);
 //        }
         if ($type == "REF") {
-            return $data['reference'];
+            return $this->zeroIsEmpty($data['reference']);
         }
         if ($type == "UPC") {
-            return $data['upc'];
+            return $this->zeroIsEmpty($data['upc']);
         }
 
         return "";
@@ -896,19 +901,6 @@ class EbayRequest
                 $data['variations'][$key]['mpn'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_MPN'));
                 $data['variations'][$key]['upc'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_UPC'));
                 $data['variations'][$key]['isbn'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_ISBN'));
-
-                if ($data['variations'][$key]['ean13'] == 0) {
-                    $data['variations'][$key]['ean13'] = "";
-                }
-                if ($data['variations'][$key]['mpn'] == 0) {
-                    $data['variations'][$key]['mpn'] = "";
-                }
-                if ($data['variations'][$key]['upc'] == 0) {
-                    $data['variations'][$key]['upc'] = "";
-                }
-                if ($data['variations'][$key]['isbn'] == 0) {
-                    $data['variations'][$key]['isbn'] = "";
-                }
 
                 if (isset($variation['variations'])) {
                     foreach ($variation['variations'] as $variation_key => $variation_element) {
@@ -934,6 +926,21 @@ class EbayRequest
                             $variation_specifics_set[$name][] = $value;
                         }
 
+                    }
+
+                    // send MPN as a variation specificcs
+                    if (Configuration::get('EBAY_SYNCHRONIZE_MPN') !== "") {
+                        $mpn = $data['variations'][$key]['mpn'];
+                        if ((int)Configuration::get('EBAY_EAN_NOT_APPLICABLE') == 1 && $mpn == "") {
+                            $mpn = "Does not apply";
+                        }
+                        if (!isset($variation_specifics_set['MPN'])) {
+                            $variation_specifics_set['MPN'] = array();
+                        }
+                        $data['variations'][$key]['variation_specifics']['MPN'] = $mpn;
+                        if (!in_array($mpn, $variation_specifics_set['MPN'])) {
+                            $variation_specifics_set['MPN'][] = $mpn;
+                        }
                     }
                 }
             }
@@ -995,6 +1002,12 @@ class EbayRequest
         return $headers;
     }
 
+    /**
+     * @param       $api_call
+     * @param array $vars
+     * @param bool  $shoppingEndPoint
+     * @return bool|SimpleXMLElement
+     */
     private function _makeRequest($api_call, $vars = array(), $shoppingEndPoint = false)
     {
         $vars = array_merge($vars, array(
@@ -1050,6 +1063,10 @@ class EbayRequest
         return simplexml_load_string($response);
     }
 
+    /**
+     * @param $response
+     * @return bool
+     */
     private function _checkForErrors($response)
     {
         $this->error = '';
@@ -1058,7 +1075,7 @@ class EbayRequest
         if (isset($response->Errors) && isset($response->Ack) && (string)$response->Ack != 'Success' && (string)$response->Ack != 'Warning') {
             foreach ($response->Errors as $e) {
                 // if product no longer on eBay, we log the error code
-                if ((int)$e->ErrorCode == 291) {
+                if ((int)$e->ErrorCode == 291 || (int)$e->ErrorCode == 17) {
                     $this->errorCode = (int)$e->ErrorCode;
                 } elseif (in_array((int)$e->ErrorCode, array(21916883, 21916884))) {
                     $this->itemConditionError = true;

@@ -76,7 +76,7 @@ class EbayLogger
             $name = self::$loggers ? key(array_slice(self::$loggers, -1, 1, true)) : '';
         }
         if (!array_key_exists($name, self::$loggers)) {
-            self::$loggers[$name] = new EbayLogger($level = $level, $context = $context, $uid = $name);
+            self::$loggers[$name] = new EbayLogger($level, $context, $name);
         }
 
         return self::$loggers[$name];
@@ -121,7 +121,7 @@ class EbayLogger
     public static function export($uid = null)
     {
 
-        $logs = self::getLogs($uid = $uid);
+        $logs = self::getLogs($uid);
 
         $csvcontent = fopen('php://output', 'w');
         fputcsv($csvcontent, array_keys($logs[0]));
@@ -173,7 +173,7 @@ class EbayLogger
         $html .= '<p></p>';
 
 
-        $logs = self::getLogs($uid = $uid, $keyword = $keyword); //self::getLogs();
+        $logs = self::getLogs($uid, $keyword); //self::getLogs();
 
 
         /*

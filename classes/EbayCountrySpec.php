@@ -420,6 +420,7 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
 
     /**
      * Get countries
+     * @param bool $dev
      * @return array Countries list
      */
     public static function getCountries($dev)

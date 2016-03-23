@@ -117,7 +117,9 @@ class EbayValidatorTab
 
     public static function getCategoryTabConfiguration($id_ebay_profile)
     {
-
+        return array(
+            'indicator' => 'success',
+        );
     }
 
     public static function getItemSpecificsTabConfiguration($id_ebay_profile)
@@ -175,11 +177,15 @@ class EbayValidatorTab
 
     public static function getSynchronisationTabConfiguration($id_ebay_profile)
     {
-
+        return array(
+            'indicator' => 'success',
+        );
     }
 
     public static function getEbayListingTabConfiguration($id_ebay_profile)
     {
-
+        return array(
+            'indicator' => 'success',
+        );
     }
 }

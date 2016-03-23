@@ -60,11 +60,15 @@
 			{else}
 				{assign var="does_not_apply" value=""}
 			{/if}
+
+			{assign var="sync_VariationProductListingDetails" value=($synchronize_ean||$synchronize_isbn||$synchronize_upc)}
+			{if $sync_VariationProductListingDetails}
 			<VariationProductListingDetails>
 				{if ($synchronize_ean != "")}<EAN>{if isset($variation.ean13) && $variation.ean13 != ''}{$variation.ean13}{else}{$does_not_apply}{/if}</EAN>{/if}
 				{if ($synchronize_isbn != "")}<ISBN>{if isset($variation.isbn) && $variation.isbn != ''}{$variation.isbn}{else}{$does_not_apply}{/if}</ISBN>{/if}
 				{if ($synchronize_upc != "")}<UPC>{if isset($variation.upc) && $variation.upc != ''}{$variation.upc}{else}{$does_not_apply}{/if}</UPC>{/if}
 			</VariationProductListingDetails>
+			{/if}
 		</Variation>
 	{/foreach}
 	<Pictures>

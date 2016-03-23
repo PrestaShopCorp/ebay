@@ -94,7 +94,10 @@ class EbayConfiguration
      *
      * Returns true is sucessful, false otherwise
      *
-     * @return boolean
+     * @param $id_ebay_profile
+     * @param $attributes
+     * @param $attributes_html
+     * @return bool
      */
     public static function PSConfigurationsToEbayConfigurations($id_ebay_profile, $attributes, $attributes_html)
     {

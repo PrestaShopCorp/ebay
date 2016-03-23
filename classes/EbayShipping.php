@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 2007-2016 PrestaShop
  *
@@ -24,6 +23,7 @@
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  * International Registered Trademark & Property of PrestaShop SA
  */
+
 class EbayShipping
 {
     public static function getPsCarrierByEbayCarrier($id_ebay_profile, $ebay_carrier)
@@ -164,14 +164,8 @@ class EbayShipping
 			AND `id_ebay_profile` = ' . (int)$id_ebay_profile);
     }
 
-    public static function insert(
-        $id_ebay_profile,
-        $ebay_carrier,
-        $ps_carrier,
-        $extra_fee,
-        $id_zone,
-        $international = false
-    ) {
+    public static function insert($id_ebay_profile, $ebay_carrier, $ps_carrier, $extra_fee, $id_zone, $international = false)
+    {
         $sql = 'INSERT INTO `' . _DB_PREFIX_ . 'ebay_shipping` (
 			`id_ebay_profile`, 
 			`ebay_carrier`, 

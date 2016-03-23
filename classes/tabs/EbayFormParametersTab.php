@@ -90,17 +90,12 @@ class EbayFormParametersTab extends EbayTab
             'catLoaded'                 => !Configuration::get('EBAY_CATEGORY_LOADED_' . $this->ebay_profile->ebay_site_id),
             'createShopUrl'             => $createShopUrl,
             'ebayCountry'               => EbayCountrySpec::getInstanceByKey($this->ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT')),
-            'ebayReturns'               => preg_replace('#<br\s*?/?>#i', "\n",
-                $this->ebay_profile->getReturnsPolicyConfiguration()->ebay_returns_description),
+            'ebayReturns'               => preg_replace('#<br\s*?/?>#i', "\n", $this->ebay_profile->getReturnsPolicyConfiguration()->ebay_returns_description),
             'ebayShopValue'             => $ebayShopValue,
-            'shopPostalCode'            => Tools::getValue('ebay_shop_postalcode',
-                $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE')),
+            'shopPostalCode'            => Tools::getValue('ebay_shop_postalcode', $this->ebay_profile->getConfiguration('EBAY_SHOP_POSTALCODE')),
             'listingDurations'          => $this->_getListingDurations(),
             'ebayShop'                  => $this->ebay_profile->getConfiguration('EBAY_SHOP'),
-            'ebay_paypal_email'         => Tools::getValue('ebay_paypal_email',
-                $this->ebay_profile->getConfiguration('EBAY_PAYPAL_EMAIL')),
-            'returnsConditionAccepted'  => Tools::getValue('ebay_returns_accepted_option',
-                $returns_policy_configuration->ebay_returns_accepted_option),
+            'returnsConditionAccepted'  => Tools::getValue('ebay_returns_accepted_option', $returns_policy_configuration->ebay_returns_accepted_option),
             'automaticallyRelist'       => $this->ebay_profile->getConfiguration('EBAY_AUTOMATICALLY_RELIST'),
             'ebay_paypal_email'         => $ebay_paypal_email,
             'returnsConditionAccepted'  => $returnsConditionAccepted,
@@ -134,7 +129,7 @@ class EbayFormParametersTab extends EbayTab
         }
 
         if (Tools::getValue('action') == 'regenerate_token') {
-            $smarty_vars['check_token_tpl'] = $this->ebay->_displayCheckToken();
+            $smarty_vars['check_token_tpl'] = $this->ebay->displayCheckToken();
         }
 
         $smarty_vars['help'] = array(

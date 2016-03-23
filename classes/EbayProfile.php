@@ -363,6 +363,7 @@ class EbayProfile extends ObjectModel
     /**
      * Set token for this ebay_user_identifier
      *
+     * @param $token
      * @return null
      */
     public function setToken($token)
@@ -429,6 +430,7 @@ class EbayProfile extends ObjectModel
     /**
      * Is the shop has changed, returns the first profile of the shop, returns the current profile otherwise
      *
+     * @param bool $check_current_shop
      * @return EbayProfile
      */
     public static function getCurrent($check_current_shop = true)

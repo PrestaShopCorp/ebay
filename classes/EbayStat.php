@@ -34,6 +34,11 @@ class EbayStat
     private $data;
     private $date_add;
 
+    /**
+     * EbayStat constructor.
+     * @param $stats_version
+     * @param EbayProfile $ebay_profile
+     */
     public function __construct($stats_version, $ebay_profile)
     {
         $ebay = Module::getInstanceByName('ebay');

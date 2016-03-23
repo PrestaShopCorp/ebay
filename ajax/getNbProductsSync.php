@@ -40,8 +40,11 @@ if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get(
 $id_ebay_profile = (int)Tools::getValue('profile');
 $ebay_profile = new EbayProfile($id_ebay_profile);
 
-Db::getInstance()->autoExecute(_DB_PREFIX_ . 'ebay_category_configuration',
-    array('sync' => (int)Tools::getValue('action')), 'UPDATE',
-    '`id_category` = ' . (int)Tools::getValue('id_category') . ' AND `id_ebay_profile` = ' . (int)$ebay_profile->id);
+Db::getInstance()->autoExecute(
+    _DB_PREFIX_.'ebay_category_configuration',
+    array('sync' => (int)Tools::getValue('action')),
+    'UPDATE',
+    '`id_category` = '.(int)Tools::getValue('id_category').' AND `id_ebay_profile` = '.(int)$ebay_profile->id
+);
 
 echo EbaySynchronizer::getNbProductsSync($id_ebay_profile, "B");
