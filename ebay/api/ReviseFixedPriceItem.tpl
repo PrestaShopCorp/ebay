@@ -96,8 +96,7 @@
             <Site>{$site}</Site>{/if}
         {if isset($variations)}
             {$variations}
-		{/if}
-		{if isset($product_listing_details)}
+		{elseif isset($product_listing_details)}
             {$product_listing_details}
         {/if}
 
