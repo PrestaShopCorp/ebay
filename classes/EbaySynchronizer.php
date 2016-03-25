@@ -26,7 +26,7 @@
 
 class EbaySynchronizer
 {
-    /** @var $ebay_categories EbayCategory[]  */
+    /** @var $ebay_categories EbayCategory[] */
     private static $ebay_categories = array();
 
     public static function getIdProduct($product)
