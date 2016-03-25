@@ -47,6 +47,7 @@ if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Co
 }
 
 if (Module::isInstalled('ebay')) {
+    /** @var Ebay $ebay */
     $ebay = Module::getInstanceByName('ebay');
 
     if (version_compare(_PS_VERSION_, '1.5', '<')) {

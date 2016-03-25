@@ -104,12 +104,12 @@
 		// trash
 		var atrash = $('<a class="ebay_trash">');
 		var imgtrash = $('<img>').attr('src', '../img/admin/delete.gif');
-		atrash.append(imgtrash)
+		atrash.append(imgtrash);
 		atrash.click(function() {
 			$(this).closest('table').remove();
 			return false;
 		});
-		var trash = $("<td style='visibility:hidden'>").append(atrash)
+		var trash = $("<td style='visibility:hidden'>").append(atrash);
 		// end trash
 
 		createSelecstShipping += "</tr>";
@@ -123,8 +123,8 @@
 
 		current.append(createSelecstShipping);
 		if (hasValues) {
-			displayEbayCarrier(current.find('.prestaCarrier').eq(nbSelect))
-			processEbayCarrier(current.find('.eBayCarrier').eq(nbSelect))
+			displayEbayCarrier(current.find('.prestaCarrier').eq(nbSelect));
+			processEbayCarrier(current.find('.eBayCarrier').eq(nbSelect));
 		}
 
 		$('#domesticShipping select, #internationalShipping select').unbind().change(function(){
@@ -215,7 +215,7 @@
 							$(this).siblings('div').fadeIn();
 						});
 						div.siblings('p').html(oldHtmlP);
-						checkShippingConfiguration(tr.closest('table'))
+						checkShippingConfiguration(tr.closest('table'));
 						return false;
 					});
 				}
@@ -231,21 +231,19 @@
 	function addShippingFee(show, internationalOnly, idEbayCarrier, idPSCarrier, additionalFee){
 	{/literal}
 		var currentShippingService = -1;
-
+		var internationSuffix = '';
 
 		if(internationalOnly == 1)
 		{literal}{{/literal}
 			var lastId = $('#internationalCarrier .internationalShipping').length;
-			internationsuffix = '_international';
+			internationSuffix = '_international';
 		}
 		else
 		{literal}{{/literal}
 
 			var lastId = $('#nationalCarrier tr').length;
-			internationsuffix = '';
+			internationSuffix = '';
 		}
-
-
 
 
 		if(additionalFee == undefined)
@@ -254,7 +252,7 @@
 		var stringShippingFee = "<tr class='onelineebaycarrier'>";
 		stringShippingFee += "<td>{l s='Choose your eBay carrier' mod='ebay'}</td>";
 		stringShippingFee += 	"<td>";
-		stringShippingFee += 		"<select name='ebayCarrier"+internationsuffix+"["+lastId+"]' id='ebayCarrier_"+lastId+"'>";
+		stringShippingFee += 		"<select name='ebayCarrier"+internationSuffix+"["+lastId+"]' id='ebayCarrier_"+lastId+"'>";
 		{foreach from=$eBayCarrier item=carrier}
 		currentShippingService = '{$carrier.shippingService|escape:'htmlall':'UTF-8'}';
 		//check for international
@@ -276,7 +274,7 @@
 		stringShippingFee += 		"{l s='Associate it with a PrestaShop carrier' mod='ebay'}";
 		stringShippingFee += 	"</td>";
 		stringShippingFee += 	"<td>";
-		stringShippingFee += 		"<select name='psCarrier"+internationsuffix+"["+lastId+"]' id='psCarrier_"+lastId+"'>";
+		stringShippingFee += 		"<select name='psCarrier"+internationSuffix+"["+lastId+"]' id='psCarrier_"+lastId+"'>";
 												{foreach from=$psCarrier item=carrier}
 		currentShippingService = {$carrier.id_carrier|escape:'htmlall':'UTF-8'};
 		if(currentShippingService == idPSCarrier)
@@ -294,7 +292,7 @@
 		stringShippingFee += 		"{l s='Add extra fee for this carrier' mod='ebay'} ";
 		stringShippingFee += 	"<td>";
 		stringShippingFee += 	"<td>";
-		stringShippingFee += 		"<input type='text' name='extrafee"+internationsuffix+"["+lastId+"]' value='"+additionalFee+"'>";
+		stringShippingFee += 		"<input type='text' name='extrafee"+internationSuffix+"["+lastId+"]' value='"+additionalFee+"'>";
 		stringShippingFee += 	"</td>";
 		stringShippingFee += 	"<td>";
 		stringShippingFee += 	"<img src='../img/admin/delete.gif' title='Delete' class='deleteCarrier' />";
@@ -346,7 +344,7 @@
 
 	function excludeLocation()
 	{literal}{{/literal}
-		string = '<input type="hidden" value="1" name="excludeLocationHidden"/>'
+		var string = '<input type="hidden" value="1" name="excludeLocationHidden"/>';
 		string += '<table class="allregion table">';
 
 		{foreach from=$excludeShippingLocation.all item=region key=regionvalue name=count}
@@ -357,7 +355,7 @@
 			string += "<div class='excludedLocation'>";
 			string += "<input type='checkbox' name='excludeLocation[{$regionvalue|escape:'htmlall':'UTF-8'}]' {if in_array($regionvalue, $excludeShippingLocation.excluded)} checked='checked'{/if}/> {$region.description|escape:'htmlall':'UTF-8'}<br/>";
 			string += "<span class='showCountries' data-region='{$regionvalue|escape:'htmlall':'UTF-8'}'>({l s='Show all countries' mod='ebay'})</span>";
-			string += "<div class='listcountry'></div>"
+			string += "<div class='listcountry'></div>";
 			string += "</div>";
 			string += "</td>";
 
@@ -482,15 +480,15 @@
 
 	/**
 	 * Check if a configuration is well configured
-	 * @param  jQuery Element : Table} el
+	 * @param el jQuery Element : Table}
 	 * @param  Boolean isInternational [description]
 	 * @return Boolean                  [description]
 	 */
 	{literal}
 	function checkShippingConfiguration(el)
 	{
-		is_configured = true;
-		isInternational = true;
+		var is_configured = true;
+		var isInternational = true;
 		//Check if international or domestic shipping
 		if(el.closest('#domesticShipping').length == 1)
 			isInternational = false;
@@ -530,8 +528,8 @@
 			$(this).parent().parent().remove();
 		});
 		$('.addExcludedZone').unbind().click(function(){literal}{{/literal}
-			excludedButton = $(this);
-			excluded = getExcludeShippingLocation(excludedButton.parent());
+			var excludedButton = $(this);
+			var excluded = getExcludeShippingLocation(excludedButton.parent());
 			$(this).before(excluded);
 		});
 
@@ -570,7 +568,7 @@
 		{literal}
 		$('.shipping_destinations input').unbind().click(function(el){
 			checkShippingConfiguration($(this).closest('table'));
-		})
+		});
 		{/literal}
 	}
 </script>
@@ -696,10 +694,10 @@
 		else{
 			$(".fancyboxeBay").click(function(){
 				$("#warningOnCarriersContainer").fadeIn();
-			})
+			});
 			$(".fancyboxeBayClose").click(function(){
 				$(this).parent().fadeOut();
-			})
+			});
 		}
 	});
 	{/literal}

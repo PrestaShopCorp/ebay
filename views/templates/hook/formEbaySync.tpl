@@ -125,7 +125,7 @@
 			url: '{/literal}{$sync_products_url|escape:'urlencode'}{literal}' + counter,
 			success: function(data)
 			{
-				tab = data.split("|");
+				var tab = data.split("|");
 				$("#resultSync").html(tab[1]);
 				if (tab[0] != "OK")
 					eBaySyncProduct(option);

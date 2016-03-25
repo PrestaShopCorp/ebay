@@ -24,6 +24,11 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
+/**
+ * @param Ebay $module
+ * @return bool
+ * @throws PrestaShopDatabaseException
+ */
 function upgrade_module_1_8($module)
 {
     include dirname(__FILE__).'/sql/sql-upgrade-1-8.php';

@@ -113,7 +113,7 @@
 	{literal}			
 	$('#menuTab8').click(function() {
 		loadCategoriesItemsSpecifics();
-	})
+	});
 
 	$(document).ready(function() 
 	{

@@ -45,13 +45,16 @@ class EbayRequest
     private $loginUrl;
     private $compatibility_level;
     private $debug;
-    private $dev = false;
+    private $dev = true;
+    /** @var EbayCountrySpec */
     private $ebay_country;
-
+    /** @var Smarty_Data */
     private $smarty_data;
-
+    /** @var Smarty */
+    private $smarty;
+    /** @var EbayProfile */
     private $ebay_profile;
-
+    /** @var Context */
     private $context;
 
     private $write_api_logs;
@@ -168,9 +171,11 @@ class EbayRequest
     }
 
     /**
-     * $all : true (récupère toutes les catégories)
-     *      : false (récupère seulement les catégories root)
-     *      : int (récupère les catégories enfants de l'id catégories)
+     * @param Bool $all  : true (récupère toutes les catégories)
+     *                   : false (récupère seulement les catégories root)
+     *                   : int (récupère les catégories enfants de l'id catégories)
+     *
+     * @return array|bool
      */
     public function getCategories($all = true)
     {
@@ -406,7 +411,9 @@ class EbayRequest
     /**
      * Add / Update / End Product Methods
      *
-     **/
+     * @param array $data
+     * @return bool
+     */
     public function addFixedPriceItem($data = array())
     {
         // Check data
@@ -736,7 +743,11 @@ class EbayRequest
     /**
      * Set order status to "shipped"
      *
-     **/
+     * @param $id_order_ref
+     * @param $tracking_number
+     * @param $carrier_name
+     * @return bool
+     */
     public function updateOrderTracking($id_order_ref, $tracking_number, $carrier_name)
     {
         // Check data
@@ -763,7 +774,10 @@ class EbayRequest
     /**
      * Add / Update / End Product Methods
      *
-     **/
+     * @param $picture_url
+     * @param $picture_name
+     * @return bool|null|string
+     */
     public function uploadSiteHostedPicture($picture_url, $picture_name)
     {
         if (!$picture_url || !$picture_name) {

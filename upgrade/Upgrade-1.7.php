@@ -26,9 +26,10 @@
 
 /**
  * Updates the template image links since the image files have moved
- *
+ * @param Ebay $module
+ * @return bool
+ * @throws PrestaShopDatabaseException
  */
-
 function upgrade_module_1_7($module)
 {
 

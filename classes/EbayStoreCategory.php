@@ -86,7 +86,10 @@ class EbayStoreCategory extends ObjectModel
     /**
      * return compatible and not capatible categories, i.e. having children or being a child
      *
-     **/
+     * @param int $id_ebay_profile
+     * @return array
+     * @throws PrestaShopDatabaseException
+     */
     public static function getStoreCategories($id_ebay_profile)
     {
         $store_categories = Db::getInstance()->executeS('SELECT *
@@ -119,7 +122,6 @@ class EbayStoreCategory extends ObjectModel
             'compatible' => $compatible_store_categories,
             'not_compatible' => $not_compatible_store_categories,
         );
-
     }
 
     public static function updateStoreCategoryTable($store_categories, $ebay_profile)

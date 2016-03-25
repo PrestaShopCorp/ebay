@@ -24,6 +24,10 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
+/**
+ * @param Ebay $module
+ * @return bool
+ */
 function upgrade_module_1_12($module)
 {
     EbayOrderErrors::install();

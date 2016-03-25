@@ -161,9 +161,9 @@ class EbayAlert
 
         $templates_vars = array();
 
-        (!empty($this->errors)) ? $templates_vars['errors'] = $this->errors : '';
-        (!empty($this->warnings)) ? $templates_vars['warnings'] = $this->warnings : '';
-        (!empty($this->infos)) ? $templates_vars['infos'] = $this->infos : '';
+        $templates_vars['errors'] = (!empty($this->errors)) ? $this->errors : '';
+        $templates_vars['warnings'] = (!empty($this->warnings)) ? $this->warnings : '';
+        $templates_vars['infos'] = (!empty($this->infos)) ? $this->infos : '';
 
         if (empty($templates_vars)) {
             return false;

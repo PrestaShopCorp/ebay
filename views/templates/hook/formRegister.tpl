@@ -27,7 +27,7 @@
 
 	<script>
 		$(document).ready(function() {ldelim}
-				win = window.location.href = '{$redirect_url|escape:'urlencode'}';
+				var win = window.location.href = '{$redirect_url|escape:'urlencode'}';
 		{rdelim});
 	</script>
 {/if}
@@ -228,7 +228,7 @@
             checkeBayUsernameSelect();
         });
         checkeBayUsernameSelect();
-    })
+    });
 
 
     $(document).ready(function() {
@@ -253,7 +253,7 @@
             alert("{l s='Only eBay user identifiers can be used to log in. Please do not use your email address' mod='ebay'}");
             return false;
         }
-    })
+    });
 
 {literal}
 /**

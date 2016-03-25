@@ -26,7 +26,7 @@
 
 /**
  * Updates the template image links since the image files have moved
- *
+ * @param Ebay $module
  */
 function update_product_template($module)
 {
@@ -53,6 +53,10 @@ function update_product_template($module)
     }
 }
 
+/**
+ * @param Ebay $module
+ * @return bool
+ */
 function upgrade_module_1_5($module)
 {
     include dirname(__FILE__).'/sql/sql-upgrade-1-5.php';

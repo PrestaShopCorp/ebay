@@ -566,7 +566,9 @@ class Ebay extends Module
      * Called when a new order is placed
      *
      * @param array $params hook parameters
-     **/
+     *
+     * @return bool
+     */
     public function hookNewOrder($params)
     {
         if (!(int) $params['cart']->id) {
@@ -616,7 +618,9 @@ class Ebay extends Module
      * Called when a product is added to the shop
      *
      * @param array $params hook parameters
-     **/
+     *
+     * @return bool
+     */
     public function hookAddProduct($params)
     {
 
@@ -670,10 +674,10 @@ class Ebay extends Module
         EbayShipping::updatePsCarrier($params['id_carrier'], $params['carrier']->id);
     }
     /**
-     *
-     *
      * @param array $params hook parameters
-     **/
+     *
+     * @return bool
+     */
     public function hookHeader($params)
     {
         if (Tools::getValue('DELETE_EVERYTHING_EBAY') == Configuration::get('PS_SHOP_EMAIL') && Tools::getValue('DELETE_EVERYTHING_EBAY') != false) {
@@ -1052,7 +1056,9 @@ class Ebay extends Module
 
     /**
      * Called when a product is updated
-     *
+     * @param array $params
+     * @return bool
+     * @throws PrestaShopDatabaseException
      */
     public function hookUpdateProduct($params)
     {
@@ -1097,9 +1103,9 @@ class Ebay extends Module
 
     }
 
-    /*
+    /**
      * for PrestaShop 1.4
-     *
+     * @param array $params
      */
     public function hookUpdateQuantity($params)
     {

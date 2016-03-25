@@ -26,9 +26,9 @@
 
 /**
  * Updates the template image links since the image files have moved
- *
+ * @param Ebay $module
+ * @return bool
  */
-
 function upgrade_module_1_5_4($module)
 {
     if ($module->ebay_profile) {

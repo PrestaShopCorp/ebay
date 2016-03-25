@@ -39,9 +39,9 @@ function checkInputParameters(){
 function addToolTip(item, type, msg)
 {
 	if (type == 'error')
-		$(item).after('<a class="tooltip202 tooltip" target="_blank"> <img src="../modules/ebay/views/img/error.png" alt="">'+msg+'</a>')
+		$(item).after('<a class="tooltip202 tooltip" target="_blank"> <img src="../modules/ebay/views/img/error.png" alt="">'+msg+'</a>');
 	else if (type == 'help')
-		$(item).after('<a class="tooltip202 tooltip" target="_blank"> <img src="../img/admin/help.png" alt="">'+msg+'</a>')
+		$(item).after('<a class="tooltip202 tooltip" target="_blank"> <img src="../img/admin/help.png" alt="">'+msg+'</a>');
 }
 
 function launchDatabaseChecking(i){
