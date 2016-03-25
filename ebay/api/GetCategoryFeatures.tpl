@@ -25,17 +25,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GetCategoryFeatures xmlns="urn:ebay:apis:eBLBaseComponents">
     <RequesterCredentials>
-        <eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>
+        <eBayAuthToken>{$ebay_auth_token|escape:'htmlall':'UTF-8'}</eBayAuthToken>
     </RequesterCredentials>
     <DetailLevel>ReturnAll</DetailLevel>
     {if isset($feature_id)}
-        <FeatureID>{$feature_id}</FeatureID>
+        <FeatureID>{$feature_id|escape:'htmlall':'UTF-8'}</FeatureID>
     {/if}
     {if isset($category_id)}
-        <CategoryID>{$category_id}</CategoryID>
+        <CategoryID>{$category_id|escape:'htmlall':'UTF-8'}</CategoryID>
     {/if}
-    <ErrorLanguage>{$error_language}</ErrorLanguage>
-    <Version>{$version}</Version>
+    <ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>
+    <Version>{$version|escape:'htmlall':'UTF-8'}</Version>
     <WarningLevel>High</WarningLevel>
     <ViewAllNodes>true</ViewAllNodes>
 </GetCategoryFeatures>

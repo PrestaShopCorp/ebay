@@ -24,16 +24,16 @@
 *}
 <?xml version="1.0" encoding="utf-8"?>
 <AddFixedPriceItem xmlns="urn:ebay:apis:eBLBaseComponents">
-	<ErrorLanguage>{$error_language}</ErrorLanguage>
+	<ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>
 	<WarningLevel>High</WarningLevel>
 	<Item>
 		{if isset($sku)}
-			<SKU>{$sku}</SKU>
+			<SKU>{$sku|escape:'htmlall':'UTF-8'}</SKU>
 		{/if}
 		{if isset($autopay)}
-			<AutoPay>{$autopay}</AutoPay>
+			<AutoPay>{$autopay|escape:'htmlall':'UTF-8'}</AutoPay>
 		{/if}        
-		<Title>{$title}</Title>
+		<Title>{$title|cleanHtml}</Title>
 		{if count($pictures)}
 			<PictureDetails>
 				<GalleryType>Gallery</GalleryType>
@@ -41,63 +41,63 @@
 					<PhotoDisplay>PicturePack</PhotoDisplay>
 				{/if}
 				{foreach from=$pictures item=picture}
-					<PictureURL>{$picture}</PictureURL>
+					<PictureURL>{$picture|escape:'htmlall':'UTF-8'}</PictureURL>
 				{/foreach}
 			</PictureDetails>
 		{/if}
-		<Description><![CDATA[{$description}]]></Description>
+		<Description><![CDATA[{$description|ebayHtml}]]></Description>
 		<PrimaryCategory>
-			<CategoryID>{$category_id}</CategoryID>
+			<CategoryID>{$category_id|escape:'htmlall':'UTF-8'}</CategoryID>
 		</PrimaryCategory>
-		<ConditionID>{if $condition_id > 0}{$condition_id}{else}1000{/if}</ConditionID>
+		<ConditionID>{if $condition_id > 0}{$condition_id|escape:'htmlall':'UTF-8'}{else}1000{/if}</ConditionID>
 		{if $price_update && isset($start_price)}
-			<StartPrice>{$start_price}</StartPrice>
+			<StartPrice>{$start_price|escape:'htmlall':'UTF-8'}</StartPrice>
 		{/if}
 		<CategoryMappingAllowed>true</CategoryMappingAllowed>
-		<Country>{$country}</Country>
-		<Currency>{$country_currency}</Currency>
-		<DispatchTimeMax>{$dispatch_time_max}</DispatchTimeMax>
-		<ListingDuration>{$listing_duration}</ListingDuration>
+		<Country>{$country|escape:'htmlall':'UTF-8'}</Country>
+		<Currency>{$country_currency|escape:'htmlall':'UTF-8'}</Currency>
+		<DispatchTimeMax>{$dispatch_time_max|escape:'htmlall':'UTF-8'}</DispatchTimeMax>
+		<ListingDuration>{$listing_duration|escape:'htmlall':'UTF-8'}</ListingDuration>
 		<ListingType>FixedPriceItem</ListingType>
 		<PaymentMethods>PayPal</PaymentMethods>
-		<PayPalEmailAddress>{$pay_pal_email_address}</PayPalEmailAddress>
-		<PostalCode>{$postal_code}</PostalCode>
+		<PayPalEmailAddress>{$pay_pal_email_address|escape:'htmlall':'UTF-8'}</PayPalEmailAddress>
+		<PostalCode>{$postal_code|escape:'htmlall':'UTF-8'}</PostalCode>
 		{if isset($quantity)}
-			<Quantity>{$quantity}</Quantity>
+			<Quantity>{$quantity|escape:'htmlall':'UTF-8'}</Quantity>
 		{/if}
 		<ItemSpecifics>
 			{foreach from=$item_specifics key=name item=value}
 				<NameValueList>
-					<Name><![CDATA[{$name}]]></Name>
-					<Value><![CDATA[{$value}]]></Value>
+					<Name><![CDATA[{$name|cleanHtml}]]></Name>
+					<Value><![CDATA[{$value|cleanHtml}]]></Value>
 				</NameValueList>
 			{/foreach}
 		</ItemSpecifics>
-		{$return_policy}
+		{$return_policy|cleanHtml}
         {if isset($variations)}
-            {$variations}
+            {$variations|cleanHtml}
 		{elseif isset($product_listing_details)}
-            {$product_listing_details}
+            {$product_listing_details|cleanHtml}
         {/if}
-		<ShippingDetails>{$shipping_details}</ShippingDetails>
-		{$buyer_requirements_details}
-		<Site>{$site}</Site>
+		<ShippingDetails>{$shipping_details|cleanHtml}</ShippingDetails>
+		{$buyer_requirements_details|cleanHtml}
+		<Site>{$site|escape:'htmlall':'UTF-8'}</Site>
         
         {if isset($price_original)}
             <DiscountPriceInfo>
-                <OriginalRetailPrice>{$price_original}</OriginalRetailPrice>
+                <OriginalRetailPrice>{$price_original|escape:'htmlall':'UTF-8'}</OriginalRetailPrice>
                 <SoldOffeBay>true</SoldOffeBay>
             </DiscountPriceInfo>
         {/if}
         
         {if isset($ebay_store_category_id)}
             <Storefront>
-                  <StoreCategoryID>{$ebay_store_category_id}</StoreCategoryID>
+                  <StoreCategoryID>{$ebay_store_category_id|escape:'htmlall':'UTF-8'}</StoreCategoryID>
                   {*<!--<StoreCategoryName> string </StoreCategoryName>-->*}
             </Storefront>
         {/if}
 	</Item>
 	<RequesterCredentials>
-		<eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>
+		<eBayAuthToken>{$ebay_auth_token|escape:'htmlall':'UTF-8'}</eBayAuthToken>
 	</RequesterCredentials>
 </AddFixedPriceItem>

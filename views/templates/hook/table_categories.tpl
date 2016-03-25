@@ -34,7 +34,7 @@
         		<li class="prev"><</li>
         		{assign var="nb_pages" value=($nbCategories / 20)|ceil}
         		{for $i=1 to $nb_pages}
-        			<li{if $i == $p} class="current"{/if}>{$i}</li>
+        			<li{if $i == $p} class="current"{/if}>{$i|escape:'htmlall':'UTF-8'}</li>
         		{/for}
         		<li class="next">></li>
         	</ul>
@@ -47,7 +47,7 @@
 			</td>
 			<td id="categoryPath{$c.id_category|escape:'htmlall':'UTF-8'}">
 				{if isset($categoryConfigList[$c.id_category]) && isset($categoryConfigList[$c.id_category].var)}
-					{$categoryConfigList[$c.id_category].var}
+					{$categoryConfigList[$c.id_category].var|ebayHtml}
 				{else}
 					<select name="category[{$c.id_category|escape:'htmlall':'UTF-8'}]" id="categoryLevel1-{$c.id_category|escape:'htmlall':'UTF-8'}" rel="{$c.id_category|escape:'htmlall':'UTF-8'}" style="font-size: 12px; width: 160px;" OnChange="changeCategoryMatch(1, {$c.id_category|escape:'htmlall':'UTF-8'});" class="ebay_select">
 						<option value="0">{$noCatSelected|escape:'htmlall':'UTF-8'}</option>
@@ -67,7 +67,7 @@
 				</select>
 				<input type="text" size="3" maxlength="3" name="percent[{$c.id_category|escape:'htmlall':'UTF-8'}][value]" id="percent{$c.id_category|escape:'htmlall':'UTF-8'}" rel="{$c.id_category|escape:'htmlall':'UTF-8'}" style="font-size: 12px;" value="{if isset($categoryConfigList[$c.id_category]) && isset($categoryConfigList[$c.id_category].var)}{$categoryConfigList[$c.id_category].percent.value|escape:'htmlall':'UTF-8'}{/if}" />
 				<select name="percent[{$c.id_category|escape:'htmlall':'UTF-8'}][type]" class="ebay_select">
-					<option value="currency"{if isset($categoryConfigList[$c.id_category].percent.type) && $categoryConfigList[$c.id_category].percent.type == ''} selected{/if}>{$currencySign|html_entity_decode:2:"UTF-8"}</option>
+					<option value="currency"{if isset($categoryConfigList[$c.id_category].percent.type) && $categoryConfigList[$c.id_category].percent.type == ''} selected{/if}>{$currencySign|escape:'htmlall':'UTF-8'}</option>
 					<option value="percent"{if isset($categoryConfigList[$c.id_category].percent.type) && $categoryConfigList[$c.id_category].percent.type == '%'} selected{/if}>%</option>
 				</select>
 			</td>

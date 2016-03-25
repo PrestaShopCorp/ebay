@@ -27,7 +27,7 @@
 	{literal}
 	<script>
 		$(document).ready(function() {
-			var win = window.location = '{/literal}{$redirect_url|escape:'urlencode'}{literal}';
+			var win = window.location = '{/literal}{$redirect_url|escape:'htmlall':'UTF-8'}{literal}';
 		});		
 	</script>
 	{/literal}
@@ -54,11 +54,11 @@
 	{if isset($check_token_tpl)}
 	<fieldset id="regenerate_token">
 		<legend>{l s='Token' mod='ebay'}</legend>
-			{$check_token_tpl}	
+			{$check_token_tpl|ebayHtml}
 	</fieldset>	
 	{/if}
 	
-<form action="{$url|escape:'urlencode'}" method="post" class="form" id="configForm1">
+<form action="{$url|escape:'htmlall':'UTF-8'}" method="post" class="form" id="configForm1">
     
 	<fieldset style="margin-top:10px;">
 		<legend>{l s='Account details' mod='ebay'}</legend>
@@ -70,7 +70,7 @@
 		<div class="margin-form">
 
 			<input type="text" size="20" name="ebay_paypal_email" value="{$ebay_paypal_email|escape:'htmlall':'UTF-8'}"/>
-			<p>{l s='You have to set your PayPal e-mail account, it\'s the only payment available with this module' mod='ebay'}<a class="kb-help" data-errorcode="{$help.code_payment_solution}" data-module="ebay" data-lang="{$help.lang}" module_version="{$help.module_version}" prestashop_version="{$help.ps_version}" href="" target="_blank"></a></p>
+			<p>{l s='You have to set your PayPal e-mail account, it\'s the only payment available with this module' mod='ebay'}<a class="kb-help" data-errorcode="{$help.code_payment_solution|escape:'htmlall':'UTF-8'}" data-module="ebay" data-lang="{$help.lang|escape:'htmlall':'UTF-8'}" module_version="{$help.module_version|escape:'htmlall':'UTF-8'}" prestashop_version="{$help.ps_version|escape:'htmlall':'UTF-8'}" href="" target="_blank"></a></p>
 		</div>
         
 		<label>
@@ -113,7 +113,7 @@
 		</div>
 		<div class="hide regenerate_token_button" style="display:none;">
 			<label>{l s='Regenerate Token' mod='ebay'} :</label>
-			<a href="{$url|escape:'urlencode'}&action=regenerate_token">
+			<a href="{$url|escape:'htmlall':'UTF-8'}&action=regenerate_token">
 				<input type="button" id="token-btn" class="button" value="{l s='Regenerate Token' mod='ebay'}" />
 			</a>
 		</div>

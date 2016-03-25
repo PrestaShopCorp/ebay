@@ -26,32 +26,32 @@
 	<VariationSpecificsSet>
 	{foreach from=$variation_specifics_set key=name item=values}
 		<NameValueList>
-			<Name>{$name}</Name>
+			<Name>{$name|escape:'htmlall':'UTF-8'}</Name>
 			{foreach from=$values item=value}
-				<Value><![CDATA[{$value}]]></Value>
+				<Value><![CDATA[{$value|escape:'htmlall':'UTF-8'}]]></Value>
 			{/foreach}
 		</NameValueList>
 	{/foreach}
 	</VariationSpecificsSet>
 	{foreach from=$variations key=variation_key item=variation}
 		<Variation>
-			<SKU>prestashop-{$variation_key}</SKU>
+			<SKU>prestashop-{$variation_key|escape:'htmlall':'UTF-8'}</SKU>
 			{if $price_update}
-				<StartPrice>{$variation.price}</StartPrice>
+				<StartPrice>{$variation.price|escape:'htmlall':'UTF-8'}</StartPrice>
 			{/if}
-			<Quantity>{$variation.quantity}</Quantity>
+			<Quantity>{$variation.quantity|escape:'htmlall':'UTF-8'}</Quantity>
 			<VariationSpecifics>
 				{foreach from=$variation.variation_specifics key=name item=value}
 					<NameValueList>
-						<Name>{$name}</Name>
-						<Value><![CDATA[{$value}]]></Value>
+						<Name>{$name|escape:'htmlall':'UTF-8'}</Name>
+						<Value><![CDATA[{$value|escape:'htmlall':'UTF-8'}]]></Value>
 					</NameValueList>
 				{/foreach}				
 			</VariationSpecifics>
             
             {if isset($variation.price_original)}
                 <DiscountPriceInfo>
-                    <OriginalRetailPrice>{$variation.price_original}</OriginalRetailPrice>
+                    <OriginalRetailPrice>{$variation.price_original|escape:'htmlall':'UTF-8'}</OriginalRetailPrice>
                     <SoldOffeBay>true</SoldOffeBay>
                 </DiscountPriceInfo>
             {/if}
@@ -64,9 +64,9 @@
 			{assign var="sync_VariationProductListingDetails" value=($synchronize_ean||$synchronize_isbn||$synchronize_upc)}
 			{if $sync_VariationProductListingDetails}
 			<VariationProductListingDetails>
-				{if ($synchronize_ean != "")}<EAN>{if isset($variation.ean13) && $variation.ean13 != ''}{$variation.ean13}{else}{$does_not_apply}{/if}</EAN>{/if}
-				{if ($synchronize_isbn != "")}<ISBN>{if isset($variation.isbn) && $variation.isbn != ''}{$variation.isbn}{else}{$does_not_apply}{/if}</ISBN>{/if}
-				{if ($synchronize_upc != "")}<UPC>{if isset($variation.upc) && $variation.upc != ''}{$variation.upc}{else}{$does_not_apply}{/if}</UPC>{/if}
+				{if ($synchronize_ean != "")}<EAN>{if isset($variation.ean13) && $variation.ean13 != ''}{$variation.ean13|escape:'htmlall':'UTF-8'}{else}{$does_not_apply|escape:'htmlall':'UTF-8'}{/if}</EAN>{/if}
+				{if ($synchronize_isbn != "")}<ISBN>{if isset($variation.isbn) && $variation.isbn != ''}{$variation.isbn|escape:'htmlall':'UTF-8'}{else}{$does_not_apply|escape:'htmlall':'UTF-8'}{/if}</ISBN>{/if}
+				{if ($synchronize_upc != "")}<UPC>{if isset($variation.upc) && $variation.upc != ''}{$variation.upc|escape:'htmlall':'UTF-8'}{else}{$does_not_apply|escape:'htmlall':'UTF-8'}{/if}</UPC>{/if}
 			</VariationProductListingDetails>
 			{/if}
 		</Variation>
@@ -75,11 +75,11 @@
 	{foreach from=$variations_pictures item=variations_pictures_list}
 		{foreach from=$variations_pictures_list item=picture}
 			{if isset($picture.name)}
-				<VariationSpecificName><![CDATA[{$picture.name}]]></VariationSpecificName>
+				<VariationSpecificName><![CDATA[{$picture.name|escape:'htmlall':'UTF-8'}]]></VariationSpecificName>
 			{/if}
 			<VariationSpecificPictureSet>
-				<VariationSpecificValue><![CDATA[{$picture.value}]]></VariationSpecificValue>                
-				<PictureURL>{$picture.url}</PictureURL>
+				<VariationSpecificValue><![CDATA[{$picture.value|escape:'htmlall':'UTF-8'}]]></VariationSpecificValue>
+				<PictureURL>{$picture.url|escape:'htmlall':'UTF-8'}</PictureURL>
 			</VariationSpecificPictureSet>
 		{/foreach}
 	{/foreach}

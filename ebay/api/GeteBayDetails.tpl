@@ -24,10 +24,10 @@
 *}
 <?xml version="1.0" encoding="utf-8"?>
 <GeteBayDetailsRequest xmlns="urn:ebay:apis:eBLBaseComponents">
-    <DetailName>{$detail_name}</DetailName>
-    <ErrorLanguage>{$error_language}</ErrorLanguage>
+    <DetailName>{$detail_name|escape:'htmlall':'UTF-8'}</DetailName>
+    <ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>
     <WarningLevel>High</WarningLevel>
     <RequesterCredentials>
-        <eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>
+        <eBayAuthToken>{$ebay_auth_token|escape:'htmlall':'UTF-8'}</eBayAuthToken>
     </RequesterCredentials>
 </GeteBayDetailsRequest>

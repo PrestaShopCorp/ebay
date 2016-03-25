@@ -183,6 +183,7 @@ if (Module::isInstalled('ebay')) {
             'p' => $page,
         );
         $smarty->assign($template_vars);
+        Ebay::addSmartyModifiers();
         echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/table_categories.tpl');
     }
 }

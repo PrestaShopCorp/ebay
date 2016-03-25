@@ -38,7 +38,7 @@
                 <li class="prev"><</li>
                 {math equation="floor(x/$nbPerPage)" x=$nbProducts assign=nb_pages} 
                 {for $i=1 to ($nb_pages)}
-                    <li{if $i == $p} class="current"{/if}>{$i}</li>
+                    <li{if $i == $p} class="current"{/if}>{$i|escape:'htmlall':'UTF-8'}</li>
                 {/for}
                 <li class="next">></li>
             </ul>
@@ -58,13 +58,13 @@
                         sync="{if $p.sync}1{else}0{/if}"
                         blacklisted="{if $p.blacklisted}1{else}0{/if}"
                      href="javascript:showVariations({$p.id_product|escape:'htmlall':'UTF-8'})">&#9654;</a>
-                     <a href="{$p.link}" target="_blank">{$p.id_product|intval}</a>
+                     <a href="{$p.link|escape:'htmlall':'UTF-8'}" target="_blank">{$p.id_product|intval}</a>
                 {else}<span class="left-padded-name"><a href="{$p.link}" target="_blank">{$p.id_product|intval}</a></span>{/if}
             </td>
 
 			<td>{$p.name|escape:'htmlall':'UTF-8'}</td>
 
-            <td class="center{if !$p.stock} red{/if}">{$p.stock}</td>
+            <td class="center{if !$p.stock} red{/if}">{$p.stock|escape:'htmlall':'UTF-8'}</td>
             
             <td>{$p.category_full_name|escape:'htmlall':'UTF-8'}</td>
 
@@ -88,7 +88,7 @@
                 {elseif !$p.id_category_ref || !$p.EbayProductRef}
                     {l s='No listing yet' mod='ebay'}                  
                 {else}
-                    <a href="{if $p.EbayProductRef}{$p.link}{/if}" target="_blank">{l s='Access to listing' mod='ebay'}</a>    
+                    <a href="{if $p.EbayProductRef}{$p.link|escape:'htmlall':'UTF-8'}{/if}" target="_blank">{l s='Access to listing' mod='ebay'}</a>
                 {/if}
             </td>
             

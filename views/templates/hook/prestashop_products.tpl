@@ -45,7 +45,7 @@
         <input id="products-filter" type="search" placeholder="{l s='Filter products' mod='ebay'}" />
     </p>
     
-    <form id="products-form-view" action="{$show_products_url}" method="post" class="form">
+    <form id="products-form-view" action="{$show_products_url|escape:'htmlall':'UTF-8'}" method="post" class="form">
         <p class="center">
             <input class="primary button" name="submitSave" type="submit" value="{l s='Load Products' mod='ebay'}" />
         </p>
@@ -121,7 +121,7 @@
             'No listing': "{l s='No listing yet' mod='ebay'}",
             'See main product': "{l s='See main product' mod='ebay'}",
         {rdelim};   
-        var id_employee = {$id_employee};     
+        var id_employee = {$id_employee|escape:'htmlall':'UTF-8'};
     </script>
     
     <script type="text/javascript" src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/js/prestaShopProducts.js?date={$date|escape:'htmlall':'UTF-8'}"></script>

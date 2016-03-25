@@ -673,6 +673,45 @@ class Ebay extends Module
     {
         EbayShipping::updatePsCarrier($params['id_carrier'], $params['carrier']->id);
     }
+
+    /**
+     * @param string $data
+     * @return string
+     */
+    public static function smartyCleanHtml($data)
+    {
+        // Prevent xss injection.
+        if (Validate::isCleanHtml($data)) {
+            return $data;
+        }
+        return "";
+    }
+
+    /**
+     * @param string $data
+     * @return string
+     */
+    public static function smartyHtmlDescription($data)
+    {
+        return $data;
+    }
+
+    /**
+     * Add smarty modifiers :
+     * - cleanHtml : send html if cleanHtml, nothing else.
+     * - ebayHtml : send the variable. Usefull for send Description HTML and pass the validator.
+     */
+    public static function addSmartyModifiers()
+    {
+        // Add modifier cleanHtml for older version of Prestashop
+        if (Tools::version_compare(_PS_VERSION_, "1.6.1", "<")) {
+            $callback = array('Ebay', 'smartyCleanHtml');
+            smartyRegisterFunction(Context::getContext()->smarty, 'modifier', 'cleanHtml', $callback);
+        }
+        $callback = array('Ebay', 'smartyHtmlDescription');
+        smartyRegisterFunction(Context::getContext()->smarty, 'modifier', 'ebayHtml', $callback);
+    }
+
     /**
      * @param array $params hook parameters
      *
@@ -680,6 +719,8 @@ class Ebay extends Module
      */
     public function hookHeader($params)
     {
+        self::addSmartyModifiers();
+
         if (Tools::getValue('DELETE_EVERYTHING_EBAY') == Configuration::get('PS_SHOP_EMAIL') && Tools::getValue('DELETE_EVERYTHING_EBAY') != false) {
             $this->emptyEverything();
         }
@@ -1809,6 +1850,7 @@ class Ebay extends Module
 
     public function ajaxProductSync()
     {
+        self::addSmartyModifiers();
         $nb_products = EbaySynchronizer::getNbSynchronizableProducts($this->ebay_profile);
         $products = EbaySynchronizer::getProductsToSynchronize($this->ebay_profile, Tools::getValue('option'));
         $nb_products_less = EbaySynchronizer::getNbProductsLess($this->ebay_profile, Tools::getValue('option'), (int) $this->ebay_profile->getConfiguration('EBAY_SYNC_LAST_PRODUCT'));

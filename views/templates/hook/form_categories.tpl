@@ -54,7 +54,7 @@
 	</table>
     {elseif isset($load_cat) && $load_cat == true}
         {l s='Loading of categories did not finish, please retry with button below.' mod='ebay'}<br/>
-        <a href="{$url_categories|escape:'urlencode'}"><input type="button" class="button" value="{l s='Load categories' mod='ebay'}"/></a>
+        <a href="{$url_categories|escape:'htmlall':'UTF-8'}"><input type="button" class="button" value="{l s='Load categories' mod='ebay'}"/></a>
     {/if}
 	<p {if isset($load_cat) && $load_cat == true}class="hidden importCatEbay"{/if}>
 		<b>{l s='Select a category' mod='ebay'}</b>
@@ -154,7 +154,7 @@
 	var module_path = '{$_path|escape:'htmlall':'UTF-8'}';
 	var id_lang = '{$id_lang|escape:'htmlall':'UTF-8'}';
 	var id_ebay_profile = '{$id_ebay_profile|escape:'htmlall':'UTF-8'}';
-	var id_shop = '{$id_shop|escape:'htmlall'}';
+	var id_shop = '{$id_shop|escape:'htmlall':'UTF-8'}';
 	var categories_ebay_l = {ldelim}
 		'thank you for waiting': "{l s='Thank you for waiting while creating suggestions' mod='ebay'}",
 		'no category selected' : "{l s='No category selected' mod='ebay'}",

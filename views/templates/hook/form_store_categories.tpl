@@ -39,9 +39,9 @@
             <p>
                 <b><a href="http://cgi6.sandbox.ebay.fr/ws/eBayISAPI.dll?StoreCategoryMgmt"
                       target="_blank">{l s='you don’t have any category in your shop, please refer to this page to create categories' mod='ebay'}</a><a
-                            class="kb-help" data-errorcode="{$help.code_store_category}" data-module="ebay"
-                            data-lang="{$help.lang}" module_version="{$help.module_version}"
-                            prestashop_version="{$help.ps_version}" href="" target="_blank"></a></b>
+                            class="kb-help" data-errorcode="{$help.code_store_category|escape:'htmlall':'UTF-8'}" data-module="ebay"
+                            data-lang="{$help.lang|escape:'htmlall':'UTF-8'}" module_version="{$help.module_version|escape:'htmlall':'UTF-8'}"
+                            prestashop_version="{$help.ps_version|escape:'htmlall':'UTF-8'}" href="" target="_blank"></a></b>
             </p>
         {/if}
     {else}
@@ -49,7 +49,7 @@
             <p>
                 <b>{l s='Your eBay account has no eBay shop registered.' mod='ebay'} </b>
 
-                <a href="{$ebay_store_url}"
+                <a href="{$ebay_store_url|escape:'htmlall':'UTF-8'}"
                    target="_blank">{l s='An eBay shop subscription isn’t required but you may benefit. Find out if an eBay Shop is right for you.' mod='ebay'}</a>
             </p>
         </div>
@@ -64,7 +64,7 @@
             <li class="prev"><</li>
             {math equation="floor(x/20)" x=$nb_categorie assign=nb_pages}
             {for $i=1 to ($nb_pages +1)}
-                <li{if $i == 0} class="current"{/if}>{$i}</li>
+                <li{if $i == 0} class="current"{/if}>{$i|escape:'htmlall':'UTF-8'}</li>
             {/for}
             <li class="next">></li>
         </ul>
@@ -105,7 +105,7 @@
 
     {if $not_compatible_store_categories}
         <div class="warning big tips">
-            {l s='The following categories are not available for they contain subcategories. The eBay API does not permit sending products in these categories: ' mod='ebay'} {$not_compatible_store_categories}
+            {l s='The following categories are not available for they contain subcategories. The eBay API does not permit sending products in these categories: ' mod='ebay'} {$not_compatible_store_categories|escape:'htmlall':'UTF-8'}
         </div>
     {/if}
     <script type="text/javascript">
@@ -119,7 +119,7 @@
         var module_path = '{$_path|escape:'htmlall':'UTF-8'}';
         var id_lang = '{$id_lang|escape:'htmlall':'UTF-8'}';
         var id_ebay_profile = '{$id_ebay_profile|escape:'htmlall':'UTF-8'}';
-        var id_shop = '{$id_shop|escape:'htmlall'}';
+        var id_shop = '{$id_shop|escape:'htmlall':'UTF-8'}';
         var store_categories_ebay_l = {ldelim}
             'No category found': "{l s='No category found' mod='ebay'}",
             'You are not logged in': "{l s='You are not logged in' mod='ebay'}",

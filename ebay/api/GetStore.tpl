@@ -28,9 +28,9 @@
 
     <CategoryStructureOnly>true</CategoryStructureOnly>
 
-    <ErrorLanguage>{$error_language}</ErrorLanguage>
+    <ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>
     <RequesterCredentials>
-        <eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>
+        <eBayAuthToken>{$ebay_auth_token|escape:'htmlall':'UTF-8'}</eBayAuthToken>
     </RequesterCredentials>
     <WarningLevel>High</WarningLevel>
 </GetStoreRequest>

@@ -25,17 +25,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GetOrdersRequest xmlns="urn:ebay:apis:eBLBaseComponents">
     <DetailLevel>ReturnAll</DetailLevel>
-    <ErrorLanguage>{$error_language}</ErrorLanguage>
+    <ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>
     <WarningLevel>High</WarningLevel>
-    <CreateTimeFrom>{$create_time_from}</CreateTimeFrom>
-    <CreateTimeTo>{$create_time_to}</CreateTimeTo>
+    <CreateTimeFrom>{$create_time_from|escape:'htmlall':'UTF-8'}</CreateTimeFrom>
+    <CreateTimeTo>{$create_time_to|escape:'htmlall':'UTF-8'}</CreateTimeTo>
     <OrderRole>Seller</OrderRole>
     <OrderStatus>Completed</OrderStatus>
     <Pagination>
         <EntriesPerPage>100</EntriesPerPage>
-        <PageNumber>{$page_number}</PageNumber>
+        <PageNumber>{$page_number|escape:'htmlall':'UTF-8'}</PageNumber>
     </Pagination>
     <RequesterCredentials>
-        <eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>
+        <eBayAuthToken>{$ebay_auth_token|escape:'htmlall':'UTF-8'}</eBayAuthToken>
     </RequesterCredentials>
 </GetOrdersRequest>

@@ -23,8 +23,8 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 <ReturnPolicy>
-    <ReturnsAcceptedOption>{$returns_accepted_option}</ReturnsAcceptedOption>
-    <Description><![CDATA[{$description}]]></Description>
-    <ReturnsWithinOption>{$within}</ReturnsWithinOption>
-    <ShippingCostPaidByOption>{$whopays}</ShippingCostPaidByOption>
+    <ReturnsAcceptedOption>{$returns_accepted_option|escape:'htmlall':'UTF-8'}</ReturnsAcceptedOption>
+    <Description><![CDATA[{$description|ebayHtml}]]></Description>
+    <ReturnsWithinOption>{$within|escape:'htmlall':'UTF-8'}</ReturnsWithinOption>
+    <ShippingCostPaidByOption>{$whopays|escape:'htmlall':'UTF-8'}</ShippingCostPaidByOption>
 </ReturnPolicy>

@@ -25,7 +25,7 @@
 <?xml version="1.0" encoding="utf-8" ?>';
 <FetchTokenRequest xmlns="urn:ebay:apis:eBLBaseComponents">
     <RequesterCredentials>
-        <Username>{$username}</Username>
+        <Username>{$username|escape:'htmlall':'UTF-8'}</Username>
     </RequesterCredentials>
-    <SessionID>{$session_id}</SessionID>
+    <SessionID>{$session_id|escape:'htmlall':'UTF-8'}</SessionID>
 </FetchTokenRequest>

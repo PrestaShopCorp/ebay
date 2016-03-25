@@ -38,7 +38,7 @@
 					{$alert.message|escape:'htmlall':'UTF-8'}
 				{/if}
 				{if isset($alert.kb)}
-					<a class="kb-help" data-errorcode="{$alert.kb.errorcode}" data-module="ebay" data-lang="{$alert.kb.lang}" module_version="{$alert.kb.module_version}" prestashop_version="{$alert.kb.prestashop_version}"></a>
+					<a class="kb-help" data-errorcode="{$alert.kb.errorcode|escape:'htmlall':'UTF-8'}" data-module="ebay" data-lang="{$alert.kb.lang|escape:'htmlall':'UTF-8'}" module_version="{$alert.kb.module_version|escape:'htmlall':'UTF-8'}" prestashop_version="{$alert.kb.prestashop_version|escape:'htmlall':'UTF-8'}"></a>
 				{/if}
 			</div>
 		{/foreach}
@@ -92,10 +92,38 @@
 </ul>
 
 <div id="tabList" class="{$class_general|escape:'htmlall':'UTF-8'}">
-	<div id="menuTab1Sheet" class="tabItem selected">{if isset($parametersValidator.message)}<div class="ebay_{$parametersValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">{$parametersValidator.message|escape:'htmlall':'UTF-8'}</div>{/if}{$form_parameters}</div>
-	<div id="menuTab13Sheet" class="tabItem selected">{if isset($parametersValidator.message)}<div class="ebay_{$parametersValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">{$parametersValidator.message|escape:'htmlall':'UTF-8'}</div>{/if}{$form_advanced_parameters}</div>
-	<div id="menuTab2Sheet" class="tabItem">{if isset($categoryValidator.message)}<div class="ebay_{$categoryValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">{$categoryValidator.message|escape:'htmlall':'UTF-8'}</div>{/if}{$form_category}</div>
-	<div id="menuTab8Sheet" class="tabItem">{if isset($itemSpecificValidator.message)}<div class="ebay_{$itemSpecificValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">{$itemSpecificValidator.message|escape:'htmlall':'UTF-8'}</div>{/if}{$form_items_specifics}</div>
+	<div id="menuTab1Sheet" class="tabItem selected">
+		{if isset($parametersValidator.message)}
+			<div class="ebay_{$parametersValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">
+				{$parametersValidator.message|escape:'htmlall':'UTF-8'}
+			</div>
+		{/if}
+		{$form_parameters|ebayHtml}
+	</div>
+	<div id="menuTab13Sheet" class="tabItem selected">
+		{if isset($parametersValidator.message)}
+			<div class="ebay_{$parametersValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">
+				{$parametersValidator.message|escape:'htmlall':'UTF-8'}
+			</div>
+		{/if}
+		{$form_advanced_parameters|ebayHtml}
+	</div>
+	<div id="menuTab2Sheet" class="tabItem">
+		{if isset($categoryValidator.message)}
+			<div class="ebay_{$categoryValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">
+				{$categoryValidator.message|escape:'htmlall':'UTF-8'}
+			</div>
+		{/if}
+		{$form_category|ebayHtml}
+	</div>
+	<div id="menuTab8Sheet" class="tabItem">
+		{if isset($itemSpecificValidator.message)}
+			<div class="ebay_{$itemSpecificValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">
+				{$itemSpecificValidator.message|escape:'htmlall':'UTF-8'}
+			</div>
+		{/if}
+		{$form_items_specifics|ebayHtml}
+	</div>
 	<div id="menuTab3Sheet" class="tabItem">
 		{foreach from=$shippingValidator item=shippingValidatorItem}
 			{if isset($shippingValidatorItem.message)}
@@ -109,10 +137,24 @@
 			{$shippingValidator.message|escape:'htmlall':'UTF-8'}
 			</div>
 		{/if}
-		{$form_shipping}
+		{$form_shipping|ebayHtml}
 	</div>
-	<div id="menuTab4Sheet" class="tabItem">{if isset($templateValidator.message)}<div class="ebay_{$templateValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">{$templateValidator.message|escape:'htmlall':'UTF-8'}</div>{/if}{$form_template_manager}</div>
-	<div id="menuTab5Sheet" class="tabItem">{if isset($listingValidator.message)}<div class="ebay_{$listingValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">{$listingValidator.message|escape:'htmlall':'UTF-8'}</div>{/if}{$form_ebay_sync}</div>
+	<div id="menuTab4Sheet" class="tabItem">
+		{if isset($templateValidator.message)}
+			<div class="ebay_{$templateValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">
+				{$templateValidator.message|escape:'htmlall':'UTF-8'}
+			</div>
+		{/if}
+		{$form_template_manager|ebayHtml}
+	</div>
+	<div id="menuTab5Sheet" class="tabItem">
+		{if isset($listingValidator.message)}
+			<div class="ebay_{$listingValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">
+			{$listingValidator.message|escape:'htmlall':'UTF-8'}
+			</div>
+		{/if}
+		{$form_ebay_sync|ebayHtml}
+	</div>
 	<div id="menuTab9Sheet" class="tabItem">{$ebay_listings}</div>
     <div id="menuTab10Sheet" class="tabItem">{$form_store_category}</div>
 	<div id="menuTab11Sheet" class="tabItem">{$api_logs}</div>

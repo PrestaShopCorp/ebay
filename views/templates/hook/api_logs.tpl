@@ -33,7 +33,7 @@
 	<ul id="api_logs_pagination" class="pagination">
 		<li class="prev"><</li>
 		{for $i=0 to ($nb_logs / 20)|round:"0"}
-			<li{if $i == 0} class="current"{/if}>{$i + 1}</li>
+			<li{if $i == 0} class="current"{/if}>{($i + 1)|escape:'htmlall':'UTF-8'}</li>
 		{/for}
 		<li class="next">></li>
 	</ul>

@@ -25,10 +25,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GetCategorySpecifics xmlns="urn:ebay:apis:eBLBaseComponents">
     <RequesterCredentials>
-        <eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>
+        <eBayAuthToken>{$ebay_auth_token|escape:'htmlall':'UTF-8'}</eBayAuthToken>
     </RequesterCredentials>
     <CategorySpecific>
-        <CategoryID>{$category_id}</CategoryID>
+        <CategoryID>{$category_id|escape:'htmlall':'UTF-8'}</CategoryID>
     </CategorySpecific>
     <MaxValuesPerName>2147483647</MaxValuesPerName>
 </GetCategorySpecifics>

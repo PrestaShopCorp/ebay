@@ -25,14 +25,14 @@
 
 <?xml version="1.0" encoding="utf-8"?>
 <EndFixedPriceItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">
-    <ErrorLanguage>{$error_language}</ErrorLanguage>
-    <ItemID>{$item_id}</ItemID>
+    <ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>
+    <ItemID>{$item_id|escape:'htmlall':'UTF-8'}</ItemID>
     {if isset($sku)}
-        <SKU>{$sku}</SKU>
+        <SKU>{$sku|escape:'htmlall':'UTF-8'}</SKU>
     {/if}
     <EndingReason>NotAvailable</EndingReason>
     <RequesterCredentials>
-        <eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>
+        <eBayAuthToken>{$ebay_auth_token|escape:'htmlall':'UTF-8'}</eBayAuthToken>
     </RequesterCredentials>
     <WarningLevel>High</WarningLevel>
 </EndFixedPriceItemRequest>

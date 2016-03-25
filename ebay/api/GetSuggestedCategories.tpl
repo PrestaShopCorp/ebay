@@ -25,10 +25,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GetSuggestedCategoriesRequest xmlns="urn:ebay:apis:eBLBaseComponents">
     <RequesterCredentials>
-        <eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>
+        <eBayAuthToken>{$ebay_auth_token|escape:'htmlall':'UTF-8'}</eBayAuthToken>
     </RequesterCredentials>
-    <ErrorLanguage>{$error_language}</ErrorLanguage>
-    <Version>{$version}</Version>
+    <ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>
+    <Version>{$version|escape:'htmlall':'UTF-8'}</Version>
     <WarningLevel>High</WarningLevel>
-    <Query>{$query}</Query>
+    <Query>{$query|escape:'htmlall':'UTF-8'}</Query>
 </GetSuggestedCategoriesRequest>

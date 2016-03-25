@@ -24,13 +24,13 @@
 *}
 <?xml version="1.0" encoding="utf-8"?>
 <RelistFixedPriceItem xmlns="urn:ebay:apis:eBLBaseComponents">
-    <ErrorLanguage>{$error_language}</ErrorLanguage>
+    <ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>
     <WarningLevel>High</WarningLevel>
     <Item>
-        <ItemID>{$item_id}</ItemID>
+        <ItemID>{$item_id|escape:'htmlall':'UTF-8'}</ItemID>
     </Item>
     <RequesterCredentials>
-        <eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>
+        <eBayAuthToken>{$ebay_auth_token|escape:'htmlall':'UTF-8'}</eBayAuthToken>
     </RequesterCredentials>
     <WarningLevel>High</WarningLevel>
 </RelistFixedPriceItem>

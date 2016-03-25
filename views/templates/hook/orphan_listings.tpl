@@ -30,7 +30,7 @@
 		{l s='Reasons for theses listings not be synchronised anymore can be multiple, and are explained in the "Help" column.' mod='ebay'}
 	</p>
     
-    <form id="orphans-form-view" action="{$show_orphan_listings_url}" method="post" class="form">
+    <form id="orphans-form-view" action="{$show_orphan_listings_url|escape:'htmlall':'UTF-8'}" method="post" class="form">
         <p class="center">
             <input class="primary button" name="submitSave" type="submit" value="{l s='Load orphan listings' mod='ebay'}" />
     	</p>

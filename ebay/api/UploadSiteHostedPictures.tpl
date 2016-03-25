@@ -25,14 +25,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <UploadSiteHostedPictures xmlns="urn:ebay:apis:eBLBaseComponents">
     <!-- Call-specific Input Fields -->
-    <ExternalPictureURL>{$picture_url}</ExternalPictureURL>
-    <PictureName>{$picture_name}</PictureName>
+    <ExternalPictureURL>{$picture_url|escape:'htmlall':'UTF-8'}</ExternalPictureURL>
+    <PictureName>{$picture_name|escape:'htmlall':'UTF-8'}</PictureName>
 
     <!-- Standard Input Fields -->
-    <ErrorLanguage>{$error_language}</ErrorLanguage>
-    <Version>{$version}</Version>
+    <ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>
+    <Version>{$version|escape:'htmlall':'UTF-8'}</Version>
     <WarningLevel>High</WarningLevel>
     <RequesterCredentials>
-        <eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>
+        <eBayAuthToken>{$ebay_auth_token|escape:'htmlall':'UTF-8'}</eBayAuthToken>
     </RequesterCredentials>
 </UploadSiteHostedPictures>

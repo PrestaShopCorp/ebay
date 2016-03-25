@@ -22,7 +22,7 @@
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-<form action="{$formUrl|escape:'urlencode'}" method="post">
+<form action="{$formUrl|escape:'htmlall':'UTF-8'}" method="post">
 
 <fieldset>
 	<legend>{l s='Dispatch time' mod='ebay'}</legend>
@@ -83,8 +83,9 @@
 			createSelecstShipping += "<td style='visibility:hidden;clear:left;' class='shipping_destinations'><p>{l s='Select the countries you will ship to:' mod='ebay'}</p>";
 			createSelecstShipping += "<ul style='float:left'>";
 			{foreach from=$internationalShippingLocations item=shippingLocation name=loop}
-				if ({$smarty.foreach.loop.index%4} == 0 && {$smarty.foreach.loop.index} != 0)
+				{if $smarty.foreach.loop.index%4 == 0 && $smarty.foreach.loop.index != 0}
 					createSelecstShipping += "</ul><ul style='float:left'>";
+				{/if}
 				if(typeof(zone) != "undefined" && zone.indexOf('{$shippingLocation.location|escape:'htmlall':'UTF-8'}') != -1)
 				{
 					createSelecstShipping += '<li><input type="checkbox" checked="checked" name="internationalShippingLocation['+lastId+'][{$shippingLocation.location|escape:'htmlall':'UTF-8'}] value="{$shippingLocation.location|escape:'htmlall':'UTF-8'}"> {$shippingLocation.description|escape:'htmlall':'UTF-8'}</li>';
@@ -396,7 +397,7 @@
 
 		{foreach from=$existingNationalCarrier item=nationalCarrier key=i}
 			{if isset($nationalCarrier.ps_carrier) && isset($nationalCarrier.ebay_carrier)}
-			addShipping('domesticShipping', '{$nationalCarrier.ps_carrier|escape:'htmlall':'UTF-8'}', '{$nationalCarrier.ebay_carrier|escape:'htmlall':'UTF-8'}', '{$nationalCarrier.extra_fee|escape:'htmlall':'UTF-8'}', '{$i}', '{$nationalCarrier.id_zone|escape:'htmlall':'UTF-8'}');
+			addShipping('domesticShipping', '{$nationalCarrier.ps_carrier|escape:'htmlall':'UTF-8'}', '{$nationalCarrier.ebay_carrier|escape:'htmlall':'UTF-8'}', '{$nationalCarrier.extra_fee|escape:'htmlall':'UTF-8'}', '{$i|escape:'htmlall':'UTF-8'}', '{$nationalCarrier.id_zone|escape:'htmlall':'UTF-8'}');
 			{/if}
 		{foreachelse}
 			addShipping('domesticShipping');
@@ -409,7 +410,7 @@
 				zone.push('{$shippingLocation.id_ebay_zone|escape:'htmlall':'UTF-8'}');
 			{/foreach}
 			{if isset($internationalCarrier.ebay_carrier) && isset($internationalCarrier.ps_carrier)}
-				addShipping('internationalShipping', {$internationalCarrier.ps_carrier|escape:'htmlall':'UTF-8'}, '{$internationalCarrier.ebay_carrier|escape:'htmlall':'UTF-8'}', {$internationalCarrier.extra_fee|escape:'htmlall':'UTF-8'}, {$i}, {$internationalCarrier.id_zone|escape:'htmlall':'UTF-8'}, zone);
+				addShipping('internationalShipping', {$internationalCarrier.ps_carrier|escape:'htmlall':'UTF-8'}, '{$internationalCarrier.ebay_carrier|escape:'htmlall':'UTF-8'}', {$internationalCarrier.extra_fee|escape:'htmlall':'UTF-8'}, {$i|escape:'htmlall':'UTF-8'}, {$internationalCarrier.id_zone|escape:'htmlall':'UTF-8'}, zone);
 			{/if}
 		{foreachelse}
 			addShipping('internationalShipping');

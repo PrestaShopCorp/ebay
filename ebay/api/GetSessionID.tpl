@@ -24,6 +24,6 @@
 *}
 <?xml version="1.0" encoding="utf-8" ?>
 <GetSessionIDRequest xmlns="urn:ebay:apis:eBLBaseComponents">
-    <Version>{$version}</Version>
-    <RuName>{$ru_name}</RuName>
+    <Version>{$version|escape:'htmlall':'UTF-8'}</Version>
+    <RuName>{$ru_name|escape:'htmlall':'UTF-8'}</RuName>
 </GetSessionIDRequest>

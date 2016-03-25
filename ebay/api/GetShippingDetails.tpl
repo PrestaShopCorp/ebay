@@ -23,18 +23,18 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 {foreach from=$excluded_zones item=zone}
-	<ExcludeShipToLocation>{$zone.location}</ExcludeShipToLocation>
+	<ExcludeShipToLocation>{$zone.location|escape:'htmlall':'UTF-8'}</ExcludeShipToLocation>
 {/foreach} 
 
 {foreach from=$national_services key=service_name item=services}
 	{foreach from=$services item=service}
 		{if $service.serviceCosts !== false}
 			<ShippingServiceOptions>
-				<ShippingServicePriority>{$service.servicePriority}</ShippingServicePriority>
-				<ShippingService>{$service_name}</ShippingService>
+				<ShippingServicePriority>{$service.servicePriority|escape:'htmlall':'UTF-8'}</ShippingServicePriority>
+				<ShippingService>{$service_name|escape:'htmlall':'UTF-8'}</ShippingService>
 				<FreeShipping>false</FreeShipping>
-				<ShippingServiceCost currencyID="{$currency_id}">{$service.serviceCosts}</ShippingServiceCost>
-				<ShippingServiceAdditionalCost>{$service.serviceAdditionalCosts}</ShippingServiceAdditionalCost>
+				<ShippingServiceCost currencyID="{$currency_id|escape:'htmlall':'UTF-8'}">{$service.serviceCosts|escape:'htmlall':'UTF-8'}</ShippingServiceCost>
+				<ShippingServiceAdditionalCost>{$service.serviceAdditionalCosts|escape:'htmlall':'UTF-8'}</ShippingServiceAdditionalCost>
 			</ShippingServiceOptions>
 		{/if}
 	{/foreach}
@@ -43,12 +43,12 @@
 	{foreach from=$services item=service}
 		{if $service.serviceCosts !== false}
 			<InternationalShippingServiceOption>
-				<ShippingServicePriority>{$service.servicePriority}</ShippingServicePriority>
-				<ShippingService>{$service_name}</ShippingService>
-				<ShippingServiceCost currencyID="{$currency_id}">{$service.serviceCosts}</ShippingServiceCost>
-				<ShippingServiceAdditionalCost>{$service.serviceAdditionalCosts}</ShippingServiceAdditionalCost>
+				<ShippingServicePriority>{$service.servicePriority|escape:'htmlall':'UTF-8'}</ShippingServicePriority>
+				<ShippingService>{$service_name|escape:'htmlall':'UTF-8'}</ShippingService>
+				<ShippingServiceCost currencyID="{$currency_id|escape:'htmlall':'UTF-8'}">{$service.serviceCosts|escape:'htmlall':'UTF-8'}</ShippingServiceCost>
+				<ShippingServiceAdditionalCost>{$service.serviceAdditionalCosts|escape:'htmlall':'UTF-8'}</ShippingServiceAdditionalCost>
 				{foreach from=$service.locationsToShip item=location}
-					<ShipToLocation>{$location.id_ebay_zone}</ShipToLocation>
+					<ShipToLocation>{$location.id_ebay_zone|escape:'htmlall':'UTF-8'}</ShipToLocation>
 				{/foreach}
 			</InternationalShippingServiceOption>
 		{/if}

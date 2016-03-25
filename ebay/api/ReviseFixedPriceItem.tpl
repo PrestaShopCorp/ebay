@@ -24,35 +24,35 @@
 *}
 <?xml version="1.0" encoding="utf-8"?>
 <ReviseFixedPriceItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">
-	<ErrorLanguage>{$error_language}</ErrorLanguage>
+	<ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>
 	<WarningLevel>High</WarningLevel>
 	<Item>
-		<ItemID>{$item_id}</ItemID>
+		<ItemID>{$item_id|escape:'htmlall':'UTF-8'}</ItemID>
 		{if isset($country)}
-			<Country>{$country}</Country>
+			<Country>{$country|escape:'htmlall':'UTF-8'}</Country>
 		{/if}
 		{if isset($autopay)}
-			<AutoPay>{$autopay}</AutoPay>
+			<AutoPay>{$autopay|escape:'htmlall':'UTF-8'}</AutoPay>
 		{/if}        
 		{if isset($country_currency)}
-			<Currency>{$country_currency}</Currency>
+			<Currency>{$country_currency|escape:'htmlall':'UTF-8'}</Currency>
 		{/if}
-		<ConditionID>{if $condition_id > 0}{$condition_id}{else}1000{/if}</ConditionID>
+		<ConditionID>{if $condition_id > 0}{$condition_id|escape:'htmlall':'UTF-8'}{else}1000{/if}</ConditionID>
 		{if isset($listing_type)}
-			<ListingType>{$listing_type}</ListingType>
+			<ListingType>{$listing_type|escape:'htmlall':'UTF-8'}</ListingType>
 		{/if}
 		{if isset($payment_method)}
-			<PaymentMethods>{$payment_method}</PaymentMethods>
+			<PaymentMethods>{$payment_method|escape:'htmlall':'UTF-8'}</PaymentMethods>
 		{/if}
 		{if isset($pay_pal_email_address)}
-			<PayPalEmailAddress>{$pay_pal_email_address}</PayPalEmailAddress>
+			<PayPalEmailAddress>{$pay_pal_email_address|escape:'htmlall':'UTF-8'}</PayPalEmailAddress>
 		{/if}
 		{if isset($postal_code)}
-			<PostalCode>{$postal_code}</PostalCode>
+			<PostalCode>{$postal_code|escape:'htmlall':'UTF-8'}</PostalCode>
 		{/if}
 		{if isset($category_id)}
 			<PrimaryCategory>
-				<CategoryID>{$category_id}</CategoryID>
+				<CategoryID>{$category_id|escape:'htmlall':'UTF-8'}</CategoryID>
 			</PrimaryCategory>		
 		{/if}
 		{if count($pictures)}
@@ -62,59 +62,59 @@
 					<PhotoDisplay>PicturePack</PhotoDisplay>
 				{/if}				
 				{foreach from=$pictures item=picture}
-					<PictureURL>{$picture}</PictureURL>
+					<PictureURL>{$picture|escape:'htmlall':'UTF-8'}</PictureURL>
 				{/foreach}
 			</PictureDetails>
 		{/if}
 		{if isset($sku)}
-			<SKU>{$sku}</SKU>
+			<SKU>{$sku|escape:'htmlall':'UTF-8'}</SKU>
 		{/if}
-		<ListingDuration>{$listing_duration}</ListingDuration>
+		<ListingDuration>{$listing_duration|escape:'htmlall':'UTF-8'}</ListingDuration>
 		{if isset($quantity)}
-			<Quantity>{$quantity}</Quantity>
+			<Quantity>{$quantity|escape:'htmlall':'UTF-8'}</Quantity>
 		{/if}
 		{if $price_update && isset($start_price)}
-			<StartPrice>{$start_price}</StartPrice>
+			<StartPrice>{$start_price|escape:'htmlall':'UTF-8'}</StartPrice>
 		{/if}
 		{if $resynchronize}
-			<DispatchTimeMax>{$dispatch_time_max}</DispatchTimeMax>
-			<Title>{$title}</Title>
-			<Description><![CDATA[{$description}]]></Description>
-			<ShippingDetails>{$shipping_details}</ShippingDetails>
-			{$buyer_requirements_details}
+			<DispatchTimeMax>{$dispatch_time_max|escape:'htmlall':'UTF-8'}</DispatchTimeMax>
+			<Title>{$title|cleanHtml}</Title>
+			<Description><![CDATA[{$description|ebayHtml}]]></Description>
+			<ShippingDetails>{$shipping_details|cleanHtml}</ShippingDetails>
+			{$buyer_requirements_details|cleanHtml}
 		{/if}
 			<ItemSpecifics>
 				{foreach from=$item_specifics key=name item=value}
 					<NameValueList>
-						<Name><![CDATA[{$name}]]></Name>
-                        <Value><![CDATA[{$value}]]></Value>
+						<Name><![CDATA[{$name|cleanHtml}]]></Name>
+                        <Value><![CDATA[{$value|cleanHtml}]]></Value>
                     </NameValueList>
                 {/foreach}
             </ItemSpecifics>
-        {$return_policy}
+        {$return_policy|cleanHtml}
         {if isset($site)}
-            <Site>{$site}</Site>{/if}
+            <Site>{$site|escape:'htmlall':'UTF-8'}</Site>{/if}
         {if isset($variations)}
-            {$variations}
+            {$variations|cleanHtml}
 		{elseif isset($product_listing_details)}
-            {$product_listing_details}
+            {$product_listing_details|cleanHtml}
         {/if}
 
         {if isset($price_original)}
             <DiscountPriceInfo>
-                <OriginalRetailPrice>{$price_original}</OriginalRetailPrice>
+                <OriginalRetailPrice>{$price_original|escape:'htmlall':'UTF-8'}</OriginalRetailPrice>
                 <SoldOffeBay>true</SoldOffeBay>
             </DiscountPriceInfo>
         {/if}
 
         {if isset($ebay_store_category_id)}
             <Storefront>
-                  <StoreCategoryID>{$ebay_store_category_id}</StoreCategoryID>
+                  <StoreCategoryID>{$ebay_store_category_id|escape:'htmlall':'UTF-8'}</StoreCategoryID>
                   <!--<StoreCategoryName> string </StoreCategoryName>-->
             </Storefront>
         {/if} 
 	</Item>
 	<RequesterCredentials>
-		<eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>
+		<eBayAuthToken>{$ebay_auth_token|escape:'htmlall':'UTF-8'}</eBayAuthToken>
 	</RequesterCredentials>
 </ReviseFixedPriceItemRequest>

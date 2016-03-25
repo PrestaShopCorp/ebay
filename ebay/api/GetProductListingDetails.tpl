@@ -33,11 +33,11 @@
 {if $synch_product_listing_details}
 <ProductListingDetails>
     {if ($synchronize_mpn != "")}<BrandMPN>
-        <Brand>{if (isset($manufacturer_name) && $manufacturer_name != "")}{$manufacturer_name}{else}{if ($does_not_apply != "")}Unbranded{/if}{/if}</Brand>
-        <MPN>{if (isset($mpn) && $mpn != "")}{$mpn}{else}{$does_not_apply}{/if}</MPN>
+        <Brand>{if (isset($manufacturer_name) && $manufacturer_name != "")}{$manufacturer_name|escape:'htmlall':'UTF-8'}{else}{if ($does_not_apply != "")}Unbranded{/if}{/if}</Brand>
+        <MPN>{if (isset($mpn) && $mpn != "")}{$mpn|escape:'htmlall':'UTF-8'}{else}{$does_not_apply|escape:'htmlall':'UTF-8'}{/if}</MPN>
     </BrandMPN>{/if}
-    {if ($synchronize_ean != "")}<EAN>{if (isset($ean) && $ean != "")}{$ean}{else}{$does_not_apply}{/if}</EAN>{/if}
-    {if ($synchronize_isbn != "")}<ISBN>{if (isset($isbn) && $isbn != "")}{$isbn}{else}{$does_not_apply}{/if}</ISBN>{/if}
-    {if ($synchronize_upc != "")}<UPC>{if (isset($upc) && $upc != "")}{$upc}{else}{$does_not_apply}{/if}</UPC>{/if}
+    {if ($synchronize_ean != "")}<EAN>{if (isset($ean) && $ean != "")}{$ean|escape:'htmlall':'UTF-8'}{else}{$does_not_apply|escape:'htmlall':'UTF-8'}{/if}</EAN>{/if}
+    {if ($synchronize_isbn != "")}<ISBN>{if (isset($isbn) && $isbn != "")}{$isbn|escape:'htmlall':'UTF-8'}{else}{$does_not_apply|escape:'htmlall':'UTF-8'}{/if}</ISBN>{/if}
+    {if ($synchronize_upc != "")}<UPC>{if (isset($upc) && $upc != "")}{$upc|escape:'htmlall':'UTF-8'}{else}{$does_not_apply|escape:'htmlall':'UTF-8'}{/if}</UPC>{/if}
 </ProductListingDetails>
 {/if}

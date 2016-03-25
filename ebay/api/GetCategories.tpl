@@ -24,11 +24,11 @@
 *}
 <?xml version="1.0" encoding="utf-8"?>
 <GetCategories xmlns="urn:ebay:apis:eBLBaseComponents">
-    <Version>{$version}</Version>
+    <Version>{$version|escape:'htmlall':'UTF-8'}</Version>
     <RequesterCredentials>
-        <eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>
+        <eBayAuthToken>{$ebay_auth_token|escape:'htmlall':'UTF-8'}</eBayAuthToken>
     </RequesterCredentials>
-    <CategorySiteID>{$category_site_id}</CategorySiteID>
+    <CategorySiteID>{$category_site_id|escape:'htmlall':'UTF-8'}</CategorySiteID>
     <DetailLevel>ReturnAll</DetailLevel>
     {if $root == true && $all == false}
         <LevelLimit>1</LevelLimit>
@@ -36,7 +36,7 @@
         <LevelLimit>5</LevelLimit>
     {else}
         <LevelLimit>5</LevelLimit>
-        <CategoryParent>{$id_category}</CategoryParent>
+        <CategoryParent>{$id_category|escape:'htmlall':'UTF-8'}</CategoryParent>
     {/if}
     <ViewAllNodes>true</ViewAllNodes>
 </GetCategories>

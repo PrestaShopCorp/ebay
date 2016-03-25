@@ -24,20 +24,20 @@
 *}
 <?xml version="1.0" encoding="utf-8"?>
 <CompleteSaleRequest xmlns="urn:ebay:apis:eBLBaseComponents">
-  <OrderID>{$id_order_ref}</OrderID>
+  <OrderID>{$id_order_ref|escape:'htmlall':'UTF-8'}</OrderID>
   {if isset($tracking_number)}
       <Shipment>
         <ShipmentTrackingDetails>
-          <ShipmentTrackingNumber>{$tracking_number}</ShipmentTrackingNumber>
-          <ShippingCarrierUsed>{$carrier_name}</ShippingCarrierUsed>
+          <ShipmentTrackingNumber>{$tracking_number|escape:'htmlall':'UTF-8'}</ShipmentTrackingNumber>
+          <ShippingCarrierUsed>{$carrier_name|escape:'htmlall':'UTF-8'}</ShippingCarrierUsed>
         </ShipmentTrackingDetails>
       </Shipment>
   {else}
       <Shipped>true</Shipped>
   {/if}
-  <ErrorLanguage>{$error_language}</ErrorLanguage>
+  <ErrorLanguage>{$error_language|escape:'htmlall':'UTF-8'}</ErrorLanguage>
   <RequesterCredentials>
-      <eBayAuthToken>{$ebay_auth_token}</eBayAuthToken>
+      <eBayAuthToken>{$ebay_auth_token|escape:'htmlall':'UTF-8'}</eBayAuthToken>
   </RequesterCredentials>
   <WarningLevel>High</WarningLevel>  
 </CompleteSaleRequest>
