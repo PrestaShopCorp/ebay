@@ -703,13 +703,19 @@ class Ebay extends Module
      */
     public static function addSmartyModifiers()
     {
-        // Add modifier cleanHtml for older version of Prestashop
-        if (Tools::version_compare(_PS_VERSION_, "1.6.1", "<")) {
-            $callback = array('Ebay', 'smartyCleanHtml');
-            smartyRegisterFunction(Context::getContext()->smarty, 'modifier', 'cleanHtml', $callback);
+        static $function_called = 0;
+
+        if ($function_called === 0)
+        {
+            $function_called++;
+            // Add modifier cleanHtml for older version of Prestashop
+            if (Tools::version_compare(_PS_VERSION_, "1.6.1", "<")) {
+                $callback = array('Ebay', 'smartyCleanHtml');
+                smartyRegisterFunction(Context::getContext()->smarty, 'modifier', 'cleanHtml', $callback);
+            }
+            $callback = array('Ebay', 'smartyHtmlDescription');
+            smartyRegisterFunction(Context::getContext()->smarty, 'modifier', 'ebayHtml', $callback);
         }
-        $callback = array('Ebay', 'smartyHtmlDescription');
-        smartyRegisterFunction(Context::getContext()->smarty, 'modifier', 'ebayHtml', $callback);
     }
 
     /**

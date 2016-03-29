@@ -835,6 +835,8 @@ class EbayRequest
             'whopays'                 => $returns_policy_configuration->ebay_returns_who_pays,
         );
 
+        Ebay::addSmartyModifiers();
+
         $this->smarty->assign($vars);
 
         return $this->smarty->fetch(dirname(__FILE__).'/../ebay/api/GetReturnPolicy.tpl');
