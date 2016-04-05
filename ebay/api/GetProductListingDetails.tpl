@@ -29,7 +29,7 @@
 {/if}
 <ProductListingDetails>
     {if ($synchronize_mpn != "")}<BrandMPN>
-        <Brand>{if (isset($manufacturer_name) && $manufacturer_name != "")}{$manufacturer_name}{else}{if ($does_not_apply != "")}Unbranded{/if}{/if}</Brand>
+        <Brand><![CDATA[{if (isset($manufacturer_name) && $manufacturer_name != "")}{$manufacturer_name}{else}{if ($does_not_apply != "")}Unbranded{/if}{/if}]]></Brand>
         <MPN>{if (isset($mpn) && $mpn != "")}{$mpn}{else}{$does_not_apply}{/if}</MPN>
     </BrandMPN>{/if}
     {if ($synchronize_ean != "")}<EAN>{if (isset($ean) && $ean != "")}{$ean}{else}{$does_not_apply}{/if}</EAN>{/if}

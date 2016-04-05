@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2016 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -18,10 +18,10 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2016 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayDbValidator
@@ -94,6 +94,9 @@ class EbayDbValidator
             'id_ebay_category_specific_value' => array('type' => 'int', 'length' => 11),
             'is_brand' => array('type' => 'tinyint', 'length' => 1),
             'ebay_site_id' => array('type' => 'int', 'length' => 11),
+            'is_reference' => array('type' => 'tinyint', 'length' => 1),
+            'is_ean' => array('type' => 'tinyint', 'length' => 1),
+            'is_upc' => array('type' => 'tinyint', 'length' => 1),
         ),
 
         'ebay_category_specific_value' => array(
@@ -315,7 +318,7 @@ class EbayDbValidator
 
         if ($result === false) {
             $this->setLog($table, 'error', 'SQL REQUEST : SHOW TABLES LIKE "'._DB_PREFIX_.$table.'"', Db::getInstance()->getMsgError());
-        } else if (empty($result)) {
+        } elseif (empty($result)) {
             $this->repairTable($table);
         } else {
             $this->checkField($table, $fields);
@@ -331,7 +334,7 @@ class EbayDbValidator
 
             if ($result === false) {
                 $this->setLog($table, 'error', 'SQL REQUEST : '.Db::getInstance()->getMsgError());
-            } else if (empty($result)) {
+            } elseif (empty($result)) {
                 $this->setLog($table, 'error', 'The '.$field.' column in '.$table.' table doesn\'t exist');
             } else {
                 $this->checkTypeFields($table, $field, $arguments);
@@ -532,7 +535,7 @@ class EbayDbValidator
 
         if (!isset($arguments['null'])) {
             $sql .= 'NOT NULL ';
-        } else if ($arguments['null']) {
+        } elseif ($arguments['null']) {
             $sql .= 'NULL ';
         }
 
