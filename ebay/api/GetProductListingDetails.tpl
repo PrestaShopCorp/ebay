@@ -33,7 +33,7 @@
 {if $synch_product_listing_details}
 <ProductListingDetails>
     {if ($synchronize_mpn != "")}<BrandMPN>
-        <Brand>{if (isset($manufacturer_name) && $manufacturer_name != "")}{$manufacturer_name|escape:'htmlall':'UTF-8'}{else}{if ($does_not_apply != "")}Unbranded{/if}{/if}</Brand>
+        <Brand><![CDATA[{if (isset($manufacturer_name) && $manufacturer_name != "")}{$manufacturer_name|escape:'htmlall':'UTF-8'}{else}{if ($does_not_apply != "")}Unbranded{/if}{/if}]]></Brand>
         <MPN>{if (isset($mpn) && $mpn != "")}{$mpn|escape:'htmlall':'UTF-8'}{else}{$does_not_apply|escape:'htmlall':'UTF-8'}{/if}</MPN>
     </BrandMPN>{/if}
     {if ($synchronize_ean != "")}<EAN>{if (isset($ean) && $ean != "")}{$ean|escape:'htmlall':'UTF-8'}{else}{$does_not_apply|escape:'htmlall':'UTF-8'}{/if}</EAN>{/if}

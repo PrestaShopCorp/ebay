@@ -813,9 +813,6 @@ class EbayOrder
         $products = array();
 
         foreach ($transactions as $transaction) {
-            $handle = fopen(dirname(__FILE__).'/totolog.txt', 'a+');
-            fwrite($handle, print_r($transaction, true));
-            fclose($handle);
             $id_product = 0;
 
             $id_product_attribute = 0;
