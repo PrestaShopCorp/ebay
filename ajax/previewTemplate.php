@@ -32,5 +32,5 @@ if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get(
     die('ERROR: Invalid Token');
 }
 
-$ebay = new eBay();
+$ebay = new Ebay();
 $ebay->ajaxPreviewTemplate(Tools::getValue('message'), (int) Tools::getValue('id_lang'));
