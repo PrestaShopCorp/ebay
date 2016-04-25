@@ -32,7 +32,7 @@
 			success: function(data)
 			{ldelim}
 				if (data == 'OK')
-					window.location.href = '{$window_location_href|escape:'htmlall':'UTF-8'}';
+					window.location.href = '{$window_location_href|escape:'UTF-8'}';
 				else
 					setTimeout ("checkToken()", 5000);
 			{rdelim}

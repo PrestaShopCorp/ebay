@@ -92,7 +92,7 @@ $_MODULE['<{ebay}prestashop>ebay_8289b7ec22f39ace395a246dec26e79f'] = 'en stock'
 $_MODULE['<{ebay}prestashop>alert_mail_fe816ec4b30c11a39edfd8b0a4cfab49'] = 'Erreur(s)';
 $_MODULE['<{ebay}prestashop>alert_mail_cc49f384fd7b6f80fee8762e96323ff0'] = 'Avertissement(s)';
 $_MODULE['<{ebay}prestashop>alert_mail_47c1cd97f5787ec60674a0360ae32e69'] = 'Information(s)';
-$_MODULE['<{ebay}prestashop>alert_multishop_2e7f3dde5f1647fd2f2e90460cd38a97'] = 'La configuration actuelle de votre Boutique ne vous permet pas d\'utiliser ce module.';
+$_MODULE['<{ebay}prestashop>alert_multishop_3462bd149680e1539dbf3e8a2791add9'] = 'Vous ne pouvez pas configurer le module dans ce contexte. Merci de vous placer dans le contexte d\'une boutique spécifique.';
 $_MODULE['<{ebay}prestashop>api_logs_54b1a52487d66c4f98fda5b1954d60dd'] = 'Les journaux ne sont pas activés, merci de vous rendre dans les paramètres avancés afin de les activer';
 $_MODULE['<{ebay}prestashop>api_logs_193cfc9be3b995831c6af2fea6650e60'] = 'Page ';
 $_MODULE['<{ebay}prestashop>api_logs_d9efc413ecd9988caf09c5e921902dfc'] = 'sur %s';
@@ -197,7 +197,7 @@ $_MODULE['<{ebay}prestashop>formadvancedparameters_2b100896fd5ace4912e319bc7463b
 $_MODULE['<{ebay}prestashop>formadvancedparameters_801ab24683a4a8c433c6eb40c48bcd9d'] = 'Télécharger';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_d2fd2db4137a11bdbd6c63750d7f875f'] = 'Durée de conservation des journaux';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_e8605220e0fd610c52ec6fdd43035528'] = 'Synchro EAN';
-$_MODULE['<{ebay}prestashop>formadvancedparameters_6f98ebbeea0eb89cd394d88336a146ae'] = 'Si vous cochez cette case, le module enverra la valeur &quot;Non applicable&quot; (&quot;Does not apply&quot;) pour l\'EAN quand aucun des champs EAN, ISBN ou UPC n\'est défini.';
+$_MODULE['<{ebay}prestashop>formadvancedparameters_6f98ebbeea0eb89cd394d88336a146ae'] = 'Si vous cochez cette case, le module enverra la valeur \"Non applicable\" (\"Does not apply\") pour l\'EAN quand aucun des champs EAN, ISBN ou UPC n\'est défini.';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_d8e87c0927539672f54462c837be0b7f'] = 'Synchroniser';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_31bb5929dfddc4a33bfb7d035e4d7be0'] = 'Synchroniser les commandes';
 $_MODULE['<{ebay}prestashop>formadvancedparameters_88470e0a387c590e7520820a4d665bb7'] = 'toutes les 30 minutes lors du chargement de la page';
