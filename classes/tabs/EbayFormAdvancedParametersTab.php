@@ -61,13 +61,6 @@ class EbayFormAdvancedParametersTab extends EbayTab
             'log_file_exists'            => file_exists(_PS_MODULE_DIR_.'ebay/log/request.txt'),
             'logs_conservation_duration' => Configuration::get('EBAY_LOGS_DAYS'),
 
-            //EAN
-            'synchronize_ean'    => (string)Configuration::get('EBAY_SYNCHRONIZE_EAN'),
-            'synchronize_mpn'    => (string)Configuration::get('EBAY_SYNCHRONIZE_MPN'),
-            'synchronize_upc'    => (string)Configuration::get('EBAY_SYNCHRONIZE_UPC'),
-            'synchronize_isbn'   => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
-            'ean_not_applicable' => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
-
             // CRON sync
             'sync_products_by_cron'      => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON'),
             'sync_products_by_cron_url'  => $this->_getModuleUrl().'synchronizeProducts_CRON.php',
@@ -116,11 +109,6 @@ class EbayFormAdvancedParametersTab extends EbayTab
             && $this->ebay_profile->setConfiguration('EBAY_PICTURE_PER_LISTING', $picture_per_listing)
             && $this->ebay_profile->setConfiguration('EBAY_PICTURE_SKIP_VARIATIONS', (bool)Tools::getValue('picture_skip_variations'))
             && $this->ebay->setConfiguration('EBAY_API_LOGS', Tools::getValue('api_logs') ? 1 : 0)
-            && $this->ebay->setConfiguration('EBAY_SYNCHRONIZE_EAN', (string)Tools::getValue('synchronize_ean'))
-            && $this->ebay->setConfiguration('EBAY_SYNCHRONIZE_MPN', (string)Tools::getValue('synchronize_mpn'))
-            && $this->ebay->setConfiguration('EBAY_SYNCHRONIZE_UPC', (string)Tools::getValue('synchronize_upc'))
-            && $this->ebay->setConfiguration('EBAY_SYNCHRONIZE_ISBN', (string)Tools::getValue('synchronize_isbn'))
-            && $this->ebay->setConfiguration('EBAY_EAN_NOT_APPLICABLE', Tools::getValue('ean_not_applicable') ? 1 : 0)
             && $this->ebay->setConfiguration('EBAY_ACTIVATE_LOGS', Tools::getValue('activate_logs') ? 1 : 0)
             && Configuration::updateValue('EBAY_SYNC_PRODUCTS_BY_CRON', ('cron' === Tools::getValue('sync_products_mode')))
             && Configuration::updateValue('EBAY_SYNC_ORDERS_BY_CRON', ('cron' === Tools::getValue('sync_orders_mode')))
