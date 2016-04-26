@@ -85,7 +85,7 @@ if (Module::isInstalled('ebay')) {
             $rq_products = '
                 SELECT COUNT(DISTINCT(p.`id_product`)) AS nbProducts,
                     COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts,
-                    p.`id_category_default`
+                    ps.`id_category_default`
                 FROM `'._DB_PREFIX_.'product` AS p
 
                 INNER JOIN `'._DB_PREFIX_.'product_shop` AS ps
@@ -98,7 +98,7 @@ if (Module::isInstalled('ebay')) {
 
                 WHERE 1 '.$ebay->addSqlRestrictionOnLang('ps').'
                 AND ps.`id_shop` = 1
-                GROUP BY p.`id_category_default`';
+                GROUP BY ps.`id_category_default`';
         } else {
 
             $rq_products = 'SELECT COUNT(DISTINCT(p.`id_product`)) AS nbProducts,

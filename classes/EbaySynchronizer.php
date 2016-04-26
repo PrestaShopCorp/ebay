@@ -269,7 +269,7 @@ class EbaySynchronizer
         $id_currency = (int)$ebay_profile->getConfiguration('EBAY_CURRENCY');
 
         if (count($data['variations'])) {
-            // the product is multivariation
+            // the product is multivariation           
             if (EbaySynchronizer::__isProductMultiSku($ebay_category, $product->id, $id_lang, $ebay_profile->ebay_site_id)) {
                 // the category accepts multisku products and there is variables matching
                 $data['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $id_lang);
@@ -1024,7 +1024,7 @@ class EbaySynchronizer
             }
 
             $sql .= ' WHERE s.`quantity` > 0
-                    AND  p.`id_category_default`
+                    AND  ps.`id_category_default`
                     IN (
                         SELECT  `id_category`
                         FROM  `'._DB_PREFIX_.'ebay_category_configuration`
@@ -1083,7 +1083,7 @@ class EbaySynchronizer
                 ON p.id_product = ps.id_product
                 AND ps.id_shop = '.(int)$ebay_profile->id_shop;
             $sql .= ' WHERE s.`quantity` > 0
-                AND  p.`id_category_default`
+                AND  ps.`id_category_default`
                     IN (
                         SELECT  `id_category`
                         FROM  `'._DB_PREFIX_.'ebay_category_configuration`
@@ -1144,7 +1144,7 @@ class EbaySynchronizer
             $sql .= '
                         WHERE s.`quantity` >0
                         AND  p.`active` =1
-                        AND  p.`id_category_default`
+                        AND  ps.`id_category_default`
                         IN (
                             SELECT  `id_category`
                             FROM  `'._DB_PREFIX_.'ebay_category_configuration`
@@ -1503,7 +1503,7 @@ class EbaySynchronizer
             }
             $sql .= ' WHERE s.`quantity` > 0
                 AND p.`active` = 1
-                AND p.`id_category_default` IN (
+                AND ps.`id_category_default` IN (
                     SELECT `id_category`
                     FROM `'._DB_PREFIX_.'ebay_category_configuration`
                     WHERE `id_ebay_category` > 0';
