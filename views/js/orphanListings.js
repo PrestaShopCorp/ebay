@@ -27,7 +27,7 @@ function loadOrphans() {
 
 	$.ajax({
 		type: "POST",
-		url: module_dir + "ebay/ajax/loadTableOrphanListings.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile,
+		url: module_dir + "ebay/ajax/loadTableOrphanListings.php?token=" + ebay_token + "&id_lang=" + id_lang + "&profile=" + id_ebay_profile+'&id_shop='+id_shop,
 		success : function(data) {
       
       console.log(data);
