@@ -164,13 +164,15 @@ class EbayProduct
 			LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
 			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = '.(int) $id_lang.' ';
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
-            $sql .= 'AND id_shop = '.(int)$ebay_profile->id_shop.' ';
+            $sql .= 'AND id_shop = '.(int)$ebay_profile->id_shop;
 
         }
 		$sql .= ') WHERE ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
         if ($no_blacklisted) {
             $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
         }
+
+        $sql .= ' GROUP BY id_product, id_attribute, id_product_ref';
 
         return Db::getInstance()->ExecuteS($sql);
 
