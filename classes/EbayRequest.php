@@ -945,7 +945,7 @@ class EbayRequest
                     }
 
                     // send MPN as a variation specificcs
-                    if (Configuration::get('EBAY_SYNCHRONIZE_MPN') !== "") {
+                    if (Configuration::get('EBAY_SYNCHRONIZE_MPN') !== "" && Configuration::get('EBAY_SYNCHRONIZE_MPN') != null) {
                         $mpn = $data['variations'][$key]['mpn'];
                         if ($mpn == "") {
                             $mpn = "Does not apply";
