@@ -83,7 +83,8 @@ class EbaySynchronizer
         }
 
         foreach ($products as $p) {
-            $product = new Product((int)$p['id_product'], true, $id_lang);
+            $ebay_profile = new EbayProfile((int)$p['id_ebay_profile']);
+            $product = new Product((int)$p['id_product'], true, $id_lang, $ebay_profile->id_shop);
 
             $product_configuration = EbayProductConfiguration::getByProductIdAndProfile($p['id_product'], $p['id_ebay_profile']);
 
@@ -92,9 +93,8 @@ class EbaySynchronizer
                 continue;
             }
 
-            $quantity_product = EbaySynchronizer::__getProductQuantity($product, (int)$p['id_product']);
+            $quantity_product = EbaySynchronizer::__getProductQuantity($product, (int)$p['id_product'], $ebay_profile);
 
-            $ebay_profile = new EbayProfile((int)$p['id_ebay_profile']);
 
             if (!$ebay_profile->getConfiguration('EBAY_HAS_SYNCED_PRODUCTS')) {
                 $ebay_profile->setConfiguration('EBAY_HAS_SYNCED_PRODUCTS', 1);
@@ -525,13 +525,13 @@ class EbaySynchronizer
      * @param int     $id_product
      * @return int
      */
-    private static function __getProductQuantity(Product $product, $id_product)
+    private static function __getProductQuantity(Product $product, $id_product, $ebay_profile)
     {
         if (version_compare(_PS_VERSION_, '1.5', '<')) {
-            $product_for_quantity = new Product($id_product);
-            $quantity_product = $product_for_quantity->quantity;
-        } else {
+            $product = new Product($id_product);
             $quantity_product = $product->quantity;
+        } else {
+            $quantity_product = StockAvailable::getQuantityAvailableByProduct($id_product, $id_product_attribute, $ebay_profile->id_shop);
         }
 
         return $quantity_product;
@@ -593,6 +593,10 @@ class EbaySynchronizer
                         'value' => $combinaison['attribute_name'],
                     )),
             );
+
+            if (version_compare(_PS_VERSION_, '1.5', '>')) {
+                $variation['quantity'] = StockAvailable::getQuantityAvailableByProduct($product->id, $variation['id_attribute'], $ebay_profile->id_shop);
+            }
 
             if (preg_match('#[-]{0,1}[0-9]{1,2}%$#is', $ebay_category->getPercent())) {
                 $price *= (1 + ($ebay_category->getPercent() / 100));
@@ -778,7 +782,7 @@ class EbaySynchronizer
     public static function endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $ebay_item_id, $product_id = null)
     {
         if ($product_id) {
-            $product = new Product((int)$product_id, true, $id_lang);
+            $product = new Product((int)$product_id, true, $id_lang, $ebay_profile->id_shop);
             $ebay_category = EbaySynchronizer::__getEbayCategory($product->id_category_default, $ebay_profile);
             $variations = EbaySynchronizer::__loadVariations($product, $ebay_profile, $context, $ebay_category);
 
