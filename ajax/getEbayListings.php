@@ -35,6 +35,9 @@ include '../../../modules/ebay/ebay.php';
 if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR : INVALID TOKEN');
 }
-
+if (version_compare(_PS_VERSION_, '1.5', '>=') && Tools::getValue('id_shop')) {
+    $context = Context::getContext();
+    $context->shop = new Shop((int) Tools::getValue('id_shop'));
+}
 $ebay = new eBay();
 $ebay->displayEbayListingsAjax((int) Tools::getValue('id_employee'));
