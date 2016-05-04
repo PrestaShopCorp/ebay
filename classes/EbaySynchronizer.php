@@ -531,7 +531,7 @@ class EbaySynchronizer
             $product = new Product($id_product);
             $quantity_product = $product->quantity;
         } else {
-            $quantity_product = StockAvailable::getQuantityAvailableByProduct($id_product, $id_product_attribute, $ebay_profile->id_shop);
+            $quantity_product = StockAvailable::getQuantityAvailableByProduct($id_product, null, $ebay_profile->id_shop);
         }
 
         return $quantity_product;

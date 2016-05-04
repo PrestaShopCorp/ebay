@@ -115,12 +115,18 @@ class EbayFormParametersTab extends EbayTab
             'order_states'              => $order_states,
             'current_order_state'       => $current_order_state,
             'immediate_payment'         => (bool)$this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
-              //EAN
+            //EAN
             'synchronize_ean'    => (string)Configuration::get('EBAY_SYNCHRONIZE_EAN'),
             'synchronize_mpn'    => (string)Configuration::get('EBAY_SYNCHRONIZE_MPN'),
             'synchronize_upc'    => (string)Configuration::get('EBAY_SYNCHRONIZE_UPC'),
             'synchronize_isbn'   => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
             'ean_not_applicable' => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
+            'help_ean' => array(
+                'lang'           => $this->context->country->iso_code,
+                'module_version' => $this->ebay->version,
+                'ps_version'     => _PS_VERSION_,
+                'error_code'     => 'HELP-ADV-SETTINGS-EAN',
+            ),
 
         );
 

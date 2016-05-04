@@ -74,14 +74,6 @@ class EbayFormAdvancedParametersTab extends EbayTab
 
             // send stats to eBay
             'stats' => Configuration::get('EBAY_SEND_STATS'),
-
-        );
-
-        $smarty_vars['help_ean'] = array(
-            'lang'           => $this->context->country->iso_code,
-            'module_version' => $this->ebay->version,
-            'ps_version'     => _PS_VERSION_,
-            'error_code'     => 'HELP-ADV-SETTINGS-EAN',
         );
 
         return $this->display('formAdvancedParameters.tpl', $smarty_vars);

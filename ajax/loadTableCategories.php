@@ -97,7 +97,7 @@ if (Module::isInstalled('ebay')) {
                 AND epc.blacklisted = 1
 
                 WHERE 1 '.$ebay->addSqlRestrictionOnLang('ps').'
-                AND ps.`id_shop` = 1
+                AND ps.`id_shop` = '.(int)$ebay_profile->id_shop.'
                 GROUP BY ps.`id_category_default`';
         } else {
 
