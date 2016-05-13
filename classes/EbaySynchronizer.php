@@ -85,7 +85,6 @@ class EbaySynchronizer
         foreach ($products as $p) {
             $ebay_profile = new EbayProfile((int)$p['id_ebay_profile']);
             $product = new Product((int)$p['id_product'], true, $id_lang, $ebay_profile->id_shop);
-
             $product_configuration = EbayProductConfiguration::getByProductIdAndProfile($p['id_product'], $p['id_ebay_profile']);
 
             // make sure that product exists in the db and has a default category
@@ -571,8 +570,16 @@ class EbaySynchronizer
         }
 
         foreach ($combinations as $combinaison) {
-            $price = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute']);
-            $price_original = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, false);
+             if (version_compare(_PS_VERSION_, '1.5', '>')) {
+                $context_correct_shop = $context->cloneContext();
+                $context_correct_shop->shop = new Shop($ebay_profile->id_shop);
+                $specific_price_output = null;
+                $price = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, true, 1, false, null, null, null, $specific_price_output, true, true,$context_correct_shop);
+                $price_original = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, false, 1, false, null, null, null, $specific_price_output, true, true,$context_correct_shop);
+            } else {
+                $price = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'] );
+                $price_original = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, false);
+            }
 
             // convert price to destination currency
             $currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
