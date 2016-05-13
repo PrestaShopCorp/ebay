@@ -2,7 +2,7 @@
 <module>
 	<name>ebay</name>
 	<displayName>eBay</displayName>
-	<version>1.12.3</version>
+	<version>1.13.0</version>
 	<description>Easily export your products from PrestaShop to eBay, the biggest market place, to acquire new customers and realize more sales.</description>
 	<author>PrestaShop</author>
 	<tab>market_place</tab>

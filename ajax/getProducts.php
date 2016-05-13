@@ -55,7 +55,7 @@ if ($is_one_five) {
     $sql .= Shop::addSqlRestrictionOnLang('pl');
     $sql .= ')
             LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
-                ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.$id_ebay_profile.'
+                ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.(int)$id_ebay_profile.'
             LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
                 ON p.`id_product` = sa.`id_product`
                 AND sa.`id_product_attribute` = 0
@@ -73,7 +73,7 @@ if ($is_one_five) {
                 AND pl.`id_lang` = '.(int) $id_lang;
     $sql .= ')
             LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
-                ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.$id_ebay_profile.'
+                ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.(int)$id_ebay_profile.'
 
             WHERE ';
 

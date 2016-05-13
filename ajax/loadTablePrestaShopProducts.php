@@ -81,7 +81,7 @@ if ($is_one_five) {
 
 $query .= ' INNER JOIN `'._DB_PREFIX_.'product_lang` pl
     ON pl.`id_product` = p.`id_product`
-    AND pl.`id_lang` = '.$ebay_profile->id_lang.'
+    AND pl.`id_lang` = '.(int)$ebay_profile->id_lang.'
 
     LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
     ON pa.`id_product` = p.`id_product`
@@ -95,22 +95,22 @@ if ($is_one_five) {
 
 $query .= ' INNER JOIN `'._DB_PREFIX_.'category_lang` cl
     ON cl.`id_category` = p.`id_category_default`
-    AND cl.`id_lang` = '.$ebay_profile->id_lang.'
+    AND cl.`id_lang` = '.(int)$ebay_profile->id_lang.'
 
     '.($on_ebay_only ? 'INNER' : 'LEFT').' JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
     ON ecc.`id_category` = p.`id_category_default`
-    AND ecc.`id_ebay_profile` = '.$ebay_profile->id.'
+    AND ecc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
 
     '.($on_ebay_only ? 'INNER' : 'LEFT').' JOIN `'._DB_PREFIX_.'ebay_category` ec
     ON ec.`id_ebay_category` = ecc.`id_ebay_category`
 
     LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
     ON epc.`id_product` = p.`id_product`
-    AND epc.`id_ebay_profile` = '.$ebay_profile->id.'
+    AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
 
     LEFT JOIN `'._DB_PREFIX_.'ebay_product` ep
     ON ep.`id_product` = p.`id_product`
-    AND ep.`id_ebay_profile` = '.$ebay_profile->id.'
+    AND ep.`id_ebay_profile` = '.(int)$ebay_profile->id.'
     AND ep.`id_ebay_product` = (
         SELECT MIN(ep2.`id_ebay_product`)
         FROM `'._DB_PREFIX_.'ebay_product` ep2

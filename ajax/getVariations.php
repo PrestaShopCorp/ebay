@@ -67,9 +67,9 @@ $sql = 'SELECT pa.`id_product_attribute`,
     LEFT JOIN `'._DB_PREFIX_.'ebay_product` ep
     ON ep.`id_product` = pa.`id_product`
     AND ep.`id_attribute` = pac.`id_product_attribute`
-    AND ep.`id_ebay_profile` = '.$id_ebay_profile.'
+    AND ep.`id_ebay_profile` = '.(int)$id_ebay_profile.'
 
-    WHERE pa.`id_product` = '.$id_product.$ebay->addSqlRestrictionOnLang('sa').'
+    WHERE pa.`id_product` = '.(int)$id_product.' '.$ebay->addSqlRestrictionOnLang('sa').'
 
     ORDER BY a.`position` ASC';
 

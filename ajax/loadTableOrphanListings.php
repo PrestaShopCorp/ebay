@@ -66,7 +66,7 @@ if($is_one_five)
     
     LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
     ON epc.`id_product` = ep.`id_product`
-    AND epc.`id_ebay_profile` = '.$ebay_profile->id.'
+    AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
 
     LEFT JOIN `'._DB_PREFIX_.'product` p
     ON p.`id_product` = ep.`id_product`
@@ -74,7 +74,7 @@ if($is_one_five)
 
     LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
     ON pl.`id_product` = p.`id_product`
-    AND pl.`id_lang` = '.$ebay_profile->id_lang.'
+    AND pl.`id_lang` = '.(int)$ebay_profile->id_lang.'
 
     LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
     ON pa.`id_product` = p.`id_product`
@@ -82,12 +82,12 @@ if($is_one_five)
 
     LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
     ON ecc.`id_category` = product_shop.`id_category_default`
-    AND ecc.`id_ebay_profile` = '.$ebay_profile->id.'
+    AND ecc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
 
     LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
     ON ec.`id_ebay_category` = ecc.`id_ebay_category`
 
-    WHERE ep.`id_ebay_profile` = '.$ebay_profile->id;
+    WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id;
 }
 else
 {
@@ -111,14 +111,14 @@ else
     
     LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
     ON epc.`id_product` = ep.`id_product`
-    AND epc.`id_ebay_profile` = '.$ebay_profile->id.'
+    AND epc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
 
     LEFT JOIN `'._DB_PREFIX_.'product` p
     ON p.`id_product` = ep.`id_product`
 
     LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
     ON pl.`id_product` = p.`id_product`
-    AND pl.`id_lang` = '.$ebay_profile->id_lang.'
+    AND pl.`id_lang` = '.(int)$ebay_profile->id_lang.'
 
     LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
     ON pa.`id_product` = p.`id_product`
@@ -126,14 +126,13 @@ else
 
     LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
     ON ecc.`id_category` = p.`id_category_default`
-    AND ecc.`id_ebay_profile` = '.$ebay_profile->id.'
+    AND ecc.`id_ebay_profile` = '.(int)$ebay_profile->id.'
 
     LEFT JOIN `'._DB_PREFIX_.'ebay_category` ec
     ON ec.`id_ebay_category` = ecc.`id_ebay_category`
 
-    WHERE ep.`id_ebay_profile` = '.$ebay_profile->id;
+    WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id;
 }
-Ebay::debug($query);
 //$currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
 // categories
@@ -177,26 +176,20 @@ foreach ($res as &$row) {
 
     // filtering
     if (!$row['exists']) {
-        Ebay::debug('exists');
         $final_res[] = $row;
     } elseif (!$row['EbayCategoryExists']) {
-        Ebay::debug('EbayCategoryExists');
         $final_res[] = $row;
     } elseif ($row['isMultiSku']
         && !$row['notSetWithMultiSkuCat']// set as if on a MultiSku category
          && !$row['EbayCategoryIsMultiSku']
     ) {
-        Ebay::debug('isMultiSku');
         $final_res[] = $row;
     } elseif ($row['notSetWithMultiSkuCat']
         && $row['EbayCategoryIsMultiSku']) {
-        Ebay::debug('notSetWithMultiSkuCat');
         $final_res[] = $row;
     } elseif (!$row['active'] || $row['blacklisted']) {
-        Ebay::debug('active');
         $final_res[] = $row;
     } elseif (!$row['sync']) {
-        Ebay::debug('sync');
         $final_res[] = $row;
     }
 }
