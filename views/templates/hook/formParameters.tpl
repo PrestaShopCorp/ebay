@@ -29,6 +29,7 @@
 		$(document).ready(function() {
 			var win = window.location = '{/literal}{$redirect_url|escape:'UTF-8'}{literal}';
 		});		
+        var id_shop = '{$id_shop|escape:'htmlall':'UTF-8'}';
 	</script>
 	{/literal}
 {/if}

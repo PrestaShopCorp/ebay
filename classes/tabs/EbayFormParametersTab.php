@@ -127,7 +127,7 @@ class EbayFormParametersTab extends EbayTab
                 'ps_version'     => _PS_VERSION_,
                 'error_code'     => 'HELP-ADV-SETTINGS-EAN',
             ),
-
+            'id_shop' => $this->context->shop->id,
         );
 
         if (Tools::getValue('relogin')) {

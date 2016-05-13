@@ -99,7 +99,6 @@ class EbayFormCategoryTab extends EbayTab
             'load_cat' => $load_cat,
             'launch_load_cat' => Tools::getValue('id_tab') == 2 ? true : false,
             'admin_path' => basename(_PS_ADMIN_DIR_),
-            'id_shop' => $this->context->shop->id,
         );
 
         return $this->display('form_categories.tpl', $template_vars);
