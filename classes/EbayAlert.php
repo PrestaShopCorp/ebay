@@ -132,6 +132,8 @@ class EbayAlert
 
     public function sendDailyMail()
     {
+        //For the moment we do not send emails
+        return true;
         $this->getAlerts();
 
         if (!$this->formatEmail()) {
