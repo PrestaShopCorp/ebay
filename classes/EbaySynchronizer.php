@@ -83,6 +83,7 @@ class EbaySynchronizer
         }
 
         foreach ($products as $p) {
+            Hook::exec('actionEbaySynch', array('id_product' => (int)$p['id_product'], 'id_ebay_profile' => (int)$p['id_ebay_profile']));
             $ebay_profile = new EbayProfile((int)$p['id_ebay_profile']);
             $product = new Product((int)$p['id_product'], true, $id_lang, $ebay_profile->id_shop);
             $product_configuration = EbayProductConfiguration::getByProductIdAndProfile($p['id_product'], $p['id_ebay_profile']);
