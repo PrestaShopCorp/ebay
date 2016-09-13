@@ -70,6 +70,11 @@ class EbayFormCategoryTab extends EbayTab
         // Display eBay Categories
         $ebay_site_id = $this->ebay_profile->ebay_site_id;
         if (!isset($configs['EBAY_CATEGORY_LOADED_'.$ebay_site_id]) || !$configs['EBAY_CATEGORY_LOADED_'.$ebay_site_id] || !EbayCategory::areCategoryLoaded($ebay_site_id) || Tools::getValue('resynchCategories')) {
+
+            if(Tools::getValue('resynchCategories')) {
+                $sql = ("TRUNCATE TABLE `"._DB_PREFIX_."ebay_category_configuration`");
+                Db::getInstance()->execute($sql);
+            }
             $load_cat = true;
         } else {
             $load_cat = false;
@@ -99,6 +104,12 @@ class EbayFormCategoryTab extends EbayTab
             'load_cat' => $load_cat,
             'launch_load_cat' => Tools::getValue('id_tab') == 2 ? true : false,
             'admin_path' => basename(_PS_ADMIN_DIR_),
+            'help_Cat_upd' => array(
+                'lang'           => $this->context->country->iso_code,
+                'module_version' => $this->ebay->version,
+                'ps_version'     => _PS_VERSION_,
+                'error_code'     => 'HELP-CATEGORY-UPDATE',
+            ),
         );
 
         return $this->display('form_categories.tpl', $template_vars);
