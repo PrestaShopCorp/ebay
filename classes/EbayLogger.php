@@ -51,6 +51,7 @@ class EbayLogger
 
     public static function install()
     {
+        $sql=array();
         // Create ebay_logs Table in Database
         $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_logs` (
             `id_ebay_logs` INT(16) NOT NULL AUTO_INCREMENT,
@@ -294,18 +295,27 @@ class EbayLogger
 
             $ctx = array_merge((array)$this->context, (array)$context);
 
-            Db::getInstance()->insert(
-                'ebay_logs',
-                array(
-                    'uid'       => $this->uid,
-                    'datetime'  => $datetime,
-                    'severity'  => (int)$severity,
-                    'code'      => 0,
-                    'message'   => $msg,
-                    'context'   => $ctx ? json_encode($ctx) : null,
-                    'backtrace' => $backtrace,
-                )
-            );
+            if (method_exists('MySQL', 'insert')) {
+                Db::getInstance()->insert(
+                    'ebay_logs',
+                    array(
+                        'uid'       => $this->uid,
+                        'datetime'  => $datetime,
+                        'severity'  => (int)$severity,
+                        'code'      => 0,
+                        'message'   => $msg,
+                        'context'   => $ctx ? json_encode($ctx) : null,
+                        'backtrace' => $backtrace,
+                    )
+                );
+            } else {
+
+                $sql = 'INSERT INTO '._DB_PREFIX_.'ebay_logs(`uid`, `datetime`, `severity`, `code`, `message`, `context`, `backtrace`)
+			VALUES(\''.(int) $this->uid.'\', \''.$datetime.'\', \''.(int)$severity.'\', \'0\', \''.pSQL($msg).'\',
+			 \''.pSQL($ctx ? json_encode($ctx) : null).'\', \''.pSQL($backtrace).'\')';
+
+                DB::getInstance()->Execute($sql);
+            }
         }
     }
 

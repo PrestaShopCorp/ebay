@@ -188,4 +188,18 @@ class EbayValidatorTab
             'indicator' => 'success',
         );
     }
+    public static function getEbayBusinessPoliciesTabConfiguration($id_ebay_profile)
+    {
+
+        if (EbayConfiguration::get($id_ebay_profile, 'EBAY_BUSINESS_POLICIES_CONFIG') == 0 && EbayConfiguration::get($id_ebay_profile, 'EBAY_BUSINESS_POLICIES')==1) {
+            return array(
+                'indicator'    => 'wrong',
+            );
+        }
+
+        
+        return array(
+            'indicator' => 'success',
+        );
+    }
 }

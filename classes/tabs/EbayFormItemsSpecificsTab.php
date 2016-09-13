@@ -53,6 +53,12 @@ class EbayFormItemsSpecificsTab extends EbayTab
             'form_items_specifics' => EbaySynchronizer::getNbSynchronizableEbayCategoryCondition(),
             'form_items_specifics_mixed' => EbaySynchronizer::getNbSynchronizableEbayCategoryConditionMixed(),
             'isOneDotFive' => $is_one_dot_five,
+            'help_Cat_upd' => array(
+                'lang'           => $this->context->country->iso_code,
+                'module_version' => $this->ebay->version,
+                'ps_version'     => _PS_VERSION_,
+                'error_code'     => 'HELP-CATEGORY-UPDATE',
+            ),
         );
 
         return $this->display('formItemsSpecifics.tpl', $template_vars);

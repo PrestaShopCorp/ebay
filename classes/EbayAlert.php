@@ -147,10 +147,10 @@ class EbayAlert
             'ebayAlert',
             Mail::l('Recap of your eBay module', (int) Configuration::get('PS_LANG_DEFAULT')),
             $template_vars,
-            strval(Configuration::get('PS_SHOP_EMAIL')),
+            (string) Configuration::get('PS_SHOP_EMAIL'),
             null,
-            strval(Configuration::get('PS_SHOP_EMAIL')),
-            strval(Configuration::get('PS_SHOP_NAME')),
+            (string) Configuration::get('PS_SHOP_EMAIL'),
+            (string) Configuration::get('PS_SHOP_NAME'),
             null,
             null,
             dirname(__FILE__).'/../views/templates/mails/'
@@ -288,6 +288,39 @@ class EbayAlert
                 $this->errors[] = array(
                     'type' => 'error',
                     'message' => $this->ebay->l('Order cron job has never been run.'),
+                );
+            }
+
+        }
+
+        // Returns
+        if ((int) Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON') == 1) {
+            if ($this->ebay_profile->getConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE') != null) {
+                $datetime = new DateTime($this->ebay_profile->getConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE'));
+
+                $date = date('Y-m-d', strtotime($datetime->format('Y-m-d H:i:s')));
+                $time = date('H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
+
+                $datetime2 = new DateTime();
+
+                $interval = round(($datetime2->format('U') - $datetime->format('U')) / (60 * 60 * 24));
+
+                if ($interval >= 1) {
+                    $this->errors[] = array(
+                        'type' => 'error',
+                        'message' => $this->ebay->l('Last order returns synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
+                    );
+                } else {
+                    $this->infos[] = array(
+                        'type' => 'info',
+                        'message' => $this->ebay->l('Last order returns synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
+                    );
+                }
+
+            } else {
+                $this->errors[] = array(
+                    'type' => 'error',
+                    'message' => $this->ebay->l('Order returns cron job has never been run.'),
                 );
             }
 

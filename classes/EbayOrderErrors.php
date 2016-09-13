@@ -52,6 +52,7 @@ class EbayOrderErrors extends ObjectModel
 
     public static function install()
     {
+        $sql = array();
         // Create Category Table in Database
         $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.self::$definition['table'].'` (
 				  	`'.self::$definition['primary'].'` int(16) NOT NULL AUTO_INCREMENT,

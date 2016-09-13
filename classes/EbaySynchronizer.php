@@ -83,7 +83,11 @@ class EbaySynchronizer
         }
 
         foreach ($products as $p) {
-            Hook::exec('actionEbaySynch', array('id_product' => (int)$p['id_product'], 'id_ebay_profile' => (int)$p['id_ebay_profile']));
+            if (method_exists('Hook', 'exec')) {
+                Hook::exec('actionEbaySynch', array('id_product' => (int)$p['id_product'], 'id_ebay_profile' => (int)$p['id_ebay_profile']));
+            } else {
+                Module::hookExec('actionEbaySynch', array('id_product' => (int)$p['id_product'], 'id_ebay_profile' => (int)$p['id_ebay_profile']));
+            }
             $ebay_profile = new EbayProfile((int)$p['id_ebay_profile']);
             $product = new Product((int)$p['id_product'], true, $id_lang, $ebay_profile->id_shop);
             $product_configuration = EbayProductConfiguration::getByProductIdAndProfile($p['id_product'], $p['id_ebay_profile']);
@@ -454,6 +458,7 @@ class EbaySynchronizer
 
     private static function __updateTabError($ebay_error, $name)
     {
+        $tab_error = array();
         $error_key = md5($ebay_error->error);
         $tab_error[$error_key]['msg'] = '<hr/>'.$ebay_error->error;
 
@@ -569,24 +574,22 @@ class EbaySynchronizer
         } else {
             $combinations = $product->getAttributeCombinaisons($ebay_profile->id_lang);
         }
-
         foreach ($combinations as $combinaison) {
-             if (version_compare(_PS_VERSION_, '1.5', '>')) {
+            if (version_compare(_PS_VERSION_, '1.5', '>')) {
                 $context_correct_shop = $context->cloneContext();
                 $context_correct_shop->shop = new Shop($ebay_profile->id_shop);
                 $specific_price_output = null;
-                $price = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, true, 1, false, null, null, null, $specific_price_output, true, true,$context_correct_shop);
-                $price_original = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, false, 1, false, null, null, null, $specific_price_output, true, true,$context_correct_shop);
+                $price = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, true, 1, false, null, null, null, $specific_price_output, true, true, $context_correct_shop);
+                $price_original = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, false, 1, false, null, null, null, $specific_price_output, true, true, $context_correct_shop);
             } else {
-                $price = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'] );
-                $price_original = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, false);
+                 $price = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute']);
+                 $price_original = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, false);
+
+                 // convert price to destination currency
+                 $currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
+                 $price *= $currency->conversion_rate;
+                 $price_original *= $currency->conversion_rate;
             }
-
-            // convert price to destination currency
-            $currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
-            $price *= $currency->conversion_rate;
-            $price_original *= $currency->conversion_rate;
-
             $variation = array(
                 'id_attribute'        => $combinaison['id_product_attribute'],
                 'reference'           => $combinaison['reference'],

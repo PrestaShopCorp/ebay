@@ -58,7 +58,7 @@ class EbayShippingZoneExcluded
             }
 
             $excluded_location['excluded'] = 0;
-            $excluded_location['id_ebay_profile'] = intval($id_ebay_profile);
+            $excluded_location['id_ebay_profile'] = (int) $id_ebay_profile;
         }
 
         if (version_compare(_PS_VERSION_, '1.5', '>')) {

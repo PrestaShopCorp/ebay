@@ -60,4 +60,12 @@ class EbayShippingService
 
         return $carriers;
     }
+
+    public static function getCarrierByName($name, $ebay_site_id)
+    {
+        
+        return Db::getInstance()->ExecuteS('SELECT *
+			FROM '._DB_PREFIX_.'ebay_shipping_service
+			WHERE `ebay_site_id` = '.(int) $ebay_site_id .' AND `shippingService` = "'. pSQL($name) .'"');
+    }
 }

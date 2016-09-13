@@ -31,51 +31,15 @@ if (!in_array('Ebay', get_declared_classes())) {
 class EbayCountrySpec
 {
     public $country;
-    public $accepted_isos = array('it', 'gb', 'es', 'fr', 'nl', 'pl', 'be', 'de');
+    public $accepted_isos = array( 'es', 'fr', 'nl', 'pl', 'be');
     protected $ebay_iso;
-
+    public $accepted_isos_block = array('it', 'gb', 'de');
     private $dev;
     private static $multilang = array('be');
 
     private static $country_data = array(
-        'it' => array(
-            'site_id' => 101,
-            'documentation' => 'it',
-            'language' => 'it_IT',
-            'currency' => 'EUR',
-            'site_name' => 'Italy',
-            'site_extension' => 'it',
-            'img_stats' => null,
-            'iso_code' => 'it',
-            'signin' => 'https://signin.ebay.it/ws/eBayISAPI.dll',
-            'signin_sandbox' => 'https://signin.sandbox.ebay.it/ws/eBayISAPI.dll',
-            'pro_url' => 'http://pages.ebay.fr/professionnels/index.html',
-            'signin_pro_url' => 'https://scgi.ebay.it/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2',
-            'fee_url' => 'http://pages.ebay.it/help/sell/businessfees.html',
-            'title_desc_url' => 'http://pages.ebay.it/help/sell/title_desc_ov.html',
-            'similar_items_url' => 'http://pages.ebay.it/help/search/questions/search-completed-listings.html',
-            'picture_url' => 'http://pages.ebay.it/areaprofessionale/migliora_foto.html',
-            'top_rated_url' => 'http://pages.ebay.it/help/sell/top-rated.html',
-        ),
-        'gb' => array(
-            'site_id' => 3,
-            'documentation' => 'en',
-            'language' => 'en_GB',
-            'currency' => 'GBP',
-            'site_name' => 'UK',
-            'site_extension' => 'co.uk',
-            'img_stats' => null,
-            'iso_code' => 'gb',
-            'signin' => 'https://signin.ebay.co.uk/ws/eBayISAPI.dll',
-            'signin_pro_url' => 'https://scgi.ebay.co.uk/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2',
-            'signin_sandbox' => 'https://signin.sandbox.ebay.co.uk/ws/eBayISAPI.dll',
-            'pro_url' => 'http://sellercentre.ebay.co.uk/',
-            'fee_url' => 'http://sellercentre.ebay.co.uk/fees-business-sellers-0',
-            'title_desc_url' => 'http://pages.ebay.co.uk/help/sell/title_desc_ov.html',
-            'similar_items_url' => 'http://sellercentre.ebay.co.uk/research-items-similar-yours',
-            'picture_url' => 'http://sellercentre.ebay.co.uk/new-picture-standards',
-            'top_rated_url' => 'http://pages.ebay.co.uk/help/sell/top-rated.html',
-        ),
+
+
         'es' => array(
             'site_id' => 186,
             'documentation' => 'es',
@@ -94,6 +58,7 @@ class EbayCountrySpec
             'similar_items_url' => 'http://pages.ebay.es/help/search/questions/search-completed-listings.html',
             'picture_url' => 'http://pages.ebay.es/businesscentre/photocenter.html',
             'top_rated_url' => 'http://pages.ebay.es/help/sell/top-rated.html',
+            'url_help_business_policies' => 'http://pages.ebay.es/help/sell/business-policies.html',
         ),
         'fr' => array(
             'site_id' => 71,
@@ -113,6 +78,7 @@ class EbayCountrySpec
             'similar_items_url' => 'http://pages.ebay.fr/help/search/questions/search-completed-listings.html',
             'picture_url' => 'http://pages.ebay.fr/professionnels/images.html',
             'top_rated_url' => 'http://pages.ebay.fr/help/sell/top-rated.html',
+            'url_help_business_policies' => 'http://pages.ebay.fr/help/sell/business-policies.html',
 
         ),
         'nl' => array(
@@ -133,6 +99,7 @@ class EbayCountrySpec
             'similar_items_url' => 'http://pages.ebay.nl/help/search/questions/search-completed-listings.html',
             'picture_url' => 'http://pages.ebay.nl/help/sell/pictures.html',
             'top_rated_url' => 'http://pages.ebay.nl/help/sell/top-rated.html',
+            'url_help_business_policies' => 'http://pages.ebay.nl/help/sell/business-policies.html',
 
         ),
         'pl' => array(
@@ -154,6 +121,7 @@ class EbayCountrySpec
 http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
             'picture_url' => 'http://pages.ebay.pl/help/sell/pictures.html',
             'top_rated_url' => 'http://pages.ebay.pl/help/sell/top-rated.html',
+            'url_help_business_policies' => 'http://pages.ebay.pl/help/sell/business-policies.html',
         ),
         'be-fr' => array(
             'site_id' => 23,
@@ -174,6 +142,7 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
             'similar_items_url' => 'http://pages.befr.ebay.be/help/search/questions/search-completed-listings.html',
             'picture_url' => 'http://pages.befr.ebay.be/help/sell/pictures.html',
             'top_rated_url' => 'http://pages.befr.ebay.be/help/sell/top-rated.html',
+            'url_help_business_policies' => 'http://pages.befr.ebay.be/help/sell/business-policies.html',
         ),
         'be-nl' => array(
             'site_id' => 123,
@@ -194,26 +163,9 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
             'similar_items_url' => 'http://pages.benl.ebay.be/help/search/questions/search-completed-listings.html',
             'picture_url' => 'http://pages.benl.ebay.be/help/sell/pictures.html',
             'top_rated_url' => 'http://pages.benl.ebay.be/help/sell/top-rated.html',
+            'url_help_business_policies' => 'http://pages.benl.ebay.be/help/sell/business-policies.html',
         ),
-        'de' => array(
-            'site_id' => 77,
-            'documentation' => 'de',
-            'language' => 'de_DE',
-            'currency' => 'EUR',
-            'site_name' => 'Germany',
-            'site_extension' => 'de',
-            'img_stats' => null,
-            'iso_code' => 'de',
-            'signin' => 'https://signin.ebay.de/ws/eBayISAPI.dll',
-            'signin_sandbox' => 'https://signin.sandbox.ebay.de/ws/eBayISAPI.dll',
-            'pro_url' => 'http://verkaeuferportal.ebay.de/',
-            'signin_pro_url' => 'https://scgi.ebay.de/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2',
-            'fee_url' => 'http://pages.ebay.de/help/sell/businessfees.html',
-            'title_desc_url' => 'http://pages.ebay.de/help/sell/title_desc_ov.html',
-            'similar_items_url' => 'http://pages.ebay.de/help/search/questions/search-completed-listings.html',
-            'picture_url' => 'http://pages.ebay.de/help/sell/pictures.html',
-            'top_rated_url' => 'http://pages.ebay.de/help/sell/top-rated.html',
-        ),
+
         'ch' => array(
             'site_id' => 193,
             'documentation' => 'de',
@@ -232,6 +184,7 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
             'similar_items_url' => 'http://pages.ebay.ch/help/search/questions/search-completed-listings.html',
             'picture_url' => 'http://pages.ebay.ch/help/sell/pictures.html',
             'top_rated_url' => 'http://pages.ebay.ch/help/sell/top-rated.html',
+            'url_help_business_policies' => 'http://pages.ebay.ch/help/sell/business-policies.html',
 
         ),
         'at' => array(
@@ -252,9 +205,79 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
             'similar_items_url' => 'http://pages.ebay.at/help/search/questions/search-completed-listings.html',
             'picture_url' => 'http://pages.ebay.at/help/sell/pictures.html',
             'top_rated_url' => 'http://pages.ebay.at/help/sell/top-rated.html',
+            'url_help_business_policies' => 'http://pages.ebay.at/help/sell/business-policies.html',
+
 
         ),
+
+
     );
+
+    private static $cuntry_block= array(
+        'it' => array(
+            'site_id' => 101,
+            'documentation' => 'it',
+            'language' => 'it_IT',
+            'currency' => 'EUR',
+            'site_name' => 'Italy',
+            'site_extension' => 'it',
+            'img_stats' => null,
+            'iso_code' => 'it',
+            'signin' => 'https://signin.ebay.it/ws/eBayISAPI.dll',
+            'signin_sandbox' => 'https://signin.sandbox.ebay.it/ws/eBayISAPI.dll',
+            'pro_url' => 'http://pages.ebay.fr/professionnels/index.html',
+            'signin_pro_url' => 'https://scgi.ebay.it/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2',
+            'fee_url' => 'http://pages.ebay.it/help/sell/businessfees.html',
+            'title_desc_url' => 'http://pages.ebay.it/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://pages.ebay.it/help/search/questions/search-completed-listings.html',
+            'picture_url' => 'http://pages.ebay.it/areaprofessionale/migliora_foto.html',
+            'top_rated_url' => 'http://pages.ebay.it/help/sell/top-rated.html',
+            'url_help_business_policies' => 'http://pages.ebay.it/help/sell/business-policies.html',
+        ),
+        'de' => array(
+            'site_id' => 77,
+            'documentation' => 'de',
+            'language' => 'de_DE',
+            'currency' => 'EUR',
+            'site_name' => 'Germany',
+            'site_extension' => 'de',
+            'img_stats' => null,
+            'iso_code' => 'de',
+            'signin' => 'https://signin.ebay.de/ws/eBayISAPI.dll',
+            'signin_sandbox' => 'https://signin.sandbox.ebay.de/ws/eBayISAPI.dll',
+            'pro_url' => 'http://verkaeuferportal.ebay.de/',
+            'signin_pro_url' => 'https://scgi.ebay.de/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2',
+            'fee_url' => 'http://pages.ebay.de/help/sell/businessfees.html',
+            'title_desc_url' => 'http://pages.ebay.de/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://pages.ebay.de/help/search/questions/search-completed-listings.html',
+            'picture_url' => 'http://pages.ebay.de/help/sell/pictures.html',
+            'top_rated_url' => 'http://pages.ebay.de/help/sell/top-rated.html',
+            'url_help_business_policies' => 'http://pages.ebay.de/help/sell/business-policies.html',
+        ),
+        'gb' => array(
+            'site_id' => 3,
+            'documentation' => 'en',
+            'language' => 'en_GB',
+            'currency' => 'GBP',
+            'site_name' => 'UK',
+            'site_extension' => 'co.uk',
+            'img_stats' => null,
+            'iso_code' => 'gb',
+            'signin' => 'https://signin.ebay.co.uk/ws/eBayISAPI.dll',
+            'signin_pro_url' => 'https://scgi.ebay.co.uk/ws/eBayISAPI.dll?RegisterEnterInfo&bizflow=2',
+            'signin_sandbox' => 'https://signin.sandbox.ebay.co.uk/ws/eBayISAPI.dll',
+            'pro_url' => 'http://sellercentre.ebay.co.uk/',
+            'fee_url' => 'http://sellercentre.ebay.co.uk/fees-business-sellers-0',
+            'title_desc_url' => 'http://pages.ebay.co.uk/help/sell/title_desc_ov.html',
+            'similar_items_url' => 'http://sellercentre.ebay.co.uk/research-items-similar-yours',
+            'picture_url' => 'http://sellercentre.ebay.co.uk/new-picture-standards',
+            'top_rated_url' => 'http://pages.ebay.co.uk/help/sell/top-rated.html',
+            'url_help_business_policies' => 'http://pages.ebay.co.uk/help/sell/business-policies.html',
+        ),
+
+    );
+
+
 
     public function __construct(Country $country = null)
     {
@@ -370,10 +393,21 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
 
         return (int) $id_lang;
     }
+    public function getHelpUrlBusinesss()
+    {
+         return $this->_getCountryData('url_help_business_policies');
+    }
 
     private function _getCountryData($data)
     {
         $iso_code = $this->ebay_iso;
+
+        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
+            self::$country_data = array_merge(self::$country_data, self::$cuntry_block);
+            $this->accepted_isos = array_merge($this->accepted_isos, $this->accepted_isos_block);
+        }
+
+      
         if (isset(self::$country_data[$iso_code]) && isset(self::$country_data[$iso_code][$data])) {
             return self::$country_data[$iso_code][$data];
         } else if (isset(self::$country_data['fr'][$data])) {
@@ -391,6 +425,10 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
      **/
     public function checkCountry()
     {
+        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
+            $this->accepted_isos = array_merge($this->accepted_isos, $this->accepted_isos_block);
+
+        }
         if (in_array(Tools::strtolower($this->country->iso_code), $this->accepted_isos)) {
             return true;
         }
@@ -426,6 +464,11 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
     public static function getCountries($dev)
     {
         $countries = array();
+
+        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
+            self::$country_data=array_merge(self::$country_data, self::$cuntry_block);
+        }
+
         foreach (self::$country_data as $iso => $ctry) {
             if (isset($ctry['subdomain']) === false) {
                 $ctry['subdomain'] = null;
@@ -452,7 +495,9 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
      */
     public static function getInstanceByKey($key, $dev = false)
     {
-
+        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
+            self::$country_data=array_merge(self::$country_data, self::$cuntry_block);
+        }
         if (isset(self::$country_data[$key])) {
             $iso_code = self::$country_data[$key]['iso_code'];
             $id_country = Country::getByIso($iso_code);
@@ -469,7 +514,9 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
 
     public static function getInstanceByCountryAndLang($iso_country, $iso_lang)
     {
-
+        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
+            self::$country_data=array_merge(self::$country_data, self::$cuntry_block);
+        }
         if (isset(self::$country_data[$iso_country])) {
             return self::getInstanceByKey($iso_country);
         } else if (isset(self::$country_data[$iso_country.'-'.$iso_lang])) {
@@ -514,6 +561,10 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
 
     public static function getSiteNameBySiteId($site_id = false)
     {
+        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
+            self::$country_data=array_merge(self::$country_data, self::$cuntry_block);
+        }
+
         foreach (self::$country_data as $country) {
             if ($country['site_id'] == $site_id) {
                 return $country['site_name'];
@@ -525,6 +576,10 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
 
     public static function getSiteExtensionBySiteId($site_id = false)
     {
+        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
+            self::$country_data=array_merge(self::$country_data, self::$cuntry_block);
+        }
+
         foreach (self::$country_data as $country) {
             if ($country['site_id'] == $site_id) {
                 return $country['site_extension'];
@@ -536,6 +591,10 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
 
     public static function getIsoCodeBySiteId($site_id = false)
     {
+
+        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
+            self::$country_data=array_merge(self::$country_data, self::$cuntry_block);
+        }
         foreach (self::$country_data as $country) {
             if ($country['site_id'] == $site_id) {
                 return $country['iso_code'];
@@ -547,6 +606,10 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
 
     public static function getProUrlBySiteId($site_id = false)
     {
+
+        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
+            self::$country_data=array_merge(self::$country_data, self::$cuntry_block);
+        }
         foreach (self::$country_data as $country) {
             if ($country['site_id'] == $site_id) {
                 return $country['pro_url'];
@@ -558,6 +621,10 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
 
     public static function getSiteIdByIsoCode($iso_code = false)
     {
+
+        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
+            self::$country_data=array_merge(self::$country_data, self::$cuntry_block);
+        }
         foreach (self::$country_data as $country) {
             if ($country['iso_code'] == $iso_code) {
                 return $country['site_id'];

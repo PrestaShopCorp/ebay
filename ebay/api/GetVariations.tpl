@@ -26,7 +26,7 @@
 	<VariationSpecificsSet>
 	{foreach from=$variation_specifics_set key=name item=values}
 		<NameValueList>
-			<Name>{$name|escape:'htmlall':'UTF-8'}</Name>
+			<Name><![CDATA[{$name|escape:'html':'UTF-8'}]]></Name>
 			{foreach from=$values item=value}
 				<Value><![CDATA[{$value|escape:'htmlall':'UTF-8'}]]></Value>
 			{/foreach}
@@ -43,7 +43,7 @@
 			<VariationSpecifics>
 				{foreach from=$variation.variation_specifics key=name item=value}
 					<NameValueList>
-						<Name>{$name|escape:'htmlall':'UTF-8'}</Name>
+						<Name><![CDATA[{$name|escape:'html':'UTF-8'}]]></Name>
 						<Value><![CDATA[{$value|escape:'htmlall':'UTF-8'}]]></Value>
 					</NameValueList>
 				{/foreach}				

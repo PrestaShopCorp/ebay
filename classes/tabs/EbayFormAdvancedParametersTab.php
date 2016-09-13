@@ -68,12 +68,23 @@ class EbayFormAdvancedParametersTab extends EbayTab
             'sync_orders_by_cron'        => Configuration::get('EBAY_SYNC_ORDERS_BY_CRON'),
             'sync_orders_by_cron_url'    => $this->_getModuleUrl().'synchronizeOrders_CRON.php',
             'sync_orders_by_cron_path'   => $this->_getModuleUrl().'synchronizeOrders_CRON.php',
-
+            'sync_orders_returns_by_cron'        => Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON'),
+            'sync_orders_returns_by_cron_url'    => $this->_getModuleUrl().'synchronizeOrdersReturns_CRON.php',
+            'sync_orders_returns_by_cron_path'   => $this->_getModuleUrl().'synchronizeOrdersReturns_CRON.php',
+            'activate_resynchBP'         => $this->ebay_profile->getConfiguration('EBAY_RESYNCHBP'),
+          
             // number of days to collect the oders for backward
             'orders_days_backward' => Configuration::get('EBAY_ORDERS_DAYS_BACKWARD'),
-
+            'id_profile_ebay' => $this->ebay_profile->id,
+            '_path' => $this->path,
             // send stats to eBay
             'stats' => Configuration::get('EBAY_SEND_STATS'),
+            'help_Cat_upd' => array(
+                'lang'           => $this->context->country->iso_code,
+                'module_version' => $this->ebay->version,
+                'ps_version'     => _PS_VERSION_,
+                'error_code'     => 'HELP-CATEGORY-UPDATE',
+            ),
         );
 
         return $this->display('formAdvancedParameters.tpl', $smarty_vars);
@@ -107,6 +118,8 @@ class EbayFormAdvancedParametersTab extends EbayTab
             && Configuration::updateValue('EBAY_SEND_STATS', Tools::getValue('stats') ? 1 : 0, false, 0, 0)
             && Configuration::updateValue('EBAY_ORDERS_DAYS_BACKWARD', (int)Tools::getValue('orders_days_backward'), false, 0, 0)
             && Configuration::updateValue('EBAY_LOGS_DAYS', (int)Tools::getValue('logs_conservation_duration'), false, 0, 0)
+            && $this->ebay_profile->setConfiguration('EBAY_RESYNCHBP', Tools::getValue('activate_resynchBP') ? 1 : 0)
+            && Configuration::updateValue('EBAY_SYNC_ORDERS_RETURNS_BY_CRON', ('cron' === Tools::getValue('sync_orders_returns_mode')))
         ) {
             if (Tools::getValue('activate_logs') == 0) {
                 if (file_exists(dirname(__FILE__).'/../../log/request.txt')) {

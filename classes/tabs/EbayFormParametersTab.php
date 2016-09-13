@@ -55,7 +55,7 @@ class EbayFormParametersTab extends EbayTab
         $ebay_request = new EbayRequest();
 
         $ebay_sign_in_url = $ebay_request->getLoginUrl().'?SignIn&runame='.$ebay_request->runame.'&SessID='.$this->context->cookie->eBaySession;
-
+        
         $returns_policy_configuration = $this->ebay_profile->getReturnsPolicyConfiguration();
 
         $returnsConditionAccepted = Tools::getValue('ebay_returns_accepted_option', Configuration::get('EBAY_RETURNS_ACCEPTED_OPTION'));
@@ -70,6 +70,7 @@ class EbayFormParametersTab extends EbayTab
         $is_multishop = (version_compare(_PS_VERSION_, '1.5', '>') && Shop::isFeatureActive());
 
         $order_states = OrderState::getOrderStates($this->ebay_profile->id_lang);
+        
         $current_order_state = $this->ebay_profile->getConfiguration('EBAY_SHIPPED_ORDER_STATE');
         if ($current_order_state === null) {
             foreach ($order_states as $order_state) {
@@ -114,6 +115,7 @@ class EbayFormParametersTab extends EbayTab
             'send_tracking_code'        => (bool)$this->ebay_profile->getConfiguration('EBAY_SEND_TRACKING_CODE'),
             'order_states'              => $order_states,
             'current_order_state'       => $current_order_state,
+            'current_order_return_state' => $this->ebay_profile->getConfiguration('EBAY_RETURN_ORDER_STATE'),
             'immediate_payment'         => (bool)$this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
             //EAN
             'synchronize_ean'    => (string)Configuration::get('EBAY_SYNCHRONIZE_EAN'),
@@ -144,12 +146,13 @@ class EbayFormParametersTab extends EbayTab
         if (Tools::getValue('action') == 'regenerate_token') {
             $smarty_vars['check_token_tpl'] = $this->ebay->displayCheckToken();
         }
+        
 
         $smarty_vars['help'] = array(
             'lang'                  => $this->context->country->iso_code,
             'module_version'        => $this->ebay->version,
             'ps_version'            => _PS_VERSION_,
-            'code_payment_solution' => 'HELP-SETTINGS-PAYMENT-SOLUTIONS'
+            'code_payment_solution' => 'HELP-SETTINGS-PAYMENT-SOLUTIONS',
         );
 
         return $this->display('formParameters.tpl', $smarty_vars);
@@ -190,8 +193,8 @@ class EbayFormParametersTab extends EbayTab
             && $this->ebay_profile->setConfiguration('EBAY_CURRENCY', (int) Tools::getValue('currency'))
             && $this->ebay_profile->setConfiguration('EBAY_SEND_TRACKING_CODE', (int) Tools::getValue('send_tracking_code'))
             && $this->ebay_profile->setConfiguration('EBAY_SHIPPED_ORDER_STATE', (int) Tools::getValue('shipped_order_state'))
-            && $this->ebay_profile->setConfiguration('EBAY_IMMEDIATE_PAYMENT', (int) Tools::getValue('immediate_payment')
-            )
+            && $this->ebay_profile->setConfiguration('EBAY_RETURN_ORDER_STATE', (int) Tools::getValue('return_order_state'))
+            && $this->ebay_profile->setConfiguration('EBAY_IMMEDIATE_PAYMENT', (int) Tools::getValue('immediate_payment'))
         ) {
             if (version_compare(_PS_VERSION_, '1.5', '>')) {
                 $link = new Link();
@@ -199,7 +202,6 @@ class EbayFormParametersTab extends EbayTab
             } else {
                 $url = 'index.php?tab_module=market_place&section=parameters&tab=AdminModules&token='.Tools::getAdminTokenLite('AdminModules');
             }
-
             Tools::redirectAdmin($url.'&configure=ebay&module_name=ebay&id_tab=2');
         } else {
             return $this->ebay->displayError($this->ebay->l('Settings failed'));

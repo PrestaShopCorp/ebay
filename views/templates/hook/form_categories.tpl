@@ -144,6 +144,14 @@
 	* {l s='In most eBay categories, you can list variations of your products together in one listing called a multi-variation listing, for example a red t-shirt size small, medium and large. In those few categories that don’t support multi-variation listings, a listing will be added for every variation of your product.' mod='ebay'}<br />
 	<a href="{l s='http://sellerupdate.ebay.fr/autumn2012/improvements-multi-variation-listings' mod='ebay'}" target="_blank">{l s='Click here for more informations on multi-variation listings' mod='ebay'}</a>
 </p><br /><br />
+
+<div {if isset($load_cat) && $load_cat == true}style="display:none"{/if} class="warning big tips h">{l s='Miss some categories ? You may need to upgrade category definitions :' mod='ebay'}
+	</br>{l s='- You can compare your category definitions with last available category definitions from eBay using the ' mod='ebay'}<a href="#comparaison" id='link_cat_support'>{l s='comparison tool' mod='ebay'}</a>
+	</br>{l s='- If needed, you can upgrade category definition using the ' mod='ebay'}<a id='link_cat_support_reload' href="#resynch">{l s='upgrade tool.' mod='ebay'}</a>
+	</br>{l s='New to category definition concept ? Please read ' mod='ebay'} <a class="kb-help" style ="display: inline-block;width: auto;height: 20px;background-image: none;" data-errorcode="{$help_Cat_upd.error_code}" data-module="ebay" data-lang="{$help_Cat_upd.lang}" module_version="{$help_Cat_upd.module_version}" prestashop_version="{$help_Cat_upd.ps_version}" href="" target="_blank">{l s='category definition & reloading article first.' mod='ebay'}</a>
+
+</div>
+
 <script type="text/javascript">
 		
 	var $selects = false;
@@ -184,6 +192,19 @@
 		{if isset($load_cat) && $load_cat == true && isset($launch_load_cat) && $launch_load_cat == true}
 			loadCategoriesFromEbay();
 		{/if}
+
+		$('#link_cat_support').click(function(e){
+			e.preventDefault();
+			$('#advanced-settings-menu-link').click();
+			window.location.href = $(this).attr('href');
+		});
+		$('#link_cat_support_reload').click(function(e){
+			e.preventDefault();
+			$('#advanced-settings-menu-link').click();
+			window.location.href = $(this).attr('href');
+		});
+
 	});
 	//]]>
 </script>
+

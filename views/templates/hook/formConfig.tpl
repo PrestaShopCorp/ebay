@@ -56,7 +56,8 @@
     
 	<li id="menuTab3" class="menuTabButton {$shippingValidator.indicator|escape:'htmlall':'UTF-8'}">5. {l s='Dispatch and Shipping' mod='ebay'}</li>
     
-	<li id="menuTab4" class="menuTabButton {$templateValidator.indicator|escape:'htmlall':'UTF-8'}">6. {l s='Template manager' mod='ebay'}</li>    
+	<li id="menuTab4" class="menuTabButton {$templateValidator.indicator|escape:'htmlall':'UTF-8'}">6. {l s='Template manager' mod='ebay'}</li>
+	<li id="menuTab77" class="menuTabButton {$businesspoliciesValidator.indicator|escape:'htmlall':'UTF-8'}">7. {l s='Business Policies' mod='ebay'}</li>
     
 </ul>
 
@@ -66,7 +67,9 @@
 	<li id="menuTab5" class="menuTabButton ">1. {l s='List products' mod='ebay'}</li>
 	
     <li id="menuTab14" class="menuTabButton ">2. {l s='Orders Synchronization' mod='ebay'}</li>
-
+	{if $ps_version > '1.4.12'}
+	<li id="menuTab79" class="menuTabButton ">3. {l s='Refunds and Returns Synchronization' mod='ebay'}</li>
+	{/if}
 </ul>
 
 
@@ -83,6 +86,9 @@
     <li id="menuTab11" class="menuTabButton">5. {l s='API Logs' mod='ebay'}</li>
 	
     <li id="menuTab12" class="menuTabButton">6. {l s='Order Logs' mod='ebay'}</li>
+	{if $ps_version > '1.4.12'}
+	<li id="menuTab78" class="menuTabButton">7. {l s='Order Returns' mod='ebay'}</li>
+	{/if}
     
 </ul>
 
@@ -161,8 +167,15 @@
 	<div id="menuTab12Sheet" class="tabItem">{$order_logs}</div>
 	<div id="menuTab6Sheet" class="tabItem">{$orders_history}</div>
 	<div id="menuTab14Sheet" class="tabItem">{$orders_sync}</div>
+	{if $ps_version > '1.4.12'}
+		<div id="menuTab79Sheet" class="tabItem">{$orders_returns_sync}</div>
+		<div id="menuTab78Sheet" class="tabItem">{$order_returns}</div>
+	{/if}
     <div id="menuTab15Sheet" class="tabItem">{$ps_products}</div>
 	<div id="menuTab16Sheet" class="tabItem">{$orphan_listings}</div>
+	<div id="menuTab77Sheet" class="tabItem">
+		{$form_business_policies|ebayHtml}
+	</div>
 </div>
 <br clear="left" />
 <br />

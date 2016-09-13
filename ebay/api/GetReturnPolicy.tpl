@@ -22,9 +22,30 @@
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
+
+{if isset($payment_profile_id)}
+    <SellerProfiles>
+        <SellerPaymentProfile>
+            <PaymentProfileID>{$payment_profile_id}</PaymentProfileID>
+            <PaymentProfileName>{$payment_profile_name}</PaymentProfileName>
+        </SellerPaymentProfile>
+
+        <SellerReturnProfile>
+            <ReturnProfileID>{$return_profile_id}</ReturnProfileID>
+            <ReturnProfileName>{$return_profile_name}</ReturnProfileName>
+        </SellerReturnProfile>
+        <SellerShippingProfile>
+            <ShippingProfileID>{$shipping_profile_id}</ShippingProfileID>
+            <ShippingProfileName>{$shipping_profile_name}</ShippingProfileName>
+        </SellerShippingProfile>
+
+
+    </SellerProfiles>
+{else}
 <ReturnPolicy>
     <ReturnsAcceptedOption>{$returns_accepted_option|escape:'htmlall':'UTF-8'}</ReturnsAcceptedOption>
     <Description><![CDATA[{$description|ebayHtml}]]></Description>
     <ReturnsWithinOption>{$within|escape:'htmlall':'UTF-8'}</ReturnsWithinOption>
     <ShippingCostPaidByOption>{$whopays|escape:'htmlall':'UTF-8'}</ShippingCostPaidByOption>
 </ReturnPolicy>
+{/if}

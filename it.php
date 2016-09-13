@@ -558,3 +558,5 @@ $_MODULE['<{ebay}prestashop>table_prestashop_products_84c27bbcecf86489f4a299b12c
 $_MODULE['<{ebay}prestashop>table_prestashop_products_44548951e9c6e0cd97093bd5894516d5'] = 'La categoria non è sincronizzata o si è verificato un errore durante la sincronizzazione del prodotto';
 $_MODULE['<{ebay}prestashop>table_prestashop_products_c106ffb3df72a6d20ae1850eedf7cd03'] = 'La categoria eBay è senza codici prodotto multipli';
 $_MODULE['<{ebay}prestashop>table_prestashop_products_48900a6a0a3b3104f52398c08c13cfa1'] = 'Più di un motivo';
+$_MODULE['<{ebay}prestashop>formregister_79c6977f9821c44e8eba6fe765feba3d'] = 'Non è possibile utilizzare questo modulo Perché il vostro negozio ha sede in Italia, Regno Unito o in Germania.';
+$_MODULE['<{ebay}prestashop>formregister_932ca78e74321a93e1c32660b3cd17d0'] = 'Solo versione precedente di questo modulo può essere utilizzato in tutti i paesi.';

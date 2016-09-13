@@ -92,7 +92,7 @@
 		</tbody>
         
 	</table>    
-    
+    </div>
     <script type="text/javascript">
     
     	var orphan_listings_ebay_l = {ldelim}

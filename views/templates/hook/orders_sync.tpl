@@ -24,7 +24,7 @@
 *}
 
 <div class="warning big">
-    {l s="Only orders marked as complete in eBay will be retrieven when importing the orders form eBay." mod='ebay'}
+    {l s='Only orders marked as complete in eBay will be retrieven when importing the orders form eBay.' mod='ebay'}
 </div>
 
 <fieldset style="margin-top:10px;">

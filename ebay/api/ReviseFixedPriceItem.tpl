@@ -78,9 +78,11 @@
 		{/if}
 		{if $resynchronize}
 			<DispatchTimeMax>{$dispatch_time_max|escape:'htmlall':'UTF-8'}</DispatchTimeMax>
-			<Title>{$title|cleanHtml}</Title>
+			<Title><![CDATA[{$title|cleanHtml}]]></Title>
 			<Description><![CDATA[{$description|ebayHtml}]]></Description>
+		{if isset($shipping_details)}
 			<ShippingDetails>{$shipping_details|cleanHtml}</ShippingDetails>
+		{/if}
 			{$buyer_requirements_details|cleanHtml}
 		{/if}
 			<ItemSpecifics>

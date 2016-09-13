@@ -82,7 +82,7 @@ $ref_cats = Db::getInstance()->executeS('SELECT `id_ebay_category`, `id_category
 if (!is_array($ref_cats) || !count($ref_cats)) {
     return;
 }
-
+$ref_categories = array();
 foreach ($ref_cats as $cat) {
     $ref_categories[$cat['id_category_ref']] = $cat['id_ebay_category'];
 }

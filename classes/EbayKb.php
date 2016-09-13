@@ -88,6 +88,7 @@ class EbayKb extends ObjectModel
 
     public function getFields()
     {
+        $fields = array();
         $fields['error_code'] = $this->error_code;
         $fields['language'] = $this->language;
         $fields['ps_version'] = $this->ps_version;
@@ -108,6 +109,7 @@ class EbayKb extends ObjectModel
 
     public static function install()
     {
+        $sql= array();
         // Create Category Table in Database
         $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.self::$definition['table'].'` (
 				  	`'.self::$definition['primary'].'` int(16) NOT NULL AUTO_INCREMENT,

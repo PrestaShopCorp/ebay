@@ -50,6 +50,7 @@ class EbayOrder
     private $id_order_seller;
     private $date_add;
     private $id_currency;
+    private $id_transaction;
 
     private $error_messages = array();
 
@@ -91,8 +92,10 @@ class EbayOrder
         $amount_paid_attr = $order_xml->AmountPaid->attributes();
         $this->id_currency = Currency::getIdByIsoCode($amount_paid_attr['currencyID']);
 
+
         if (count($order_xml->TransactionArray->Transaction)) {
             $this->email = (string) $order_xml->TransactionArray->Transaction[0]->Buyer->Email;
+            $this->id_transaction = (string) $order_xml->TransactionArray->Transaction->TransactionID;
         }
 
         $phone = (string) $order_xml->ShippingAddress->Phone;
@@ -621,17 +624,33 @@ class EbayOrder
                         'total_shipping_tax_incl' => 0,
                     )
                 );
+
             }
             // Update Incoice
             $invoice_data = $data;
             unset($invoice_data['total_paid'], $invoice_data['total_paid_real'], $invoice_data['total_shipping']);
             Db::getInstance()->autoExecute(_DB_PREFIX_.'order_invoice', $invoice_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
-
-            // Update payment
+           // Update payment
             $payment_data = array(
                 'amount' => (float) $this->amount, // RAPH TODO, fix this value amount
             );
             Db::getInstance()->autoExecute(_DB_PREFIX_.'order_payment', $payment_data, 'UPDATE', '`order_reference` = "'.pSQL($order->reference).'" ');
+
+        }
+        if (version_compare(_PS_VERSION_, '1.5.0', '>')) {
+            $ship_data = array(
+                'shipping_cost_tax_incl' => (float) $total_shipping_tax_incl,
+                'shipping_cost_tax_excl' => (float) $total_shipping_tax_excl,
+            );
+
+            if ((float) $this->shippingServiceCost == 0) {
+
+                $ship_data = array(
+                    'shipping_cost_tax_incl' => 0,
+                    'shipping_cost_tax_excl' => 0,
+                );
+            }
+            Db::getInstance()->autoExecute(_DB_PREFIX_.'order_carrier', $ship_data, 'UPDATE', '`id_order` = '.(int) $this->id_orders[$ebay_profile->id_shop]);
 
         }
 
@@ -683,6 +702,7 @@ class EbayOrder
                         'id_order' => (int) $id_order,
                         'id_shop' => (int) $id_shop,
                         'id_ebay_profile' => ($id_ebay_profile === null) ? null : (int) $id_ebay_profile,
+                        'id_transaction' => $this->id_transaction,
                     ));
                 } else {
                     $res = Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_order_order', array(
@@ -690,6 +710,7 @@ class EbayOrder
                         'id_order' => (int) $id_order,
                         'id_shop' => (int) $id_shop,
                         'id_ebay_profile' => ($id_ebay_profile === null) ? null : (int) $id_ebay_profile,
+                        'id_transaction' => $this->id_transaction,
                     ), 'INSERT');
                 }
 
@@ -918,10 +939,10 @@ class EbayOrder
             'alertEbay',
             Mail::l('Product quantity', (int) Configuration::get('PS_LANG_DEFAULT')),
             $template_vars,
-            strval(Configuration::get('PS_SHOP_EMAIL')),
+            (string) Configuration::get('PS_SHOP_EMAIL'),
             null,
-            strval(Configuration::get('PS_SHOP_EMAIL')),
-            strval(Configuration::get('PS_SHOP_NAME')),
+            (string) Configuration::get('PS_SHOP_EMAIL'),
+            (string) Configuration::get('PS_SHOP_NAME'),
             null,
             null,
             dirname(__FILE__).'/../views/templates/mails/'
@@ -976,5 +997,29 @@ class EbayOrder
         }
 
         return $ebay_order;
+    }
+    
+    public static function getOrderbytransactionId($transaction_id)
+    {
+
+        $result = Db::getInstance()->executeS('SELECT id_order
+			FROM `'._DB_PREFIX_.'ebay_order_order`
+			WHERE `id_transaction` = '.(string) $transaction_id);
+
+            $result['id_ebay_order']= EbayOrder::getIdOrderRefByIdOrder((int)$result[0]['id_order']);
+  
+        return $result;
+    }
+    
+    public static function getAllReturns()
+    {
+        return Db::getInstance()->ExecuteS('SELECT *
+			FROM `'._DB_PREFIX_.'ebay_order_return_detail`');
+    }
+
+    public static function getReturnsByOrderId($order_id)
+    {
+        return Db::getInstance()->ExecuteS('SELECT *
+			FROM `'._DB_PREFIX_.'ebay_order_return_detail` WHERE id_order = '.$order_id);
     }
 }

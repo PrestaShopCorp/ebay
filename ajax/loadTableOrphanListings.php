@@ -44,8 +44,7 @@ if (!Configuration::get('EBAY_SECURITY_TOKEN')
     return Tools::safeOutput(Tools::getValue('not_logged_str'));
 }
 
-if($is_one_five)
-{
+if ($is_one_five) {
     // to check if a product has attributes (multi-variations),
     // we check if it has a "default_on" attribute in the product_attribute table
     $query = 'SELECT DISTINCT(ep.`id_ebay_product`),
@@ -88,9 +87,7 @@ if($is_one_five)
     ON ec.`id_ebay_category` = ecc.`id_ebay_category`
 
     WHERE ep.`id_ebay_profile` = '.(int)$ebay_profile->id;
-}
-else
-{
+} else {
     // to check if a product has attributes (multi-variations),
     // we check if it has a "default_on" attribute in the product_attribute table
     $query = 'SELECT DISTINCT(ep.`id_ebay_product`),

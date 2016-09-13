@@ -296,7 +296,13 @@ function loadCategoriesFromEbay(step, id_category, row) {
                         loadCategoriesFromEbay(3);
                         $('#load_cat_ebay').css('display', 'none');
                         $('.hidden.importCatEbay').removeClass('hidden').removeClass('importCatEbay');
+                        $('.warning.big.tips.h').show();
                         alertOnExit(false, "");
+                        $('#menuTab2').removeClass('succes');
+                        $('#menuTab2').addClass('wrong');
+                        $('#menuTab8').removeClass('succes');
+                        $('#menuTab8').addClass('wrong');
+                        
                         return loadCategories();
 
                     }

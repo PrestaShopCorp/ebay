@@ -28,7 +28,8 @@
 	<script>
 		$(document).ready(function() {
 			var win = window.location = '{/literal}{$redirect_url|escape:'UTF-8'}{literal}';
-		});
+		});		
+
 	</script>
 	{/literal}
 {/if}
@@ -227,7 +228,7 @@
 			{l s='Status used to indicate product has been shipped' mod='ebay'}
 		</label>
 		<div class="margin-form">
-			<select name="shipped_order_state" class="ebay_select">
+			<select name="shipped_order_state" class="ebay_select" >
                 <option value=""></option>
 				{if isset($order_states) && $order_states && sizeof($order_states)}
 					{foreach from=$order_states item='order_state'}
@@ -235,9 +236,23 @@
 					{/foreach}
 				{/if}
 			</select>
-		</div>        
-        
- 		<div style="clear:both;"></div>
+		</div></br>
+		{if $help_ean.ps_version > '1.4.11'}
+		<label>
+			{l s='Status used to indicate order has been canceled' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<select name="return_order_state" class="ebay_select" data-inlinehelp="{l s='Synchronisation is 2 ways : a cancellation validated on eBay will change PrestaShop order to this status, and a change to this status on PrestaShop will cancel order on eBay.' mod='ebay'}">
+				<option value=""></option>
+				{if isset($order_states) && $order_states && sizeof($order_states)}
+					{foreach from=$order_states item='order_state'}
+						<option value="{$order_state.id_order_state|escape:'htmlall':'UTF-8'}"{if $order_state.id_order_state == $current_order_return_state} selected{/if}>{$order_state.name|escape:'htmlall':'UTF-8'}</option>
+					{/foreach}
+				{/if}
+			</select>
+		</div>
+		{/if}
+		<div style="clear:both;"></div>
      </fieldset>    
      
      

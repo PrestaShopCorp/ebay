@@ -55,6 +55,7 @@ class EbayProfile extends ObjectModel
 
     public function getFields()
     {
+        $fields = array();
         parent::validateFields();
         if (isset($this->id)) {
             $fields['id_ebay_profile'] = (int) ($this->id);

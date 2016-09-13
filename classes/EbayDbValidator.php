@@ -315,7 +315,7 @@ class EbayDbValidator
     {
         // Check if table exist
         $result = Db::getInstance()->ExecuteS('SHOW TABLES LIKE "'._DB_PREFIX_.$table.'"');
-
+        
         if ($result === false) {
             $this->setLog($table, 'error', 'SQL REQUEST : SHOW TABLES LIKE "'._DB_PREFIX_.$table.'"', Db::getInstance()->getMsgError());
         } elseif (empty($result)) {
@@ -336,11 +336,24 @@ class EbayDbValidator
                 $this->setLog($table, 'error', 'SQL REQUEST : '.Db::getInstance()->getMsgError());
             } elseif (empty($result)) {
                 $this->setLog($table, 'error', 'The '.$field.' column in '.$table.' table doesn\'t exist');
+                if ($this->addColumns($table, $field, $arguments)) {
+                    $this->setLog($table, 'SUCCESSFULL', 'The ' . $field . ' column in ' . $table . ' added', 'SUCCESSFULL');
+                }
             } else {
                 $this->checkTypeFields($table, $field, $arguments);
             }
 
         }
+    }
+    private function addColumns($table, $field, $arguments)
+    {
+        $sql = 'ALTER TABLE `'._DB_PREFIX_.$table.'` 
+                ADD '.bqSQL($field).' '.bqSQL($arguments['type']).'('.pSQL($arguments['length']).')';
+
+
+        return Db::getInstance()->Execute($sql);
+
+
     }
 
     private function checkTypeFields($table, $field, $arguments)
@@ -610,5 +623,108 @@ class EbayDbValidator
         }
 
         return $result;
+    }
+    public function getCategoriesPsEbay()
+    {
+        $sql = 'SELECT
+			DISTINCT(ec1.`id_categories`) as id,
+			CONCAT(
+				IFNULL(ec3.`name`, \'\'),
+				IF (ec3.`name` is not null, \' > \', \'\'),
+				IFNULL(ec2.`name`, \'\'),
+				IF (ec2.`name` is not null, \' > \', \'\'),
+				ec1.`name`
+			) as name
+			FROM `'._DB_PREFIX_.'ebay_category_tmp` ec1
+			LEFT JOIN `'._DB_PREFIX_.'ebay_category_tmp` ec2
+			ON ec1.`id_categories_ref_parent` = ec2.`id_categories`
+			AND ec1.`id_categories_ref_parent` <> \'1\'
+			AND ec1.level <> 1
+			LEFT JOIN `'._DB_PREFIX_.'ebay_category_tmp` ec3
+			ON ec2.`id_categories_ref_parent` = ec3.`id_categories`
+			AND ec2.`id_categories_ref_parent` <> \'1\'
+			AND ec2.level <> 1
+			WHERE ec1.`id_categories` is not null and ec1.`id_categories` not in(
+			SELECT `id_category_ref`
+			FROM `'._DB_PREFIX_.'ebay_category` ecp
+			WHERE ecp. `id_category_ref` is not null)';
+
+        return Db::getInstance()->executeS($sql);
+
+    }
+
+    public function getCategoriesTmp()
+    {
+
+        $sql = 'SELECT
+			DISTINCT(ec1.`id_categories`) as id,
+			CONCAT(
+				IFNULL(ec3.`name`, \'\'),
+				IF (ec3.`name` is not null, \' > \', \'\'),
+				IFNULL(ec2.`name`, \'\'),
+				IF (ec2.`name` is not null, \' > \', \'\'),
+				ec1.`name`
+			) as name
+			FROM `'._DB_PREFIX_.'ebay_category_tmp` ec1
+			LEFT JOIN `'._DB_PREFIX_.'ebay_category_tmp` ec2
+			ON ec1.`id_categories_ref_parent` = ec2.`id_categories`
+			AND ec1.`id_categories_ref_parent` <> \'1\'
+			AND ec1.level <> 1
+			LEFT JOIN `'._DB_PREFIX_.'ebay_category_tmp` ec3
+			ON ec2.`id_categories_ref_parent` = ec3.`id_categories`
+			AND ec2.`id_categories_ref_parent` <> \'1\'
+			AND ec2.level <> 1
+			WHERE ec1.`id_categories` is not null';
+
+        return Db::getInstance()->executeS($sql);
+    }
+
+    public function comparationCategories($ebay_profile_id)
+    {
+        $data = array();
+        $result = array();
+        $data['cat_ebay']=$this->getCategoriesTmp();
+        $data['cat_ps']=EbayCategoryConfiguration::getEbayCategories($ebay_profile_id);
+        
+        if ($data['cat_ps'] == '') {
+            $result['table'] = null;
+            $result['new'] = false;
+            $datas=array();
+            return $datas[] = $result;
+        }
+        $result=array();
+        foreach ($data['cat_ps'] as $cat_p) {
+            foreach ($data['cat_ebay'] as $cat_ebay) {
+                $statut = 0;
+                if ($cat_p['id'] == $cat_ebay['id'] and $cat_p['name'] == $cat_ebay['name']) {
+                    $result['table'][$cat_p['name']] = 1;
+
+                    $statut=1;
+                    break;
+                }
+
+            }
+            if ($statut == 0) {
+                $result['table'][$cat_p['name']] = 0;
+
+            }
+
+        }
+
+        $ps_ebay_cat= $this->getCategoriesPsEbay();
+        if ($ps_ebay_cat == '') {
+            $result['new'] = false;
+        }
+        $result['new']=$ps_ebay_cat;
+        $datas=array();
+         return $datas[] = $result;
+        
+    }
+
+    public function deleteTmp()
+    {
+
+        Db::getInstance()->execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'ebay_category_tmp`');
+    
     }
 }

@@ -33,7 +33,7 @@
 		{if isset($autopay)}
 			<AutoPay>{$autopay|escape:'htmlall':'UTF-8'}</AutoPay>
 		{/if}        
-		<Title>{$title|cleanHtml}</Title>
+		<Title><![CDATA[{$title|cleanHtml}]]></Title>
 		{if count($pictures)}
 			<PictureDetails>
 				<GalleryType>Gallery</GalleryType>
@@ -49,6 +49,9 @@
 		<PrimaryCategory>
 			<CategoryID>{$category_id|escape:'htmlall':'UTF-8'}</CategoryID>
 		</PrimaryCategory>
+
+
+
 		<ConditionID>{if $condition_id > 0}{$condition_id|escape:'htmlall':'UTF-8'}{else}1000{/if}</ConditionID>
 		{if $price_update && isset($start_price)}
 			<StartPrice>{$start_price|escape:'htmlall':'UTF-8'}</StartPrice>
@@ -59,8 +62,10 @@
 		<DispatchTimeMax>{$dispatch_time_max|escape:'htmlall':'UTF-8'}</DispatchTimeMax>
 		<ListingDuration>{$listing_duration|escape:'htmlall':'UTF-8'}</ListingDuration>
 		<ListingType>FixedPriceItem</ListingType>
+		{if isset($pay_pal_email_address)}
 		<PaymentMethods>PayPal</PaymentMethods>
 		<PayPalEmailAddress>{$pay_pal_email_address|escape:'htmlall':'UTF-8'}</PayPalEmailAddress>
+		{/if}
 		<PostalCode>{$postal_code|escape:'htmlall':'UTF-8'}</PostalCode>
 		{if isset($quantity)}
 			<Quantity>{$quantity|escape:'htmlall':'UTF-8'}</Quantity>
@@ -79,7 +84,9 @@
 		{elseif isset($product_listing_details)}
             {$product_listing_details|cleanHtml}
         {/if}
+		{if isset($shipping_details)}
 		<ShippingDetails>{$shipping_details|cleanHtml}</ShippingDetails>
+		{/if}
 		{$buyer_requirements_details|cleanHtml}
 		<Site>{$site|escape:'htmlall':'UTF-8'}</Site>
         

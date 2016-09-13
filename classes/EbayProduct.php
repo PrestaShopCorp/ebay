@@ -81,8 +81,7 @@ class EbayProduct
     {
         $row = Db::getInstance()->getRow('SELECT id_product, id_attribute
 			FROM `'._DB_PREFIX_.'ebay_product`
-			WHERE `id_product_ref` = '.(int) $itemID);
-
+			WHERE `id_product_ref` = '. $itemID);
         if ((int) $row['id_product']) {
             return array('id_product' => (int) $row['id_product'], 'id_product_attribute' => (int) $row['id_attribute']);
         } else {
@@ -153,7 +152,7 @@ class EbayProduct
     }
 
     public static function getProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted)
-    { 
+    {
         $ebay_profile = new EbayProfile($id_ebay_profile);
         $sql = 'SELECT ep.`id_product`, ep.`id_attribute`, ep.`id_product_ref`,
 			p.`id_category_default`, p.`reference`, p.`ean13`, p.`upc`,
@@ -167,7 +166,7 @@ class EbayProduct
             $sql .= 'AND id_shop = '.(int)$ebay_profile->id_shop;
 
         }
-		$sql .= ') WHERE ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
+        $sql .= ') WHERE ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
         if ($no_blacklisted) {
             $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
         }
