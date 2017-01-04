@@ -53,7 +53,7 @@ class EbayBussinesPolicies
 
     public static function getPoliciesbyName($name, $id_ebay_profile)
     {
-        return Db::getInstance()->executeS('SELECT name, id_bussines_Policie FROM ' . _DB_PREFIX_ . 'ebay_business_policies WHERE name ="' . $name . '" AND id_ebay_profile=' . $id_ebay_profile);
+        return Db::getInstance()->executeS('SELECT id, name, id_bussines_Policie FROM ' . _DB_PREFIX_ . 'ebay_business_policies WHERE name ="' . $name . '" AND id_ebay_profile=' . $id_ebay_profile);
 
     }
 
@@ -77,5 +77,17 @@ class EbayBussinesPolicies
             return false;
         }
 
+    }
+
+    public static function addShipPolicies($data, $id_ebay_profile)
+    {
+         Db::getInstance()->execute('INSERT INTO ' . _DB_PREFIX_ . 'ebay_business_policies (`type`, `name`, `id_ebay_profile`) VALUES ("' . $data['ProfileType'] . '","' . $data['ProfileName'] . '","' . $id_ebay_profile . '")');
+
+        return Db::getInstance()->Insert_ID();
+    }
+
+    public static function updateShipPolicies($data, $id_ebay_profile)
+    {
+        return  Db::getInstance()->update('ebay_business_policies', array('id_bussines_Policie' => $data['id_bussines_Policie']), 'id = '.$data['id']);
     }
 }

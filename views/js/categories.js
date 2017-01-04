@@ -196,8 +196,16 @@ function loadCategories(page, search) {
         success: function (data) {
 
             $("form#configForm2 table tbody #removeRow").remove();
-            $("form#configForm2 table tbody").html(data);
-
+	    var categorie = $(data).text();
+	    categorie = categorie.replace(/\s+/g, '');
+            if ( categorie == 'undefined') {
+		
+		$("form#configForm2 table tbody").html('<tr><td colspan="4">eBay module cannot synchronize deactivated categories, nor child categories of deactivated categories. ' +
+            'The root category of your catalog is currently deactivated, so there is no category to display here. ' +
+            'Please activate root category in PrestaShop category tab.</td></tr>');
+            } else {
+            	$("form#configForm2 table tbody").html(data);
+	    }
             $('#cat-pagination-holder').html($('#cat-pagination'));
             $('#cat-pagination').show();
 

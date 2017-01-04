@@ -125,7 +125,6 @@ class EbaySynchronizer
                 }
                 continue;
             }
-
             $pictures = EbaySynchronizer::__getPictures($product, $ebay_profile, $id_lang, $context, $variations);
 
             // Load basic price
@@ -225,7 +224,7 @@ class EbaySynchronizer
         }
 
         //Fix for orders that are passed in a country without taxes
-        if ($context->cart && $id_address != 0) {
+        if ($context->cart && isset($id_address) && $id_address != 0) {
             $address->id_country = $country_address;
             $address->save();
         }
@@ -273,7 +272,7 @@ class EbaySynchronizer
         $id_currency = (int)$ebay_profile->getConfiguration('EBAY_CURRENCY');
 
         if (count($data['variations'])) {
-            // the product is multivariation           
+            // the product is multivariation
             if (EbaySynchronizer::__isProductMultiSku($ebay_category, $product->id, $id_lang, $ebay_profile->ebay_site_id)) {
                 // the category accepts multisku products and there is variables matching
                 $data['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $id_lang);
@@ -282,7 +281,7 @@ class EbaySynchronizer
                 if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id)) {
                     //if product already exists on eBay
                     $data['itemID'] = $item_id;
-                    if (!EbaySynchronizer::__hasVariationProducts($data['variations'])) {
+                    if (!EbaySynchronizer::__hasVariationProducts($data['variations'], $id_ebay_profile)) {
                         $ebay = EbaySynchronizer::endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $item_id);
                     } else {
                         $ebay = EbaySynchronizer::__updateMultiSkuItem($product->id, $data, $id_ebay_profile, $ebay, $date);
@@ -303,7 +302,7 @@ class EbaySynchronizer
                     if ($itemID = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $data_variation['id_attribute'])) {
                         $data_variation['itemID'] = $itemID;
 
-                        if ($data_variation['quantity'] < 1) {
+                        if ($data_variation['quantity'] < EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK')) {
                             // no more products
                             $ebay = EbaySynchronizer::endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $itemID);
                         } else {
@@ -319,13 +318,12 @@ class EbaySynchronizer
             // the product is not a multivariation product
             $data['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $id_lang);
             $data['description'] = EbaySynchronizer::__getItemDescription($data, $id_currency);
-
             // Check if product exists on eBay
             if ($itemID = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id)) {
                 $data['itemID'] = $itemID;
 
                 // Delete or Update
-                if ($data['quantity'] < 1) {
+                if ($data['quantity'] < EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK')) {
                     $ebay = EbaySynchronizer::endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $itemID);
                 } else {
                     $ebay = EbaySynchronizer::__updateItem($product->id, $data, $id_ebay_profile, $ebay, $date);
@@ -358,10 +356,10 @@ class EbaySynchronizer
      * @param array $variations
      * @return bool
      */
-    private static function __hasVariationProducts($variations)
+    private static function __hasVariationProducts($variations, $id_ebay_profile)
     {
         foreach ($variations as $variation) {
-            if ($variation['quantity'] >= 1) {
+            if ($variation['quantity'] >= EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK')) {
                 return true;
             }
         }
@@ -499,7 +497,7 @@ class EbaySynchronizer
         foreach (EbaySynchronizer::orderImages($product->getImages($id_lang)) as $image) {
             $pictures_default = EbaySynchronizer::__getPictureLink($product->id, $image['id_image'], $context->link, $default->name);
 
-            if (((count($pictures) == 0) && ($nb_pictures == 1)) || self::__hasVariationProducts($variations)) {
+            if (((count($pictures) == 0) && ($nb_pictures == 1)) || self::__hasVariationProducts($variations, $ebay_profile->id)) {
                 // no extra picture, we don't upload the image
                 $pictures[] = $pictures_default;
             } elseif (count($pictures) < $nb_pictures) {
@@ -582,14 +580,15 @@ class EbaySynchronizer
                 $price = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, true, 1, false, null, null, null, $specific_price_output, true, true, $context_correct_shop);
                 $price_original = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, false, 1, false, null, null, null, $specific_price_output, true, true, $context_correct_shop);
             } else {
-                 $price = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute']);
-                 $price_original = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, false);
+                $price = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'] );
+                $price_original = Product::getPriceStatic((int)$combinaison['id_product'], true, (int)$combinaison['id_product_attribute'], 6, null, false, false);
+            }
 
                  // convert price to destination currency
                  $currency = new Currency((int)$ebay_profile->getConfiguration('EBAY_CURRENCY'));
                  $price *= $currency->conversion_rate;
                  $price_original *= $currency->conversion_rate;
-            }
+
             $variation = array(
                 'id_attribute'        => $combinaison['id_product_attribute'],
                 'reference'           => $combinaison['reference'],
@@ -718,6 +717,9 @@ class EbaySynchronizer
         $context->shop = new Shop($ebay_profile->id_shop);
         // Use currency of ebay_profile
         $context->currency = new Currency($ebay_profile->getConfiguration('EBAY_CURRENCY'));
+
+        $id_country = Country::getByIso($ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT'));
+        $context->country = new Country($id_country);
 
         $specific_price_output = null;
 

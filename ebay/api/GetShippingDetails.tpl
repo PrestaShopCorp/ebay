@@ -24,7 +24,7 @@
 *}
 {foreach from=$excluded_zones item=zone}
 	<ExcludeShipToLocation>{$zone.location|escape:'htmlall':'UTF-8'}</ExcludeShipToLocation>
-{/foreach} 
+{/foreach}
 
 {foreach from=$national_services key=service_name item=services}
 	{foreach from=$services item=service}

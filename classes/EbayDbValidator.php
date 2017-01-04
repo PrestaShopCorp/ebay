@@ -149,6 +149,7 @@ class EbayDbValidator
             'id_order' => array('type' => 'int', 'length' => 11),
             'id_shop' => array('type' => 'int', 'length' => 11),
             'id_ebay_profile' => array('type' => 'int', 'length' => 11),
+            'id_transaction' => array('type' => 'varchar', 'length' => 125),
         ),
 
         'ebay_product' => array(
@@ -160,6 +161,7 @@ class EbayDbValidator
             'id_product_ref' => array('type' => 'varchar', 'length' => 32),
             'date_add' => array('type' => 'datetime', 'length' => null),
             'date_upd' => array('type' => 'datetime', 'length' => null),
+            'id_shipping_policies' => array('type' => 'varchar', 'length' => 125),
         ),
 
         'ebay_product_configuration' => array(
@@ -293,15 +295,42 @@ class EbayDbValidator
             'ebay_user_identifier' => array('type' => 'varchar', 'length' => 255, 'primary' => true, 'auto_increment' => true),
             'token' => array('type' => 'text', 'length' => null),
         ),
+        'ebay_business_policies' => array(
+            'id' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
+            'type' => array('type' => 'varchar', 'length' => 255 ),
+            'name' => array('type' => 'varchar', 'length' => 255 ),
+            'id_bussines_Policie' => array('type' => 'varchar', 'length' => 30 ),
+            'id_ebay_profile' => array('type' => 'int', 'length' => 16),
+        ),
+        'ebay_category_business_config' => array(
+            'id' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
+            'id_category' => array('type' => 'int', 'length' => 11),
+            'id_return' => array('type' => 'varchar', 'length' => 30 ),
+            'id_payment' => array('type' => 'varchar', 'length' => 30 ),
+            'id_ebay_profile' => array('type' => 'int', 'length' => 16),
+        ),
+        'ebay_order_return_detail' => array(
+            'id' => array('type' => 'int', 'length' => 11, 'primary' => true, 'auto_increment' => true),
+            'id_return' => array('type' => 'varchar', 'length' => 125 ),
+            'type' => array('type' => 'varchar', 'length' => 125 ),
+            'date' => array('type' => 'datetime', 'length' => null),
+            'description' => array('type' => 'varchar', 'length' => 125 ),
+            'status' => array('type' => 'varchar', 'length' => 125 ),
+            'id_order' => array('type' => 'varchar', 'length' => 125 ),
+            'id_ebay_order' => array('type' => 'varchar', 'length' => 125 ),
+            'id_transaction' => array('type' => 'varchar', 'length' => 125 ),
+            'id_item' => array('type' => 'varchar', 'length' => 125 ),
+        ),
     );
 
-    public function checkDatabase()
+    public function checkDatabase($withOutLogs = true)
     {
         foreach ($this->database as $table => $fields) {
             $this->checkTable($table, $fields);
         }
-
-        $this->writeLog();
+        if ($withOutLogs) {
+            $this->writeLog();
+        }
     }
 
     public function writeLog()

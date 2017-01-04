@@ -106,6 +106,7 @@
 			</script>
 			<script type="text/javascript" src="{$base_uri|escape:'htmlall':'UTF-8'}js/tiny_mce/tiny_mce.js"></script>
 			<script type="text/javascript">
+				setTimeout(function() {
 			{literal}
 				if(tinyMCE.majorVersion == 4)
 				{
@@ -203,6 +204,7 @@
 			    });
 			}
 			{/literal}
+			},1000);
 			</script>
 		{else}
 			<script type="text/javascript">

@@ -290,6 +290,7 @@ $_MODULE['<{ebay}prestashop>formparameters_20df664c801b8aacb49f07c2c39f1291'] = 
 $_MODULE['<{ebay}prestashop>formparameters_b15120bacd492d36ca44b4e132d50ff1'] = 'Rücknahmebedingungen';
 $_MODULE['<{ebay}prestashop>formparameters_1b91703ad66f3ba08ae7f2554c9bd006'] = 'Bitte geben Sie Ihre Rücknahmebedingungen an';
 $_MODULE['<{ebay}prestashop>formparameters_c27fa0b15250d8789acc9e8cd8a0cbef'] = 'Gewerbliche eBay-Verkäufer müssen Rückgaben gemäß dem Fernabsatzrecht akzeptieren.';
+
 $_MODULE['<{ebay}prestashop>formparameters_18758a2b4c91088ad3d106098199b76a'] = 'Rücknahmen innerhalb';
 $_MODULE['<{ebay}prestashop>formparameters_e616fcab8481ac75cf74c0d31c21fedf'] = 'Gewerbliche eBay-Verkäufer müssen Käufern zur Rückgabe von Artikeln eine Frist von mindestens 14 Tagen gewähren.';
 $_MODULE['<{ebay}prestashop>formparameters_c019c73a61a20be2d2ba883be58b1236'] = 'Wer zahlt';
@@ -322,6 +323,9 @@ $_MODULE['<{ebay}prestashop>formregister_b9a3dc1cf156282b085d5cc037015701'] = 'S
 $_MODULE['<{ebay}prestashop>formregister_0ba7583639a274c434bbe6ef797115a4'] = 'Neu anmelden';
 $_MODULE['<{ebay}prestashop>formregister_abea3cd3f772f1246cb388cf20528de8'] = 'http://pages.ebay.de/help/sell/businessfees.html';
 $_MODULE['<{ebay}prestashop>formregister_b9a5eed0d483078a21f7ee6f3ce7cee7'] = 'Gebühren für gewerbliche Verkäufer anzeigen';
+$_MODULE['<{ebay}prestashop>formparameters_54acd5df763de1e578c2d15b52f098f4'] = 'Nicht mehr vorrätig” ';
+$_MODULE['<{ebay}prestashop>formparameters_43c7582c40594c3fe32a6634ef9dcb07'] = 'Untauglich';
+$_MODULE['<{ebay}prestashop>formparameters_04180642f26383f709e8338fcf97be14'] = 'Aktiviert';
 $_MODULE['<{ebay}prestashop>formregister_8cb0f9d11395a2e4f2de997ca6e63e14'] = 'Weitere Informationen finden Sie im Abschnitt „Hilfe“';
 $_MODULE['<{ebay}prestashop>formregister_6aa53cf3d6454040f9d772a2d5688002'] = 'Nur eBay Benutzerkennungen können benutzt werden, um sich anzumelden. Bitte verwenden Sie nicht Ihre E-Mail Adresse';
 $_MODULE['<{ebay}prestashop>formtemplatemanager_35dcb1b564f161a2ff7a55ab9ae51da8'] = 'Angebotstitel mit Tags optimieren:';

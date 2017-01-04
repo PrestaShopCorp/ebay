@@ -44,7 +44,7 @@ class EbayLogger
 
     public function __construct($level = 'INFO', $context = null, $uid = '')
     {
-        $this->level = self::$severity[strtoupper($level)];
+        $this->level = self::$severity[Tools::strtoupper($level)];
         $this->uid = uniqid($prefix = (string)$uid, true);
         $this->context = $context;
     }
@@ -303,8 +303,8 @@ class EbayLogger
                         'datetime'  => $datetime,
                         'severity'  => (int)$severity,
                         'code'      => 0,
-                        'message'   => $msg,
-                        'context'   => $ctx ? json_encode($ctx) : null,
+                        'message'   => pSQL($msg),
+                        'context'   => $ctx ? pSQL(Tools::jsonEncode($ctx)) : null,
                         'backtrace' => $backtrace,
                     )
                 );
@@ -312,7 +312,7 @@ class EbayLogger
 
                 $sql = 'INSERT INTO '._DB_PREFIX_.'ebay_logs(`uid`, `datetime`, `severity`, `code`, `message`, `context`, `backtrace`)
 			VALUES(\''.(int) $this->uid.'\', \''.$datetime.'\', \''.(int)$severity.'\', \'0\', \''.pSQL($msg).'\',
-			 \''.pSQL($ctx ? json_encode($ctx) : null).'\', \''.pSQL($backtrace).'\')';
+			 \''.pSQL($ctx ? Tools::jsonEncode($ctx) : null).'\', \''.pSQL($backtrace).'\')';
 
                 DB::getInstance()->Execute($sql);
             }

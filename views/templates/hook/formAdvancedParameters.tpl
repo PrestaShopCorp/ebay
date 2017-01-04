@@ -112,18 +112,12 @@
 		</label>
 		<div class="margin-form">
 			<input type="checkbox" name="activate_logs" value="1"{if $activate_logs} checked="checked"{/if}>
+			{if $log_file_exists}
+			<a href="#" class ='logs'  class="button" data-inlinehelp="{l s='When log file size reaches 100 mo, log file is emptied automatically.' mod='ebay'}">{l s='Download' mod='ebay'}</a>
+			{/if}
 		</div>
 		<div class="clear both"></div>
-		{if $log_file_exists}
-			<label>
-				{l s='Download logs' mod='ebay'}
-			</label>
-			
-			<div class="margin-form">
-				<a href="../modules/ebay/log/request.txt" target="_blank" class="button">{l s='Download' mod='ebay'}</a>
-			</div>
-			<div class="clear both"></div>
-		{/if}
+
         
 		<label>{l s='Logs Conservation Duration' mod='ebay'} : </label>
 		<div class="margin-form">
@@ -305,6 +299,12 @@
 				setTimeout(function(){					
 					$('#ebay_returns_description').val($('#ebayreturnshide').html());
 				}, 1000);
+			});
+
+
+			$('.logs').click(function(e) {
+				e.preventDefault();
+				window.open(module_dir + 'ebay/ajax/checkLogs.php?token={/literal}{$ebay_token|escape:'urlencode'}{literal}&action=getLogs');;
 			});
 			
 			$('#token-btn').click(function() {

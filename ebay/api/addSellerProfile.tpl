@@ -38,7 +38,7 @@
         <profileDesc>{$description}</profileDesc>
         <profileType>SHIPPING</profileType>
         <shippingPolicyInfo>
-            <dispatchTimeMax>0</dispatchTimeMax>
+            <dispatchTimeMax>{$dispatch_time_max}</dispatchTimeMax>
         {foreach from=$national_services key=service_name item=services}
             {foreach from=$services item=service}
                 {if $service.serviceCosts !== false}

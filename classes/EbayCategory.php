@@ -69,9 +69,10 @@ class EbayCategory
         }
 
         $res = Db::getInstance()->getRow($sql);
-
-        foreach ($res as $attribute => $value) {
-            $this->$attribute = $value;
+        if ($res) {
+            foreach ($res as $attribute => $value) {
+                $this->$attribute = $value;
+            }
         }
 
     }

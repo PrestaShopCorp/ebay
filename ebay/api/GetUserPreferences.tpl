@@ -28,6 +28,7 @@
     <!-- Call-specific Input Fields -->
 
     <ShowSellerProfilePreferences>True</ShowSellerProfilePreferences>
+    <ShowOutOfStockControlPreference>True</ShowOutOfStockControlPreference>
 
     <!-- Standard Input Fields -->
     <RequesterCredentials>

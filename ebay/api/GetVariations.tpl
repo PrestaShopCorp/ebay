@@ -26,9 +26,9 @@
 	<VariationSpecificsSet>
 	{foreach from=$variation_specifics_set key=name item=values}
 		<NameValueList>
-			<Name><![CDATA[{$name|escape:'html':'UTF-8'}]]></Name>
+			<Name><![CDATA[{$name}]]></Name>
 			{foreach from=$values item=value}
-				<Value><![CDATA[{$value|escape:'htmlall':'UTF-8'}]]></Value>
+				<Value><![CDATA[{$value}]]></Value>
 			{/foreach}
 		</NameValueList>
 	{/foreach}
@@ -43,8 +43,8 @@
 			<VariationSpecifics>
 				{foreach from=$variation.variation_specifics key=name item=value}
 					<NameValueList>
-						<Name><![CDATA[{$name|escape:'html':'UTF-8'}]]></Name>
-						<Value><![CDATA[{$value|escape:'htmlall':'UTF-8'}]]></Value>
+						<Name><![CDATA[{$name}]]></Name>
+						<Value><![CDATA[{$value}]]></Value>
 					</NameValueList>
 				{/foreach}				
 			</VariationSpecifics>
@@ -75,10 +75,10 @@
 	{foreach from=$variations_pictures item=variations_pictures_list}
 		{foreach from=$variations_pictures_list item=picture}
 			{if isset($picture.name)}
-				<VariationSpecificName><![CDATA[{$picture.name|escape:'htmlall':'UTF-8'}]]></VariationSpecificName>
+				<VariationSpecificName><![CDATA[{$picture.name}]]></VariationSpecificName>
 			{/if}
 			<VariationSpecificPictureSet>
-				<VariationSpecificValue><![CDATA[{$picture.value|escape:'htmlall':'UTF-8'}]]></VariationSpecificValue>
+				<VariationSpecificValue><![CDATA[{$picture.value}]]></VariationSpecificValue>
 				<PictureURL>{$picture.url|escape:'htmlall':'UTF-8'}</PictureURL>
 			</VariationSpecificPictureSet>
 		{/foreach}

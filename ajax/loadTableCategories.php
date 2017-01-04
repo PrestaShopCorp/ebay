@@ -65,6 +65,7 @@ if (Module::isInstalled('ebay')) {
 
         $root_category = Category::getRootCategory();
         $categories = Category::getCategories(Tools::getValue('id_lang'));
+
         $category_list = $ebay->getChildCategories($categories, $root_category->id_parent, array(), '', Tools::getValue('s'));
 
         $offset = 20;
@@ -135,7 +136,10 @@ if (Module::isInstalled('ebay')) {
             AND ecc.`id_ebay_profile` = '.(int) $ebay_profile->id.'
             WHERE ec.`id_country` = '.(int) $ebay_profile->ebay_site_id.'
             ORDER BY `level`';
-        foreach (Db::getInstance()->executeS($sql) as $category) {
+
+        $datas = Db::getInstance()->executeS($sql);
+
+        foreach ($datas as $category) {
             /* Add datas */
             if (isset($category['id_category'])) {
                 $category_config_list[$category['id_category']] = $category;
@@ -182,6 +186,7 @@ if (Module::isInstalled('ebay')) {
             'currencySign' => $currency->sign,
             'p' => $page,
         );
+        
         $smarty->assign($template_vars);
         Ebay::addSmartyModifiers();
         echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/table_categories.tpl');

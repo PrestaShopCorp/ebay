@@ -130,7 +130,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '1.15.0';
+        $this->version = '1.15.4';
         $this->stats_version = '1.0';
 
         $this->author = 'PrestaShop';
@@ -977,6 +977,8 @@ class Ebay extends Module
                 $errors[] = $message;
                 $order->addErrorMessage($message);
                 continue;
+            } else {
+                $order->add($this->ebay_profile->id);
             }
 
             if ($this->is_multishop) {
@@ -1096,6 +1098,8 @@ class Ebay extends Module
 
                 // Validate order
                 $id_order = $order->validate($ebay_profile->id_shop, $this->ebay_profile->id);
+                $order->update($this->ebay_profile->id);
+
                 // @todo: verrifier la valeur de $id_order. Si validate ne fonctionne pas, on a quoi ??
                 // we now disable the carrier if required
                 if ($has_disabled_carrier) {
@@ -1108,7 +1112,7 @@ class Ebay extends Module
 
             }
 
-            $order->add($this->ebay_profile->id);
+
 
             if (!version_compare(_PS_VERSION_, '1.5', '>')) {
                 foreach ($order->getProducts() as $product) {
@@ -1190,7 +1194,7 @@ class Ebay extends Module
             $from_date .= 'T'.(isset($from_date_ar[1]) ? $from_date_ar[1] : '');
         }
 
-        $ebay = new EbayRequest();
+        $ebay = new EbayRequest($this->ebay_profile->id);
         $page = 1;
         $orders = array();
         $nb_page_orders = 100;
@@ -1230,7 +1234,7 @@ class Ebay extends Module
             $from_date .= 'T'.(isset($from_date_ar[1]) ? $from_date_ar[1] : '');
         }
 
-        $ebay = new EbayRequest();
+        $ebay = new EbayRequest($this->ebay_profile->id);
 
         $orders = array();
 
@@ -1453,27 +1457,15 @@ class Ebay extends Module
             ($id_order_ref = EbayOrder::getIdOrderRefByIdOrder($id_order))) {
 
             $id_ebay_profiles = Db::getInstance()->ExecuteS('SELECT DISTINCT(`id_ebay_profile`) FROM `'._DB_PREFIX_.'ebay_profile`');
+            $id_ebay_profile = EbayOrder::getIdProfilebyIdOrder($id_order);
+            $order = new Order($id_order);
 
-            if (count($id_ebay_profiles) == 1) {
-                $order = new Order($id_order);
-
-                foreach ($id_ebay_profiles as $data) {
-                    $id_ebay_profile = (int) $data['id_ebay_profile'];
-                    $ebay_profile = new EbayProfile($id_ebay_profile);
-
-                    if (!$ebay_profile->getConfiguration('EBAY_SEND_TRACKING_CODE')) {
-                        continue;
-                    }
-
-                    $carrier = new Carrier($order->id_carrier, $ebay_profile->id_lang);
-
-                    $ebay_request = new EbayRequest($id_ebay_profile);
-                    if ($ebay_request->updateOrderTracking($id_order_ref, $tracking_number, $carrier->name)) {
-                        break;
-                    }
-                }
+            $ebay_profile = new EbayProfile($id_ebay_profile);
+            if ($ebay_profile->getConfiguration('EBAY_SEND_TRACKING_CODE')) {
+                $carrier = new Carrier($order->id_carrier, $ebay_profile->id_lang);
+                $ebay_request = new EbayRequest($id_ebay_profile);
+                $ebay_request->updateOrderTracking($id_order_ref, $tracking_number, $carrier->name);
             }
-
         }
 
         if (!((version_compare(_PS_VERSION_, '1.5.1', '>=')
@@ -1489,6 +1481,13 @@ class Ebay extends Module
      */
     public function getContent()
     {
+        if (Configuration::get('EBAY_VERSION') != $this->version) {
+            set_time_limit(3600);
+            Configuration::set('EBAY_VERSION', $this->version);
+            $validatordb = new EbayDbValidator();
+            $validatordb->checkDatabase(false);
+        }
+        
         if (version_compare(_PS_VERSION_, '1.5', '>') && Shop::getContext() != Shop::CONTEXT_SHOP) {
             $this->bootstrap = true;
             return $this->display(__FILE__, 'views/templates/hook/alert_multishop.tpl');
@@ -2388,7 +2387,7 @@ class Ebay extends Module
 
     private function __getAttributeCombinationsById($product, $id_attribute, $id_lang)
     {
-        if (method_exists($product, 'getATtributeCombinationsById')) {
+        if (method_exists($product, 'getAttributeCombinationsById')) {
             return $product->getAttributeCombinationsById((int) $id_attribute, $id_lang);
         }
 

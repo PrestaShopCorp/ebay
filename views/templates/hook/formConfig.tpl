@@ -131,13 +131,7 @@
 		{$form_items_specifics|ebayHtml}
 	</div>
 	<div id="menuTab3Sheet" class="tabItem">
-		{foreach from=$shippingValidator item=shippingValidatorItem}
-			{if isset($shippingValidatorItem.message)}
-				<div class="ebay_{$shippingValidatorItem.indicatorBig|escape:'htmlall':'UTF-8'} big">
-					{$shippingValidatorItem.message|escape:'htmlall':'UTF-8'}
-				</div>
-			{/if}
-		{/foreach}
+
 		{if isset($shippingValidator.message)}
 			<div class="ebay_{$shippingValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">
 			{$shippingValidator.message|escape:'htmlall':'UTF-8'}

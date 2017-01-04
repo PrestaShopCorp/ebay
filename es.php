@@ -303,6 +303,10 @@ $_MODULE['<{ebay}prestashop>formparameters_a55e604a5bd344251e5f5fec9354c319'] = 
 $_MODULE['<{ebay}prestashop>formparameters_89915713614e6417e4d4ee67d5487fa0'] = 'http://pages.ebay.es/help/sell/duration.html';
 $_MODULE['<{ebay}prestashop>formparameters_5e14b32df295b4dc536a56aa192b42e2'] = 'La duración del anuncio es el periodo de tiempo que estará activo en eBay.es. Puedes hacer que tenga una duración de 1, 3, 5, 7, 10, 30 días o elegir que sea un anuncio abierto. Los anuncios abiertos se renuevan automáticamente cada 30 días a menos que todos los artículos se vendan, que tú finalices el anuncio o que éste infrinja alguna de las políticas de eBay. Anuncio abierto es la configuración por defecto para ahorrarte tiempo a la hora de volver a poner en venta artículos.';
 $_MODULE['<{ebay}prestashop>formparameters_24f57c27a39e51dcf58fcfcdfe69f7d6'] = '¿Quieres volver a poner en venta el artículo automáticamente?';
+
+$_MODULE['<{ebay}prestashop>formparameters_54acd5df763de1e578c2d15b52f098f4'] = 'Sin existencias ';
+$_MODULE['<{ebay}prestashop>formparameters_43c7582c40594c3fe32a6634ef9dcb07'] = 'Desactivado ';
+$_MODULE['<{ebay}prestashop>formparameters_04180642f26383f709e8338fcf97be14'] = 'Activado ';
 $_MODULE['<{ebay}prestashop>formparameters_26030c760e6e50206710389d768204a9'] = 'Guardar y continuar';
 $_MODULE['<{ebay}prestashop>formregister_9a5c99bf25e84cd8fe7c500f7ec698f2'] = 'Registra el módulo en eBay';
 $_MODULE['<{ebay}prestashop>formregister_19fb52a1add2ebba0f6e81d9a5c53e80'] = 'Introduce tu seudónimo de eBay';

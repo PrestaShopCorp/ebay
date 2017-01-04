@@ -23,7 +23,6 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<?xml version="1.0" encoding="utf-8"?>
 <setSellerProfileRequest xmlns="http://www.ebay.com/marketplace/selling/v1/services">
     <shippingPolicyProfile>
         <categoryGroups>
@@ -37,7 +36,7 @@
         <profileDesc>{$description}</profileDesc>
         <profileType>SHIPPING</profileType>
         <shippingPolicyInfo>
-            <dispatchTimeMax>0</dispatchTimeMax>
+            <dispatchTimeMax>{$dispatch_time_max}</dispatchTimeMax>
             {foreach from=$national_services key=service_name item=services}
                 {foreach from=$services item=service}
                     {if $service.serviceCosts !== false}

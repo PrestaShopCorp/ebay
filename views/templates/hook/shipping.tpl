@@ -55,7 +55,7 @@
 			 	createSelecstShipping += "<optgroup label='{$zone.name|escape:'htmlall':'UTF-8'}'>";
 					{foreach from=$zone.carriers item=carrier}
 						var testPSCarrier = (typeof(idPSCarrier) != "undefined"  && idPSCarrier == {$carrier.id_carrier|escape:'htmlall':'UTF-8'} && id_zone == {$zone.id_zone|escape:'htmlall':'UTF-8'});
-						createSelecstShipping += "<option "+ (testPSCarrier ? 'selected="selected"' : '')  +" data-realname='{$zone.name|escape:'htmlall':'UTF-8'}, {$carrier.name|escape:'htmlall':'UTF-8'}' value='{$carrier.id_carrier|escape:'htmlall':'UTF-8'}-{$zone.id_zone|escape:'htmlall':'UTF-8'}'>{$carrier.name|escape:'htmlall':'UTF-8'}</option>";
+						createSelecstShipping += "<option "+ (testPSCarrier ? 'selected="selected"' : '')  +" data-realname='{$zone.name|escape:'htmlall':'UTF-8'}, {$carrier.name|escape:'htmlall':'UTF-8'}' value='{$carrier.id_carrier|escape:'htmlall':'UTF-8'}-{$zone.id_zone|escape:'htmlall':'UTF-8'}' data-maxprice='{$carrier.price|escape:'htmlall':'UTF-8'}'>{$carrier.name|escape:'htmlall':'UTF-8'}</option>";
 						if (testPSCarrier) {
 							var valuePSCarrier = " {$carrier.name|escape:'htmlall':'UTF-8'} ";
 						}
@@ -99,7 +99,7 @@
 		}
 
 		// extrafree
-		createSelecstShipping += "<td style='visibility:hidden;'><p  class='label'>{l s='Additional item cost' mod='ebay'}</p><span>{$configCurrencysign|escape:'htmlall':'UTF-8'} </span><input "+ ((typeof(additionalFee) != "undefined" && additionalFee > 0) ? 'value="'+additionalFee+'"' : '')  +" name='"+ (currentName == 'domesticShipping' ? 'extrafee' : 'extrafee_international') +"["+ lastId +"]' type='text'>"+ (currentName == 'domesticShipping' ? '<span style="font-size:12px;">' : '<p>') +" {l s='Increase the cost when a buyer adds more than one of the same item to their order' mod='ebay'}"+ (currentName == 'domesticShipping' ? '</span>' : '</p>') +"</td>";
+		createSelecstShipping += "<td style='visibility:hidden;'><p  class='label'>{l s='Additional item cost' mod='ebay'}</p><span>{$configCurrencysign|escape:'htmlall':'UTF-8'} </span><div class='popin_ship_cost'></div><input class='extrafee' "+ ((typeof(additionalFee) != "undefined" && additionalFee > 0) ? 'value="'+additionalFee+'"' : '')  +" min = '0' name='"+ (currentName == 'domesticShipping' ? 'extrafee' : 'extrafee_international') +"["+ lastId +"]' type='number' step='0.01'>"+ (currentName == 'domesticShipping' ? '<span style="font-size:12px;">' : '<p>') +" <a class='kb-help link_ship_cost' style='width: auto;background-image: none;' data-errorcode='{$help_ship_cost.error_code}' data-module='ebay' data-lang='{$help_ship_cost.lang}' module_version='{$help_ship_cost.module_version}' prestashop_version='{$help_ship_cost.ps_version}' href='' target='_blank' ></a><a class='kb-help'  data-errorcode='{$help_ship_cost.error_code}' data-module='ebay' data-lang='{$help_ship_cost.lang}' module_version='{$help_ship_cost.module_version}' prestashop_version='{$help_ship_cost.ps_version}' href='' target='_blank' ></a>"+ (currentName == 'domesticShipping' ? '</span>' : '</p>') +"</td>";
 		// end extrafree
 
 		// trash
@@ -142,9 +142,11 @@
 		var div = $(select).parent('div');
 		var hasA = div.siblings('a').length;
 		var tr = div.parent('td').parent('tr');
+		var message = "{l s='Between 0 and ' mod='ebay'}";
 		if ($(select).val().length > 1)
 		{
 			var contentA = $(select).find('option').filter(":selected").attr('data-realname');
+			var contentAprice = $(select).find('option').filter(":selected").attr('data-maxprice');
 			div.fadeOut(400, function() {
 				$(this).hide();
 				if (hasA > 0)
@@ -156,6 +158,8 @@
 					var elementA = $('<a class="presta_shipping_text">');
 					elementA.append(contentA);
 					div.after(elementA);
+					tr.find("input").attr('max',contentAprice);
+					tr.find(".link_ship_cost").text(message + contentAprice);
 					elementA.click(function()
 					{
 						$(this).fadeOut(400, function(){
@@ -293,7 +297,7 @@
 		stringShippingFee += 		"{l s='Add extra fee for this carrier' mod='ebay'} ";
 		stringShippingFee += 	"<td>";
 		stringShippingFee += 	"<td>";
-		stringShippingFee += 		"<input type='text' name='extrafee"+internationSuffix+"["+lastId+"]' value='"+additionalFee+"'>";
+		stringShippingFee += 		"<input class = 'extrafee' type='text' name='extrafee"+internationSuffix+"["+lastId+"]' value='"+additionalFee+"'>";
 		stringShippingFee += 	"</td>";
 		stringShippingFee += 	"<td>";
 		stringShippingFee += 	"<img src='../img/admin/delete.gif' title='Delete' class='deleteCarrier' />";
@@ -701,6 +705,27 @@
 			});
 		}
 	});
+	var message_cost = "{/literal}{l s='Between 0 and ' mod='ebay'}{literal}";
+	$('.extrafee').live('keyup', '.js_numbers_only', function(event) {
+
+		var max = parseInt($(this).attr('max'));
+		console.log(max);
+		if ($(this).val() > max ) {
+
+			$(this).val(max);
+		} else if ($(this).val() < 0) {
+			$(this).val(0);
+		}
+	});
+	$('.extrafee').live('focus',function() {
+		$(this).parent().find('.popin_ship_cost').text(message_cost + $(this).attr('max'));
+		$(this).parent().find('.popin_ship_cost').css('display','block');
+	});
+
+	$('.extrafee').live('focusout',function() {
+		$(this).parent().find('.popin_ship_cost').css('display','none');
+	});
+
 	{/literal}
 </script>
 

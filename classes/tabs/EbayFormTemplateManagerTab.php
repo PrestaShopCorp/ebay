@@ -63,7 +63,7 @@ class EbayFormTemplateManagerTab extends EbayTab
             'action_url' => $action_url,
             'ebay_product_template' => $ebay_product_template,
             'ebay_product_template_title' => $ebay_product_template_title,
-            'features_product' => Feature::getFeatures($this->context->language->id),
+            'features_product' => Feature::getFeatures($this->ebay_profile->id_lang),
             'ad' => dirname($_SERVER['PHP_SELF']),
             'base_uri' => __PS_BASE_URI__,
             'is_one_dot_three' => (Tools::substr(_PS_VERSION_, 0, 3) == '1.3'),

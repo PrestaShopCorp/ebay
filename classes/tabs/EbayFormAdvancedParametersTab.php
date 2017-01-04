@@ -126,6 +126,9 @@ class EbayFormAdvancedParametersTab extends EbayTab
                     unlink(dirname(__FILE__).'/../../log/request.txt');
                 }
             }
+            if (Tools::getValue('api_logs') == 0) {
+                EbayApiLog::clear();
+            }
 
             return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));
         } else {
