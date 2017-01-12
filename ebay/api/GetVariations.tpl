@@ -39,7 +39,7 @@
 			{if $price_update}
 				<StartPrice>{$variation.price|escape:'htmlall':'UTF-8'}</StartPrice>
 			{/if}
-			<Quantity>{$variation.quantity|escape:'htmlall':'UTF-8'}</Quantity>
+			<Quantity>{if $variation.quantity < 0}0{else}{$variation.quantity|escape:'htmlall':'UTF-8'}{/if}</Quantity>
 			<VariationSpecifics>
 				{foreach from=$variation.variation_specifics key=name item=value}
 					<NameValueList>

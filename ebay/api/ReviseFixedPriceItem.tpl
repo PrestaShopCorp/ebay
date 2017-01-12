@@ -71,7 +71,7 @@
 		{/if}
 		<ListingDuration>{$listing_duration|escape:'htmlall':'UTF-8'}</ListingDuration>
 		{if isset($quantity)}
-			<Quantity>{$quantity|escape:'htmlall':'UTF-8'}</Quantity>
+			<Quantity>{if $quantity < 0}0{else}{$quantity|escape:'htmlall':'UTF-8'}{/if}</Quantity>
 		{/if}
 		{if $price_update && isset($start_price)}
 			<StartPrice>{$start_price|escape:'htmlall':'UTF-8'}</StartPrice>

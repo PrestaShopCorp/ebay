@@ -302,7 +302,7 @@ class EbaySynchronizer
                     if ($itemID = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $data_variation['id_attribute'])) {
                         $data_variation['itemID'] = $itemID;
 
-                        if ($data_variation['quantity'] < EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK')) {
+                        if ($data_variation['quantity'] < 1 && !EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK')) {
                             // no more products
                             $ebay = EbaySynchronizer::endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $itemID);
                         } else {
@@ -323,7 +323,7 @@ class EbaySynchronizer
                 $data['itemID'] = $itemID;
 
                 // Delete or Update
-                if ($data['quantity'] < EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK')) {
+                if ($data['quantity'] < 1 && !EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK')) {
                     $ebay = EbaySynchronizer::endProductOnEbay($ebay, $ebay_profile, $context, $id_lang, $itemID);
                 } else {
                     $ebay = EbaySynchronizer::__updateItem($product->id, $data, $id_ebay_profile, $ebay, $date);
@@ -359,7 +359,7 @@ class EbaySynchronizer
     private static function __hasVariationProducts($variations, $id_ebay_profile)
     {
         foreach ($variations as $variation) {
-            if ($variation['quantity'] >= EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK')) {
+            if ($variation['quantity'] >= 1 || EbayConfiguration::get($id_ebay_profile, 'EBAY_OUT_OF_STOCK')) {
                 return true;
             }
         }

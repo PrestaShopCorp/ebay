@@ -278,8 +278,7 @@
 			{l s='Out of Stock status ' mod='ebay'}
 		</label>
 		<div class="margin-form">
-			<input type="text" readonly value="
-		{if $out_of_stock_value == 1}{l s='Deactivated' mod='ebay'}{else}{l s='Activeted' mod='ebay'} {/if}">
+			<input type="text" readonly value="{if $out_of_stock_value}{l s='Activated' mod='ebay'}{else}{l s='Deactivated' mod='ebay'}{/if}" style="text-align: center;">
 			<a class="kb-help" data-errorcode="{$help_out_of_stock.error_code}" data-module="ebay" data-lang="{$help_out_of_stock.lang}" module_version="{$help_out_of_stock.module_version}" prestashop_version="{$help_out_of_stock.ps_version}" href="" target="_blank"></a>
 
 		</div>

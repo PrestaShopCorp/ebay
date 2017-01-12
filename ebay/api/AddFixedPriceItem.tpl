@@ -68,7 +68,7 @@
 		{/if}
 		<PostalCode>{$postal_code|escape:'htmlall':'UTF-8'}</PostalCode>
 		{if isset($quantity)}
-			<Quantity>{$quantity|escape:'htmlall':'UTF-8'}</Quantity>
+			<Quantity>{if $quantity < 0}0{else}{$quantity|escape:'htmlall':'UTF-8'}{/if}</Quantity>
 		{/if}
 		<ItemSpecifics>
 			{foreach from=$item_specifics key=name item=value}

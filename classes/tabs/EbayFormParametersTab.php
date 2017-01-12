@@ -136,7 +136,7 @@ class EbayFormParametersTab extends EbayTab
                 'error_code'     => 'HELP-SETTINGS-LISTING-DURATION',
             ),
             'id_shop' => $this->context->shop->id,
-            'out_of_stock_value' => (int)EbayConfiguration::get($this->ebay_profile->id,'EBAY_OUT_OF_STOCK'),
+            'out_of_stock_value' => (bool)EbayConfiguration::get($this->ebay_profile->id, 'EBAY_OUT_OF_STOCK'),
             'help_out_of_stock' => array(
                 'lang'           => $this->context->country->iso_code,
                 'module_version' => $this->ebay->version,
