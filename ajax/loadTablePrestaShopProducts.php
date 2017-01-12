@@ -37,6 +37,11 @@ if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Co
     return Tools::safeOutput(Tools::getValue('not_logged_str'));
 }
 
+/** @var Shop $shop */
+$shop = new Shop(Shop::getCurrentShop());
+/** @var ShopGroup $shopGroup */
+$shopGroup = $shop->getGroup();
+
 $page = (int) Tools::getValue('p', 0);
 if ($page < 2) {
     $page = 1;
@@ -118,7 +123,13 @@ $query .= ' INNER JOIN `'._DB_PREFIX_.'category_lang` cl
         AND ep2.`id_ebay_profile` = ep.`id_ebay_profile`
     )'.// With this inner query we ensure to only return one row of ebay_product. The id_product_ref is only relevant for products having only one correspondant product on eBay
 '
-    WHERE 1'.$ebay->addSqlRestrictionOnLang('pl').$ebay->addSqlRestrictionOnLang('cl').$ebay->addSqlRestrictionOnLang('s');
+    WHERE 1'.$ebay->addSqlRestrictionOnLang('pl').$ebay->addSqlRestrictionOnLang('cl');
+
+if ($shopGroup->share_stock) {
+    $query .= 'AND s.id_shop_group = '.(int)$shopGroup->id;
+} else {
+    $query .= $ebay->addSqlRestrictionOnLang('s');
+}
 
 if ($search) {
     $query .= ' AND pl.`name` LIKE \'%'.$search.'%\'';
