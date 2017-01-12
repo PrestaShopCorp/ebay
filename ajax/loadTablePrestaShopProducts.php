@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2016 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -30,7 +30,7 @@ include_once dirname(__FILE__).'/../ebay.php';
 
 $ebay = new Ebay();
 
-$ebay_profile = new EbayProfile((int) Tools::getValue('profile'));
+$ebay_profile = new EbayProfile((int)Tools::getValue('profile'));
 $ebay_request = new EbayRequest();
 
 if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
@@ -42,16 +42,16 @@ $shop = new Shop(Shop::getCurrentShop());
 /** @var ShopGroup $shopGroup */
 $shopGroup = $shop->getGroup();
 
-$page = (int) Tools::getValue('p', 0);
+$page = (int)Tools::getValue('p', 0);
 if ($page < 2) {
     $page = 1;
 }
 
-$limit = 20;
+$limit  = 20;
 $offset = $limit * ($page - 1);
 
 $on_ebay_only = (Tools::getValue('mode') == 'on_ebay');
-$search = Tools::getValue('s');
+$search       = Tools::getValue('s');
 
 $is_one_five = version_compare(_PS_VERSION_, '1.5', '>');
 
@@ -81,7 +81,7 @@ if ($is_one_five) {
     $query .= '
         INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
         ON p.id_product = ps.id_product
-        AND ps.id_shop = '.(int) $ebay_profile->id_shop;
+        AND ps.id_shop = '.(int)$ebay_profile->id_shop;
 }
 
 $query .= ' INNER JOIN `'._DB_PREFIX_.'product_lang` pl
@@ -122,7 +122,7 @@ $query .= ' INNER JOIN `'._DB_PREFIX_.'category_lang` cl
         WHERE ep2.`id_product` = ep.`id_product`
         AND ep2.`id_ebay_profile` = ep.`id_ebay_profile`
     )'.// With this inner query we ensure to only return one row of ebay_product. The id_product_ref is only relevant for products having only one correspondant product on eBay
-'
+    '
     WHERE 1'.$ebay->addSqlRestrictionOnLang('pl').$ebay->addSqlRestrictionOnLang('cl');
 
 if ($shopGroup->share_stock) {
@@ -148,8 +148,8 @@ $category_list = $ebay->getChildCategories(Category::getCategories($ebay_profile
 // eBay categories
 $ebay_categories = EbayCategoryConfiguration::getEbayCategories($ebay_profile->id);
 
-$context = Context::getContext();
-$employee = new Employee((int) Tools::getValue('id_employee'));
+$context           = Context::getContext();
+$employee          = new Employee((int)Tools::getValue('id_employee'));
 $context->employee = $employee;
 
 foreach ($res as &$row) {
@@ -178,24 +178,24 @@ foreach ($res as &$row) {
     }
 
     if ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A') {
-        $row['sync'] = (bool) $row['id_category_ref'];
+        $row['sync'] = (bool)$row['id_category_ref'];
     }
     // only true if category synced with an eBay category
 
     $link = $context->link;
 
-    $row['link'] = (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts').'&id_product='.(int) $row['id_product'].'&updateproduct') : $link->getProductLink((int) $row['id_product']));
+    $row['link'] = (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts').'&id_product='.(int)$row['id_product'].'&updateproduct') : $link->getProductLink((int)$row['id_product']));
 
 }
 
 $smarty = $context->smarty;
 // Smarty datas
 $template_vars = array(
-    'nbPerPage' => $limit,
-    'nbProducts' => $nbProducts,
+    'nbPerPage'      => $limit,
+    'nbProducts'     => $nbProducts,
     'noProductFound' => Tools::getValue('ch_no_prod_str'),
-    'p' => $page,
-    'products' => $res,
+    'p'              => $page,
+    'products'       => $res,
 );
 
 $smarty->assign($template_vars);
