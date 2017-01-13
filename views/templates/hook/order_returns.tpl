@@ -73,7 +73,7 @@
         <tbody>
         {if empty($returns)}
         <tr id="removeRow">
-            <td class="center" colspan="6">
+            <td class="center" colspan="7">
                 <img src="{$_path|escape:'htmlall':'UTF-8'}views/img/loading-small.gif" alt="" />   Aucun!
             </td>
         </tr>

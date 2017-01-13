@@ -24,48 +24,48 @@
 *}
 
 {if $products === false || sizeof($products) === 0}
-
-	<tr>
-		<td colspan="3" class="center">{$noProductFound|escape:'htmlall':'UTF-8'}</td>
-	</tr>
-
+    <tr>
+        <td colspan="10" class="center">{$noProductFound|escape:'htmlall':'UTF-8'}</td>
+    </tr>
 {else}
 
     {if $nbProducts > $nbPerPage}
         <div id="products-pagination" style="display:none">
-            <p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(floor($nbProducts / $nbPerPage)|round:"0") mod='ebay'}</p>
+            {math equation="ceil(x/y)" x=$nbProducts y=$nbPerPage assign=nb_pages_product}
+            <p id="textPagination">
+                {l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=$nb_pages_product mod='ebay'}
+            </p>
             <ul id="pagination" class="pagination">
-                <li class="prev"><</li>
-                {math equation="floor(x/$nbPerPage)" x=$nbProducts assign=nb_pages} 
-                {for $i=1 to ($nb_pages)}
+                <li class="prev">&lt;</li>
+                {for $i=1 to $nb_pages_product}
                     <li{if $i == $p} class="current"{/if}>{$i|escape:'htmlall':'UTF-8'}</li>
                 {/for}
-                <li class="next">></li>
+                <li class="next">&gt;</li>
             </ul>
         </div>
     {/if}
 
-	{foreach from=$products key=k  item=p}
-
-		<tr{if $k % 2 !== 0} class="alt_row"{/if} id="product-{$p.id_product|escape:'htmlall':'UTF-8'}">
+    {foreach from=$products key=k  item=p}
+        <tr{if $k % 2 !== 0} class="alt_row"{/if} id="product-{$p.id_product|escape:'htmlall':'UTF-8'}">
 
             <td>
                 {if $p.hasAttributes}
                     <a id="show-vars-{$p.id_product|escape:'htmlall':'UTF-8'}"
-                        class="show-vars"
-                        product-name="{$p.name|escape:'htmlall':'UTF-8'}"
-                        multi-sku="{if $p.EbayCategoryIsMultiSku}1{else}0{/if}"
-                        sync="{if $p.sync}1{else}0{/if}"
-                        blacklisted="{if $p.blacklisted}1{else}0{/if}"
-                     href="javascript:showVariations({$p.id_product|escape:'htmlall':'UTF-8'})">&#9654;</a>
-                     <a href="{$p.link|escape:'htmlall':'UTF-8'}" target="_blank">{$p.id_product|intval}</a>
-                {else}<span class="left-padded-name"><a href="{$p.link}" target="_blank">{$p.id_product|intval}</a></span>{/if}
+                       class="show-vars"
+                       product-name="{$p.name|escape:'htmlall':'UTF-8'}"
+                       multi-sku="{if $p.EbayCategoryIsMultiSku}1{else}0{/if}"
+                       sync="{if $p.sync}1{else}0{/if}"
+                       blacklisted="{if $p.blacklisted}1{else}0{/if}"
+                       href="javascript:showVariations({$p.id_product|escape:'htmlall':'UTF-8'})">&#9654;</a>
+                    <a href="{$p.link|escape:'htmlall':'UTF-8'}" target="_blank">{$p.id_product|intval}</a>
+                {else}<span class="left-padded-name"><a href="{$p.link}" target="_blank">{$p.id_product|intval}</a>
+                    </span>{/if}
             </td>
 
-			<td>{$p.name|escape:'htmlall':'UTF-8'}</td>
+            <td>{$p.name|escape:'htmlall':'UTF-8'}</td>
 
             <td class="center{if !$p.stock} red{/if}">{$p.stock|escape:'htmlall':'UTF-8'}</td>
-            
+
             <td>{$p.category_full_name|escape:'htmlall':'UTF-8'}</td>
 
             {if $p.id_category_ref}
@@ -73,11 +73,13 @@
             {else}
                 <td class="center">-</td>
             {/if}
-            
-            <td class="center">{if $p.sync}{l s='Yes' mod='ebay'}{else}<span class="red">{l s='No' mod='ebay'}</span>{/if}</td>
 
-            <td class="center">{if $p.id_category_ref && !$p.blacklisted}{l s='Yes' mod='ebay'}{else}<span class="red">{l s='No' mod='ebay'}</span>{/if}</td>
-            
+            <td class="center">{if $p.sync}{l s='Yes' mod='ebay'}{else}<span
+                        class="red">{l s='No' mod='ebay'}</span>{/if}</td>
+
+            <td class="center">{if $p.id_category_ref && !$p.blacklisted}{l s='Yes' mod='ebay'}{else}<span
+                        class="red">{l s='No' mod='ebay'}</span>{/if}</td>
+
             <td>{if $p.active == 1}{l s='No' mod='ebay'}{else}<span class="red">{l s='Yes' mod='ebay'}</span>{/if}</td>
 
             <td>
@@ -86,12 +88,13 @@
                 {elseif $p.id_category_ref && !$p.EbayCategoryIsMultiSku && $p.hasAttributes && $p.EbayProductRef}
                     {l s='Several ads' mod='ebay'}
                 {elseif !$p.id_category_ref || !$p.EbayProductRef}
-                    {l s='No listing yet' mod='ebay'}                  
+                    {l s='No listing yet' mod='ebay'}
                 {else}
-                    <a href="{if $p.EbayProductRef}{$p.link|escape:'htmlall':'UTF-8'}{/if}" target="_blank">{l s='Access to listing' mod='ebay'}</a>
+                    <a href="{if $p.EbayProductRef}{$p.link|escape:'htmlall':'UTF-8'}{/if}"
+                       target="_blank">{l s='Access to listing' mod='ebay'}</a>
                 {/if}
             </td>
-            
+
             <td>
                 {if !$p.stock && $p.sync && !$p.blacklisted}
                     {l s='Empty stock' mod='ebay'}
@@ -100,7 +103,7 @@
                 {elseif $p.stock && $p.id_category_ref && !$p.sync && !$p.blacklisted}
                     {l s='Product default category has not been synchronised in \'Synchronisation > 1. List products\' tab' mod='ebay'}
                 {elseif $p.stock && $p.sync && $p.blacklisted}
-                   {l s='Product has been unselected from tab \'Parameters > 2. Categories and pricing\'' mod='ebay'}
+                    {l s='Product has been unselected from tab \'Parameters > 2. Categories and pricing\'' mod='ebay'}
                 {elseif $p.stock && $p.sync && !$p.blacklisted && !$p.EbayProductRef}
                     {l s='Category is not synchronised, or an issue occured during synchronisation of this product' mod='ebay'}
                 {elseif $p.id_category_ref && !$p.EbayCategoryIsMultiSku && $p.hasAttributes && $p.EbayProductRef}                        {l s='eBay category is not multi sku' mod='ebay'}
@@ -108,7 +111,6 @@
                     {l s='More than one reason' mod='ebay'}
                 {/if}
             </td>
-            
-	{/foreach}
-
+        </tr>
+    {/foreach}
 {/if}

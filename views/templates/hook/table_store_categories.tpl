@@ -25,7 +25,7 @@
 
 {if $categoryList === false || sizeof($categoryList) === 0}
 	<tr>
-		<td colspan="3" class="center">{$noCatFound|escape:'htmlall':'UTF-8'}</td>
+		<td colspan="2" class="center">{$noCatFound|escape:'htmlall':'UTF-8'}</td>
 	</tr>
 {else}
 	{foreach from=$categoryList key=k  item=c}

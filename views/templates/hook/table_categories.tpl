@@ -24,7 +24,7 @@
 *}
 {if $categoryList === false || $categoryList|count === 0}
 	<tr>
-		<td colspan="3" class="center">{$noCatFound|escape:'htmlall':'UTF-8'}</td>
+		<td colspan="7" class="center">{$noCatFound|escape:'htmlall':'UTF-8'}</td>
 	</tr>
 {else}
     {if $nbCategories > 20}

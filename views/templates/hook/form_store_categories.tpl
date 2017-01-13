@@ -39,9 +39,12 @@
             <p>
                 <b><a href="http://cgi6.sandbox.ebay.fr/ws/eBayISAPI.dll?StoreCategoryMgmt"
                       target="_blank">{l s='you don’t have any category in your shop, please refer to this page to create categories' mod='ebay'}</a><a
-                            class="kb-help" data-errorcode="{$help.code_store_category|escape:'htmlall':'UTF-8'}" data-module="ebay"
-                            data-lang="{$help.lang|escape:'htmlall':'UTF-8'}" module_version="{$help.module_version|escape:'htmlall':'UTF-8'}"
-                            prestashop_version="{$help.ps_version|escape:'htmlall':'UTF-8'}" href="" target="_blank"></a></b>
+                            class="kb-help" data-errorcode="{$help.code_store_category|escape:'htmlall':'UTF-8'}"
+                            data-module="ebay"
+                            data-lang="{$help.lang|escape:'htmlall':'UTF-8'}"
+                            module_version="{$help.module_version|escape:'htmlall':'UTF-8'}"
+                            prestashop_version="{$help.ps_version|escape:'htmlall':'UTF-8'}" href=""
+                            target="_blank"></a></b>
             </p>
         {/if}
     {else}
@@ -57,16 +60,16 @@
 </div>
 <br/>
 {if $nb_categorie > 0}
-    {assign var="nbcat" value=($nb_categorie / 20)|round:"0"}
-    {if $nbcat > 1}
-        <p id="textStoresPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=$nbcat mod='ebay'}</p>
+    {math equation="ceil(x/20)" x=$nb_categorie assign=nb_pages}
+    {if $nb_pages > 1}
+        <p id="textStoresPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=$nb_pages mod='ebay'}
+        </p>
         <ul id="stores_pagination" class="pagination">
-            <li class="prev"><</li>
-            {math equation="floor(x/20)" x=$nb_categorie assign=nb_pages}
-            {for $i=1 to ($nb_pages +1)}
-                <li{if $i == 0} class="current"{/if}>{$i|escape:'htmlall':'UTF-8'}</li>
+            <li class="prev">&lt;</li>
+            {for $i=1 to $nb_pages}
+                <li{if $i == 1} class="current"{/if}>{$i|escape:'htmlall':'UTF-8'}</li>
             {/for}
-            <li class="next">></li>
+            <li class="next">&gt;</li>
         </ul>
     {/if}
 {/if}
@@ -121,9 +124,9 @@
         var id_ebay_profile = '{$id_ebay_profile|escape:'htmlall':'UTF-8'}';
         var id_shop = '{$id_shop|escape:'htmlall':'UTF-8'}';
         var store_categories_ebay_l = {ldelim}
-            'No category found': "{l s='No category found' mod='ebay'}",
+            'No category found'    : "{l s='No category found' mod='ebay'}",
             'You are not logged in': "{l s='You are not logged in' mod='ebay'}",
-            'Settings updated': "{l s='Settings updated' mod='ebay'}",
+            'Settings updated'     : "{l s='Settings updated' mod='ebay'}",
             {rdelim};
     </script>
     <script type="text/javascript"

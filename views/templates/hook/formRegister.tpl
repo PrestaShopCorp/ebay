@@ -133,7 +133,7 @@
                             </td>
                         </tr>
                         <tr class="margin-bottom">
-                            <td colspan="3">
+                            <td colspan="2">
                                 <div class="txt-right">{l s='Please use an eBay identifier, not your email address.' mod='ebay'}</div>
                             </td>
                         </tr>

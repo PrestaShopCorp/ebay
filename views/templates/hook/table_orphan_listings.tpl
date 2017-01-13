@@ -26,7 +26,7 @@
 {if $ads === false || sizeof($ads) === 0}
 
 	<tr>
-		<td colspan="3" class="center">{l s='No orphan listing' mod='ebay'}</td>
+		<td colspan="10" class="center">{l s='No orphan listing' mod='ebay'}</td>
 	</tr>
 
 {else}

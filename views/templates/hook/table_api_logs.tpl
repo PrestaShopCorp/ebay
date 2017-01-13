@@ -26,7 +26,7 @@
 {if $logs === false || sizeof($logs) === 0}
 
 	<tr>
-		<td colspan="3" class="center">{$noLogFound|escape:'htmlall':'UTF-8'}</td>
+		<td colspan="9" class="center">{$noLogFound|escape:'htmlall':'UTF-8'}</td>
 	</tr>
 
 {else}
