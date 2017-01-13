@@ -1526,7 +1526,6 @@ class EbayRequest
         # update OutOfStockControlPreference if it change
         $out_of_stock = ($response->OutOfStockControlPreference == 'true') ? true : false;
         if ($out_of_stock != (bool)EbayConfiguration::get($this->ebay_profile->id, 'EBAY_OUT_OF_STOCK')) {
-            Ebay::debug('on met à jour EBAY_OUT_OF_STOCK');
             EbayConfiguration::set($this->ebay_profile->id, 'EBAY_OUT_OF_STOCK', $out_of_stock);
         }
 

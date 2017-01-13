@@ -24,6 +24,8 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
+include_once('EbayConfiguration.php');
+
 class EbaySynchronizer
 {
     /** @var $ebay_categories EbayCategory[] */
@@ -1039,9 +1041,13 @@ class EbaySynchronizer
                         ON p.id_product = ps.id_product
                         AND ps.id_shop = '.(int)$ebay_profile->id_shop;
             }
-
-            $sql .= ' WHERE s.`quantity` > 0
-                    AND  ps.`id_category_default`
+            if (EbayConfiguration::get($ebay_profile->id, 'EBAY_OUT_OF_STOCK')) {
+                $sql .= ' WHERE ';
+            } else {
+                $sql .= ' WHERE s.`quantity` > 0
+                AND ';
+            }
+            $sql .= ' ps.`id_category_default`
                     IN (
                         SELECT  `id_category`
                         FROM  `'._DB_PREFIX_.'ebay_category_configuration`
@@ -1066,8 +1072,13 @@ class EbaySynchronizer
                 AND ps.id_shop = '.(int)$ebay_profile->id_shop;
             }
 
-            $sql .= ' WHERE p.`quantity` > 0
-                AND p.`id_category_default` IN (
+            if (EbayConfiguration::get($ebay_profile->id, 'EBAY_OUT_OF_STOCK')) {
+                $sql .= ' WHERE ';
+            } else {
+                $sql .= ' WHERE p.`quantity` > 0
+                AND ';
+            }
+            $sql .= ' p.`id_category_default` IN (
                     SELECT `id_category`
                     FROM `'._DB_PREFIX_.'ebay_category_configuration`
                     WHERE `id_category` > 0
@@ -1099,8 +1110,14 @@ class EbaySynchronizer
                 INNER JOIN  `'._DB_PREFIX_.'product_shop` AS ps
                 ON p.id_product = ps.id_product
                 AND ps.id_shop = '.(int)$ebay_profile->id_shop;
-            $sql .= ' WHERE s.`quantity` > 0
-                AND  ps.`id_category_default`
+
+            if (EbayConfiguration::get($ebay_profile->id, 'EBAY_OUT_OF_STOCK')) {
+                $sql .= ' WHERE ';
+            } else {
+                $sql .= ' WHERE s.`quantity` > 0
+                AND ';
+            }
+            $sql .= ' ps.`id_category_default`
                     IN (
                         SELECT  `id_category`
                         FROM  `'._DB_PREFIX_.'ebay_category_configuration`
@@ -1118,8 +1135,13 @@ class EbaySynchronizer
             $sql = '
                 SELECT `id_product`, '.(int)$ebay_profile->id.' AS `id_ebay_profile`
                 FROM `'._DB_PREFIX_.'product` AS p';
-            $sql .= ' WHERE p.`quantity` > 0
-                AND p.`id_category_default` IN (
+            if (EbayConfiguration::get($ebay_profile->id, 'EBAY_OUT_OF_STOCK')) {
+                $sql .= ' WHERE ';
+            } else {
+                $sql .= ' WHERE p.`quantity` > 0
+                AND ';
+            }
+            $sql .= ' p.`id_category_default` IN (
                     SELECT `id_category`
                     FROM `'._DB_PREFIX_.'ebay_category_configuration`
                     WHERE `id_category` > 0
@@ -1158,9 +1180,13 @@ class EbaySynchronizer
                         AND ps.id_shop = '.(int)$ebay_profile->id_shop;
             }
 
-            $sql .= '
-                        WHERE s.`quantity` >0
-                        AND  p.`active` =1
+            if (EbayConfiguration::get($ebay_profile->id, 'EBAY_OUT_OF_STOCK')) {
+                $sql .= ' WHERE ';
+            } else {
+                $sql .= ' WHERE s.`quantity` > 0
+                AND ';
+            }
+            $sql .= '   p.`active` =1
                         AND  ps.`id_category_default`
                         IN (
                             SELECT  `id_category`
@@ -1187,9 +1213,13 @@ class EbaySynchronizer
                     AND ps.id_shop = '.(int)$ebay_profile->id_shop;
             }
 
-            $sql .= '
-                WHERE p.`quantity` > 0
-                AND p.`active` = 1
+            if (EbayConfiguration::get($ebay_profile->id, 'EBAY_OUT_OF_STOCK')) {
+                $sql .= ' WHERE ';
+            } else {
+                $sql .= ' WHERE p.`quantity` > 0
+                AND ';
+            }
+            $sql .= ' p.`active` = 1
                 AND p.`id_category_default` IN (
                     SELECT `id_category`
                     FROM `'._DB_PREFIX_.'ebay_category_configuration`
@@ -1518,8 +1548,13 @@ class EbaySynchronizer
                     ON p.id_product = ps.id_product
                     AND ps.id_shop = '.(int)$ebay_profile->id_shop;
             }
-            $sql .= ' WHERE s.`quantity` > 0
-                AND p.`active` = 1
+            if (EbayConfiguration::get($ebay_profile->id, 'EBAY_OUT_OF_STOCK')) {
+                $sql .= ' WHERE ';
+            } else {
+                $sql .= ' WHERE s.`quantity` > 0
+                AND ';
+            }
+            $sql .= ' p.`active` = 1
                 AND ps.`id_category_default` IN (
                     SELECT `id_category`
                     FROM `'._DB_PREFIX_.'ebay_category_configuration`
@@ -1539,8 +1574,13 @@ class EbaySynchronizer
                     ON p.id_product = ps.id_product
                     AND ps.id_shop = '.(int)$ebay_profile->id_shop;
             }
-            $sql .= ' WHERE p.`quantity` > 0
-                AND p.`active` = 1
+            if (EbayConfiguration::get($ebay_profile->id, 'EBAY_OUT_OF_STOCK')) {
+                $sql .= ' WHERE ';
+            } else {
+                $sql .= ' WHERE p.`quantity` > 0
+                AND ';
+            }
+            $sql .= ' p.`active` = 1
                 AND p.`id_category_default` IN (
                     SELECT `id_category`
                     FROM `'._DB_PREFIX_.'ebay_category_configuration`
