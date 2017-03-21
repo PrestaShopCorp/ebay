@@ -97,6 +97,18 @@ class EbayProfile extends ObjectModel
         return parent::__construct($id, $id_lang, $id_shop);
     }
 
+    public static function getEbayProfileByUserSite($ebay_user, $site_name, $id_shop)
+    {
+        $site_id = EbayCountrySpec::getSiteIdBySiteName($site_name);
+        $sql = 'SELECT `id_ebay_profile` FROM `' . _DB_PREFIX_ . 'ebay_profile` WHERE `ebay_user_identifier` = "' . pSQL($ebay_user) . '" AND `ebay_site_id` = ' . (int)$site_id . ' AND `id_shop` = ' . (int)$id_shop . ';';
+        $result = Db::getInstance()->getRow($sql);
+        if ($result && isset($result['id_ebay_profile'])) {
+            return $result['id_ebay_profile'];
+        }
+
+        return false;
+    }
+
     public function getReturnsPolicyConfiguration()
     {
 

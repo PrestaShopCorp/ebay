@@ -42,12 +42,14 @@ class EbayOrder
     private $country_name;
     private $phone;
     private $postalcode;
-    public $shippingService;
+    public  $shippingService;
     private $shippingServiceCost;
     private $email;
     private $product_list;
     private $payment_method;
     private $id_order_seller;
+    public  $ebay_user;
+    public  $site;
     private $date_add;
     private $id_currency;
     private $id_transaction;
@@ -88,6 +90,8 @@ class EbayOrder
         $this->shippingServiceCost = (string) $order_xml->ShippingServiceSelected->ShippingServiceCost;
         $this->payment_method = (string) $order_xml->CheckoutStatus->PaymentMethod;
         $this->id_order_seller = (string) $order_xml->ShippingDetails->SellingManagerSalesRecordNumber;
+        $this->ebay_user = (string) $order_xml->MonetaryDetails->Payments->Payment[0]->Payee;
+        $this->site = (string) $order_xml->TransactionArray->Transaction[0]->Item->Site;
 
         $amount_paid_attr = $order_xml->AmountPaid->attributes();
         $this->id_currency = Currency::getIdByIsoCode($amount_paid_attr['currencyID']);

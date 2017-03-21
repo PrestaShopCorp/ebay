@@ -1047,12 +1047,8 @@ class Ebay extends Module
             }
 
             foreach ($id_shops as $id_shop) {
-                if ($this->is_multishop) {
-                    $id_ebay_profile = (int) $shops_data[$id_shop]['id_ebay_profiles'][0];
-                    $ebay_profile = new EbayProfile($id_ebay_profile);
-                } else {
-                    $ebay_profile = EbayProfile::getCurrent();
-                }
+                $id_ebay_profile = EbayProfile::getEbayProfileByUserSite($order->ebay_user, $order->site, $id_shop);
+                $ebay_profile = new EbayProfile($id_ebay_profile);
 
                 if (!$has_shared_customers) {
                     $id_customer = $order->getOrAddCustomer($ebay_profile);

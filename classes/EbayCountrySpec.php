@@ -574,6 +574,21 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
         return null;
     }
 
+    public static function getSiteIdBySiteName($site_name = '')
+    {
+        if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
+            self::$country_data=array_merge(self::$country_data, self::$cuntry_block);
+        }
+
+        foreach (self::$country_data as $country) {
+            if ($country['site_name'] == $site_name) {
+                return $country['site_id'];
+            }
+        }
+
+        return null;
+    }
+
     public static function getSiteExtensionBySiteId($site_id = false)
     {
         if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
