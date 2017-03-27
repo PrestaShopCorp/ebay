@@ -137,7 +137,7 @@ if ($search) {
 
 //$query .= ' GROUP BY s.`id_product`';
 
-$queryCount = preg_replace('/SELECT ([a-zA-Z.,` ]+) FROM /', 'SELECT COUNT(*) FROM ', $query);
+$queryCount = preg_replace('/SELECT ([a-zA-Z.,`\s_]+) FROM /', 'SELECT COUNT(*) FROM ', $query);
 $nbProducts = Db::getInstance()->getValue($queryCount);
 
 $res = Db::getInstance()->executeS($query.' ORDER BY p.`id_product` ASC LIMIT '.$offset.', '.$limit);
