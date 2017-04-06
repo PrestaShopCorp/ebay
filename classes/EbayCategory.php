@@ -32,6 +32,7 @@ class EbayCategory
     private $is_multi_sku;
 
     private $ebay_profile;
+    private $id_ebay_category_configuration;
 
     private $percent;
 
@@ -52,21 +53,30 @@ class EbayCategory
             $this->id_category = (int)$id_category;
         }
 
+        $this->_loadFromDb();
     }
 
     private function _loadFromDb()
     {
-        $sql = 'SELECT ecc.`id_category`, ec.`id_category_ref`, ec.`is_multi_sku`, ecc.`percent` FROM `'._DB_PREFIX_.'ebay_category` ec
-			LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
+        if ($this->id_ebay_category_configuration) {
+            $sql = 'SELECT ecc.`id_ebay_category_configuration`, ecc.`id_category`, ec.`id_category_ref`, ec.`is_multi_sku`, ecc.`percent` FROM `' . _DB_PREFIX_ . 'ebay_category` ec
+			LEFT JOIN `' . _DB_PREFIX_ . 'ebay_category_configuration` ecc
 			ON (ecc.`id_ebay_category` = ec.`id_ebay_category`)
-			AND ecc.`id_ebay_profile` = '.(int)$this->ebay_profile->id.'
-			WHERE ec.`id_country` = '.(int)$this->id_country.' AND ';
-
-        if ($this->id_category_ref) {
-            $sql .= 'ec.`id_category_ref` = '.(int)$this->id_category_ref;
+			WHERE ecc.`id_ebay_category_configuration` = ' . (int)$this->id_ebay_category_configuration;
         } else {
-            $sql .= 'ecc.`id_category` = '.(int)$this->id_category;
+            $sql = 'SELECT ecc.`id_ebay_category_configuration`, ecc.`id_category`, ec.`id_category_ref`, ec.`is_multi_sku`, ecc.`percent` FROM `' . _DB_PREFIX_ . 'ebay_category` ec
+			LEFT JOIN `' . _DB_PREFIX_ . 'ebay_category_configuration` ecc
+			ON (ecc.`id_ebay_category` = ec.`id_ebay_category`)
+			AND ecc.`id_ebay_profile` = ' . (int)$this->ebay_profile->id . '
+			WHERE ec.`id_country` = ' . (int)$this->id_country . ' AND ';
+
+            if ($this->id_category) {
+                $sql .= 'ecc.`id_category` = ' . (int)$this->id_category;
+            } else {
+                $sql .= 'ec.`id_category_ref` = ' . (int)$this->id_category_ref;
+            }
         }
+
 
         $res = Db::getInstance()->getRow($sql);
         if ($res) {
@@ -74,7 +84,6 @@ class EbayCategory
                 $this->$attribute = $value;
             }
         }
-
     }
 
     public function getIdCategoryRef()
