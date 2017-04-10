@@ -34,6 +34,7 @@ class EbaySynchronizeProductsTask extends Ebay
     public function __construct()
     {
         parent::__construct();
+        set_time_limit(3600);
         $this->cronProductsSync();
     }
 }

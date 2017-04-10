@@ -28,7 +28,7 @@ require_once dirname(__FILE__).'/EbayRequest.php';
 
 class EbayProductImage
 {
-    public static function getEbayUrl($ps_url, $ebay_image_name)
+    public static function getEbayUrl($ps_url, $ebay_image_name, $conditions = array())
     {
         $db = Db::getInstance();
 
@@ -55,7 +55,6 @@ class EbayProductImage
                     $db->autoExecute(_DB_PREFIX_.'ebay_product_image', $data, 'INSERT');
                 }
             }
-
         }
 
         return $ebay_url;

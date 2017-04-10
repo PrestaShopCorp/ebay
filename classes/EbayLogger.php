@@ -26,11 +26,11 @@
 
 class EbayLogger
 {
-    const DEBUG = 0;
-    const INFO = 2;
+    const DEBUG   = 0;
+    const INFO    = 2;
     const WARNING = 5;
-    const ERROR = 6;
-    const FATAL = 9;
+    const ERROR   = 6;
+    const FATAL   = 9;
 
     private static $loggers = array();
 
@@ -44,14 +44,14 @@ class EbayLogger
 
     public function __construct($level = 'INFO', $context = null, $uid = '')
     {
-        $this->level = self::$severity[Tools::strtoupper($level)];
-        $this->uid = uniqid($prefix = (string)$uid, true);
+        $this->level   = self::$severity[Tools::strtoupper($level)];
+        $this->uid     = uniqid($prefix = (string)$uid, true);
         $this->context = $context;
     }
 
     public static function install()
     {
-        $sql=array();
+        $sql = array();
         // Create ebay_logs Table in Database
         $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_logs` (
             `id_ebay_logs` INT(16) NOT NULL AUTO_INCREMENT,
@@ -86,10 +86,10 @@ class EbayLogger
     public static function getLogs($uid = null, $keyword = null, $limit = 200)
     {
         $levels = array_flip(self::$severity);
-        $sql = '
+        $sql    = '
 			SELECT * FROM '._DB_PREFIX_.'ebay_logs
 		';
-        $where = array();
+        $where  = array();
         if ($keyword) {
             $where[] = ' message LIKE "%'.$keyword.'%" OR context LIKE "%'.$keyword.'%"';
         }
@@ -121,7 +121,6 @@ class EbayLogger
 
     public static function export($uid = null)
     {
-
         $logs = self::getLogs($uid);
 
         $csvcontent = fopen('php://output', 'w');
@@ -140,9 +139,9 @@ class EbayLogger
 
         $currentIndex = 'index.php?controller=AdminModules&configure=ebay&&token='.Tools::getAdminTokenLite('AdminModules');
 
-        $action = Tools::getValue('logs');
+        $action  = Tools::getValue('logs');
         $keyword = Tools::getValue('keyword');
-        $uid = Tools::getValue('uid');
+        $uid     = Tools::getValue('uid');
 
         if ($action == 'CLEAR') {
             self::clear();
@@ -190,7 +189,7 @@ class EbayLogger
 			),
         */
 
-        $fields_list = array(
+        $fields_list           = array(
 
             'datetime' => array(
                 'title' => 'Datetime',
@@ -220,15 +219,15 @@ class EbayLogger
                 'type'  => 'hidden',
             ),
         );
-        $helper = new HelperList();
-        $helper->shopLinkType = '';
+        $helper                = new HelperList();
+        $helper->shopLinkType  = '';
         $helper->simple_header = true;
-        $helper->actions = array('view');
-        $helper->identifier = 'uid';
-        $helper->show_toolbar = true;
-        $helper->title = 'logs ebay';
-        $helper->table = '_ebay_logs';
-        $helper->token = Tools::getAdminTokenLite('AdminModules');
+        $helper->actions       = array('view');
+        $helper->identifier    = 'uid';
+        $helper->show_toolbar  = true;
+        $helper->title         = 'logs ebay';
+        $helper->table         = '_ebay_logs';
+        $helper->token         = Tools::getAdminTokenLite('AdminModules');
 
 
         //$currentIndex = AdminController::$currentIndex.'&configure='.$this->name.'&totlookbook_edit='.Tools::getValue('totlookbook_edit', 'global');
@@ -242,7 +241,6 @@ class EbayLogger
 
     public static function test()
     {
-
         $logger1 = new EbayLogger('DEBUG');
         $logger2 = new EbayLogger('INFO');
         $logger3 = new EbayLogger('WARNING');
@@ -250,7 +248,7 @@ class EbayLogger
             'user'       => 'testuser',
             'shop'       => 'shop',
             'operation'  => 'sync product',
-            'id_product' => 123
+            'id_product' => 123,
         ));
 
         $logger1->debug('logger1 debug');
@@ -284,9 +282,7 @@ class EbayLogger
 
         $log = EbayLogger::get(); // doit etre la même instance (si !name on prend la derniere instance créée (curent instance))
         $log->info('test MYLOGGER');
-
     }
-
 
     private function log($severity, $msg, $context = null, $backtrace = null)
     {
@@ -309,9 +305,8 @@ class EbayLogger
                     )
                 );
             } else {
-
                 $sql = 'INSERT INTO '._DB_PREFIX_.'ebay_logs(`uid`, `datetime`, `severity`, `code`, `message`, `context`, `backtrace`)
-			VALUES(\''.(int) $this->uid.'\', \''.$datetime.'\', \''.(int)$severity.'\', \'0\', \''.pSQL($msg).'\',
+			VALUES(\''.(int)$this->uid.'\', \''.$datetime.'\', \''.(int)$severity.'\', \'0\', \''.pSQL($msg).'\',
 			 \''.pSQL($ctx ? Tools::jsonEncode($ctx) : null).'\', \''.pSQL($backtrace).'\')';
 
                 DB::getInstance()->Execute($sql);

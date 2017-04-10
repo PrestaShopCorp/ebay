@@ -33,7 +33,6 @@ class TotFormat
         } else {
             return $pattern;
         }
-
     }
 
     /**
@@ -158,6 +157,7 @@ class TotFormat
             } elseif (!$in_quotes) {
                 switch ($char) {
                     case '}':
+                        // no break
                     case ']':
                         $level--;
                         $ends_line_level = null;
@@ -165,8 +165,10 @@ class TotFormat
                         break;
 
                     case '{':
+                        // no break
                     case '[':
                         $level++;
+                    // no break
                     case ',':
                         $ends_line_level = $level;
                         break;
@@ -176,8 +178,11 @@ class TotFormat
                         break;
 
                     case " ":
+                        // no break
                     case "\t":
+                    // no break
                     case "\n":
+                    // no break
                     case "\r":
                         $char = "";
                         $ends_line_level = $new_line_level;

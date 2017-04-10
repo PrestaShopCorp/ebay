@@ -42,7 +42,6 @@ class EbayProductTemplate extends ObjectModel
         ));
 
         return $ebay->display(dirname(__FILE__).'/../ebay.php', 'ebay/ebay.tpl');
-
     }
 
     /**

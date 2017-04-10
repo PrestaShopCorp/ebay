@@ -72,6 +72,8 @@ class EbayStat
             'is_cloud' => defined('_PS_HOST_MODE_') ? true : false,
             'module_version' => $ebay->version,
             'ps_country' => Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')),
+            'business_policies' => EbayConfiguration::get($ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
+            'OutOfStock' => EbayConfiguration::get($ebay_profile->id, 'EBAY_OUT_OF_STOCK'),
         );
         $this->date_add = date('Y-m-d H:i:s');
     }
@@ -84,7 +86,6 @@ class EbayStat
         } else {
             return __PS_BASE_URI__;
         }
-
     }
 
     public function save()

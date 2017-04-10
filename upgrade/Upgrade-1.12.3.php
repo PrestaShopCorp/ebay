@@ -50,7 +50,7 @@ function upgrade_module_1_12_3($module)
 
 function sql_1_12_3()
 {
-    $sql = array();
+    $sql   = array();
     $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_specific` ADD `is_reference` tinyint(1) NULL';
     $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_specific` ADD `is_ean` tinyint(1) NULL';
     $sql[] = 'ALTER TABLE `'._DB_PREFIX_.'ebay_category_specific` ADD `is_upc` tinyint(1) NULL';

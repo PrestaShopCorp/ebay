@@ -167,7 +167,6 @@ class EbayFormEbaySyncTab extends EbayTab
             } else {
                 $alert = $this->ebay->l('You have chosen eBay categories : ', 'ebayformebaysynctab').' "'.$var.'" '.$this->ebay->l(' which do not support multivariation products. Each variation of a product will generate a new product in eBay', 'ebayformebaysynctab');
             }
-
         }
 
         return $alert;

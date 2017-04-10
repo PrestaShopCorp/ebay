@@ -286,7 +286,6 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
         } else {
             $this->country = $this->_getCountry();
         }
-
     }
 
     public function getTitleDescUrl()
@@ -356,7 +355,6 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
         } else {
             return $this->_getCountryData('signin_sandbox');
         }
-
     }
 
     public function getImgStats()
@@ -415,7 +413,6 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
         } else {
             return null;
         }
-
     }
 
     /**
@@ -427,7 +424,6 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
     {
         if (Configuration::get('EBAY_COUNTRY_OK')== true && !array_key_exists('it', self::$country_data)) {
             $this->accepted_isos = array_merge($this->accepted_isos, $this->accepted_isos_block);
-
         }
         if (in_array(Tools::strtolower($this->country->iso_code), $this->accepted_isos)) {
             return true;
@@ -524,7 +520,6 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
         } else {
             return self::getInstanceByKey('gb');
         }
-
     }
 
     /**
@@ -536,7 +531,6 @@ http://pages.ebay.pl/help/search/questions/search-completed-listings.html',
         if (is_bool($dev)) {
             $this->dev = $dev;
         }
-
     }
 
     /**

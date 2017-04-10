@@ -26,7 +26,6 @@
 
 class EbayKb extends ObjectModel
 {
-
     public $error_code;
     public $ps_version;
     public $language;
@@ -127,18 +126,17 @@ class EbayKb extends ObjectModel
         foreach ($sql as $q) {
             Db::getInstance()->Execute($q);
         }
-
     }
 
     public static function uninstall()
     {
+        $sql= array();
         // Create Category Table in Database
         $sql[] = 'DROP TABLE IF EXISTS `'._DB_PREFIX_.self::$definition['table'].'`';
 
         foreach ($sql as $q) {
             Db::getInstance()->Execute($q);
         }
-
     }
 
     public function call()
@@ -151,11 +149,9 @@ class EbayKb extends ObjectModel
             } else {
                 return false;
             }
-
         } else {
             return false;
         }
-
     }
 
     public function build()
@@ -201,7 +197,6 @@ class EbayKb extends ObjectModel
                     } else {
                         return $this->link;
                     }
-
                 }
                 return false;
             } else {
@@ -210,7 +205,6 @@ class EbayKb extends ObjectModel
                 } else {
                     return $this->link;
                 }
-
             }
         } else {
             if ($this->call()) {
@@ -219,7 +213,6 @@ class EbayKb extends ObjectModel
                 } else {
                     return $this->link;
                 }
-
             }
             return false;
         }

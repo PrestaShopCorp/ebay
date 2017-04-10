@@ -89,7 +89,6 @@ class EbayCategorySpecific
                         } else {
                             $selection_mode = EbayCategorySpecific::SELECTION_MODE_FREE_TEXT;
                         }
-
                     } else {
                         $selection_mode = EbayCategorySpecific::SELECTION_MODE_FREE_TEXT;
                     }
@@ -132,7 +131,6 @@ class EbayCategorySpecific
                     EbayCategorySpecificValue::insertIgnore($insert_data);
                 }
             }
-
         }
 
         return true;
@@ -145,7 +143,6 @@ class EbayCategorySpecific
             if (EbayCategorySpecific::isConfigured($item)) {
                 return true;
             }
-
         }
 
         return false;
@@ -158,7 +155,6 @@ class EbayCategorySpecific
             if (!EbayCategorySpecific::isConfigured($item)) {
                 return false;
             }
-
         }
 
         return true;

@@ -44,6 +44,11 @@ class EbayFormStoreCategoryTab extends EbayTab
             }
         }
 
+        $root_category = Category::getRootCategory();
+        $categories = Category::getCategories($this->ebay_profile->id_lang);
+
+        $category_list = $this->ebay->getChildCategories($categories, $root_category->id_parent, array(), '');
+
         $template_vars = array(
             'configs' => $configs,
             '_path' => $this->path,
@@ -53,7 +58,7 @@ class EbayFormStoreCategoryTab extends EbayTab
             'tab_module' => Tools::getValue('tab_module'),
             'module_name' => Tools::getValue('module_name'),
             'tab' => Tools::getValue('tab'),
-            'nb_categorie' => count(Category::getCategories($this->context->cookie->id_lang, true, false)),
+            'nb_categorie' => count($category_list),
             'has_store_categories' => (count($store_categories['compatible']) > 1),
             'not_compatible_store_categories' => implode(', ', $not_compatible_names),
             'has_ebay_shop' => (bool) ($user_profile && $user_profile['StoreUrl']),
@@ -80,7 +85,6 @@ class EbayFormStoreCategoryTab extends EbayTab
                     EbayStoreCategoryConfiguration::update($this->ebay_profile->id, $ebay_category_id, $id_category);
                 }
             }
-
         }
 
         if (Tools::getValue('ajax')) {

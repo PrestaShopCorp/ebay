@@ -108,7 +108,6 @@ class EbayAlert
             $list = array('country' => '', 'order' => '');
 
             foreach ($countries as $key => $orders) {
-
                 $country = new Country(Country::getByIso($key), (int) Configuration::get('PS_LANG_DEFAULT'));
 
                 if ($country->active) {
@@ -120,7 +119,6 @@ class EbayAlert
                 foreach ($orders as $order) {
                     Tools::isEmpty($list['order']) ? ($list['order'] .= $order['id_order_seller']) : ($list['order'] .= ', '.$order['id_order_seller']);
                 }
-
             }
 
             $this->errors[] = array(
@@ -160,7 +158,6 @@ class EbayAlert
 
     public function formatEmail()
     {
-
         $templates_vars = array();
 
         $templates_vars['errors'] = (!empty($this->errors)) ? $this->errors : '';
@@ -210,7 +207,6 @@ class EbayAlert
                     'prestashop_version' => _PS_VERSION_,
                 ),
             );
-
         }
     }
 
@@ -250,14 +246,12 @@ class EbayAlert
                         'message' => $msg,
                     );
                 }
-
             } else {
                 $this->errors[] = array(
                     'type' => 'error',
                     'message' => $this->ebay->l('The product cron job has never been run.'),
                 );
             }
-
         }
 
         // ORDERS
@@ -283,14 +277,12 @@ class EbayAlert
                         'message' => $this->ebay->l('Last order synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
                     );
                 }
-
             } else {
                 $this->errors[] = array(
                     'type' => 'error',
                     'message' => $this->ebay->l('Order cron job has never been run.'),
                 );
             }
-
         }
 
         // Returns
@@ -316,15 +308,12 @@ class EbayAlert
                         'message' => $this->ebay->l('Last order returns synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
                     );
                 }
-
             } else {
                 $this->errors[] = array(
                     'type' => 'error',
                     'message' => $this->ebay->l('Order returns cron job has never been run.'),
                 );
             }
-
         }
-
     }
 }

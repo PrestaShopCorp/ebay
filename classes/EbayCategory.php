@@ -30,7 +30,6 @@ class EbayCategory
     private $id_category_ref; /* eBay Category id */
     private $id_country; /* eBay Site id. naming is not great */
     private $is_multi_sku;
-
     private $ebay_profile;
     private $id_ebay_category_configuration;
 
@@ -43,7 +42,7 @@ class EbayCategory
     {
         if ($ebay_profile) {
             $this->ebay_profile = $ebay_profile;
-            $this->id_country = (int)$ebay_profile->ebay_site_id;
+            $this->id_country   = (int)$ebay_profile->ebay_site_id;
         }
         if ($id_category_ref) {
             $this->id_category_ref = (int)$id_category_ref;
@@ -59,21 +58,21 @@ class EbayCategory
     private function _loadFromDb()
     {
         if ($this->id_ebay_category_configuration) {
-            $sql = 'SELECT ecc.`id_ebay_category_configuration`, ecc.`id_category`, ec.`id_category_ref`, ec.`is_multi_sku`, ecc.`percent` FROM `' . _DB_PREFIX_ . 'ebay_category` ec
-			LEFT JOIN `' . _DB_PREFIX_ . 'ebay_category_configuration` ecc
+            $sql = 'SELECT ecc.`id_ebay_category_configuration`, ecc.`id_category`, ec.`id_category_ref`, ec.`is_multi_sku`, ecc.`percent` FROM `'._DB_PREFIX_.'ebay_category` ec
+			LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
 			ON (ecc.`id_ebay_category` = ec.`id_ebay_category`)
-			WHERE ecc.`id_ebay_category_configuration` = ' . (int)$this->id_ebay_category_configuration;
+			WHERE ecc.`id_ebay_category_configuration` = '.(int)$this->id_ebay_category_configuration;
         } else {
-            $sql = 'SELECT ecc.`id_ebay_category_configuration`, ecc.`id_category`, ec.`id_category_ref`, ec.`is_multi_sku`, ecc.`percent` FROM `' . _DB_PREFIX_ . 'ebay_category` ec
-			LEFT JOIN `' . _DB_PREFIX_ . 'ebay_category_configuration` ecc
+            $sql = 'SELECT ecc.`id_ebay_category_configuration`, ecc.`id_category`, ec.`id_category_ref`, ec.`is_multi_sku`, ecc.`percent` FROM `'._DB_PREFIX_.'ebay_category` ec
+			LEFT JOIN `'._DB_PREFIX_.'ebay_category_configuration` ecc
 			ON (ecc.`id_ebay_category` = ec.`id_ebay_category`)
-			AND ecc.`id_ebay_profile` = ' . (int)$this->ebay_profile->id . '
-			WHERE ec.`id_country` = ' . (int)$this->id_country . ' AND ';
+			AND ecc.`id_ebay_profile` = '.(int)$this->ebay_profile->id.'
+			WHERE ec.`id_country` = '.(int)$this->id_country.' AND ';
 
             if ($this->id_category) {
-                $sql .= 'ecc.`id_category` = ' . (int)$this->id_category;
+                $sql .= 'ecc.`id_category` = '.(int)$this->id_category;
             } else {
-                $sql .= 'ec.`id_category_ref` = ' . (int)$this->id_category_ref;
+                $sql .= 'ec.`id_category_ref` = '.(int)$this->id_category_ref;
             }
         }
 
@@ -192,7 +191,6 @@ class EbayCategory
             } else {
                 $ret[$row['id']]['types'][] = $row['type'];
             }
-
         }
 
         return $ret;
@@ -250,7 +248,6 @@ class EbayCategory
                     'name'                   => pSQL($category['CategoryName']),
                 ), 'INSERT', '', 0)
                 ) {
-
                     $handle = fopen(dirname(__FILE__).'/../log/import_category_ebay.txt', 'a+');
                     fwrite($handle, print_r($category, true));
                     fwrite($handle, print_r($db->getMsgError(), true));
@@ -268,7 +265,6 @@ class EbayCategory
                     'name'                   => pSQL($category['CategoryName']),
                 ), 'INSERT', '', 0, true, true)
                 ) {
-
                     $handle = fopen(dirname(__FILE__).'/../log/import_category_ebay.txt', 'a+');
                     fwrite($handle, print_r($category, true));
                     fwrite($handle, print_r($db->getMsgError(), true));
@@ -284,7 +280,7 @@ class EbayCategory
 
     public static function updateCategoryTable($categories_multi_sku)
     {
-        $db = Db::getInstance();
+        $db         = Db::getInstance();
         $categories = $db->ExecuteS('SELECT * FROM '._DB_PREFIX_.'ebay_category');
 
         foreach ($categories as $category) {

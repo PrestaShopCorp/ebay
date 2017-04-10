@@ -47,12 +47,14 @@ class EbayFormAdvancedParametersTab extends EbayTab
             'url' => $url,
 
             // pictures
-            'sizes'               => ImageType::getImagesTypes('products'),
-            'sizedefault'         => $this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_DEFAULT'),
-            'sizebig'             => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_BIG'),
-            'sizesmall'           => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_SMALL'),
-            'picture_per_listing' => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING'),
-            'picture_skip_variations' => (bool)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SKIP_VARIATIONS'),
+            'sizes'                      => ImageType::getImagesTypes('products'),
+            'itemspecifics'              => AttributeGroup::getAttributesGroups(1),
+            'sizedefault'                => $this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_DEFAULT'),
+            'sizebig'                    => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_BIG'),
+            'sizesmall'                  => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SIZE_SMALL'),
+            'picture_per_listing'        => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_PER_LISTING'),
+            'picture_skip_variations'    => (bool)$this->ebay_profile->getConfiguration('EBAY_PICTURE_SKIP_VARIATIONS'),
+            'picture_charact_variations' => (int)$this->ebay_profile->getConfiguration('EBAY_PICTURE_CHARACT_VARIATIONS'),
 
             // logs
             'api_logs'                   => Configuration::get('EBAY_API_LOGS'),
@@ -62,17 +64,17 @@ class EbayFormAdvancedParametersTab extends EbayTab
             'logs_conservation_duration' => Configuration::get('EBAY_LOGS_DAYS'),
 
             // CRON sync
-            'sync_products_by_cron'      => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON'),
-            'sync_products_by_cron_url'  => $this->_getModuleUrl().'synchronizeProducts_CRON.php',
-            'sync_products_by_cron_path' => $this->_getModuleUrl().'synchronizeProducts_CRON.php',
-            'sync_orders_by_cron'        => Configuration::get('EBAY_SYNC_ORDERS_BY_CRON'),
-            'sync_orders_by_cron_url'    => $this->_getModuleUrl().'synchronizeOrders_CRON.php',
-            'sync_orders_by_cron_path'   => $this->_getModuleUrl().'synchronizeOrders_CRON.php',
-            'sync_orders_returns_by_cron'        => Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON'),
-            'sync_orders_returns_by_cron_url'    => $this->_getModuleUrl().'synchronizeOrdersReturns_CRON.php',
-            'sync_orders_returns_by_cron_path'   => $this->_getModuleUrl().'synchronizeOrdersReturns_CRON.php',
-            'activate_resynchBP'         => $this->ebay_profile->getConfiguration('EBAY_RESYNCHBP'),
-          
+            'sync_products_by_cron'            => Configuration::get('EBAY_SYNC_PRODUCTS_BY_CRON'),
+            'sync_products_by_cron_url'        => $this->_getModuleUrl().'synchronizeProducts_CRON.php',
+            'sync_products_by_cron_path'       => $this->_getModuleUrl().'synchronizeProducts_CRON.php',
+            'sync_orders_by_cron'              => Configuration::get('EBAY_SYNC_ORDERS_BY_CRON'),
+            'sync_orders_by_cron_url'          => $this->_getModuleUrl().'synchronizeOrders_CRON.php',
+            'sync_orders_by_cron_path'         => $this->_getModuleUrl().'synchronizeOrders_CRON.php',
+            'sync_orders_returns_by_cron'      => Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON'),
+            'sync_orders_returns_by_cron_url'  => $this->_getModuleUrl().'synchronizeOrdersReturns_CRON.php',
+            'sync_orders_returns_by_cron_path' => $this->_getModuleUrl().'synchronizeOrdersReturns_CRON.php',
+            'activate_resynchBP'               => $this->ebay_profile->getConfiguration('EBAY_RESYNCHBP'),
+
             // number of days to collect the oders for backward
             'orders_days_backward' => Configuration::get('EBAY_ORDERS_DAYS_BACKWARD'),
             'id_profile_ebay' => $this->ebay_profile->id,
@@ -110,6 +112,7 @@ class EbayFormAdvancedParametersTab extends EbayTab
             && $this->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_SMALL', (int)Tools::getValue('sizesmall'))
             && $this->ebay_profile->setConfiguration('EBAY_PICTURE_SIZE_BIG', (int)Tools::getValue('sizebig'))
             && $this->ebay_profile->setConfiguration('EBAY_PICTURE_PER_LISTING', $picture_per_listing)
+            && $this->ebay_profile->setConfiguration('EBAY_PICTURE_CHARACT_VARIATIONS', (int)Tools::getValue('picture_charact_variations'))
             && $this->ebay_profile->setConfiguration('EBAY_PICTURE_SKIP_VARIATIONS', (bool)Tools::getValue('picture_skip_variations'))
             && $this->ebay->setConfiguration('EBAY_API_LOGS', Tools::getValue('api_logs') ? 1 : 0)
             && $this->ebay->setConfiguration('EBAY_ACTIVATE_LOGS', Tools::getValue('activate_logs') ? 1 : 0)
@@ -134,6 +137,5 @@ class EbayFormAdvancedParametersTab extends EbayTab
         } else {
             return $this->ebay->displayError($this->ebay->l('Settings failed'));
         }
-
     }
 }

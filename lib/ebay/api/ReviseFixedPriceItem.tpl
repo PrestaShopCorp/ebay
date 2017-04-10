@@ -93,6 +93,22 @@
                     </NameValueList>
                 {/foreach}
             </ItemSpecifics>
+		{if isset($ktype)}
+			<ItemCompatibilityList>
+				<Compatibility>
+					<NameValueList>
+						<Name>KType</Name>
+						{foreach from=$ktype key=name item=value}
+
+							<Value><![CDATA[{$value}]]></Value>
+
+						{/foreach}
+					</NameValueList>
+
+				</Compatibility>
+			</ItemCompatibilityList>
+		{/if}
+
         {$return_policy|cleanHtml}
         {if isset($site)}
             <Site>{$site|escape:'htmlall':'UTF-8'}</Site>{/if}

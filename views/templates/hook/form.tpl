@@ -117,7 +117,10 @@
         <div class="ebay-boxes-2-col-cell-content left">
             <fieldset class="new" style="min-height: 165px">
                 {if $show_welcome}
-                    <legend><img src="{$path|escape:'htmlall':'UTF-8'}logo.gif" alt="" />{l s='eBay Module Status' mod='ebay'}</legend>
+                    <legend>
+                        <img src="{$path|escape:'htmlall':'UTF-8'}logo.gif" alt="" />{l s='eBay Module Status' mod='ebay'}
+                    </legend>
+
                     <div>
                         {if empty($alert)}
                             <p id="ebay-no-profile">{l s='You don\'t have any profile setup yet' mod='ebay'}</p>
@@ -137,8 +140,12 @@
                     </div>
                 {else}
                         {if $profiles && count($profiles)}
-                         <legend><img src="{if isset($_path) && !empty($_path)}{$_path|escape:'htmlall':'UTF-8'}{elseif isset($path)}{$path|escape:'htmlall':'UTF-8'}{/if}logo.gif" alt="" />{l s='eBay Profiles' mod='ebay'}</legend>
-                            <table class="table tableDnD" cellpadding="0" cellspacing="0">
+                         <legend><img src="{if isset($_path) && !empty($_path)}{$_path|escape:'htmlall':'UTF-8'}{elseif isset($path)}{$path|escape:'htmlall':'UTF-8'}{/if}logo.gif" alt="" />{l s='eBay Profiles' mod='ebay'}
+                             {if $debug == 1}
+                                 <small  style="background-color: #F80; color: #FFF; padding:5px;">in SANDBOX mode  !!</small>
+                             {/if}
+                         </legend>
+                             <table class="table tableDnD" cellpadding="0" cellspacing="0">
                                 <thead>
                                     <tr class="nodrag nodrop">
                                         <th>#</th>

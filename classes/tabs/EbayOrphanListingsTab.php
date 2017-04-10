@@ -57,7 +57,6 @@ class EbayOrphanListingsTab extends EbayTab
 
     public function postProcess()
     {
-
     }
 
     /*
@@ -67,6 +66,5 @@ class EbayOrphanListingsTab extends EbayTab
      */
     private function _getAlertCategories()
     {
-
     }
 }

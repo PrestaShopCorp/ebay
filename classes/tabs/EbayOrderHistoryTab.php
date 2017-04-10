@@ -35,7 +35,7 @@ class EbayOrderHistoryTab extends EbayTab
         }
 
         $dateLastImport = '-';
-
+        $orders = array();
         if (file_exists(dirname(__FILE__).'/../../log/orders.php')) {
             include dirname(__FILE__).'/../../log/orders.php';
         }

@@ -55,11 +55,9 @@ if (Module::isInstalled('ebay')) {
             } else {
                 echo Tools::jsonEncode(array('finish' => array(array('status' => 'stop', 'action' => 'End of checking'))));
             }
-
         } else if (Tools::getValue('action') == 'checkAll') {
             $validator->checkDatabase();
             echo Tools::jsonEncode($validator->getLog());
         }
-
     }
 }

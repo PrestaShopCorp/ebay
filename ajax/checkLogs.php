@@ -36,11 +36,9 @@ if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Co
 }
 
 if (Tools::getValue('action') == 'getLogs') {
-
     $data = Tools::file_get_contents('../log/request.txt');
     $text = htmlentities($data);
     echo '<pre>';
     echo $text;
     die;
-
 }

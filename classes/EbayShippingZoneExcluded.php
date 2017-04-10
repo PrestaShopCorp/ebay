@@ -68,7 +68,6 @@ class EbayShippingZoneExcluded
                 EbayShippingZoneExcluded::insert($location);
             }
         }
-
     }
 
     public static function cacheEbayExcludedLocation($id_ebay_profile)

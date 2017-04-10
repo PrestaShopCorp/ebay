@@ -69,7 +69,6 @@ class EbayProduct
         } else {
             return '-';
         }
-
     }
 
     public static function getProductsIdFromTable($a)
@@ -87,7 +86,6 @@ class EbayProduct
         } else {
             return false;
         }
-
     }
 
     public static function getNbProducts($id_ebay_profile)
@@ -145,10 +143,31 @@ class EbayProduct
         return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_product', $to_insert, 'UPDATE', '`id_product_ref` = "'.pSQL($id_product_ref).'"');
     }
 
+    public static function updateByIdProduct($id_product, $datas, $id_ebay_profile)
+    {
+        $to_insert = array();
+        if (is_array($datas) && count($datas)) {
+            foreach ($datas as $key => $data) {
+                $to_insert[pSQL($key)] = $data;
+            }
+        }
+
+        //If eBay Product has been inserted then the configuration of eBay is OK
+        Configuration::updateValue('EBAY_CONFIGURATION_OK', true);
+
+        return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_product', $to_insert, 'UPDATE', '`id_product` = "'.pSQL($id_product).'" AND `id_ebay_profile` = "'.(int) $id_ebay_profile.'"');
+    }
+
     public static function deleteByIdProductRef($id_product_ref)
     {
         return Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_product`
 			WHERE `id_product_ref` = \''.pSQL($id_product_ref).'\'');
+    }
+
+    public static function deleteByIdProduct($id_product, $id_attribute = 0, $id_ebay_profile)
+    {
+        return Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_product`
+			WHERE `id_product` = \''.pSQL($id_product).'\' AND `id_attribute` = \''.pSQL($id_attribute).'\' AND `id_ebay_profile` = \''.(int) $id_ebay_profile.'\'');
     }
 
     public static function getProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted)
@@ -164,7 +183,6 @@ class EbayProduct
 			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = '.(int) $id_lang.' ';
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
             $sql .= 'AND id_shop = '.(int)$ebay_profile->id_shop;
-
         }
         $sql .= ') WHERE ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
         if ($no_blacklisted) {
@@ -174,7 +192,6 @@ class EbayProduct
         $sql .= ' GROUP BY id_product, id_attribute, id_product_ref';
 
         return Db::getInstance()->ExecuteS($sql);
-
     }
 
     public static function getEbayUrl($reference, $mode_dev = false)

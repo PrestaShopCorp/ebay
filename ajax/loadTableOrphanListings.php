@@ -154,7 +154,6 @@ foreach ($res as &$row) {
                 break;
             }
         }
-
     }
 
     if ($row['id_category_ref']) {
@@ -164,7 +163,6 @@ foreach ($res as &$row) {
                 break;
             }
         }
-
     }
 
     if ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A') {

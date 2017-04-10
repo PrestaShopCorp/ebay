@@ -78,11 +78,8 @@ $res = Db::getInstance()->ExecuteS($sql);
 $final_res = array();
 foreach ($res as $row) {
     if (isset($final_res[$row['id_product_attribute']])) {
-
         $final_res[$row['id_product_attribute']]['name'] .= ' '.Tools::safeOutput($row['name']);
-
     } else {
-
         $row['name'] = Tools::safeOutput($row['name']);
         $row['stock'] = Tools::safeOutput($row['stock']);
         $row['id_product_ref'] = Tools::safeOutput($row['id_product_ref']);
@@ -92,6 +89,5 @@ foreach ($res as $row) {
 
         $final_res[$row['id_product_attribute']] = $row;
     }
-
 }
 die(Tools::jsonEncode($final_res));

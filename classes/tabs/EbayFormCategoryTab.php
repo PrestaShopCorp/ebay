@@ -70,7 +70,6 @@ class EbayFormCategoryTab extends EbayTab
         // Display eBay Categories
         $ebay_site_id = $this->ebay_profile->ebay_site_id;
         if (!isset($configs['EBAY_CATEGORY_LOADED_'.$ebay_site_id]) || !$configs['EBAY_CATEGORY_LOADED_'.$ebay_site_id] || !EbayCategory::areCategoryLoaded($ebay_site_id) || Tools::getValue('resynchCategories')) {
-
             if (Tools::getValue('resynchCategories')) {
                 $sql = ("TRUNCATE TABLE `"._DB_PREFIX_."ebay_category_configuration`");
                 Db::getInstance()->execute($sql);
@@ -120,7 +119,6 @@ class EbayFormCategoryTab extends EbayTab
 
         // Insert and update categories
         if (($percents = Tools::getValue('percent')) && ($ebay_categories = Tools::getValue('category'))) {
-
             $id_ebay_profile = Tools::getValue('profile') ? Tools::getValue('profile') : $this->ebay_profile->id;
             foreach ($percents as $id_category => $percent) {
                 $data = array();
@@ -150,7 +148,6 @@ class EbayFormCategoryTab extends EbayTab
                     } else {
                         EbayCategoryConfiguration::deleteByIdCategory($id_ebay_profile, $id_category);
                     }
-
                 } elseif ($data) {
                     $data['date_add'] = $date;
                     EbayCategoryConfiguration::add($data);
@@ -171,7 +168,6 @@ class EbayFormCategoryTab extends EbayTab
                     'id_ebay_profile' => $this->ebay_profile->id,
                 ));
             }
-
         }
 
         // update products configuration
@@ -194,9 +190,7 @@ class EbayFormCategoryTab extends EbayTab
                     'extra_images' => 0,
                 ));
             }
-
         }
-
         if (Tools::getValue('ajax')) {
             die('{"valid" : true}');
         }
@@ -223,7 +217,6 @@ class EbayFormCategoryTab extends EbayTab
             } else {
                 $alert = $this->ebay->l('You have chosen eBay categories : ').' "'.$var.'"" '.$this->ebay->l(' which do not support multivariation products. Each variation of a product will generate a new product in eBay');
             }
-
         }
 
         return $alert;

@@ -44,7 +44,6 @@ $id_ebay_profile = (int) Tools::getValue('id_ebay_profile');
 $is_one_five = version_compare(_PS_VERSION_, '1.5', '>');
 
 if ($is_one_five) {
-
     $sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, sa.`quantity` as stock
             FROM `'._DB_PREFIX_.'product` p';
 
@@ -62,9 +61,7 @@ if ($is_one_five) {
             WHERE ';
     $sql .= ' product_shop.`id_category_default` = '.(int) Tools::getValue('category');
     $sql .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
-
 } else {
-
     $sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, p.`quantity` as stock
             FROM `'._DB_PREFIX_.'product` p';
 
@@ -78,17 +75,14 @@ if ($is_one_five) {
             WHERE ';
 
     $sql .= ' p.`id_category_default` = '.(int) Tools::getValue('category');
-
 }
 
 $res = Db::getInstance()->ExecuteS($sql);
 foreach ($res as &$row) {
-
     $row['name'] = Tools::safeOutput($row['name']);
     $row['blacklisted'] = Tools::safeOutput($row['blacklisted']);
     $row['extra_images'] = Tools::safeOutput($row['extra_images']);
     $row['stock'] = Tools::safeOutput($row['stock']);
-
 }
 
 echo Tools::jsonEncode($res);

@@ -42,7 +42,6 @@ if (Tools::getValue('action') == 'delete-all') {
     } else {
         echo 'error';
     }
-
 } else {
     die('ERROR: Invalid arguments');
 }

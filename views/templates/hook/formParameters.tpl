@@ -210,7 +210,7 @@
 		</div>
 		<label>{l s='Any other information' mod='ebay'} : </label>
 		<div class="margin-form">
-			<textarea name="ebay_returns_description" cols="120" rows="10" data-inlinehelp="{l s='This description will be displayed in the returns policy section of the listing page.' mod='ebay'}">{$ebayReturns|escape:'htmlall':'UTF-8'}</textarea>
+			<textarea name="ebay_returns_description" cols="120" rows="10" data-inlinehelp="{l s='This description will be displayed in the returns policy section of the listing page.' mod='ebay'}">{$ebayReturns|cleanHtml}</textarea>
 		</div>
 	</fieldset>
              

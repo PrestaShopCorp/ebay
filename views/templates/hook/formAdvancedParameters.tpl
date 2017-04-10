@@ -92,6 +92,19 @@
 			<input type="checkbox" name="picture_skip_variations" value="1" {if $picture_skip_variations} checked="checked"{/if}>
 		</div>
 		<div style="clear:both;"></div>
+		<label>
+			{l s='Default photo CHARACT' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<select name="picture_charact_variations" data-inlinehelp="{l s='This will be the main photo and will appear on the search result and item pages.' mod='ebay'}" class="ebay_select">
+				{if isset($itemspecifics) && $itemspecifics && sizeof($itemspecifics)}
+					{foreach from=$itemspecifics item='itemspecific'}
+						<option value="{$itemspecific.id_attribute_group|escape:'htmlall':'UTF-8'}"{if $itemspecific.id_attribute_group == $picture_charact_variations} selected{/if}>{$itemspecific.name|escape:'htmlall':'UTF-8'}</option>
+					{/foreach}
+				{/if}
+			</select>
+		</div>
+		<div style="clear:both;"></div>
 	</fieldset>
     
     

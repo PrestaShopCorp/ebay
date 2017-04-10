@@ -61,7 +61,7 @@ class EbayReturnsPolicyConfiguration extends ObjectModel
 
         $fields['ebay_returns_within'] = pSQL($this->ebay_returns_within);
         $fields['ebay_returns_who_pays'] = pSQL($this->ebay_returns_who_pays);
-        $fields['ebay_returns_description'] = pSQL($this->ebay_returns_description);
+        $fields['ebay_returns_description'] = pSQL($this->ebay_returns_description, true);
         $fields['ebay_returns_accepted_option'] = pSQL($this->ebay_returns_accepted_option);
 
         return $fields;
@@ -101,7 +101,6 @@ class EbayReturnsPolicyConfiguration extends ObjectModel
         if ($row = Db::getInstance()->getRow($sql)) {
             return $row['id_ebay_returns_policy_configuration'];
         }
-
     }
 
     // for upgrade to eBay module version 1.7

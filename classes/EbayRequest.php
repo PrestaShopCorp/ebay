@@ -58,6 +58,9 @@ class EbayRequest
     private $context;
     private $apiUrlSeller;
 
+    public static $userProfileCache;
+    public static $userPreferencesCache;
+
     private $write_api_logs;
 
     public function __construct($id_ebay_profile = null, $context = null)
@@ -111,7 +114,6 @@ class EbayRequest
         }
 
         $this->write_api_logs = Configuration::get('EBAY_API_LOGS');
-
     }
 
     public static function getValueOfFeature($val, $feature)
@@ -156,6 +158,7 @@ class EbayRequest
             'error_language' => $this->ebay_country->getLanguage(),
         ));
 
+        $this->smarty->clearAssign(dirname(__FILE__) . '/../lib/ebay/api/' . $api_call . '.tpl');
         $this->smarty->assign($vars);
 
         if ($shoppingEndPoint === 'post-order') {
@@ -165,7 +168,7 @@ class EbayRequest
             }
         }
         if ($api_call != null) {
-            $request = $this->smarty->fetch(dirname(__FILE__) . '/../ebay/api/' . $api_call . '.tpl');
+            $request = $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/' . $api_call . '.tpl');
         }
         $connection = curl_init();
         if ($shoppingEndPoint === 'seller') {
@@ -191,9 +194,8 @@ class EbayRequest
             curl_setopt($connection, CURLOPT_HTTPHEADER, $this->_buildHeaders($api_call));
         }
         curl_setopt($connection, CURLOPT_POST, 1);
-        curl_setopt($connection, CURLOPT_HTTPGET, 1);
-        if (isset($request)) {
 
+        if (isset($request)) {
             curl_setopt($connection, CURLOPT_POSTFIELDS, $request); // Set the XML body of the request
         }
         curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1); // Set it to return the transfer as a string from curl_exec
@@ -210,7 +212,6 @@ class EbayRequest
             }
 
             if ((filesize(dirname(__FILE__) . '/../log/request.txt')/1048576) > 100) {
-
                     unlink(dirname(__FILE__).'/../log/request.txt');
             }
             file_put_contents(dirname(__FILE__) . '/../log/request.txt', date('d/m/Y H:i:s') . "\n\n HEADERS : \n" . print_r($this->_buildHeadersSeller($api_call), true), FILE_APPEND | LOCK_EX);
@@ -253,7 +254,7 @@ class EbayRequest
 
             // Regulates versioning of the XML interface for the API
 
-            'X-EBAY-SOA-GLOBAL-ID: EBAY-' . $this->ebay_country->getIsoCode(),
+            'X-EBAY-SOA-GLOBAL-ID: EBAY-' . (($this->ebay_profile->ebay_site_id == 23)? 'FRBE': strtoupper(EbayCountrySpec::getIsoCodeBySiteId($this->ebay_profile->ebay_site_id))),
             'X-EBAY-SOA-OPERATION-NAME: ' . $api_call,
             'X-EBAY-SOA-SERVICE-VERSION: 1.0.0',
             'X-EBAY-SOA-SECURITY-TOKEN: ' . ($this->ebay_profile ? $this->ebay_profile->getToken() : ''),
@@ -327,30 +328,40 @@ class EbayRequest
      */
     public function getUserProfile($username)
     {
-        //Change API URL
-        $apiUrl = $this->apiUrl;
-        $this->apiUrl = ($this->dev) ? 'http://open.api.sandbox.ebay.com/shopping?' : 'http://open.api.ebay.com/shopping?';
-        $response = $this->_makeRequest('GetUserProfile', array('user_id' => $username), true);
 
-        if ($response === false) {
-            return false;
+        if (empty(self::$userProfileCache)) {
+            //Change API URL
+            $apiUrl = $this->apiUrl;
+            $this->apiUrl = ($this->dev) ? 'http://open.api.sandbox.ebay.com/shopping?' : 'http://open.api.ebay.com/shopping?';
+            $response = $this->_makeRequest('GetUserProfile', array('user_id' => $username), true);
+            if ($response === false) {
+                return false;
+            }
+
+            $userProfile = array(
+                'StoreUrl' => $response->User->StoreURL,
+                'StoreName' => $response->User->StoreName,
+                'SellerBusinessType' => $response->User->SellerBusinessType
+            );
+
+            self::$userProfileCache = $userProfile;
+            $this->apiUrl = $apiUrl;
+        } else {
+            $userProfile = self::$userProfileCache;
         }
 
-        $userProfile = array(
-            'StoreUrl' => $response->User->StoreURL,
-            'StoreName' => $response->User->StoreName,
-            'SellerBusinessType' => $response->User->SellerBusinessType,
-        );
+        if (empty(self::$userPreferencesCache)) {
+            $datas = $this->getUserPreferences();
+            self::$userPreferencesCache = $datas;
+        } else {
+            $datas = self::$userPreferencesCache;
+        }
 
 
-        $this->apiUrl = $apiUrl;
-
-        $datas = $this->getUserPreferences();
         $config = (array)$datas->SellerProfileOptedIn;
 
         if ($config[0]== 'true') {
             $data = 1;
-
         } else {
             $data = 0;
         }
@@ -623,7 +634,7 @@ class EbayRequest
             return $this->error = $return_policy['error'];
         }
         $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
-
+        $vars = array();
         $vars = array(
             'sku' => 'prestashop-' . $data['id_product'],
             'title' => Tools::substr(self::prepareTitle($data), 0, 80),
@@ -725,16 +736,15 @@ class EbayRequest
                 $namedesc .= $key . '-';
                 $shipservice = EbayShippingService::getCarrierByName($key, $this->ebay_profile->ebay_site_id);
                 $policies_ship_name .= $shipservice[0]['shippingServiceID'] . '_' . $national[0]['serviceCosts'] . '-';
-
             }
             foreach ($shippings['internationalShip'] as $key => $national) {
                 $namedesc .= $key;
                 $shipservice = EbayShippingService::getCarrierByName($key, $this->ebay_profile->ebay_site_id);
                 $policies_ship_name .= $shipservice[0]['shippingServiceID'] . '_' . $national[0]['serviceCosts'] . '-';
-
             }
 
             $policies_ship_name = rtrim($policies_ship_name, "-");
+
             $seller_ship_prof = Db::getInstance()->getValue('SELECT `id_bussines_Policie` FROM ' . _DB_PREFIX_ . 'ebay_business_policies WHERE `name` ="' . $policies_ship_name . '"');
 
             if (empty($seller_ship_prof) || $seller_ship_prof == null) {
@@ -758,6 +768,7 @@ class EbayRequest
                 $this->smarty->assign($vars);
                 $response = $this->_makeRequest('addSellerProfile', $vars, 'seller');
                 $this->_logApiCall('addSellerProfile', $vars, $response, $data['id_product']);
+
                 if (isset($response->ack) && (string)$response->ack != 'Success' && (string)$response->ack != 'Warning') {
                     if ($response->errorMessage->error->errorId == '178149') {
                         $dataProf = array(
@@ -795,7 +806,6 @@ class EbayRequest
                     );
                     EbayBussinesPolicies::updateShipPolicies($dataProf, $this->ebay_profile->id);
                 }
-
             }
             $shippingPolicies = EbayBussinesPolicies::getPoliciesbyName($policies_ship_name, $this->ebay_profile->id);
             if (!empty($seller_ship_prof) && EbayConfiguration::get($this->ebay_profile->id, 'EBAY_RESYNCHBP') == 1) {
@@ -825,15 +835,13 @@ class EbayRequest
                 'shipping_profile_id' => $shippingPolicies[0]['id_bussines_Policie'],
                 'shipping_profile_name' => 'Prestashop-Ebay-'.$shippingPolicies[0]['id'],
             );
-
         }
-
 
         Ebay::addSmartyModifiers();
 
         $this->smarty->assign($vars);
 
-        return $this->smarty->fetch(dirname(__FILE__) . '/../ebay/api/GetReturnPolicy.tpl');
+        return $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/GetReturnPolicy.tpl');
     }
 
     private function _getBuyerRequirementDetails($datas)
@@ -841,7 +849,7 @@ class EbayRequest
         $vars = array('has_excluded_zones' => (boolean)count($datas['shipping']['excludedZone']));
         $this->smarty->assign($vars);
 
-        return $this->smarty->fetch(dirname(__FILE__) . '/../ebay/api/GetBuyerRequirementDetails.tpl');
+        return $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/GetBuyerRequirementDetails.tpl');
     }
 
     private function _getProductListingDetails($data)
@@ -861,7 +869,7 @@ class EbayRequest
 
         $this->smarty->assign($vars);
 
-        return $this->smarty->fetch(dirname(__FILE__) . '/../ebay/api/GetProductListingDetails.tpl');
+        return $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/GetProductListingDetails.tpl');
     }
 
     /**
@@ -916,7 +924,7 @@ class EbayRequest
 
         $this->smarty->assign($vars);
 
-        return $this->smarty->fetch(dirname(__FILE__) . '/../ebay/api/GetShippingDetails.tpl');
+        return $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/GetShippingDetails.tpl');
     }
 
     private function _logApiCall($type, $data_sent, $response, $id_product = null, $id_order = null)
@@ -1089,6 +1097,7 @@ class EbayRequest
         $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
 
         // Build the request Xml string
+        $vars = array();
         $vars = array(
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
             'country_currency' => $currency->iso_code,
@@ -1145,22 +1154,35 @@ class EbayRequest
                 $data['variations'][$key]['mpn'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_MPN'));
                 $data['variations'][$key]['upc'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_UPC'));
                 $data['variations'][$key]['isbn'] = $this->configurationValues($data['variations'][$key], Configuration::get('EBAY_SYNCHRONIZE_ISBN'));
+                $attribute_for_image = new AttributeGroup($this->ebay_profile->getConfiguration('EBAY_PICTURE_CHARACT_VARIATIONS'));
 
                 if (isset($variation['variations'])) {
-                    foreach ($variation['variations'] as $variation_key => $variation_element) {
-                        if (!isset($attribute_used[md5($variation_element['name'] . $variation_element['value'])]) && isset($variation['pictures'][$variation_key])) {
-                            if ($last_specific_name != $variation_element['name']) {
-                                $variation_pictures[$key][$variation_key]['name'] = $variation_element['name'];
+                    if (isset($variation['variation_specifics'][$attribute_for_image->name[$this->ebay_profile->id_lang]])) {
+                        $value = $variation['variation_specifics'][$attribute_for_image->name[$this->ebay_profile->id_lang]];
+                        if (!isset($attribute_used[md5($attribute_for_image->name[$this->ebay_profile->id_lang].$value)]) && isset($variation['pictures'][0])) {
+                            if ($last_specific_name != $attribute_for_image->name[$this->ebay_profile->id_lang]) {
+                                $variation_pictures[$key][0]['name'] = $attribute_for_image->name[$this->ebay_profile->id_lang];
                             }
+                            $variation_pictures[$key][0]['value']                                                 = $value;
+                            $variation_pictures[$key][0]['url']                                                   = $variation['pictures'][0];
+                            $attribute_used[md5($attribute_for_image->name[$this->ebay_profile->id_lang].$value)] = true;
+                            $last_specific_name                                                                   = $attribute_for_image->name[$this->ebay_profile->id_lang];
+                        }
+                    } else {
+                        foreach ($variation['variations'] as $variation_key => $variation_element) {
+                            if (!isset($attribute_used[md5($variation_element['name'].$variation_element['value'])]) && isset($variation['pictures'][$variation_key])) {
+                                if ($last_specific_name != $variation_element['name']) {
+                                    $variation_pictures[$key][$variation_key]['name'] = $variation_element['name'];
+                                }
 
-                            $variation_pictures[$key][$variation_key]['value'] = $variation_element['value'];
-                            $variation_pictures[$key][$variation_key]['url'] = $variation['pictures'][$variation_key];
+                                $variation_pictures[$key][$variation_key]['value'] = $variation_element['value'];
+                                $variation_pictures[$key][$variation_key]['url']   = $variation['pictures'][$variation_key];
 
-                            $attribute_used[md5($variation_element['name'] . $variation_element['value'])] = true;
-                            $last_specific_name = $variation_element['name'];
+                                $attribute_used[md5($variation_element['name'].$variation_element['value'])] = true;
+                                $last_specific_name                                                          = $variation_element['name'];
+                            }
                         }
                     }
-
                     foreach ($variation['variation_specifics'] as $name => $value) {
                         if (!isset($variation_specifics_set[$name])) {
                             $variation_specifics_set[$name] = array();
@@ -1169,7 +1191,6 @@ class EbayRequest
                         if (!in_array($value, $variation_specifics_set[$name])) {
                             $variation_specifics_set[$name][] = $value;
                         }
-
                     }
 
                     // send MPN as a variation specificcs
@@ -1202,9 +1223,10 @@ class EbayRequest
             'synchronize_isbn' => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
         );
 
+        $this->smarty->clearAssign(dirname(__FILE__) . '/../lib/ebay/api/GetVariations.tpl');
         $this->smarty->assign($vars);
 
-        return $this->smarty->fetch(dirname(__FILE__) . '/../ebay/api/GetVariations.tpl');
+        return $this->smarty->fetch(dirname(__FILE__) . '/../lib/ebay/api/GetVariations.tpl');
     }
 
     public function relistFixedPriceItem($item_id)
@@ -1328,7 +1350,6 @@ class EbayRequest
 
     public function getUserReturn($create_time_from, $create_time_to)
     {
-
         $vars = array(
             'url' => 'search?creation_date_range_from=' . $create_time_from . '&creation_date_range_to=' . $create_time_to,
             'type' => 'return',
@@ -1336,13 +1357,12 @@ class EbayRequest
         );
 
         $response = $this->_makeRequest(null, $vars, 'post-order');
-        return Tools::jsonDecode($response, true);
 
+        return Tools::jsonDecode($response, true);
     }
 
     public function getUserCancellations($create_time_from, $create_time_to)
     {
-
         $vars = array(
             'url' => 'search?creation_date_range_from=' . $create_time_from . '&creation_date_range_to=' . $create_time_to,
             'type' => 'cancellation',
@@ -1351,8 +1371,8 @@ class EbayRequest
 
 
         $response = $this->_makeRequest(null, $vars, 'post-order');
-        return Tools::jsonDecode($response, true);
 
+        return Tools::jsonDecode($response, true);
     }
 
     /**
@@ -1361,13 +1381,11 @@ class EbayRequest
      **/
     public function getStoreCategories()
     {
-
         // Set Api Call
         $this->apiCall = 'GetStore';
         $response = $this->_makeRequest('GetStore');
 
         return ($response === false) ? false : (isset($response->Store) ? $response->Store->CustomCategories->CustomCategory : false);
-
     }
 
     /**
@@ -1413,6 +1431,7 @@ class EbayRequest
         $response = $this->_makeRequest('checkCancelation', $vars, 'post-order');
 
         $this->_logApiCall('checkCancelation', $vars, $response);
+
         return ($response === false) ? false : $this->_checkForErrors($response);
     }
 
@@ -1502,11 +1521,17 @@ class EbayRequest
                 foreach ($datas->SupportedSellerProfiles->children() as $data) {
                     $data = (array)$data;
                     $var = array(
-                        'type' => $data['ProfileType'],
-                        'name' => $data['ProfileName'],
+                        'type'                => $data['ProfileType'],
+                        'name'                => $data['ProfileName'],
                         'id_bussines_Policie' => $data['ProfileID'],
-                        'id_ebay_profile' => $this->ebay_profile->id
+                        'id_ebay_profile'     => $this->ebay_profile->id
                     );
+                    Db::getInstance()->execute('insert INTO `' . _DB_PREFIX_ . 'ebay_business_policies`
+                        (`type`,`name`,`id_bussines_Policie`,`id_ebay_profile`) VALUES 
+                        (' . pSQL($data['ProfileType']) . ',
+                        ' . pSQL($data['ProfileName']) . ',
+                        ' . pSQL($data['ProfileID']) . ',
+                        ' . pSQL($this->ebay_profile->id) . ')');
                     //var_dump($var);die;
                     Db::getInstance()->insert('ebay_business_policies', $var);
                 }

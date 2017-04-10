@@ -30,7 +30,6 @@ if (file_exists(dirname(__FILE__).'/EbayRequest.php')) {
 
 class EbayConfiguration
 {
-
     /**
      * Updates Ebay API Token and stores it
      *
@@ -78,7 +77,6 @@ class EbayConfiguration
         } else {
             return Db::getInstance()->insert('ebay_configuration', $datas, false, true, Db::REPLACE);
         }
-
     }
 
     public static function getAll($id_ebay_profile, $exceptions = false)
@@ -108,7 +106,6 @@ class EbayConfiguration
             if ($ps_value && !$ebay_value) {
                 EbayConfiguration::set($id_ebay_profile, $name, $ps_value);
             }
-
         }
         foreach ($attributes_html as $name) {
             $ps_value = Configuration::get($name);
@@ -116,7 +113,6 @@ class EbayConfiguration
             if ($ps_value && !$ebay_value) {
                 EbayConfiguration::set($id_ebay_profile, $name, $ps_value, true);
             }
-
         }
     }
 }

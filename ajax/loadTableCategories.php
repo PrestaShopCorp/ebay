@@ -82,7 +82,6 @@ if (Module::isInstalled('ebay')) {
             AND `id_country` = '.(int) $ebay_profile->ebay_site_id);
 
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
-
             $rq_products = '
                 SELECT COUNT(DISTINCT(p.`id_product`)) AS nbProducts,
                     COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts,
@@ -101,7 +100,6 @@ if (Module::isInstalled('ebay')) {
                 AND ps.`id_shop` = '.(int)$ebay_profile->id_shop.'
                 GROUP BY ps.`id_category_default`';
         } else {
-
             $rq_products = 'SELECT COUNT(DISTINCT(p.`id_product`)) AS nbProducts,
                 COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts, `id_category_default`
                 FROM `'._DB_PREFIX_.'product` p
@@ -111,7 +109,6 @@ if (Module::isInstalled('ebay')) {
                 AND epc.`id_ebay_profile` = '.(int) $ebay_profile->id.'
                 AND epc.blacklisted = 1
                 GROUP BY `id_category_default`';
-
         }
 
         $get_products = Db::getInstance()->ExecuteS($rq_products);

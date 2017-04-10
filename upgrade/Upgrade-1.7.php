@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2017 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2017 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -32,7 +32,7 @@
  */
 function upgrade_module_1_7($module)
 {
-
+    $sql = array();
     include dirname(__FILE__).'/sql/sql-upgrade-1-7.php';
 
     if (!empty($sql) && is_array($sql)) {
@@ -41,15 +41,14 @@ function upgrade_module_1_7($module)
                 return false;
             }
         }
-
     }
 
-    Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'ebay_shipping SET id_zone = '.(int) Configuration::get('EBAY_ZONE_NATIONAL').' WHERE international = 0');
-    Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'ebay_shipping SET id_zone = '.(int) Configuration::get('EBAY_ZONE_INTERNATIONAL').' WHERE international = 1');
+    Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'ebay_shipping SET id_zone = '.(int)Configuration::get('EBAY_ZONE_NATIONAL').' WHERE international = 0');
+    Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'ebay_shipping SET id_zone = '.(int)Configuration::get('EBAY_ZONE_INTERNATIONAL').' WHERE international = 1');
 
     // create default profile(s)
-    $is_multishop = (version_compare(_PS_VERSION_, '1.5', '>') && Shop::isFeatureActive());
-    $id_shop_default = (int) Configuration::get('PS_SHOP_DEFAULT') ? (int) Configuration::get('PS_SHOP_DEFAULT') : 1;
+    $is_multishop    = (version_compare(_PS_VERSION_, '1.5', '>') && Shop::isFeatureActive());
+    $id_shop_default = (int)Configuration::get('PS_SHOP_DEFAULT') ? (int)Configuration::get('PS_SHOP_DEFAULT') : 1;
 
     // handle default returns policy
     if (!($id_returns_policy_configuration = EbayReturnsPolicyConfiguration::getDefaultObjectId())) {
@@ -65,12 +64,12 @@ function upgrade_module_1_7($module)
 
     foreach (array_keys($id_shops) as $id_shop) {
         if (!($profile = EbayProfile::getOneByIdShop($id_shop))) {
-            $profile = new EbayProfile();
+            $profile          = new EbayProfile();
             $profile->id_shop = $id_shop;
         }
         $profile->ebay_user_identifier = Configuration::get('EBAY_IDENTIFIER');
-        $ebay_country = EbayCountrySpec::getInstanceByKey(Configuration::get('EBAY_COUNTRY_DEFAULT'));
-        $profile->ebay_site = $ebay_country->getSiteExtension();
+        $ebay_country                  = EbayCountrySpec::getInstanceByKey(Configuration::get('EBAY_COUNTRY_DEFAULT'));
+        $profile->ebay_site            = $ebay_country->getSiteExtension();
         if ($id_shop_default == $id_shop) {
             $profile->id_ebay_returns_policy_configuration = $id_returns_policy_configuration;
         } else {
@@ -145,7 +144,7 @@ function upgrade_module_1_7($module)
     foreach ($res as $row) {
         $data = array(
             'id_ebay_order' => $row['id_ebay_order'],
-            'id_order' => $row['id_order'],
+            'id_order'      => $row['id_order'],
         );
         if (version_compare(_PS_VERSION_, '1.5', '<')) {
             Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_order_order', $data, 'INSERT');

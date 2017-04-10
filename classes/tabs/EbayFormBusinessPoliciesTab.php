@@ -61,12 +61,11 @@ class EbayFormBusinessPoliciesTab extends EbayTab
             'url_help' => $ebay_country->getHelpUrlBusinesss(),
             'profile_name' => $this->ebay_profile->ebay_user_identifier,
         );
-        
-       
-       
+
+
+
 
         return $this->display('form_business_policies.tpl', $template_vars);
-        
     }
 
     public function postProcess()
@@ -75,7 +74,6 @@ class EbayFormBusinessPoliciesTab extends EbayTab
         if (Tools::getValue('refresh_bp') == 1) {
             $request = new EbayRequest($this->ebay_profile->id);
             $request->importBusinessPolicies();
-
         }
         if (Tools::getValue('payement') || Tools::getValue('return_policies')) {
             $var = array();
@@ -91,7 +89,6 @@ class EbayFormBusinessPoliciesTab extends EbayTab
             foreach ($var as $data) {
                 EbayBussinesPolicies::setBussinesPolicies($this->ebay_profile->id, $data);
             }
-
 
             $ebay_categories = EbayCategoryConfiguration::getEbayCategories($this->ebay_profile->id);
             $payment = Tools::getValue('payement');
@@ -110,14 +107,10 @@ class EbayFormBusinessPoliciesTab extends EbayTab
                 } else {
                     Db::getInstance()->autoExecute(_DB_PREFIX_ . 'ebay_category_specific', $data, 'INSERT');
                 }
-
             }
 
             EbayConfiguration::set($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES_CONFIG', 1);
-
         }
-
-
 
         return $this->ebay->displayConfirmation($this->ebay->l('Settings updated'));
     }

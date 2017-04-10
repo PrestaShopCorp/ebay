@@ -42,16 +42,13 @@ if (version_compare(_PS_VERSION_, '1.5', '>')) {
     include_once dirname(__FILE__).TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'..'.TMP_DS.'init.php';
 }
 
-if (
-    !Tools::getValue('token')
+if (!Tools::getValue('token')
     || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     die('ERROR : INVALID TOKEN');
 }
 
-if (
-    !($errorcode = Tools::getValue('errorcode'))
-    || !($lang = Tools::getValue('lang'))
-) {
+if (!($errorcode = Tools::getValue('errorcode'))
+    || !($lang = Tools::getValue('lang'))) {
     die('ERROR : INVALID DATA');
 }
 
@@ -77,6 +74,5 @@ if (Validate::isString($name_module) && Module::isInstalled($name_module)) {
         } else {
             die(Tools::jsonEncode(array('result' => 'error', 'code' => 'kb-001', 'more' => 'Aucun lien trouvé')));
         }
-
     }
 }

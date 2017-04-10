@@ -74,7 +74,6 @@ if ($update) {
         $last_update[$category->getIdCategoryRef()] = date('Y-m-d\TH:i:s.000\Z');
         $ebay_profile->setConfiguration('EBAY_SPECIFICS_LAST_UPDATE', Tools::jsonEncode($last_update), false);
     }
-
 }
 
 $item_specifics = $category->getItemsSpecifics();

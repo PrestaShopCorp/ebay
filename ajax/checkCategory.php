@@ -48,46 +48,42 @@ if (Module::isInstalled('ebay')) {
     if ($enable) {
         $validator = new EbayDbValidator();
         if (Tools::getValue('action') == 'checkCategories') {
-            $step = Tools::getValue('step');
+            $step         = Tools::getValue('step');
             $ebay_request = new EbayRequest();
             if ($step == 1) {
                 $sql = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_category_tmp` (
-            id INT(11) NOT NULL AUTO_INCREMENT,
-            name VARCHAR(45) DEFAULT NULL,
-            id_categories int,
-       id_categories_ref_parent int,
-       level tinyint(1),
-            PRIMARY KEY (id)
-            )';
+                    id INT(11) NOT NULL AUTO_INCREMENT,
+                    name VARCHAR(45) DEFAULT NULL,
+                    id_categories int,
+                    id_categories_ref_parent int,
+                    level tinyint(1),
+                    PRIMARY KEY (id)
+                    )';
                 Db::getInstance()->execute($sql);
                 if ($cat_root = $ebay_request->getCategories(false)) {
-
                     die(Tools::jsonEncode($cat_root));
                 } else {
                     die(Tools::jsonEncode('error'));
                 }
-            } else if ($step == 2) {
+            } elseif ($step == 2) {
                 $cat = Tools::getValue('id_categories');
-                $cats = $ebay_request->getCategories((int) $cat);
+                $cats = $ebay_request->getCategories((int)$cat);
                 foreach ($cats as $cat) {
-                    Db::getInstance()->insert('ebay_category_tmp', array(
-                        'id_categories' => pSQL($cat['CategoryID']),
-                        'name' => pSQL($cat['CategoryName']),
-                        'id_categories_ref_parent' => pSQL($cat['CategoryParentID']),
-                        'level' => pSQL($cat['CategoryLevel'])
-                    ));
+                    Db::getInstance()->execute(
+                        'insert INTO `' . _DB_PREFIX_ . 'ebay_category_tmp` (`name`,`id_categories`,`id_categories_ref_parent`,`level`) VALUES 
+                        (' . pSQL($cat['CategoryName']) . ',
+                        ' . pSQL($cat['CategoryID']) . ',
+                        ' . pSQL($cat['CategoryParentID']) . ',
+                        ' . pSQL($cat['CategoryLevel']) . ')'
+                    );
                 };
-                    die(Tools::jsonEncode($cat));
-
+                die(Tools::jsonEncode($cat));
             } elseif ($step == 3) {
                 $id_profile_ebay = Tools::getValue('id_profile_ebay');
-                $res=$validator->comparationCategories($id_profile_ebay);
+                $res             = $validator->comparationCategories($id_profile_ebay);
                 $validator->deleteTmp();
                 echo Tools::jsonEncode($res);
             }
-           
-           
         }
-        
     }
 }

@@ -48,5 +48,4 @@ if (Module::isInstalled('ebay')) {
     if ($enable) {
         die(EbayProfile::deleteById((int) Tools::getValue('profile')));
     }
-
 }

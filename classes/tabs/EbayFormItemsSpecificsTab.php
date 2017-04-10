@@ -87,7 +87,6 @@ class EbayFormItemsSpecificsTab extends EbayTab
                 } else {
                     Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_category_specific', $data, 'UPDATE', 'id_ebay_category_specific = '.(int) $specific_id);
                 }
-
             }
         }
 

@@ -77,7 +77,6 @@ class EbayShipping
                 if (array_intersect_assoc($shippings, $shippings_product)) {
                     $shippings = array_intersect_assoc($shippings, $shippings_product);
                 }
-
             }
         }
 
@@ -90,7 +89,6 @@ class EbayShipping
             if (!Db::getInstance()->getValue('SELECT * FROM '._DB_PREFIX_.'ebay_shipping_international_zone WHERE id_ebay_shipping = '.(int) $shipping['id_ebay_shipping'])) {
                 return false;
             }
-
         }
         return true;
     }
@@ -137,7 +135,6 @@ class EbayShipping
                 if (array_intersect_assoc($shippings, $shippings_product)) {
                     $shippings = array_intersect_assoc($shippings, $shippings_product);
                 }
-
             }
         }
 
