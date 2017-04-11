@@ -172,6 +172,10 @@ foreach ($res as &$row) {
                 break;
             }
         }
+        $ebayCategory = new EbayCategory($ebay_profile, $row['id_category_ref']);
+        $row['EbayCategoryIsMultiSku'] = $ebayCategory->isMultiSku();
+
+
     }
 
     if ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A') {

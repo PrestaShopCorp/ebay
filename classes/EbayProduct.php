@@ -143,7 +143,7 @@ class EbayProduct
         return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_product', $to_insert, 'UPDATE', '`id_product_ref` = "'.pSQL($id_product_ref).'"');
     }
 
-    public static function updateByIdProduct($id_product, $datas, $id_ebay_profile)
+    public static function updateByIdProduct($id_product, $datas, $id_ebay_profile, $id_attribute = 0)
     {
         $to_insert = array();
         if (is_array($datas) && count($datas)) {
@@ -155,7 +155,7 @@ class EbayProduct
         //If eBay Product has been inserted then the configuration of eBay is OK
         Configuration::updateValue('EBAY_CONFIGURATION_OK', true);
 
-        return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_product', $to_insert, 'UPDATE', '`id_product` = "'.pSQL($id_product).'" AND `id_ebay_profile` = "'.(int) $id_ebay_profile.'"');
+        return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_product', $to_insert, 'UPDATE', '`id_product` = "'.pSQL($id_product).'" AND `id_ebay_profile` = "'.(int) $id_ebay_profile.'" AND `id_attribute` = "'.(int) $id_attribute.'"');
     }
 
     public static function deleteByIdProductRef($id_product_ref)

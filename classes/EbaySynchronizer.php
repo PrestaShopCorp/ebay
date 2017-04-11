@@ -156,11 +156,11 @@ class EbaySynchronizer
                 'id_lang'                => $id_lang,
                 'real_id_product'        => (int)$p['id_product'],
                 'ebay_store_category_id' => $ebay_store_category_id,
-                'ean_not_applicable'     => (int)Configuration::get('EBAY_EAN_NOT_APPLICABLE'),
-                'synchronize_ean'        => (string)Configuration::get('EBAY_SYNCHRONIZE_EAN'),
-                'synchronize_mpn'        => (string)Configuration::get('EBAY_SYNCHRONIZE_MPN'),
-                'synchronize_upc'        => (string)Configuration::get('EBAY_SYNCHRONIZE_UPC'),
-                'synchronize_isbn'       => (string)Configuration::get('EBAY_SYNCHRONIZE_ISBN'),
+                'ean_not_applicable'     => (int)$ebay_profile->getConfiguration('EBAY_EAN_NOT_APPLICABLE'),
+                'synchronize_ean'        => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_EAN'),
+                'synchronize_mpn'        => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_MPN'),
+                'synchronize_upc'        => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_UPC'),
+                'synchronize_isbn'       => (string)$ebay_profile->getConfiguration('EBAY_SYNCHRONIZE_ISBN'),
             );
             unset($variations);
             $data = array_merge($data, EbaySynchronizer::__getProductData($product, $ebay_profile));
@@ -399,12 +399,12 @@ class EbaySynchronizer
     private static function __addItem($product_id, $data, $id_ebay_profile, $ebay, $date, $id_attribute = 0)
     {
         $ebay_profile = new EbayProfile($id_ebay_profile);
-        $item_id      = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id);
+        $item_id      = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_attribute);
         if (empty($item_id)) {
             EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, 0, $date, $id_attribute);
             $ebay->addFixedPriceItem($data);
             if ($ebay->itemID > 0) {
-                EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($ebay->itemID)), $id_ebay_profile);
+                EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($ebay->itemID)), $id_ebay_profile, $id_attribute);
             } else {
                 EbayProduct::deleteByIdProduct($product_id, $id_ebay_profile, $id_attribute);
             }
