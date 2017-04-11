@@ -581,15 +581,15 @@ class EbayRequest
 
         foreach ($response->ShippingServiceDetails as $carrier) {
             if (strip_tags($carrier->ValidForSellingFlow->asXML()) == 'true') {
-            $carriers[] = array(
-                'description' => strip_tags($carrier->Description->asXML()),
-                'shippingService' => strip_tags($carrier->ShippingService->asXML()),
-                'shippingServiceID' => strip_tags($carrier->ShippingServiceID->asXML()),
-                'ServiceType' => strip_tags($carrier->ServiceType->asXML()),
-                'InternationalService' => (isset($carrier->InternationalService) ? strip_tags($carrier->InternationalService->asXML()) : false),
-                'ebay_site_id' => (int)$this->ebay_profile->ebay_site_id,
-            );
-        }
+                $carriers[] = array(
+                    'description' => strip_tags($carrier->Description->asXML()),
+                    'shippingService' => strip_tags($carrier->ShippingService->asXML()),
+                    'shippingServiceID' => strip_tags($carrier->ShippingServiceID->asXML()),
+                    'ServiceType' => strip_tags($carrier->ServiceType->asXML()),
+                    'InternationalService' => (isset($carrier->InternationalService) ? strip_tags($carrier->InternationalService->asXML()) : false),
+                    'ebay_site_id' => (int)$this->ebay_profile->ebay_site_id,
+                );
+            }
         }
 
         return $carriers;
@@ -1534,9 +1534,9 @@ class EbayRequest
                     );
                     Db::getInstance()->execute('insert INTO `' . _DB_PREFIX_ . 'ebay_business_policies`
                         (`type`,`name`,`id_bussines_Policie`,`id_ebay_profile`) VALUES 
-                        (' . pSQL($data['ProfileType']) . ',
-                        ' . pSQL($data['ProfileName']) . ',
-                        ' . pSQL($data['ProfileID']) . ',
+                        ("' . pSQL($data['ProfileType']) . '",
+                        "' . pSQL($data['ProfileName']) . '",
+                        "' . pSQL($data['ProfileID']) . '",
                         ' . pSQL($this->ebay_profile->id) . ')');
                     //var_dump($var);die;
                     //Db::getInstance()->insert('ebay_business_policies', $var);
