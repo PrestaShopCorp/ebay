@@ -580,6 +580,7 @@ class EbayRequest
         $carriers = array();
 
         foreach ($response->ShippingServiceDetails as $carrier) {
+            if (strip_tags($carrier->ValidForSellingFlow->asXML()) == 'true') {
             $carriers[] = array(
                 'description' => strip_tags($carrier->Description->asXML()),
                 'shippingService' => strip_tags($carrier->ShippingService->asXML()),
@@ -588,6 +589,7 @@ class EbayRequest
                 'InternationalService' => (isset($carrier->InternationalService) ? strip_tags($carrier->InternationalService->asXML()) : false),
                 'ebay_site_id' => (int)$this->ebay_profile->ebay_site_id,
             );
+        }
         }
 
         return $carriers;
