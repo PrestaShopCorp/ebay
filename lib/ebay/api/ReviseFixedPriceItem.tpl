@@ -93,21 +93,27 @@
                     </NameValueList>
                 {/foreach}
             </ItemSpecifics>
-		{if isset($ktype)}
+{if isset($ktype)}
 			<ItemCompatibilityList>
+				
+				{foreach from=$ktype key=name item=value}
 				<Compatibility>
 					<NameValueList>
 						<Name>KType</Name>
-						{foreach from=$ktype key=name item=value}
+
 
 							<Value><![CDATA[{$value}]]></Value>
 
-						{/foreach}
 					</NameValueList>
 
 				</Compatibility>
+
+				{/foreach}
+				
+				<ReplaceAll>TRUE</ReplaceAll>
 			</ItemCompatibilityList>
-		{/if}
+			{/if}
+
 
         {$return_policy|cleanHtml}
         {if isset($site)}

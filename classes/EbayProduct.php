@@ -164,7 +164,7 @@ class EbayProduct
 			WHERE `id_product_ref` = \''.pSQL($id_product_ref).'\'');
     }
 
-    public static function deleteByIdProduct($id_product, $id_attribute = 0, $id_ebay_profile)
+    public static function deleteByIdProduct($id_product, $id_ebay_profile, $id_attribute = 0)
     {
         return Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_product`
 			WHERE `id_product` = \''.pSQL($id_product).'\' AND `id_attribute` = \''.pSQL($id_attribute).'\' AND `id_ebay_profile` = \''.(int) $id_ebay_profile.'\'');

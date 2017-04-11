@@ -69,12 +69,14 @@ function insertCategoryRow(category_id, data)
 		var tds = '<td>' + specific.name + '</td><td>';
 		tds += '<select name="specific[' + specific.id + ']">';
 	
-		if (!parseInt(specific.required))
+		if (!parseInt(specific.required)) {
 			tds += '<option value=""></option>';
-		else
+		} else if (specific.name == 'K-type'){
+			tds += '<option value="">Do not synchronise</option>';
+		} else {
 			tds += '<option value="">' + l['-- You have to select a value --'] + '</option>';
-
-		if (specific.selection_mode == 0)
+		}
+		if (specific.selection_mode == 0 && specific.name != 'K-type')
 		{
 			if (!data.is_multi_sku || specific.can_variation)
 			{
@@ -91,12 +93,17 @@ function insertCategoryRow(category_id, data)
 			tds += '<optgroup label="' + l['Features'] + '">';
 			tds += writeOptions('feat', possible_features, specific.id_feature);
 			tds += '</optgroup>';
+		} else if (specific.name == 'K-type') {
+			tds += '<optgroup label="' + l['Features'] + '">';
+			tds += writeOptions('feat', possible_features, specific.id_feature);
+			tds += '</optgroup>';
 		}
-
-		tds += '<optgroup label="' + l['eBay Specifications'] + '">';
-		tds += writeOptions('spec', specific.values, specific.id_specific_value);
-		tds += '</optgroup>';
-		tds += '</select></td>';
+		if (specific.name != 'K-type') {
+			tds += '<optgroup label="' + l['eBay Specifications'] + '">';
+			tds += writeOptions('spec', specific.values, specific.id_specific_value);
+			tds += '</optgroup>';
+		}
+			tds += '</select></td>';
 
 		if (parseInt(specific.required))
 			trs += '<tr ' + (i % 2 == 0 ? 'class="alt_row"' : '')+ 'category="'+ category_id + '">' + tds + '</tr>';

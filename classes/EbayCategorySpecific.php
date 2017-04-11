@@ -73,8 +73,14 @@ class EbayCategorySpecific
         foreach ($ebay_category_ids as $ebay_category_id) {
             $xml_data = $request->getCategorySpecifics($ebay_category_id);
             if ($xml_data->Recommendations->NameRecommendation) {
-                foreach ($xml_data->Recommendations->NameRecommendation as $recommendation) {
+                if (EbayCategory::getKtype($ebay_category_id, $ebay_profile->ebay_site_id) == 1) {
+                    $sql = 'INSERT INTO `'._DB_PREFIX_.'ebay_category_specific` (`id_category_ref`, `name`, `required`, `can_variation`, `selection_mode`, `ebay_site_id`)
+						VALUES ('.(int)$ebay_category_id.', \'K-type\', 1, 0, 0, '.(int)$ebay_profile->ebay_site_id.')
+						ON DUPLICATE KEY UPDATE `required` = 1, `can_variation` = 0, `selection_mode` = 0';
+                    Db::getInstance()->execute($sql);
+                }
 
+                foreach ($xml_data->Recommendations->NameRecommendation as $recommendation) {
                     $required = isset($recommendation->ValidationRules->MinValues) && ((int)$recommendation->ValidationRules->MinValues >= 1);
 
                     // if true can be used either in Item Specifics or VariationSpecifics
@@ -89,6 +95,7 @@ class EbayCategorySpecific
                         } else {
                             $selection_mode = EbayCategorySpecific::SELECTION_MODE_FREE_TEXT;
                         }
+
                     } else {
                         $selection_mode = EbayCategorySpecific::SELECTION_MODE_FREE_TEXT;
                     }

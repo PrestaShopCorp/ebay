@@ -152,6 +152,16 @@
                             </td>
                         </tr>
 
+                        <tr class="margin-bottom">
+                            <td colspan="2">
+                                <div class="txt-right">
+                                    <a class="kb-help" style ="width: auto;height: 20px;background-image: none;" data-errorcode="{$help_country.error_code}" data-module="ebay" data-lang="{$help_country.lang}" module_version="{$help_country.module_version}" prestashop_version="{$help_country.ps_version}" href="" target="_blank">
+                                        {l s='A country is missing ?' mod='ebay'}
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
                         <!-- Language -->
                         <tr class="margin-bottom">
                             <td>
@@ -281,4 +291,35 @@ function validateEmail(email){
         return true;
 }
 {/literal}
+</script>
+<script>
+    {literal}
+    function getKb(item){
+        item = typeof item !== 'undefined' ? item : 0;
+
+        var that = $("a.kb-help:eq("+ item +")");
+
+        $.ajax({
+            type: "POST",
+            url: '{/literal}{$load_kb_path}{literal}',
+            data: {errorcode: $( that ).attr('data-errorcode'), lang: $( that ).attr('data-lang'), token:"{/literal}{$ebay_token}{literal}", admin_path: "{/literal}{$admin_path|escape:'urlencode'}{literal}"},
+            dataType: "json",
+            success: function(data)
+            {
+                if (data.result != 'error')
+                {
+                    $( that ).addClass('active');
+                    $( that ).attr('href', data.result);
+                    $( that ).attr('target', '_blank');
+                }
+                var next = item + 1;
+                if ($("a.kb-help:eq("+ next +")").length > 0)
+                    getKb(next);
+            }
+        });
+    }
+    jQuery(document).ready(function($) {
+        getKb();
+    });
+    {/literal}
 </script>

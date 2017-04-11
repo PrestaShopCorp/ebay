@@ -254,7 +254,7 @@ class EbayRequest
 
             // Regulates versioning of the XML interface for the API
 
-            'X-EBAY-SOA-GLOBAL-ID: EBAY-' . (($this->ebay_profile->ebay_site_id == 23)? 'FRBE': strtoupper(EbayCountrySpec::getIsoCodeBySiteId($this->ebay_profile->ebay_site_id))),
+            'X-EBAY-SOA-GLOBAL-ID: EBAY-' . (($this->ebay_profile->ebay_site_id == 23)? 'FRBE': Tools::strtoupper(EbayCountrySpec::getIsoCodeBySiteId($this->ebay_profile->ebay_site_id))),
             'X-EBAY-SOA-OPERATION-NAME: ' . $api_call,
             'X-EBAY-SOA-SERVICE-VERSION: 1.0.0',
             'X-EBAY-SOA-SECURITY-TOKEN: ' . ($this->ebay_profile ? $this->ebay_profile->getToken() : ''),
@@ -656,6 +656,7 @@ class EbayRequest
             'site' => $this->ebay_country->getSiteName(),
             'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
             'product_listing_details' => $this->_getProductListingDetails($data),
+            'ktype' => isset($data['ktype'])?$data['ktype']:null,
 
         );
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
@@ -1037,6 +1038,7 @@ class EbayRequest
             'country' => Tools::strtoupper($this->ebay_profile->getConfiguration('EBAY_SHOP_COUNTRY')),
             'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
             'product_listing_details' => $this->_getProductListingDetails($data),
+            'ktype' => isset($data['ktype'])?$data['ktype']:null,
 
         );
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
@@ -1117,6 +1119,7 @@ class EbayRequest
             'site' => $this->ebay_country->getSiteName(),
             'item_specifics' => $data['item_specifics'],
             'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
+            'ktype' => isset($data['ktype'])? $data['ktype'] : null,
         );
 
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
@@ -1286,6 +1289,7 @@ class EbayRequest
             'product_listing_details' => $this->_getProductListingDetails($data),
             'item_specifics' => $data['item_specifics'],
             'autopay' => $this->ebay_profile->getConfiguration('EBAY_IMMEDIATE_PAYMENT'),
+            'ktype' => isset($data['ktype'])?$data['ktype']:array(),
         );
 
         if (EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES') == 0) {
@@ -1533,7 +1537,7 @@ class EbayRequest
                         ' . pSQL($data['ProfileID']) . ',
                         ' . pSQL($this->ebay_profile->id) . ')');
                     //var_dump($var);die;
-                    Db::getInstance()->insert('ebay_business_policies', $var);
+                    //Db::getInstance()->insert('ebay_business_policies', $var);
                 }
             }
         }

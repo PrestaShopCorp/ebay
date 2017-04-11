@@ -93,7 +93,7 @@
 		</div>
 		<div style="clear:both;"></div>
 		<label>
-			{l s='Default photo CHARACT' mod='ebay'}
+			{l s='Select attribute used for variation image' mod='ebay'}
 		</label>
 		<div class="margin-form">
 			<select name="picture_charact_variations" data-inlinehelp="{l s='This will be the main photo and will appear on the search result and item pages.' mod='ebay'}" class="ebay_select">

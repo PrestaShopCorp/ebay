@@ -284,6 +284,11 @@ class EbaySynchronizer
             if (EbaySynchronizer::__isProductMultiSku($ebay_category, $product->id, $id_lang, $ebay_profile->ebay_site_id)) {
                 // the category accepts multisku products and there is variables matching
                 $data['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $id_lang);
+                if (isset($data['item_specifics']['K-type'])) {
+                    $value = explode(" ", $data['item_specifics']['K-type']);
+                    $data['ktype'] = $value;
+                    unset($data['item_specifics']['K-type']);
+                }
                 $data['description'] = EbaySynchronizer::__getMultiSkuItemDescription($data, $id_currency);
 
                 if ($item_id = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id)) {
@@ -300,6 +305,12 @@ class EbaySynchronizer
             } else {
                 // No Multi Sku case so we do multiple products from a multivariation product
                 $data['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $id_lang);
+
+                if (isset($data['item_specifics']['K-type'])) {
+                    $value = explode(" ", $data['item_specifics']['K-type']);
+                    $data['ktype'] = $value;
+                    unset($data['item_specifics']['K-type']);
+                }
 
                 foreach ($data['variations'] as $variation) {
                     $data_variation = EbaySynchronizer::__getVariationData($data, $variation, $id_currency);
@@ -322,6 +333,11 @@ class EbaySynchronizer
         } else {
             // the product is not a multivariation product
             $data['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $id_lang);
+            if (isset($data['item_specifics']['K-type'])) {
+               $value = explode(" ", $data['item_specifics']['K-type']);
+                $data['ktype'] = $value;
+                unset($data['item_specifics']['K-type']);
+            }
             $data['description'] = EbaySynchronizer::__getItemDescription($data, $id_currency);
             // Check if product exists on eBay
             if ($itemID = EbayProduct::getIdProductRef($product->id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id)) {
@@ -390,7 +406,7 @@ class EbaySynchronizer
             if ($ebay->itemID > 0) {
                 EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($ebay->itemID)), $id_ebay_profile);
             } else {
-                EbayProduct::deleteByIdProduct($product_id, $id_attribute, $id_ebay_profile);
+                EbayProduct::deleteByIdProduct($product_id, $id_ebay_profile, $id_attribute);
             }
         }
 
@@ -441,7 +457,7 @@ class EbaySynchronizer
             if ($ebay->itemID > 0) {
                 EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($ebay->itemID)), $id_ebay_profile);
             } else {
-                EbayProduct::deleteByIdProduct($product_id, 0, $id_ebay_profile);
+                EbayProduct::deleteByIdProduct($product_id, $id_ebay_profile, 0);
             }
         }
 
@@ -1385,7 +1401,7 @@ class EbaySynchronizer
         $variation_specifics_pairs = array();
 
         $sql = '
-            SELECT IF(ecs.name is not null, ecs.name, agl.name) AS name, al.name AS value
+            SELECT agl.name AS name, al.name AS value
             FROM '._DB_PREFIX_.'product_attribute_combination pac
             JOIN '._DB_PREFIX_.'attribute_lang al ON (pac.id_attribute = al.id_attribute AND al.id_lang='.(int)$id_lang.')
             JOIN '._DB_PREFIX_.'attribute a

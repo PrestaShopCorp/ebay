@@ -41,7 +41,8 @@ class EbayProductTemplate extends ObjectModel
             'module_url' => self::__getModuleUrl(),
         ));
 
-        return $ebay->display(dirname(__FILE__).'/../ebay.php', 'ebay/ebay.tpl');
+      return $ebay->display(dirname(__FILE__).'/../ebay.php', 'lib/ebay/ebay.tpl');
+
     }
 
     /**

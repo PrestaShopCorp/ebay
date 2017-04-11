@@ -36,6 +36,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_category` (
 		  `level` tinyint(1) NOT NULL,
 		  `is_multi_sku` tinyint(1),
 		  `name` varchar(255) NOT NULL,
+		  `k_type` tinyint(1),
 		  UNIQUE(`id_category_ref`, `id_country`),
 		  PRIMARY KEY  (`id_ebay_category`)
 	) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';

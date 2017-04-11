@@ -74,7 +74,7 @@
         {if empty($returns)}
         <tr id="removeRow">
             <td class="center" colspan="7">
-                <img src="{$_path|escape:'htmlall':'UTF-8'}views/img/loading-small.gif" alt="" />   Aucun!
+                {l s='No returns' mod='ebay'}
             </td>
         </tr>
         {/if}

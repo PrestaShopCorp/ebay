@@ -37,6 +37,17 @@ $(document).ready(function () {
         return false;
     });
 
+    $('#aide-afficher').click(function () {
+        event.preventDefault();
+        var selleraide = $('.new_aide');
+        if (selleraide.css('display') == 'none') {
+            selleraide.show();
+        } else {
+            selleraide.hide();
+            $('#seller-tips').hide();
+        }
+        return false;
+    });
 
     $('.delete-profile').click(function (event) {
         event.preventDefault();

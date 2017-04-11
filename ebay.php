@@ -130,7 +130,7 @@ class Ebay extends Module
     {
         $this->name = 'ebay';
         $this->tab = 'market_place';
-        $this->version = '1.15.4';
+        $this->version = '1.15.5';
         $this->stats_version = '1.0';
 
         $this->author = 'PrestaShop';
@@ -1811,8 +1811,17 @@ class Ebay extends Module
                 'ebay_countries'        => EbayCountrySpec::getCountries($ebay->getDev()),
                 'default_country'       => EbayCountrySpec::getKeyForEbayCountry(),
                 'ebay_user_identifiers' => EbayProfile::getEbayUserIdentifiers(),
-                'ebay_profiles'         => $ebay_profiles,
-                'languages'             => Language::getLanguages(true, ($this->ebay_profile ? $this->ebay_profile->id_shop : $id_shop)),
+                'ebay_profiles' => $ebay_profiles,
+                'languages' => Language::getLanguages(true, ($this->ebay_profile ? $this->ebay_profile->id_shop : $id_shop)),
+                'load_kb_path' => _MODULE_DIR_.'ebay/ajax/loadKB.php',
+                'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
+                'admin_path' => basename(_PS_ADMIN_DIR_),
+                'help_country' => array(
+                    'lang'           => $this->context->country->iso_code,
+                    'module_version' => $this->version,
+                    'ps_version'     => _PS_VERSION_,
+                    'error_code'     => 'COUNTRY-MISSING',
+                    ),
             ));
 
             if (Configuration::get('EBAY_COUNTRY_OK') == false) {
@@ -2075,7 +2084,7 @@ class Ebay extends Module
                     $msg = '';
                 }
 
-                $msg .= $this->l('Some products have not been listed successfully due to the error(s) below').'<br/>';
+                $msg .= $this->l('Some products have been refused by eBay API due to the following error(s): ').'<br/>';
 
                 foreach ($context->all_error as $error) {
                     $products_details = '<br /><u>'.$this->l('Product(s) concerned').' :</u>';

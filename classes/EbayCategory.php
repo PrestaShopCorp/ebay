@@ -30,6 +30,7 @@ class EbayCategory
     private $id_category_ref; /* eBay Category id */
     private $id_country; /* eBay Site id. naming is not great */
     private $is_multi_sku;
+    private $k_type;
     private $ebay_profile;
     private $id_ebay_category_configuration;
 
@@ -105,6 +106,15 @@ class EbayCategory
         }
 
         return $this->is_multi_sku;
+    }
+
+    public function isKtype()
+    {
+
+            $this->k_type = EbayCategory::getKtype((int)$this->id_category_ref, $this->id_country);
+
+
+        return $this->k_type;
     }
 
     public function getPercent()
@@ -316,6 +326,18 @@ class EbayCategory
         return $row['is_multi_sku'];
     }
 
+    public static function getKtype($id_category_ref, $ebay_site_id)
+    {
+        $row = Db::getInstance()->getRow('SELECT `k_type`
+			FROM `'._DB_PREFIX_.'ebay_category`
+			WHERE `id_category_ref` = '.(int)$id_category_ref.'
+			AND `id_country` = '.(int)$ebay_site_id);
+
+        return $row['k_type'];
+    }
+
+
+
     public static function areCategoryLoaded($ebay_site_id)
     {
         if (Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'ebay_category ec WHERE ec.`id_country` = '.(int)$ebay_site_id) == 0) {
@@ -323,5 +345,17 @@ class EbayCategory
         }
 
         return true;
+    }
+
+    public static function setKtypeConfiguration($id_category_ref, $value, $id_ebay_profile)
+    {
+
+        $ebay_profile= new EbayProfile($id_ebay_profile);
+        $ebay_site_id = $ebay_profile->ebay_site_id;
+        $db = Db::getInstance();
+        $db->autoExecute(_DB_PREFIX_.'ebay_category', array(
+            'k_type' => ($value == 'true') ? 1 : 0,
+            ), 'UPDATE', '`id_category_ref` = '.(int)$id_category_ref .' AND `id_country` = ' . (int)$ebay_site_id, 0, true, true);
+
     }
 }
