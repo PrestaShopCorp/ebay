@@ -179,6 +179,8 @@ foreach ($res as &$row) {
         $final_res[] = $row;
     } elseif (!$row['active'] || $row['blacklisted']) {
         $final_res[] = $row;
+    } elseif (is_null($row['id_category_ref'])) {
+        $final_res[] = $row;
     } elseif (!$row['sync']) {
         $final_res[] = $row;
     }

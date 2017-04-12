@@ -285,7 +285,9 @@ class EbaySynchronizer
                 // the category accepts multisku products and there is variables matching
                 $data['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $id_lang);
                 if (isset($data['item_specifics']['K-type'])) {
-                    $value = explode(" ", $data['item_specifics']['K-type']);
+                    $str = str_replace(';', ',', $data['item_specifics']['K-type']);
+                    $str = str_replace(' ', '', $str);
+                    $value = explode(",", $str);
                     $data['ktype'] = $value;
                     unset($data['item_specifics']['K-type']);
                 }
