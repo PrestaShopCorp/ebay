@@ -204,7 +204,7 @@
                         <li>{l s='Listing rejection detection system' mod='ebay'}</li>
                     </ul>
                     <span style="font-size: 14px;font-weight: bold;">{l s='Availability May 2017' mod='ebay'}</span></br>
-                    <span style="font-size: 14px">{l s='This new module will cost 149 € excl. VAT. Introductory offer to come.' mod='ebay'}</span></br>
+                    <span style="font-size: 14px">{l s='This new module will cost 149 â‚¬ excl. VAT. Introductory offer to come.' mod='ebay'}</span></br>
                 </fieldset>
                 <fieldset class="new new_aide" style="display: none">
                     <legend>{l s='How to install the module' mod='ebay'}</legend>

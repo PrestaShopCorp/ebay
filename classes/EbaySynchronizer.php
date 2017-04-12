@@ -307,7 +307,7 @@ class EbaySynchronizer
                 $data['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $id_lang);
 
                 if (isset($data['item_specifics']['K-type'])) {
-                    $value = explode(" ", $data['item_specifics']['K-type']);
+                    $value         = explode(" ", $data['item_specifics']['K-type']);
                     $data['ktype'] = $value;
                     unset($data['item_specifics']['K-type']);
                 }
@@ -334,7 +334,7 @@ class EbaySynchronizer
             // the product is not a multivariation product
             $data['item_specifics'] = EbaySynchronizer::__getProductItemSpecifics($ebay_category, $product, $id_lang);
             if (isset($data['item_specifics']['K-type'])) {
-               $value = explode(" ", $data['item_specifics']['K-type']);
+                $value         = explode(" ", $data['item_specifics']['K-type']);
                 $data['ktype'] = $value;
                 unset($data['item_specifics']['K-type']);
             }

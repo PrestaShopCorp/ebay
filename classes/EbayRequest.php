@@ -682,6 +682,7 @@ class EbayRequest
         if ($response === false) {
             return false;
         }
+        unset($data);
 
         return $this->_checkForErrors($response);
     }

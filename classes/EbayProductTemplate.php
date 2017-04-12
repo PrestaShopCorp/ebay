@@ -18,16 +18,16 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2017 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2017 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayProductTemplate extends ObjectModel
 {
     /**
-     * @param Ebay $ebay
+     * @param Ebay        $ebay
      * @param Smarty_Data $smarty
      * @return bool|Smarty_Internal_Template
      */
@@ -36,13 +36,12 @@ class EbayProductTemplate extends ObjectModel
         $logo_url = version_compare(_PS_VERSION_, '1.5', '>') ? (Tools::getShopDomain(true).'/'.__PS_BASE_URI__.'/'._PS_IMG_.Configuration::get('PS_LOGO').'?'.Configuration::get('PS_IMG_UPDATE_TIME')) : (Tools::getShopDomain(true).'/'.__PS_BASE_URI__.'/img/logo.jpg');
 
         $smarty->assign(array(
-            'shop_logo' => $logo_url,
-            'shop_name' => Configuration::get('PS_SHOP_NAME'),
+            'shop_logo'  => $logo_url,
+            'shop_name'  => Configuration::get('PS_SHOP_NAME'),
             'module_url' => self::__getModuleUrl(),
         ));
 
-      return $ebay->display(dirname(__FILE__).'/../ebay.php', 'lib/ebay/ebay.tpl');
-
+        return $ebay->display(dirname(__FILE__).'/../ebay.php', 'lib/ebay/ebay.tpl');
     }
 
     /**

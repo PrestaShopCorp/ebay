@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2017 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2017 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -30,17 +30,18 @@ include_once dirname(__FILE__).'/../ebay.php';
 
 $ebay = new Ebay();
 
-$ebay_profile = new EbayProfile((int) Tools::getValue('profile'));
+$ebay_profile = new EbayProfile((int)Tools::getValue('profile'));
 $ebay_request = new EbayRequest();
-$is_one_five = version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0;
+$is_one_five  = version_compare(_PS_VERSION_, '1.5', '>') ? 1 : 0;
 
 if (version_compare(_PS_VERSION_, '1.5', '>=') && Tools::getValue('id_shop')) {
-    $context = Context::getContext();
-    $context->shop = new Shop((int) Tools::getValue('id_shop'));
+    $context       = Context::getContext();
+    $context->shop = new Shop((int)Tools::getValue('id_shop'));
 }
 
 if (!Configuration::get('EBAY_SECURITY_TOKEN')
-    || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
+    || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')
+) {
     return Tools::safeOutput(Tools::getValue('not_logged_str'));
 }
 
@@ -154,7 +155,6 @@ foreach ($res as &$row) {
                 break;
             }
         }
-
     }
 
     if ($row['id_category_ref']) {
@@ -164,14 +164,13 @@ foreach ($res as &$row) {
                 break;
             }
         }
-
     }
 
     if ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A') {
-        $row['sync'] = (bool) $row['EbayCategoryExists']; // only true if category synced with an eBay category
+        $row['sync'] = (bool)$row['EbayCategoryExists']; // only true if category synced with an eBay category
     }
 
-    $ebayCategory = new EbayCategory($ebay_profile, $row['id_category_ref']);
+    $ebayCategory                  = new EbayCategory($ebay_profile, $row['id_category_ref']);
     $row['EbayCategoryIsMultiSku'] = $ebayCategory->isMultiSku();
 
     // filtering
@@ -181,11 +180,12 @@ foreach ($res as &$row) {
         $final_res[] = $row;
     } elseif ($row['isMultiSku']
         && !$row['notSetWithMultiSkuCat']// set as if on a MultiSku category
-         && !$row['EbayCategoryIsMultiSku']
+        && !$row['EbayCategoryIsMultiSku']
     ) {
         $final_res[] = $row;
     } elseif ($row['notSetWithMultiSkuCat']
-        && $row['EbayCategoryIsMultiSku']) {
+        && $row['EbayCategoryIsMultiSku']
+    ) {
         $final_res[] = $row;
     } elseif (!$row['active'] || $row['blacklisted']) {
         $final_res[] = $row;

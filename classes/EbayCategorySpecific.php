@@ -95,7 +95,6 @@ class EbayCategorySpecific
                         } else {
                             $selection_mode = EbayCategorySpecific::SELECTION_MODE_FREE_TEXT;
                         }
-
                     } else {
                         $selection_mode = EbayCategorySpecific::SELECTION_MODE_FREE_TEXT;
                     }

@@ -48,11 +48,11 @@ class EbayDbValidator
             'id_category_ref'        => array('type' => 'int', 'length' => 11),
             'id_ebay_category'       => array('type' => 'int', 'length' => 11),
             'id_category_ref_parent' => array('type' => 'int', 'length' => 11),
-            'id_country' => array('type' => 'int', 'length' => 11),
-            'level' => array('type' => 'tinyint', 'length' => 1),
-            'is_multi_sku' => array('type' => 'tinyint', 'length' => 1, 'null' => true),
-            'name' => array('type' => 'varchar', 'length' => 255),
-            'k_type' => array('type' => 'tinyint', 'length' => 1, 'null' => true),
+            'id_country'             => array('type' => 'int', 'length' => 11),
+            'level'                  => array('type' => 'tinyint', 'length' => 1),
+            'is_multi_sku'           => array('type' => 'tinyint', 'length' => 1, 'null' => true),
+            'name'                   => array('type' => 'varchar', 'length' => 255),
+            'k_type'                 => array('type' => 'tinyint', 'length' => 1, 'null' => true),
         ),
 
         'ebay_category_condition' => array(

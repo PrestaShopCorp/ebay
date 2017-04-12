@@ -110,9 +110,7 @@ class EbayCategory
 
     public function isKtype()
     {
-
-            $this->k_type = EbayCategory::getKtype((int)$this->id_category_ref, $this->id_country);
-
+        $this->k_type = EbayCategory::getKtype((int)$this->id_category_ref, $this->id_country);
 
         return $this->k_type;
     }
@@ -336,8 +334,6 @@ class EbayCategory
         return $row['k_type'];
     }
 
-
-
     public static function areCategoryLoaded($ebay_site_id)
     {
         if (Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'ebay_category ec WHERE ec.`id_country` = '.(int)$ebay_site_id) == 0) {
@@ -349,13 +345,11 @@ class EbayCategory
 
     public static function setKtypeConfiguration($id_category_ref, $value, $id_ebay_profile)
     {
-
-        $ebay_profile= new EbayProfile($id_ebay_profile);
+        $ebay_profile = new EbayProfile($id_ebay_profile);
         $ebay_site_id = $ebay_profile->ebay_site_id;
-        $db = Db::getInstance();
+        $db           = Db::getInstance();
         $db->autoExecute(_DB_PREFIX_.'ebay_category', array(
             'k_type' => ($value == 'true') ? 1 : 0,
-            ), 'UPDATE', '`id_category_ref` = '.(int)$id_category_ref .' AND `id_country` = ' . (int)$ebay_site_id, 0, true, true);
-
+        ), 'UPDATE', '`id_category_ref` = '.(int)$id_category_ref.' AND `id_country` = '.(int)$ebay_site_id, 0, true, true);
     }
 }
