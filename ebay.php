@@ -1803,7 +1803,7 @@ class Ebay extends Module
             foreach ($ebay_profiles as &$profile) {
                 $profile['site_extension'] = EbayCountrySpec::getSiteExtensionBySiteId($profile['ebay_site_id']);
             }
-
+            $alert = new EbayAlert($this);
             $smarty_vars = array_merge($smarty_vars, array(
                 'action_url'            => $_SERVER['REQUEST_URI'].'&action=logged',
                 'ebay_username'         => $this->context->cookie->eBayUsername,
@@ -1816,6 +1816,8 @@ class Ebay extends Module
                 'load_kb_path' => _MODULE_DIR_.'ebay/ajax/loadKB.php',
                 'ebay_token' => Configuration::get('EBAY_SECURITY_TOKEN'),
                 'admin_path' => basename(_PS_ADMIN_DIR_),
+                'alerts' => $alert->getAlerts(),
+                'ps_version' => _PS_VERSION_,
                 'help_country' => array(
                     'lang'           => $this->context->country->iso_code,
                     'module_version' => $this->version,

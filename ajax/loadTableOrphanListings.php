@@ -40,8 +40,7 @@ if (version_compare(_PS_VERSION_, '1.5', '>=') && Tools::getValue('id_shop')) {
 }
 
 if (!Configuration::get('EBAY_SECURITY_TOKEN')
-    || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')
-) {
+    || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN')) {
     return Tools::safeOutput(Tools::getValue('not_logged_str'));
 }
 
@@ -164,28 +163,19 @@ foreach ($res as &$row) {
                 break;
             }
         }
+        $ebayCategory = new EbayCategory($ebay_profile, $row['id_category_ref']);
+        $row['EbayCategoryIsMultiSku'] = $ebayCategory->isMultiSku();
     }
 
     if ($ebay_profile->getConfiguration('EBAY_SYNC_PRODUCTS_MODE') == 'A') {
         $row['sync'] = (bool)$row['EbayCategoryExists']; // only true if category synced with an eBay category
     }
 
-    $ebayCategory                  = new EbayCategory($ebay_profile, $row['id_category_ref']);
-    $row['EbayCategoryIsMultiSku'] = $ebayCategory->isMultiSku();
-
+    
     // filtering
     if (!$row['exists']) {
         $final_res[] = $row;
     } elseif (!$row['EbayCategoryExists']) {
-        $final_res[] = $row;
-    } elseif ($row['isMultiSku']
-        && !$row['notSetWithMultiSkuCat']// set as if on a MultiSku category
-        && !$row['EbayCategoryIsMultiSku']
-    ) {
-        $final_res[] = $row;
-    } elseif ($row['notSetWithMultiSkuCat']
-        && $row['EbayCategoryIsMultiSku']
-    ) {
         $final_res[] = $row;
     } elseif (!$row['active'] || $row['blacklisted']) {
         $final_res[] = $row;
