@@ -83,13 +83,13 @@
             <td>{if $p.active == 1}{l s='No' mod='ebay'}{else}<span class="red">{l s='Yes' mod='ebay'}</span>{/if}</td>
 
             <td>
-                {if $p.id_category_ref && !$p.EbayCategoryIsMultiSku && $p.hasAttributes && !$p.EbayProductRef}
+                {if $p.id_category_ref && !$p.EbayCategoryIsMultiSku && $p.hasAttributes }
                     {l s='Non multi-sku category' mod='ebay'}
                 {elseif $p.id_category_ref && !$p.EbayCategoryIsMultiSku && $p.hasAttributes && $p.EbayProductRef}
                     {l s='Several ads' mod='ebay'}
                 {elseif !$p.id_category_ref || !$p.EbayProductRef}
                     {l s='No listing yet' mod='ebay'}
-                {else}
+                {elseif !$p.hasAttributes}
                     <a href="{if $p.EbayProductRef}{$p.link|escape:'htmlall':'UTF-8'}{/if}"
                        target="_blank">{l s='Access to listing' mod='ebay'}</a>
                 {/if}
