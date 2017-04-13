@@ -359,10 +359,9 @@ class EbayRequest
 
 
         $config = (array)$datas->SellerProfileOptedIn;
-        if(!empty($config)) {
+        if (!empty($config)) {
             if ($config[0]== 'true') {
                 $data = 1;
-
             } else {
                 $data = 0;
             }
@@ -374,7 +373,6 @@ class EbayRequest
                 EbayConfiguration::set($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES', $data);
             }
         }
-
 
         return $userProfile;
     }

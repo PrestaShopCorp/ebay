@@ -153,9 +153,6 @@ $employee          = new Employee((int)Tools::getValue('id_employee'));
 $context->employee = $employee;
 
 foreach ($res as &$row) {
-
-
-
     foreach ($category_list as $cat) {
         if ($cat['id_category'] == $row['id_category']) {
             $row['category_full_name'] = $cat['name'];

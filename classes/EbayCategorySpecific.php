@@ -73,7 +73,6 @@ class EbayCategorySpecific
         foreach ($ebay_category_ids as $ebay_category_id) {
             $xml_data = $request->getCategorySpecifics($ebay_category_id);
             if ($xml_data->Recommendations->NameRecommendation) {
-
                 foreach ($xml_data->Recommendations->NameRecommendation as $recommendation) {
                     $required = isset($recommendation->ValidationRules->MinValues) && ((int)$recommendation->ValidationRules->MinValues >= 1);
 

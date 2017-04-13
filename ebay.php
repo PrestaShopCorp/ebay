@@ -430,8 +430,6 @@ class Ebay extends Module
          `'._DB_PREFIX_.'logs`,
          `'._DB_PREFIX_.'ebay_order_errors`;
          ');
-
-
     }
 
     /**
