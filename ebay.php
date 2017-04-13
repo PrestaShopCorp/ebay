@@ -388,7 +388,8 @@ class Ebay extends Module
 
     public function emptyEverything()
     {
-        Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'configuration WHERE name LIKE  "%EBAY%"');
+        $this->uninstall();
+        Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'configuration WHERE name LIKE  "%EBAY%"');
         Db::getInstance()->Execute('DROP TABLE IF EXISTS
          `' . _DB_PREFIX_ . 'ebay_category`,
          `' . _DB_PREFIX_ . 'ebay_category_condition`,
@@ -426,7 +427,7 @@ class Ebay extends Module
          `' . _DB_PREFIX_ . 'ebay_order_errors`;
          ');
 
-        $this->uninstall();
+
     }
 
     /**
