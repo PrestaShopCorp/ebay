@@ -186,7 +186,7 @@ class EbayAlert
             $domain = isset($shop->domain_ssl) ? Configuration::get('PS_SHOP_DOMAIN_SSL') : Configuration::get('PS_SHOP_DOMAIN');
         }
 
-        if ($wrong_domain) {
+        if ($wrong_domain && !is_null($this->ebay_profile)) {
             $url_vars = array();
             // if (version_compare(_PS_VERSION_, '1.5', '>'))
             //     $url_vars['controller'] = 'AdminMeta';
