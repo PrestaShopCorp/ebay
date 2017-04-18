@@ -100,17 +100,21 @@
 	
 	var conditions_data = new Array();
 	{foreach from=$conditions key=type item=condition}
-		conditions_data[{$type|escape:'htmlall':'UTF-8'}] = "{$condition|escape:'htmlall':'UTF-8'}";
-	{/foreach}
+		{if isset($type) and $type != ""}
+			conditions_data[{$type|escape:'htmlall':'UTF-8'}] = "{$condition|escape:'htmlall':'UTF-8'}";
+		{/if}
+    {/foreach}
 	
 	var possible_attributes = new Array();
 	{foreach from=$possible_attributes item=attribute}
-		possible_attributes[{$attribute.id_attribute_group|escape:'htmlall':'UTF-8'}] = "{$attribute.name|escape:'htmlall':'UTF-8'}";
-	{/foreach}		
+		{if isset($attribute.id_attribute_group) and $attribute.id_attribute_group != ""}
+			possible_attributes[{$attribute.id_attribute_group|escape:'htmlall':'UTF-8'}] = "{$attribute.name|escape:'htmlall':'UTF-8'}";
+		{/if}
+	{/foreach}
 		
 	var possible_features = new Array();
 	{foreach from=$possible_features item=feature}
-		{if isset($feature.id_feature) && $feature.id_feature != ""}
+		{if isset($feature.id_feature) and $feature.id_feature != ""}
 			possible_features[{$feature.id_feature|escape:'htmlall':'UTF-8'}] = "{$feature.name|escape:'htmlall':'UTF-8'}";
 		{/if}
 	{/foreach}
