@@ -114,7 +114,7 @@ class EbaySynchronizer
 
             /** @var EbayCategory $ebay_category */
             $ebay_category             = EbaySynchronizer::__getEbayCategory($product->id_category_default, $ebay_profile);
-            $variations                = null;
+            $variations                = array();
             $prodAttributeCombinations = $product->getAttributeCombinations($id_lang);
             if (!empty($prodAttributeCombinations)) {
                 $variations = EbaySynchronizer::__loadVariations($product, $ebay_profile, $context, $ebay_category);
