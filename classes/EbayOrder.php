@@ -170,9 +170,9 @@ class EbayOrder
      */
     public function exists()
     {
-        return (boolean)Db::getInstance()->getValue('SELECT `id_ebay_order`
+        return (boolean)(false !== Db::getInstance()->getValue('SELECT `id_ebay_order`
 			FROM `'._DB_PREFIX_.'ebay_order`
-			WHERE `id_order_ref` = \''.pSQL($this->id_order_ref).'\'');
+			WHERE `id_order_ref` = \''.pSQL($this->id_order_ref).'\''));
     }
 
     /**
