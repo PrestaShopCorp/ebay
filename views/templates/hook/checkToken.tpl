@@ -26,7 +26,7 @@
 	function checkToken()
 	{ldelim}
 		$.ajax({ldelim}
-			url: '{$url|escape:'htmlall':'UTF-8'}',
+			url: '{html_entity_decode($url|escape:'htmlall':'UTF-8')}',
 			cache: false,
 			type: "POST",
 			success: function(data)
