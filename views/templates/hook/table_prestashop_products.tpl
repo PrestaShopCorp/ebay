@@ -89,7 +89,7 @@
                     {l s='Several ads' mod='ebay'}
                 {elseif !$p.id_category_ref || !$p.EbayProductRef}
                     {l s='No listing yet' mod='ebay'}
-                {elseif !$p.hasAttributes}
+                {elseif !$p.hasAttributes || $p.EbayCategoryIsMultiSku}
                     <a href="{if $p.EbayProductRef}{$p.link|escape:'htmlall':'UTF-8'}{/if}"
                        target="_blank">{l s='Access to listing' mod='ebay'}</a>
                 {/if}

@@ -31,7 +31,23 @@
 		{rdelim});
 	</script>
 {/if}
-
+	<div class="bootstrap">
+            {if isset($alerts) && $alerts && sizeof($alerts)}
+                {foreach from=$alerts item='alert'}
+                    <div style="text-align: left;width: 100%;padding-left: 50px;border-left: solid 3px #fcc94f;padding: 15px;margin-bottom: 17px;padding-left: 50px;" class="{if $ps_version > '1.5'}alert {/if}alert-{if $alert.type == 'error'}danger{if $ps_version < '1.5'} error{/if}{elseif $alert.type == 'warning'}warning{if $ps_version < '1.5'} warn{/if}{elseif $alert.type == 'info'}info{if $ps_version < '1.5'} conf{/if}{/if}"><button type="button" class="close" data-dismiss="alert">×</button>
+                        {if isset($alert.link_warn)}
+                            {assign var="link" value='<a href="'|cat:$alert.link_warn|cat:'" target="_blank">'}
+                            {$alert.message|regex_replace:"/@link@/":$link|regex_replace:"/@\/link@/":"</a >"}
+                        {else}
+                            {$alert.message|escape:'htmlall':'UTF-8'}
+                        {/if}
+                        {if isset($alert.kb)}
+                            <a class="kb-help" data-errorcode="{$alert.kb.errorcode|escape:'htmlall':'UTF-8'}" data-module="ebay" data-lang="{$alert.kb.lang|escape:'htmlall':'UTF-8'}" module_version="{$alert.kb.module_version|escape:'htmlall':'UTF-8'}" prestashop_version="{$alert.kb.prestashop_version|escape:'htmlall':'UTF-8'}"></a>
+                        {/if}
+                    </div>
+                {/foreach}
+            {/if}
+        </div>
 <fieldset class="new">
 	<legend>{l s='Register the module on eBay' mod='ebay'}</legend>
 
@@ -106,7 +122,7 @@
 		{/literal}
 	</script>
     {if $config_country_ok == false}
-	<form action="{$action_url|escape:'htmlall':'UTF-8'}" method="post" id="ebay_register_form">
+	<form action="{$action_url|escape:'htmlall':'UTF-8'}" method="post" id="ebay_register_form">        
         <div id="ebay-register-content">
             <div id="title_register">
                 <strong>{l s='I have a professional eBay account:' mod='ebay'}</strong>

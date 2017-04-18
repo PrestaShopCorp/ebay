@@ -153,10 +153,6 @@ $employee          = new Employee((int)Tools::getValue('id_employee'));
 $context->employee = $employee;
 
 foreach ($res as &$row) {
-    if ($row['EbayProductRef']) {
-        $row['link'] = EbayProduct::getEbayUrl($row['EbayProductRef'], $ebay_request->getDev());
-    }
-
     foreach ($category_list as $cat) {
         if ($cat['id_category'] == $row['id_category']) {
             $row['category_full_name'] = $cat['name'];
@@ -182,8 +178,11 @@ foreach ($res as &$row) {
     // only true if category synced with an eBay category
 
     $link = $context->link;
-
-    $row['link'] = (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts').'&id_product='.(int)$row['id_product'].'&updateproduct') : $link->getProductLink((int)$row['id_product']));
+    
+    $row['link'] = (method_exists($link, 'getAdminLink') ? ($link->getAdminLink('AdminProducts') . '&id_product=' . (int)$row['id_product'] . '&updateproduct') : $link->getProductLink((int)$row['id_product']));
+    if ($row['EbayProductRef']) {
+        $row['link'] = EbayProduct::getEbayUrl($row['EbayProductRef'], $ebay_request->getDev());
+    }
 }
 
 $smarty = $context->smarty;

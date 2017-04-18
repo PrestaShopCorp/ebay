@@ -359,21 +359,20 @@ class EbayRequest
 
 
         $config = (array)$datas->SellerProfileOptedIn;
-
-        if ($config[0]== 'true') {
-            $data = 1;
-        } else {
-            $data = 0;
-        }
-
-        if ($data != (boolean) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES')) {
-            if ($data== 1) {
-                $this->importBusinessPolicies();
+        if (!empty($config)) {
+            if ($config[0]== 'true') {
+                $data = 1;
+            } else {
+                $data = 0;
             }
-            EbayConfiguration::set($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES', $data);
+
+            if ($data != (boolean) EbayConfiguration::get($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES')) {
+                if ($data== 1) {
+                    $this->importBusinessPolicies();
+                }
+                EbayConfiguration::set($this->ebay_profile->id, 'EBAY_BUSINESS_POLICIES', $data);
+            }
         }
-
-
 
         return $userProfile;
     }
