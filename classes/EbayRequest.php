@@ -748,7 +748,7 @@ class EbayRequest
 
             $policies_ship_name = rtrim($policies_ship_name, "-");
 
-            $seller_ship_prof = Db::getInstance()->getValue('SELECT `id_bussines_Policie` FROM ' . _DB_PREFIX_ . 'ebay_business_policies WHERE `name` ="' . $policies_ship_name . '"');
+            $seller_ship_prof = Db::getInstance()->getValue('SELECT `id_bussines_Policie` FROM '._DB_PREFIX_.'ebay_business_policies WHERE `name` ="'.$policies_ship_name.' AND `id_ebay_profile` = '.(int)$this->ebay_profile->id.'"');
 
             if (empty($seller_ship_prof) || $seller_ship_prof == null) {
                 $dataNewShipp = array(

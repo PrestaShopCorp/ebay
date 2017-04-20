@@ -65,8 +65,9 @@ class EbayBussinesPolicies
 
     public function resetBussinesPolicies($id_ebay_profile)
     {
-        if (Db::getInstance()->execute('DELETE FROM'._DB_PREFIX_.'ebay_category_business_config WHERE id_ebay_profile='.(int)$id_ebay_profile)) {
-            EbayRequest::importBusinessPolicies();
+        if (Db::getInstance()->execute('DELETE FROM '._DB_PREFIX_.'ebay_category_business_config WHERE id_ebay_profile='.(int)$id_ebay_profile)) {
+            $ebayRequest = new EbayRequest();
+            $ebayRequest->importBusinessPolicies();
         } else {
             return false;
         }
