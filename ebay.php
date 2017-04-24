@@ -90,6 +90,7 @@ $classes_to_load = array(
     'EbayKb',
     'EbayLogger',
     'EbayBussinesPolicies',
+    'EbayTools',
 );
 
 foreach ($classes_to_load as $classname) {
@@ -2084,7 +2085,7 @@ class Ebay extends Module
 
             echo 'KO|<div class="box_sync_ajax"><img src="'.$this->getPath().'/views/img/ajax-loader-small.gif" border="0" style="width:32px;height:32px;vertical-align:middle" /> '.$this->l('Products').' : '.$nb_products_done.' / '.$nb_products.'</div>';
         } else {
-            if (file_exists(dirname(__FILE__).'/log/syncError.php')) {
+            if (file_exists(dirname(__FILE__).'/log/syncError.php') && EbayTools::phpCheckSyntax(dirname(__FILE__).'/log/syncError.php', false, true)) {
                 $context = Context::getContext();
                 include dirname(__FILE__).'/log/syncError.php';
                 if (count($context->all_error) == 0) {

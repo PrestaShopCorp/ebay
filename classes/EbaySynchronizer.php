@@ -69,7 +69,7 @@ class EbaySynchronizer
         $date = date('Y-m-d H:i:s');
 
         // Get errors back
-        if (file_exists(dirname(__FILE__).'/../log/syncError.php')) {
+        if (file_exists(dirname(__FILE__).'/../log/syncError.php') && EbayTools::phpCheckSyntax(dirname(__FILE__).'/../log/syncError.php', false, true)) {
             include dirname(__FILE__).'/../log/syncError.php';
         }
 
