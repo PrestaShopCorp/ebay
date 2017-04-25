@@ -402,14 +402,22 @@ class EbaySynchronizer
     {
         $ebay_profile = new EbayProfile($id_ebay_profile);
         $item_id      = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id, $id_attribute);
-        if (empty($item_id)) {
-            EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, 0, $date, $id_attribute);
-            $ebay->addFixedPriceItem($data);
-            if ($ebay->itemID > 0) {
+        if (empty($item_id) && 0 !== $item_id) {
+            try {
+                EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, 0, $date, $id_attribute);
+                $result = $ebay->addFixedPriceItem($data);
+            } catch (Exception $e) {
+                EbayProduct::deleteOldProductsWithoutProductRef();
+                $result = false;
+            }
+
+            if ($result && $ebay->itemID > 0) {
                 EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($ebay->itemID)), $id_ebay_profile, $id_attribute);
             } else {
                 EbayProduct::deleteByIdProduct($product_id, $id_ebay_profile, $id_attribute);
             }
+        } elseif (0 !== $item_id) {
+            EbayProduct::deleteOldProductsWithoutProductRef();
         }
 
         return $ebay;
@@ -434,7 +442,7 @@ class EbaySynchronizer
         if ($ebay->errorCode == 291 || $ebay->errorCode == 17) {
             // We delete from DB and Add it on eBay
             EbayProduct::deleteByIdProductRef($data['itemID']);
-            EbaySynchronizer::__addItem($product_id, $data, $id_ebay_profile, $ebay, $date, $id_attribute);
+            $ebay = EbaySynchronizer::__addItem($product_id, $data, $id_ebay_profile, $ebay, $date, $id_attribute);
         }
 
         return $ebay;
@@ -452,15 +460,22 @@ class EbaySynchronizer
     {
         $ebay_profile = new EbayProfile($id_ebay_profile);
         $item_id      = EbayProduct::getIdProductRef($product_id, $ebay_profile->ebay_user_identifier, $ebay_profile->ebay_site_id);
-        if (empty($item_id)) {
-            EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, 0, $date);
-            $ebay->addFixedPriceItemMultiSku($data);
+        if (empty($item_id) && 0 !== $item_id) {
+            try {
+                EbaySynchronizer::__insertEbayProduct($product_id, $id_ebay_profile, 0, $date);
+                $result = $ebay->addFixedPriceItemMultiSku($data);
+            } catch (Exception $e) {
+                EbayProduct::deleteOldProductsWithoutProductRef();
+                $result = false;
+            }
 
-            if ($ebay->itemID > 0) {
+            if ($result && $ebay->itemID > 0) {
                 EbayProduct::updateByIdProduct($product_id, array('id_product_ref' => pSQL($ebay->itemID)), $id_ebay_profile);
             } else {
                 EbayProduct::deleteByIdProduct($product_id, $id_ebay_profile, 0);
             }
+        } elseif (0 !== $item_id) {
+            EbayProduct::deleteOldProductsWithoutProductRef();
         }
 
         return $ebay;

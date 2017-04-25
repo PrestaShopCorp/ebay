@@ -632,7 +632,9 @@ class EbayRequest
         $return_policy = $this->_getReturnPolicy($data);
 
         if (!is_string($return_policy) && is_array($return_policy)) {
-            return $this->error = $return_policy['error'];
+            $this->error = $return_policy['error'];
+
+            return empty($this->error);
         }
         $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));
         $vars = array();
@@ -1095,7 +1097,9 @@ class EbayRequest
         $return_policy = $this->_getReturnPolicy($data);
 
         if (!is_string($return_policy) && is_array($return_policy)) {
-            return $this->error = $return_policy['error'];
+            $this->error = $return_policy['error'];
+
+            return empty($this->error);
         }
 
         $currency = new Currency($this->ebay_profile->getConfiguration('EBAY_CURRENCY'));

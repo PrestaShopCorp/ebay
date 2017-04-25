@@ -43,6 +43,15 @@ class EbayProduct
         return Db::getInstance()->getValue($query);
     }
 
+    public static function deleteOldProductsWithoutProductRef()
+    {
+        $query = 'DELETE FROM `'._DB_PREFIX_.'ebay_product`
+                  WHERE `id_product_ref` = 0
+                  AND `date_upd` < DATE_SUB(NOW(), INTERVAL 1 HOUR)';
+
+        return Db::getInstance()->execute($query);
+    }
+
     public static function getPercentOfCatalog($ebay_profile)
     {
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
