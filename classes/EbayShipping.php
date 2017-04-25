@@ -75,8 +75,7 @@ class EbayShipping
             $shippings_product = Db::getInstance()->ExecuteS('SELECT id_carrier_reference as ps_carrier
             FROM '._DB_PREFIX_.'product_carrier WHERE id_product = '.(int)$id_product);
             if (count($shippings_product) > 0) {
-                $shippings_product[0]['ps_carrier'] = 10;
-                $intersect_shippings                = self::arrayIntersectAssocField($shippings, $shippings_product, 'ps_carrier');
+                $intersect_shippings = self::arrayIntersectAssocField($shippings, $shippings_product, 'ps_carrier');
                 if ($intersect_shippings) {
                     $shippings = $intersect_shippings;
                 }

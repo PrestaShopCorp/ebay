@@ -59,7 +59,7 @@ class EbayTools
         return isset($_POST[$key]) ? true : (isset($_GET[$key]) ? true : false);
     }
 
-    public static function phpCheckSyntax($fileName, $checkIncludes = true, $delete = false)
+    public static function phpCheckSyntax($fileName, $checkIncludes = false, $delete = false)
     {
         try {
             self::checkSyntax($fileName, $checkIncludes);
@@ -82,7 +82,7 @@ class EbayTools
      * @param bool $checkIncludes
      * @throws Exception
      */
-    public static function checkSyntax($fileName, $checkIncludes = true)
+    public static function checkSyntax($fileName, $checkIncludes = false)
     {
         // If it is not a file or we can't read it throw an exception
         if (!is_file($fileName) || !is_readable($fileName)) {
@@ -92,22 +92,24 @@ class EbayTools
         // Sort out the formatting of the filename
         $fileName = realpath($fileName);
 
-        // Get the shell output from the syntax check command
-        $output = shell_exec('php -l "'.$fileName.'"');
-
-        // Try to find the parse error text and chop it off
-        $syntaxError = preg_replace("/Errors parsing.*$/", "", $output, -1, $count);
+        // Eval the code
+        $contentFile = file_get_contents($fileName);
+        $contentFile = '?>'.$contentFile;
+        ob_start();
+        $evalResult = @eval($contentFile);
+        ob_end_clean();
 
         // If the error text above was matched, throw an exception containing the syntax error
-        if ($count > 0) {
-            throw new Exception(trim($syntaxError));
+        if ($evalResult === false) {
+            $errors = error_get_last();
+            throw new Exception("Parse error: ".$errors['message'].' in '.$fileName.' on line '.$errors['line']);
         }
 
         // If we are going to check the files includes
         if ($checkIncludes) {
             foreach (self::getIncludes($fileName) as $include) {
                 // Check the syntax for each include
-                self::checkSyntax($include);
+                self::checkSyntax($include, $checkIncludes);
             }
         }
     }
