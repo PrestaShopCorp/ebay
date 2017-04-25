@@ -1,6 +1,9 @@
 log/request.php
 
-orders.php
+log/orders.php
+log/orders.php.error
+log/syncError.php
+log/syncError.php.error
 request.txt
 classes/log_database.txt
 classes/log-error.txt
