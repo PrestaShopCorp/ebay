@@ -828,7 +828,7 @@ class EbayRequest
                 $this->_logApiCall('setSellerProfile', $vars, $response, $data['id_product']);
             }
 
-            DB::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_product SET `id_shipping_policies` = "' . $shippingPolicies[0]['id_bussines_Policie'] . '" WHERE `id_product` = "' . $data['id_product'] . '"');
+            DB::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'ebay_product SET `id_shipping_policies` = "' . pSQL($shippingPolicies[0]['id_bussines_Policie']) . '" WHERE `id_product` = "' .(int)$data['id_product'] . '"');
 
             $vars = array(
                 'payment_profile_id' => $policies_config[0]['id_payment'],
