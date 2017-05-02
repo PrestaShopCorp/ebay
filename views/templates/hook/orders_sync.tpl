@@ -1,5 +1,5 @@
 {*
-* 2007-2013 PrestaShop
+* 2007-2017 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,31 +18,32 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2016 PrestaShop SA
+*  @copyright 2007-2017 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-	<fieldset style="margin-top:10px;">
-		
-        <legend>{l s='Synchronize' mod='ebay'}</span></legend>
+<div class="warning big">
+    {l s='Only orders marked as complete in eBay will be retrieven when importing the orders form eBay.' mod='ebay'}
+</div>
 
-		<label>
-			{l s='Manually Sync Orders' mod='ebay'}
-		</label>
-		
-        <div class="margin-form">
-			
-			<a href="{$url|escape:'urlencode'}&EBAY_SYNC_ORDERS=1"><input type="button" class="button" value="{l s='Sync Orders from eBay' mod='ebay'}" /></a>
-	        <br>
-		
-        </div>
-        
-	</fieldset>
-    <br>
-    <p>
-        {l s='Orders are automatically retrieved from eBay every 30 minutes. You can immediately retrieve them by clicking the button below.' mod='ebay'}
-    </p>
-    <p>
-        {l s='If you wish to retrieve orders using a cron task, please go to the “Advanced parameters” tab.' mod='ebay'}
-    </p>
+<fieldset style="margin-top:10px;">
+    <legend>{l s='Synchronize' mod='ebay'}</span></legend>
+
+    <label>
+        {l s='Manually Sync Orders' mod='ebay'}
+    </label>
+
+    <div class="margin-form">
+        <a href="{$url|escape:'htmlall':'UTF-8'}&EBAY_SYNC_ORDERS=1"><input type="button" class="button"
+                                                                      value="{l s='Sync Orders from eBay' mod='ebay'}"/></a>
+        <br>
+    </div>
+</fieldset>
+<br>
+<p>
+    {l s='Orders are automatically retrieved from eBay every 30 minutes. You can immediately retrieve them by clicking the button below.' mod='ebay'}
+</p>
+<p>
+    {l s='If you wish to retrieve orders using a cron task, please go to the “Advanced parameters” tab.' mod='ebay'}
+</p>

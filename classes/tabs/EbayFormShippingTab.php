@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
+ *  @copyright 2007-2017 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -75,6 +75,19 @@ class EbayFormShippingTab extends EbayTab
         $zones = Zone::getZones(true);
         foreach ($zones as &$zone) {
             $zone['carriers'] = Carrier::getCarriers($this->context->language->id, false, false, $zone['id_zone']);
+            if ($zone['carriers']) {
+                foreach ($zone['carriers'] as &$carrier) {
+                    $psCarriersPr = new Carrier($carrier['id_carrier']);
+                    $sql = 'SELECT MIN(d.`price`) FROM `'._DB_PREFIX_.'delivery` d WHERE d.`id_zone` = '.(int)$zone['id_zone'].' AND d.`id_carrier` = '.(int)$carrier['id_carrier'];
+                    $result = Db::getInstance()->getValue($sql);
+
+                    if ($result == null) {
+                        $carrier['price'] = 0;
+                    } else {
+                        $carrier['price'] = round($result, 2, PHP_ROUND_HALF_DOWN);
+                    }
+                }
+            }
         }
 
         $template_vars = array(
@@ -94,6 +107,13 @@ class EbayFormShippingTab extends EbayTab
             'ebay_token' => $configs['EBAY_SECURITY_TOKEN'],
             'id_ebay_profile' => $this->ebay_profile->id,
             'newPrestashopZone' => $zones,
+            'help_ship_cost' => array(
+                'lang'           => $this->context->country->iso_code,
+                'module_version' => $this->ebay->version,
+                'ps_version'     => _PS_VERSION_,
+                'error_code'     => 'HELP-SHIPPING-ADDITIONAL-ITEM-COST',
+            ),
+
         );
 
         return $this->display('shipping.tpl', $template_vars);
@@ -118,7 +138,6 @@ class EbayFormShippingTab extends EbayTab
                 } else {
                     Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_shipping_zone_excluded', array('excluded' => 1), 'UPDATE', $where);
                 }
-
             }
         }
 
@@ -128,14 +147,25 @@ class EbayFormShippingTab extends EbayTab
         EbayShipping::truncate($this->ebay_profile->id);
 
         if ($ebay_carriers = Tools::getValue('ebayCarrier')) {
-
             $ps_carriers = Tools::getValue('psCarrier');
             $extra_fees = Tools::getValue('extrafee');
+            $ps_ship= new Carrier($ps_carriers);
 
+            $ps_ship->getMaxDeliveryPriceByPrice($this->ebay_profile->id);
             foreach ($ebay_carriers as $key => $ebay_carrier) {
                 if (!empty($ebay_carrier) && !empty($ps_carriers[$key])) {
                     //Get id_carrier and id_zone from ps_carrier
                     $infos = explode('-', $ps_carriers[$key]);
+                    $ps_ship= new Carrier($infos[0]);
+                    if ($ps_ship->getMaxDeliveryPriceByPrice($infos[1]) == false) {
+                        $ship_cost = 0;
+                    } else {
+                        $ship_cost = $ps_ship->getMaxDeliveryPriceByPrice($infos[1]);
+                    }
+                    if (Tools::getIsset($extra_fees) && (int) $ship_cost < $extra_fees) {
+                        return false;
+                    }
+
                     EbayShipping::insert($this->ebay_profile->id, $ebay_carrier, $infos[0], $extra_fees[$key], $infos[1]);
                 }
             }

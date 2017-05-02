@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2014 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
+ *  @copyright 2007-2017 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -108,7 +108,6 @@ class EbayAlert
             $list = array('country' => '', 'order' => '');
 
             foreach ($countries as $key => $orders) {
-
                 $country = new Country(Country::getByIso($key), (int) Configuration::get('PS_LANG_DEFAULT'));
 
                 if ($country->active) {
@@ -120,7 +119,6 @@ class EbayAlert
                 foreach ($orders as $order) {
                     Tools::isEmpty($list['order']) ? ($list['order'] .= $order['id_order_seller']) : ($list['order'] .= ', '.$order['id_order_seller']);
                 }
-
             }
 
             $this->errors[] = array(
@@ -132,6 +130,8 @@ class EbayAlert
 
     public function sendDailyMail()
     {
+        //For the moment we do not send emails
+        return true;
         $this->getAlerts();
 
         if (!$this->formatEmail()) {
@@ -145,10 +145,10 @@ class EbayAlert
             'ebayAlert',
             Mail::l('Recap of your eBay module', (int) Configuration::get('PS_LANG_DEFAULT')),
             $template_vars,
-            strval(Configuration::get('PS_SHOP_EMAIL')),
+            (string) Configuration::get('PS_SHOP_EMAIL'),
             null,
-            strval(Configuration::get('PS_SHOP_EMAIL')),
-            strval(Configuration::get('PS_SHOP_NAME')),
+            (string) Configuration::get('PS_SHOP_EMAIL'),
+            (string) Configuration::get('PS_SHOP_NAME'),
             null,
             null,
             dirname(__FILE__).'/../views/templates/mails/'
@@ -158,12 +158,11 @@ class EbayAlert
 
     public function formatEmail()
     {
-
         $templates_vars = array();
 
-        (!empty($this->errors)) ? $templates_vars['errors'] = $this->errors : '';
-        (!empty($this->warnings)) ? $templates_vars['warnings'] = $this->warnings : '';
-        (!empty($this->infos)) ? $templates_vars['infos'] = $this->infos : '';
+        $templates_vars['errors'] = (!empty($this->errors)) ? $this->errors : '';
+        $templates_vars['warnings'] = (!empty($this->warnings)) ? $this->warnings : '';
+        $templates_vars['infos'] = (!empty($this->infos)) ? $this->infos : '';
 
         if (empty($templates_vars)) {
             return false;
@@ -178,8 +177,8 @@ class EbayAlert
     public function checkUrlDomain()
     {
         // check domain
+        $shop = $this->ebay_profile instanceof EbayProfile ? new Shop($this->ebay_profile->id_shop) : new Shop();
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
-            $shop = $this->ebay_profile instanceof EbayProfile ? new Shop($this->ebay_profile->id_shop) : new Shop();
             $wrong_domain = ($_SERVER['HTTP_HOST'] != $shop->domain && $_SERVER['HTTP_HOST'] != $shop->domain_ssl && Tools::getValue('ajax') == false);
             $domain = isset($shop->domain_ssl) ? $shop->domain_ssl : $shop->domain.DIRECTORY_SEPARATOR.$shop->physical_uri;
         } else {
@@ -187,7 +186,7 @@ class EbayAlert
             $domain = isset($shop->domain_ssl) ? Configuration::get('PS_SHOP_DOMAIN_SSL') : Configuration::get('PS_SHOP_DOMAIN');
         }
 
-        if ($wrong_domain) {
+        if ($wrong_domain && !is_null($this->ebay_profile)) {
             $url_vars = array();
             // if (version_compare(_PS_VERSION_, '1.5', '>'))
             //     $url_vars['controller'] = 'AdminMeta';
@@ -208,7 +207,6 @@ class EbayAlert
                     'prestashop_version' => _PS_VERSION_,
                 ),
             );
-
         }
     }
 
@@ -248,14 +246,12 @@ class EbayAlert
                         'message' => $msg,
                     );
                 }
-
             } else {
                 $this->errors[] = array(
                     'type' => 'error',
                     'message' => $this->ebay->l('The product cron job has never been run.'),
                 );
             }
-
         }
 
         // ORDERS
@@ -281,15 +277,43 @@ class EbayAlert
                         'message' => $this->ebay->l('Last order synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
                     );
                 }
-
             } else {
                 $this->errors[] = array(
                     'type' => 'error',
                     'message' => $this->ebay->l('Order cron job has never been run.'),
                 );
             }
-
         }
 
+        // Returns
+        if ((int) Configuration::get('EBAY_SYNC_ORDERS_RETURNS_BY_CRON') == 1) {
+            if ($this->ebay_profile->getConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE') != null) {
+                $datetime = new DateTime($this->ebay_profile->getConfiguration('EBAY_ORDER_RETURNS_LAST_UPDATE'));
+
+                $date = date('Y-m-d', strtotime($datetime->format('Y-m-d H:i:s')));
+                $time = date('H:i:s', strtotime($datetime->format('Y-m-d H:i:s')));
+
+                $datetime2 = new DateTime();
+
+                $interval = round(($datetime2->format('U') - $datetime->format('U')) / (60 * 60 * 24));
+
+                if ($interval >= 1) {
+                    $this->errors[] = array(
+                        'type' => 'error',
+                        'message' => $this->ebay->l('Last order returns synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
+                    );
+                } else {
+                    $this->infos[] = array(
+                        'type' => 'info',
+                        'message' => $this->ebay->l('Last order returns synchronization has been done the ').$date.$this->ebay->l(' at ').$time,
+                    );
+                }
+            } else {
+                $this->errors[] = array(
+                    'type' => 'error',
+                    'message' => $this->ebay->l('Order returns cron job has never been run.'),
+                );
+            }
+        }
     }
 }

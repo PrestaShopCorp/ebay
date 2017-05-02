@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
+ *  @copyright 2007-2017 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -47,6 +47,7 @@ if (!Configuration::get('EBAY_SECURITY_TOKEN') || Tools::getValue('token') != Co
 }
 
 if (Module::isInstalled('ebay')) {
+    /** @var Ebay $ebay */
     $ebay = Module::getInstanceByName('ebay');
 
     if (version_compare(_PS_VERSION_, '1.5', '<')) {
@@ -64,6 +65,7 @@ if (Module::isInstalled('ebay')) {
 
         $root_category = Category::getRootCategory();
         $categories = Category::getCategories(Tools::getValue('id_lang'));
+
         $category_list = $ebay->getChildCategories($categories, $root_category->id_parent, array(), '', Tools::getValue('s'));
 
         $offset = 20;
@@ -80,11 +82,10 @@ if (Module::isInstalled('ebay')) {
             AND `id_country` = '.(int) $ebay_profile->ebay_site_id);
 
         if (version_compare(_PS_VERSION_, '1.5', '>')) {
-
             $rq_products = '
                 SELECT COUNT(DISTINCT(p.`id_product`)) AS nbProducts,
                     COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts,
-                    p.`id_category_default`
+                    ps.`id_category_default`
                 FROM `'._DB_PREFIX_.'product` AS p
 
                 INNER JOIN `'._DB_PREFIX_.'product_shop` AS ps
@@ -96,10 +97,9 @@ if (Module::isInstalled('ebay')) {
                 AND epc.blacklisted = 1
 
                 WHERE 1 '.$ebay->addSqlRestrictionOnLang('ps').'
-                AND ps.`id_shop` = 1
-                GROUP BY p.`id_category_default`';
+                AND ps.`id_shop` = '.(int)$ebay_profile->id_shop.'
+                GROUP BY ps.`id_category_default`';
         } else {
-
             $rq_products = 'SELECT COUNT(DISTINCT(p.`id_product`)) AS nbProducts,
                 COUNT(DISTINCT(epc.`id_product`)) AS nbNotSyncProducts, `id_category_default`
                 FROM `'._DB_PREFIX_.'product` p
@@ -109,7 +109,6 @@ if (Module::isInstalled('ebay')) {
                 AND epc.`id_ebay_profile` = '.(int) $ebay_profile->id.'
                 AND epc.blacklisted = 1
                 GROUP BY `id_category_default`';
-
         }
 
         $get_products = Db::getInstance()->ExecuteS($rq_products);
@@ -134,7 +133,10 @@ if (Module::isInstalled('ebay')) {
             AND ecc.`id_ebay_profile` = '.(int) $ebay_profile->id.'
             WHERE ec.`id_country` = '.(int) $ebay_profile->ebay_site_id.'
             ORDER BY `level`';
-        foreach (Db::getInstance()->executeS($sql) as $category) {
+
+        $datas = Db::getInstance()->executeS($sql);
+
+        foreach ($datas as $category) {
             /* Add datas */
             if (isset($category['id_category'])) {
                 $category_config_list[$category['id_category']] = $category;
@@ -181,7 +183,9 @@ if (Module::isInstalled('ebay')) {
             'currencySign' => $currency->sign,
             'p' => $page,
         );
+        
         $smarty->assign($template_vars);
+        Ebay::addSmartyModifiers();
         echo $ebay->display(realpath(dirname(__FILE__).'/../'), '/views/templates/hook/table_categories.tpl');
     }
 }

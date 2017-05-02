@@ -1,5 +1,5 @@
 {*
-* 2007-2016 PrestaShop
+* 2007-2017 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2016 PrestaShop SA
+*  @copyright 2007-2017 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -38,7 +38,7 @@
 					{$alert.message|escape:'htmlall':'UTF-8'}
 				{/if}
 				{if isset($alert.kb)}
-					<a class="kb-help" data-errorcode="{$alert.kb.errorcode}" data-module="ebay" data-lang="{$alert.kb.lang}" module_version="{$alert.kb.module_version}" prestashop_version="{$alert.kb.prestashop_version}"></a>
+					<a class="kb-help" data-errorcode="{$alert.kb.errorcode|escape:'htmlall':'UTF-8'}" data-module="ebay" data-lang="{$alert.kb.lang|escape:'htmlall':'UTF-8'}" module_version="{$alert.kb.module_version|escape:'htmlall':'UTF-8'}" prestashop_version="{$alert.kb.prestashop_version|escape:'htmlall':'UTF-8'}"></a>
 				{/if}
 			</div>
 		{/foreach}
@@ -56,7 +56,8 @@
     
 	<li id="menuTab3" class="menuTabButton {$shippingValidator.indicator|escape:'htmlall':'UTF-8'}">5. {l s='Dispatch and Shipping' mod='ebay'}</li>
     
-	<li id="menuTab4" class="menuTabButton {$templateValidator.indicator|escape:'htmlall':'UTF-8'}">6. {l s='Template manager' mod='ebay'}</li>    
+	<li id="menuTab4" class="menuTabButton {$templateValidator.indicator|escape:'htmlall':'UTF-8'}">6. {l s='Template manager' mod='ebay'}</li>
+	<li id="menuTab77" class="menuTabButton {$businesspoliciesValidator.indicator|escape:'htmlall':'UTF-8'}">7. {l s='Business Policies' mod='ebay'}</li>
     
 </ul>
 
@@ -66,7 +67,9 @@
 	<li id="menuTab5" class="menuTabButton ">1. {l s='List products' mod='ebay'}</li>
 	
     <li id="menuTab14" class="menuTabButton ">2. {l s='Orders Synchronization' mod='ebay'}</li>
-
+	{if $ps_version > '1.4.12'}
+	<li id="menuTab79" class="menuTabButton ">3. {l s='Refunds and Returns Synchronization' mod='ebay'}</li>
+	{/if}
 </ul>
 
 
@@ -83,6 +86,9 @@
     <li id="menuTab11" class="menuTabButton">5. {l s='API Logs' mod='ebay'}</li>
 	
     <li id="menuTab12" class="menuTabButton">6. {l s='Order Logs' mod='ebay'}</li>
+	{if $ps_version > '1.4.12'}
+	<li id="menuTab78" class="menuTabButton">7. {l s='Order Returns' mod='ebay'}</li>
+	{/if}
     
 </ul>
 
@@ -92,21 +98,78 @@
 </ul>
 
 <div id="tabList" class="{$class_general|escape:'htmlall':'UTF-8'}">
-	<div id="menuTab1Sheet" class="tabItem selected">{if isset($parametersValidator.message)}<div class="ebay_{$parametersValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">{$parametersValidator.message|escape:'htmlall':'UTF-8'}</div>{/if}{$form_parameters}</div>
-	<div id="menuTab13Sheet" class="tabItem selected">{if isset($parametersValidator.message)}<div class="ebay_{$parametersValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">{$parametersValidator.message|escape:'htmlall':'UTF-8'}</div>{/if}{$form_advanced_parameters}</div>
-	<div id="menuTab2Sheet" class="tabItem">{if isset($categoryValidator.message)}<div class="ebay_{$categoryValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">{$categoryValidator.message|escape:'htmlall':'UTF-8'}</div>{/if}{$form_category}</div>
-	<div id="menuTab8Sheet" class="tabItem">{if isset($itemSpecificValidator.message)}<div class="ebay_{$itemSpecificValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">{$itemSpecificValidator.message|escape:'htmlall':'UTF-8'}</div>{/if}{$form_items_specifics}</div>
-	<div id="menuTab3Sheet" class="tabItem">{if isset($shippingValidator.message)}<div class="ebay_{$shippingValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">{$shippingValidator.message|escape:'htmlall':'UTF-8'}</div>{/if}{$form_shipping}</div>
-	<div id="menuTab4Sheet" class="tabItem">{if isset($templateValidator.message)}<div class="ebay_{$templateValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">{$templateValidator.message|escape:'htmlall':'UTF-8'}</div>{/if}{$form_template_manager}</div>
-	<div id="menuTab5Sheet" class="tabItem">{if isset($listingValidator.message)}<div class="ebay_{$listingValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">{$listingValidator.message|escape:'htmlall':'UTF-8'}</div>{/if}{$form_ebay_sync}</div>
+	<div id="menuTab1Sheet" class="tabItem selected">
+		{if isset($parametersValidator.message)}
+			<div class="ebay_{$parametersValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">
+				{$parametersValidator.message|escape:'htmlall':'UTF-8'}
+			</div>
+		{/if}
+		{$form_parameters|ebayHtml}
+	</div>
+	<div id="menuTab13Sheet" class="tabItem selected">
+		{if isset($parametersValidator.message)}
+			<div class="ebay_{$parametersValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">
+				{$parametersValidator.message|escape:'htmlall':'UTF-8'}
+			</div>
+		{/if}
+		{$form_advanced_parameters|ebayHtml}
+	</div>
+	<div id="menuTab2Sheet" class="tabItem">
+		{if isset($categoryValidator.message)}
+			<div class="ebay_{$categoryValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">
+				{$categoryValidator.message|escape:'htmlall':'UTF-8'}
+			</div>
+		{/if}
+		{$form_category|ebayHtml}
+	</div>
+	<div id="menuTab8Sheet" class="tabItem">
+		{if isset($itemSpecificValidator.message)}
+			<div class="ebay_{$itemSpecificValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">
+				{$itemSpecificValidator.message|escape:'htmlall':'UTF-8'}
+			</div>
+		{/if}
+		{$form_items_specifics|ebayHtml}
+	</div>
+	<div id="menuTab3Sheet" class="tabItem">
+
+		{if isset($shippingValidator.message)}
+			<div class="ebay_{$shippingValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">
+			{$shippingValidator.message|escape:'htmlall':'UTF-8'}
+			</div>
+		{/if}
+		{$form_shipping|ebayHtml}
+	</div>
+	<div id="menuTab4Sheet" class="tabItem">
+		{if isset($templateValidator.message)}
+			<div class="ebay_{$templateValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">
+				{$templateValidator.message|escape:'htmlall':'UTF-8'}
+			</div>
+		{/if}
+		{$form_template_manager|ebayHtml}
+	</div>
+	<div id="menuTab5Sheet" class="tabItem">
+		{if isset($listingValidator.message)}
+			<div class="ebay_{$listingValidator.indicatorBig|escape:'htmlall':'UTF-8'} big">
+			{$listingValidator.message|escape:'htmlall':'UTF-8'}
+			</div>
+		{/if}
+		{$form_ebay_sync|ebayHtml}
+	</div>
 	<div id="menuTab9Sheet" class="tabItem">{$ebay_listings}</div>
     <div id="menuTab10Sheet" class="tabItem">{$form_store_category}</div>
 	<div id="menuTab11Sheet" class="tabItem">{$api_logs}</div>
 	<div id="menuTab12Sheet" class="tabItem">{$order_logs}</div>
 	<div id="menuTab6Sheet" class="tabItem">{$orders_history}</div>
 	<div id="menuTab14Sheet" class="tabItem">{$orders_sync}</div>
+	{if $ps_version > '1.4.12'}
+		<div id="menuTab79Sheet" class="tabItem">{$orders_returns_sync}</div>
+		<div id="menuTab78Sheet" class="tabItem">{$order_returns}</div>
+	{/if}
     <div id="menuTab15Sheet" class="tabItem">{$ps_products}</div>
 	<div id="menuTab16Sheet" class="tabItem">{$orphan_listings}</div>
+	<div id="menuTab77Sheet" class="tabItem">
+		{$form_business_policies|ebayHtml}
+	</div>
 </div>
 <br clear="left" />
 <br />

@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
+ *  @copyright 2007-2017 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -52,6 +52,8 @@ class EbayReturnsPolicyConfiguration extends ObjectModel
 
     public function getFields()
     {
+        
+        $fields = array();
         parent::validateFields();
         if (isset($this->id)) {
             $fields['id_ebay_returns_policy_configuration'] = (int) ($this->id);
@@ -59,7 +61,7 @@ class EbayReturnsPolicyConfiguration extends ObjectModel
 
         $fields['ebay_returns_within'] = pSQL($this->ebay_returns_within);
         $fields['ebay_returns_who_pays'] = pSQL($this->ebay_returns_who_pays);
-        $fields['ebay_returns_description'] = pSQL($this->ebay_returns_description);
+        $fields['ebay_returns_description'] = pSQL($this->ebay_returns_description, true);
         $fields['ebay_returns_accepted_option'] = pSQL($this->ebay_returns_accepted_option);
 
         return $fields;
@@ -99,7 +101,6 @@ class EbayReturnsPolicyConfiguration extends ObjectModel
         if ($row = Db::getInstance()->getRow($sql)) {
             return $row['id_ebay_returns_policy_configuration'];
         }
-
     }
 
     // for upgrade to eBay module version 1.7

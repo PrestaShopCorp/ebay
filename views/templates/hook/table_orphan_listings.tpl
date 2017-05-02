@@ -1,5 +1,5 @@
 {*
-* 2007-2014 PrestaShop
+* 2007-2017 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2016 PrestaShop SA
+*  @copyright 2007-2017 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -26,7 +26,7 @@
 {if $ads === false || sizeof($ads) === 0}
 
 	<tr>
-		<td colspan="3" class="center">{l s='No orphan listing' mod='ebay'}</td>
+		<td colspan="10" class="center">{l s='No orphan listing' mod='ebay'}</td>
 	</tr>
 
 {else}
@@ -41,7 +41,7 @@
                 {/if} 
 			</td>
 
-            <td>{if $a.exists}{$a.psProductName|escape:'htmlall':'UTF-8'}{else}{l s='Product deleted. Id: ' mod='ebay'}{$a.id_product}{/if}</td>
+            <td>{if $a.exists}{$a.psProductName|escape:'htmlall':'UTF-8'}{else}{l s='Product deleted. Id: ' mod='ebay'}{$a.id_product|escape:'htmlall':'UTF-8'}{/if}</td>
             
             {if $a.exists}
                 <td class="center">{if $a.active && !$a.blacklisted}{l s='No' mod='ebay'}{else}{l s='Yes' mod='ebay'}{/if}</td>
@@ -56,13 +56,13 @@
             {/if}                
             
             {if $a.exists}
-                <td>{$a.category_full_name}</td>
+                <td>{$a.category_full_name|escape:'htmlall':'UTF-8'}</td>
             {else}
                 <td class="center">-</td>
             {/if}                
 
             {if $a.exists && $a.id_category_ref}
-                <td>{$a.ebay_category_full_name}</td>
+                <td>{$a.ebay_category_full_name|escape:'htmlall':'UTF-8'}</td>
             {else}
                 <td class="center">-</td>
             {/if}
@@ -80,7 +80,7 @@
             {/if}
             
             <td class="center">
-                <a href="#" class="delete-orphan" ref="{$a.id_product_ref}"><img src="../img/admin/delete.gif" /></a>
+                <a href="#" class="delete-orphan" ref="{$a.id_product_ref|escape:'htmlall':'UTF-8'}"><img src="../img/admin/delete.gif" /></a>
             </td>
             
             <td>

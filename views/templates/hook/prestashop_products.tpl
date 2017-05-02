@@ -1,5 +1,5 @@
 {*
-* 2007-2014 PrestaShop
+* 2007-2017 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2016 PrestaShop SA
+*  @copyright 2007-2017 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -45,7 +45,7 @@
         <input id="products-filter" type="search" placeholder="{l s='Filter products' mod='ebay'}" />
     </p>
     
-    <form id="products-form-view" action="{$show_products_url}" method="post" class="form">
+    <form id="products-form-view" action="{$show_products_url|escape:'htmlall':'UTF-8'}" method="post" class="form">
         <p class="center">
             <input class="primary button" name="submitSave" type="submit" value="{l s='Load Products' mod='ebay'}" />
         </p>
@@ -104,7 +104,7 @@
         
         <tbody>
             <tr id="removeRow">
-                <td class="center" colspan="3">
+                <td class="center" colspan="10">
                     <img src="{$_path|escape:'htmlall':'UTF-8'}views/img/loading-small.gif" alt="" />
                 </td>
             </tr>
@@ -121,7 +121,7 @@
             'No listing': "{l s='No listing yet' mod='ebay'}",
             'See main product': "{l s='See main product' mod='ebay'}",
         {rdelim};   
-        var id_employee = {$id_employee};     
+        var id_employee = {$id_employee|escape:'htmlall':'UTF-8'};
     </script>
     
     <script type="text/javascript" src="{$_module_dir_|escape:'htmlall':'UTF-8'}ebay/views/js/prestaShopProducts.js?date={$date|escape:'htmlall':'UTF-8'}"></script>

@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
+ *  @copyright 2007-2017 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -44,7 +44,6 @@ $id_ebay_profile = (int) Tools::getValue('id_ebay_profile');
 $is_one_five = version_compare(_PS_VERSION_, '1.5', '>');
 
 if ($is_one_five) {
-
     $sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, sa.`quantity` as stock
             FROM `'._DB_PREFIX_.'product` p';
 
@@ -55,19 +54,14 @@ if ($is_one_five) {
     $sql .= Shop::addSqlRestrictionOnLang('pl');
     $sql .= ')
             LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
-                ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.$id_ebay_profile.'
+                ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.(int)$id_ebay_profile.'
             LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
                 ON p.`id_product` = sa.`id_product`
                 AND sa.`id_product_attribute` = 0
             WHERE ';
-
-    // $sql .= ' product_shop.`id_shop` = 1 AND ';
-    $sql .= ' p.`id_category_default` = '.(int) Tools::getValue('category');
-    // $sql .= $ebay->addSqlRestrictionOnLang('sa');
+    $sql .= ' product_shop.`id_category_default` = '.(int) Tools::getValue('category');
     $sql .= StockAvailable::addSqlShopRestriction(null, null, 'sa');
-
 } else {
-
     $sql = 'SELECT p.`id_product` as id, pl.`name`, epc.`blacklisted`, epc.`extra_images`, p.`quantity` as stock
             FROM `'._DB_PREFIX_.'product` p';
 
@@ -76,22 +70,19 @@ if ($is_one_five) {
                 AND pl.`id_lang` = '.(int) $id_lang;
     $sql .= ')
             LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc
-                ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.$id_ebay_profile.'
+                ON p.`id_product` = epc.`id_product` AND epc.id_ebay_profile = '.(int)$id_ebay_profile.'
 
             WHERE ';
 
     $sql .= ' p.`id_category_default` = '.(int) Tools::getValue('category');
-
 }
 
 $res = Db::getInstance()->ExecuteS($sql);
 foreach ($res as &$row) {
-
     $row['name'] = Tools::safeOutput($row['name']);
     $row['blacklisted'] = Tools::safeOutput($row['blacklisted']);
     $row['extra_images'] = Tools::safeOutput($row['extra_images']);
     $row['stock'] = Tools::safeOutput($row['stock']);
-
 }
 
 echo Tools::jsonEncode($res);

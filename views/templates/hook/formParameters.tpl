@@ -1,5 +1,5 @@
 {*
-* 2007-2013 PrestaShop
+* 2007-2017 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2016 PrestaShop SA
+*  @copyright 2007-2017 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -27,12 +27,14 @@
 	{literal}
 	<script>
 		$(document).ready(function() {
-			win = window.location = '{/literal}{$redirect_url|escape:'urlencode'}{literal}';
+			var win = window.location = '{/literal}{$redirect_url|escape:'UTF-8'}{literal}';
 		});		
+
 	</script>
 	{/literal}
 {/if}
 <script type="text/javascript">
+	var id_shop = '{$id_shop|escape:'htmlall':'UTF-8'}';
 	var tooltip_numeric = "{l s='You must enter a number.' mod='ebay'}";
 	var tooltip_max_pictures = "{l s='The maximum number is 12, so you can put up to 11 in this field.' mod='ebay'}";
 
@@ -54,11 +56,11 @@
 	{if isset($check_token_tpl)}
 	<fieldset id="regenerate_token">
 		<legend>{l s='Token' mod='ebay'}</legend>
-			{$check_token_tpl}	
+			{$check_token_tpl|ebayHtml}
 	</fieldset>	
 	{/if}
 	
-<form action="{$url|escape:'urlencode'}" method="post" class="form" id="configForm1">
+<form action="{$url|escape:'htmlall':'UTF-8'}" method="post" class="form" id="configForm1">
     
 	<fieldset style="margin-top:10px;">
 		<legend>{l s='Account details' mod='ebay'}</legend>
@@ -70,7 +72,7 @@
 		<div class="margin-form">
 
 			<input type="text" size="20" name="ebay_paypal_email" value="{$ebay_paypal_email|escape:'htmlall':'UTF-8'}"/>
-			<p>{l s='You have to set your PayPal e-mail account, it\'s the only payment available with this module' mod='ebay'}<a class="kb-help" data-errorcode="{$help.code_payment_solution}" data-module="ebay" data-lang="{$help.lang}" module_version="{$help.module_version}" prestashop_version="{$help.ps_version}" href="" target="_blank"></a></p>
+			<p>{l s='You have to set your PayPal e-mail account, this is the only payment solution available with this module.' mod='ebay'}<a class="kb-help" data-errorcode="{$help.code_payment_solution|escape:'htmlall':'UTF-8'}" data-module="ebay" data-lang="{$help.lang|escape:'htmlall':'UTF-8'}" module_version="{$help.module_version|escape:'htmlall':'UTF-8'}" prestashop_version="{$help.ps_version|escape:'htmlall':'UTF-8'}" href="" target="_blank"></a></p>
 		</div>
         
 		<label>
@@ -113,11 +115,66 @@
 		</div>
 		<div class="hide regenerate_token_button" style="display:none;">
 			<label>{l s='Regenerate Token' mod='ebay'} :</label>
-			<a href="{$url|escape:'urlencode'}&action=regenerate_token">
+			<a href="{$url|escape:'htmlall':'UTF-8'}&action=regenerate_token">
 				<input type="button" id="token-btn" class="button" value="{l s='Regenerate Token' mod='ebay'}" />
 			</a>
 		</div>
 	</fieldset>
+
+    <fieldset style="margin-top:10px;">
+       
+        <legend>{l s='EAN Sync' mod='ebay'} <a class="kb-help" data-errorcode="{$help_ean.error_code}" data-module="ebay" data-lang="{$help_ean.lang}" module_version="{$help_ean.module_version}" prestashop_version="{$help_ean.ps_version}" href="" target="_blank"></a></legend>
+
+        <label>{l s='Synchronize EAN with :' mod='ebay'}</label>
+        <div class="margin-form">
+            <select name="synchronize_ean" class="ebay_select">
+                <option value="">{l s='Do not synchronise' mod='ebay'}</option>
+                <option value="EAN"{if "EAN" == $synchronize_ean} selected{/if}>{l s='EAN' mod='ebay'}</option>
+                {*<option value="SUP_REF"{if "SUP_REF" == $synchronize_ean} selected{/if}>{l s='Supplier Reference' mod='ebay'}</option>*}
+                <option value="REF"{if "REF" == $synchronize_ean} selected{/if}>{l s='Reference' mod='ebay'}</option>
+                <option value="UPC"{if "UPC" == $synchronize_ean} selected{/if}>{l s='UPC' mod='ebay'}</option>
+            </select>
+        </div>
+        <label>{l s='Synchronize MPN with :' mod='ebay'}</label>
+        <div class="margin-form">
+            <select name="synchronize_mpn" class="ebay_select">
+                <option value="">{l s='Do not synchronise' mod='ebay'}</option>
+                <option value="EAN"{if "EAN" == $synchronize_mpn} selected{/if}>{l s='EAN' mod='ebay'}</option>
+                {*<option value="SUP_REF"{if "SUP_REF" == $synchronize_mpn} selected{/if}>{l s='Supplier Reference' mod='ebay'}</option>*}
+                <option value="REF"{if "REF" == $synchronize_mpn} selected{/if}>{l s='Reference' mod='ebay'}</option>
+                <option value="UPC"{if "UPC" == $synchronize_mpn} selected{/if}>{l s='UPC' mod='ebay'}</option>
+            </select>
+        </div>
+        <label>{l s='Synchronize UPC with :' mod='ebay'}</label>
+        <div class="margin-form">
+            <select name="synchronize_upc" class="ebay_select">
+                <option value="">{l s='Do not synchronise' mod='ebay'}</option>
+                <option value="EAN"{if "EAN" == $synchronize_upc} selected{/if}>{l s='EAN' mod='ebay'}</option>
+                {*<option value="SUP_REF"{if "SUP_REF" == $synchronize_upc} selected{/if}>{l s='Supplier Reference' mod='ebay'}</option>*}
+                <option value="REF"{if "REF" == $synchronize_upc} selected{/if}>{l s='Reference' mod='ebay'}</option>
+                <option value="UPC"{if "UPC" == $synchronize_upc} selected{/if}>{l s='UPC' mod='ebay'}</option>
+            </select>
+        </div>
+        <label>{l s='Synchronize ISBN with :' mod='ebay'}</label>
+        <div class="margin-form">
+            <select name="synchronize_isbn" class="ebay_select">
+                <option value="">{l s='Do not synchronise' mod='ebay'}</option>
+                <option value="EAN"{if "EAN" == $synchronize_isbn} selected{/if}>{l s='EAN' mod='ebay'}</option>
+                {*<option value="SUP_REF"{if "SUP_REF" == $synchronize_isbn} selected{/if}>{l s='Supplier Reference' mod='ebay'}</option>*}
+                <option value="REF"{if "REF" == $synchronize_isbn} selected{/if}>{l s='Reference' mod='ebay'}</option>
+                <option value="UPC"{if "UPC" == $synchronize_isbn} selected{/if}>{l s='UPC' mod='ebay'}</option>
+            </select>
+        </div>
+        {* <label>
+            {l s='Option \'Does not apply\'' mod='ebay'}
+        </label>
+        <div class="margin-form">
+            <input type="checkbox" name="ean_not_applicable" value="1"{if $ean_not_applicable} checked="checked"{/if} data-inlinehelp="{l s='If you check this box, the module will send EAN value &quot;Does not apply&quot; when none of EAN, ISBN or UPC is set.' mod='ebay'}">
+        </div> *}
+
+        <div style="clear:both;"></div>
+        
+    </fieldset>
         
    <fieldset style="margin-top:10px;">
 		<legend>{l s='Returns policy' mod='ebay'}</legend>
@@ -153,7 +210,7 @@
 		</div>
 		<label>{l s='Any other information' mod='ebay'} : </label>
 		<div class="margin-form">
-			<textarea name="ebay_returns_description" cols="120" rows="10" data-inlinehelp="{l s='This description will be displayed in the returns policy section of the listing page.' mod='ebay'}">{$ebayReturns|escape:'htmlall':'UTF-8'}</textarea>
+			<textarea name="ebay_returns_description" cols="120" rows="10" data-inlinehelp="{l s='This description will be displayed in the returns policy section of the listing page.' mod='ebay'}">{$ebayReturns|cleanHtml}</textarea>
 		</div>
 	</fieldset>
              
@@ -171,7 +228,7 @@
 			{l s='Status used to indicate product has been shipped' mod='ebay'}
 		</label>
 		<div class="margin-form">
-			<select name="shipped_order_state" class="ebay_select">
+			<select name="shipped_order_state" class="ebay_select" >
                 <option value=""></option>
 				{if isset($order_states) && $order_states && sizeof($order_states)}
 					{foreach from=$order_states item='order_state'}
@@ -179,9 +236,23 @@
 					{/foreach}
 				{/if}
 			</select>
-		</div>        
-        
- 		<div style="clear:both;"></div>
+		</div></br>
+		{if $help_ean.ps_version > '1.4.11'}
+		<label>
+			{l s='Status used to indicate order has been canceled' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<select name="return_order_state" class="ebay_select" data-inlinehelp="{l s='Synchronisation is 2 ways : a cancellation validated on eBay will change PrestaShop order to this status, and a change to this status on PrestaShop will cancel order on eBay.' mod='ebay'}">
+				<option value=""></option>
+				{if isset($order_states) && $order_states && sizeof($order_states)}
+					{foreach from=$order_states item='order_state'}
+						<option value="{$order_state.id_order_state|escape:'htmlall':'UTF-8'}"{if $order_state.id_order_state == $current_order_return_state} selected{/if}>{$order_state.name|escape:'htmlall':'UTF-8'}</option>
+					{/foreach}
+				{/if}
+			</select>
+		</div>
+		{/if}
+		<div style="clear:both;"></div>
      </fieldset>    
      
      
@@ -194,15 +265,23 @@
 		</label>
 		<div class="margin-form">
 
-			<select name="listingdurations" data-dialoghelp="{l s='http://pages.ebay.com/help/sell/duration.html' mod='ebay'}" data-inlinehelp="{l s='The listing duration is the length of time that your listing is active on eBay.co.uk. You can have it last 1, 3, 5, 7, 10, 30 days or Good \'Til Cancelled. Good \'Til Cancelled listings renew automatically every 30 days unless all of the items sell, you end the listing, or the listing breaches an eBay policy. Good \'Til Cancelled is the default setting here to save you time relisting your items.' mod='ebay'}" class="ebay_select">
+			<select name="listingdurations"  class="ebay_select">
 				{foreach from=$listingDurations item=listing key=key}
 					<option value="{$key|escape:'htmlall':'UTF-8'}" {if $ebayListingDuration == $key}selected="selected" {/if}>{$listing|escape:'htmlall':'UTF-8'}</option>
 				{/foreach}
-			</select>
+			</select><a class="kb-help" data-errorcode="{$help_gtc.error_code}" data-module="ebay" data-lang="{$help_gtc.lang}" module_version="{$help_gtc.module_version}" prestashop_version="{$help_gtc.ps_version}" href="" target="_blank"></a>
 		</div>
 		
-        <label for="">{l s='Do you want to automatically relist' mod='ebay'}</label>
+        <label for="">{l s='Automatic relist' mod='ebay'}</label>
 		<div class="margin-form"><input type="checkbox" name="automaticallyrelist" {if $automaticallyRelist == 'on'} checked="checked" {/if} /></div>
+		<label>
+			{l s='Out of Stock status ' mod='ebay'}
+		</label>
+		<div class="margin-form">
+			<input type="text" readonly value="{if $out_of_stock_value}{l s='Activated' mod='ebay'}{else}{l s='Deactivated' mod='ebay'}{/if}" style="text-align: center;">
+			<a class="kb-help" data-errorcode="{$help_out_of_stock.error_code}" data-module="ebay" data-lang="{$help_out_of_stock.lang}" module_version="{$help_out_of_stock.module_version}" prestashop_version="{$help_out_of_stock.ps_version}" href="" target="_blank"></a>
+
+		</div>
 	</fieldset>
     
         

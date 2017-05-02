@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2016 PrestaShop SA
+ * @copyright 2007-2017 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -33,7 +33,6 @@ class TotFormat
         } else {
             return $pattern;
         }
-
     }
 
     /**
@@ -158,6 +157,7 @@ class TotFormat
             } elseif (!$in_quotes) {
                 switch ($char) {
                     case '}':
+                        // no break
                     case ']':
                         $level--;
                         $ends_line_level = null;
@@ -165,8 +165,10 @@ class TotFormat
                         break;
 
                     case '{':
+                        // no break
                     case '[':
                         $level++;
+                    // no break
                     case ',':
                         $ends_line_level = $level;
                         break;
@@ -176,8 +178,11 @@ class TotFormat
                         break;
 
                     case " ":
+                        // no break
                     case "\t":
+                    // no break
                     case "\n":
+                    // no break
                     case "\r":
                         $char = "";
                         $ends_line_level = $new_line_level;

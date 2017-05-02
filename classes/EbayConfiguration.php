@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
+ *  @copyright 2007-2017 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -30,7 +30,6 @@ if (file_exists(dirname(__FILE__).'/EbayRequest.php')) {
 
 class EbayConfiguration
 {
-
     /**
      * Updates Ebay API Token and stores it
      *
@@ -48,6 +47,7 @@ class EbayConfiguration
 //        if ($token = $request->fetchToken(Configuration::get('EBAY_API_USERNAME', null, 0, 0), Configuration::get('EBAY_API_SESSION', null, 0, 0)))
         if ($token = $request->fetchToken($ebay_profile->ebay_user_identifier, Configuration::get('EBAY_API_SESSION', null, 0, 0))) {
             $ebay_profile->setToken($token);
+            $request->importBusinessPolicies();
             //Configuration::updateValue('EBAY_API_TOKEN', $token, false, 0, 0);
             Configuration::updateValue('EBAY_TOKEN_REGENERATE', false, false, 0, 0);
 
@@ -77,7 +77,6 @@ class EbayConfiguration
         } else {
             return Db::getInstance()->insert('ebay_configuration', $datas, false, true, Db::REPLACE);
         }
-
     }
 
     public static function getAll($id_ebay_profile, $exceptions = false)
@@ -94,7 +93,10 @@ class EbayConfiguration
      *
      * Returns true is sucessful, false otherwise
      *
-     * @return boolean
+     * @param $id_ebay_profile
+     * @param $attributes
+     * @param $attributes_html
+     * @return bool
      */
     public static function PSConfigurationsToEbayConfigurations($id_ebay_profile, $attributes, $attributes_html)
     {
@@ -104,7 +106,6 @@ class EbayConfiguration
             if ($ps_value && !$ebay_value) {
                 EbayConfiguration::set($id_ebay_profile, $name, $ps_value);
             }
-
         }
         foreach ($attributes_html as $name) {
             $ps_value = Configuration::get($name);
@@ -112,7 +113,6 @@ class EbayConfiguration
             if ($ps_value && !$ebay_value) {
                 EbayConfiguration::set($id_ebay_profile, $name, $ps_value, true);
             }
-
         }
     }
 }

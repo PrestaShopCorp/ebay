@@ -1,5 +1,5 @@
 {*
-* 2007-2016 PrestaShop
+* 2007-2017 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2016 PrestaShop SA
+*  @copyright 2007-2017 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -65,6 +65,13 @@
 	<div id="buttonEbayShipping" style="margin-top:5px;">
 		<input class="primary button" name="submitSave" type="submit" id="save_ebay_shipping" value="{l s='Save and continue' mod='ebay'}"/>
 	</div>
+	<div style="display:block" class="warning big tips">{l s='Miss some item specifics ? You may need to upgrade category definitions :' mod='ebay'}
+		</br>{l s='-  You can compare your category definitions with last available category definitions from eBay using the ' mod='ebay'}<a href="#comparaison" id='link_cat_support_i'>{l s='comparison tool' mod='ebay'}</a>
+		</br>{l s='-  If needed, you can upgrade category definition using the ' mod='ebay'}<a id='link_cat_support_reload_i' href="#resynch">{l s='upgrade tool.' mod='ebay'}</a>
+		</br>{l s='New to category definition concept ? Please read ' mod='ebay'}<a class="kb-help" style ="display: inline-block;width: auto;height: 20px;background-image: none;"data-errorcode="{$help_Cat_upd.error_code}" data-module="ebay" data-lang="{$help_Cat_upd.lang}" module_version="{$help_Cat_upd.module_version}" prestashop_version="{$help_Cat_upd.ps_version}" href="" target="_blank">{l s='category definition & reloading article first.' mod='ebay'}</a>
+
+	</div>
+
 </form>
 
 <script type="text/javascript">
@@ -93,17 +100,21 @@
 	
 	var conditions_data = new Array();
 	{foreach from=$conditions key=type item=condition}
-		conditions_data[{$type|escape:'htmlall':'UTF-8'}] = "{$condition|escape:'htmlall':'UTF-8'}";
-	{/foreach}
+		{if isset($type) and $type != ""}
+			conditions_data[{$type|escape:'htmlall':'UTF-8'}] = "{$condition|escape:'htmlall':'UTF-8'}";
+		{/if}
+    {/foreach}
 	
 	var possible_attributes = new Array();
 	{foreach from=$possible_attributes item=attribute}
-		possible_attributes[{$attribute.id_attribute_group|escape:'htmlall':'UTF-8'}] = "{$attribute.name|escape:'htmlall':'UTF-8'}";
-	{/foreach}		
+		{if isset($attribute.id_attribute_group) and $attribute.id_attribute_group != ""}
+			possible_attributes[{$attribute.id_attribute_group|escape:'htmlall':'UTF-8'}] = "{$attribute.name|escape:'htmlall':'UTF-8'}";
+		{/if}
+	{/foreach}
 		
 	var possible_features = new Array();
 	{foreach from=$possible_features item=feature}
-		{if isset($feature.id_feature) && $feature.id_feature != ""}
+		{if isset($feature.id_feature) and $feature.id_feature != ""}
 			possible_features[{$feature.id_feature|escape:'htmlall':'UTF-8'}] = "{$feature.name|escape:'htmlall':'UTF-8'}";
 		{/if}
 	{/foreach}
@@ -113,10 +124,22 @@
 	{literal}			
 	$('#menuTab8').click(function() {
 		loadCategoriesItemsSpecifics();
-	})
+	});
+
 
 	$(document).ready(function() 
 	{
+		$('#link_cat_support_i').click(function(e){
+			e.preventDefault();
+			$('#advanced-settings-menu-link').click();
+			window.location.href = $(this).attr('href');
+		});
+		$('#link_cat_support_reload_i').click(function(e){
+			e.preventDefault();
+			$('#advanced-settings-menu-link').click();
+			window.location.href = $(this).attr('href');
+		});
+
 		{/literal}{if $id_tab == 8}
 			loadCategoriesItemsSpecifics();
 		{/if}

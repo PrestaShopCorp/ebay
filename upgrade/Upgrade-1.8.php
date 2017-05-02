@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -18,14 +18,20 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2017 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
+/**
+ * @param Ebay $module
+ * @return bool
+ * @throws PrestaShopDatabaseException
+ */
 function upgrade_module_1_8($module)
 {
+    $sql = array();
     include dirname(__FILE__).'/sql/sql-upgrade-1-8.php';
 
     if (!empty($sql) && is_array($sql)) {
@@ -34,24 +40,22 @@ function upgrade_module_1_8($module)
                 return false;
             }
         }
-
     }
 
     // upgrade existing profiles
     $profiles = EbayProfile::getProfilesByIdShop();
     foreach ($profiles as $profile) {
-
         $ebay_profile = new EbayProfile($profile['id_ebay_profile']);
 
         // set id_lang if not set
         if (!$profile['id_lang']) {
-            $ebay_profile->id_lang = (int) Configuration::get('PS_LANG_DEFAULT');
+            $ebay_profile->id_lang = (int)Configuration::get('PS_LANG_DEFAULT');
             $ebay_profile->save();
         }
 
         if ($ebay_profile->ebay_site_id) {
             $ebay_shop_country = EbayCountrySpec::getIsoCodeBySiteId($ebay_profile->ebay_site_id);
-            $ebay_site_id = $ebay_profile->ebay_site_id;
+            $ebay_site_id      = $ebay_profile->ebay_site_id;
         } else {
             if ($ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT')) {
                 $ebay_shop_country = $ebay_profile->getConfiguration('EBAY_COUNTRY_DEFAULT');
@@ -80,7 +84,6 @@ function upgrade_module_1_8($module)
         // update ebay_product_configuration
         $ebay_profile = EbayProfile::getCurrent();
         Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_product_configuration', array('id_ebay_profile' => $ebay_profile->id), 'UPDATE');
-
     }
 
     return true;

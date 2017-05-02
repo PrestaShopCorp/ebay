@@ -1,5 +1,5 @@
 {*
-* 2007-2016 PrestaShop
+* 2007-2017 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2016 PrestaShop SA
+*  @copyright 2007-2017 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -117,7 +117,10 @@
         <div class="ebay-boxes-2-col-cell-content left">
             <fieldset class="new" style="min-height: 165px">
                 {if $show_welcome}
-                    <legend><img src="{$path|escape:'htmlall':'UTF-8'}logo.gif" alt="" />{l s='eBay Module Status' mod='ebay'}</legend>
+                    <legend>
+                        <img src="{$path|escape:'htmlall':'UTF-8'}logo.gif" alt="" />{l s='eBay Module Status' mod='ebay'}
+                    </legend>
+
                     <div>
                         {if empty($alert)}
                             <p id="ebay-no-profile">{l s='You don\'t have any profile setup yet' mod='ebay'}</p>
@@ -137,8 +140,12 @@
                     </div>
                 {else}
                         {if $profiles && count($profiles)}
-                         <legend><img src="{if isset($_path) && !empty($_path)}{$_path|escape:'htmlall':'UTF-8'}{elseif isset($path)}{$path|escape:'htmlall':'UTF-8'}{/if}logo.gif" alt="" />{l s='eBay Profiles' mod='ebay'}</legend>
-                            <table class="table tableDnD" cellpadding="0" cellspacing="0">
+                         <legend><img src="{if isset($_path) && !empty($_path)}{$_path|escape:'htmlall':'UTF-8'}{elseif isset($path)}{$path|escape:'htmlall':'UTF-8'}{/if}logo.gif" alt="" />{l s='eBay Profiles' mod='ebay'}
+                             {if $debug == 1}
+                                 <small  style="background-color: #F80; color: #FFF; padding:5px;">in SANDBOX mode  !!</small>
+                             {/if}
+                         </legend>
+                             <table class="table tableDnD" cellpadding="0" cellspacing="0">
                                 <thead>
                                     <tr class="nodrag nodrop">
                                         <th>#</th>
@@ -179,7 +186,22 @@
     
         <div class="ebay-boxes-2-col-cell">
             <div class="ebay-boxes-2-col-cell-content right absolute">
-                <fieldset class="new">
+                <fieldset class="new aide" >
+                    <legend>{l s='Official eBay module 2' mod='ebay'}</legend>
+                    {if $show_seller_tips}
+                        <a id="aide-afficher" href style="    color: #7f7f7f;font-size: 0.9em;line-height: 1em;position: absolute;top: 1em;right: 1em;">{l s='Display help' mod='ebay'}</a>
+                    {/if}
+                    <p id="ebay-install-title " style="-webkit-margin-before: 0;font-size: 12px; font-weight: bold;"><b>{l s='A complete redesign to boost your sales on ebay' mod='ebay'}</b></p>
+                    <a id="" href="{if $site_extension == 'fr'}http://www.202-ecommerce.com/modules-partenaires/ebay/module-ebay-officiel-2/{else}http://www.202-ecommerce.com/en/partners-modules/ebay-en/official-module-ebay-2/{/if}" target="_blank"><img id="ebay-install-pict" src="../modules/ebay/views/img/eBay-2.png" /></a>
+                    <ul id="ebay-install-ul" style="font-size: 12px">
+                        <li>{l s='Fast synchronisation, including for large inventories' mod='ebay'}</li>
+                        <li>{l s='Available in all countries where eBay is available' mod='ebay'}</li>
+                        <li>{l s='Listing rejection detection system' mod='ebay'}</li>
+                    </ul>
+                    <span style="font-size: 12px;font-weight: bold;">{l s='Availability May 2017' mod='ebay'}</span></br>
+                    <span style="font-size: 12px">{l s='This new module will cost 149 € excl. VAT. Introductory offer to come.' mod='ebay'}</span></br>
+                </fieldset>
+                <fieldset class="new new_aide" style="display: none">
                     <legend>{l s='How to install the module' mod='ebay'}</legend>
                     {if $show_seller_tips}
                         <a id="ebay-seller-tips-link" href>{l s='Show seller tips' mod='ebay'}</a>

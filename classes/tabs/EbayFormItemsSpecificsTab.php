@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
+ *  @copyright 2007-2017 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -53,6 +53,12 @@ class EbayFormItemsSpecificsTab extends EbayTab
             'form_items_specifics' => EbaySynchronizer::getNbSynchronizableEbayCategoryCondition(),
             'form_items_specifics_mixed' => EbaySynchronizer::getNbSynchronizableEbayCategoryConditionMixed(),
             'isOneDotFive' => $is_one_dot_five,
+            'help_Cat_upd' => array(
+                'lang'           => $this->context->country->iso_code,
+                'module_version' => $this->ebay->version,
+                'ps_version'     => _PS_VERSION_,
+                'error_code'     => 'HELP-CATEGORY-UPDATE',
+            ),
         );
 
         return $this->display('formItemsSpecifics.tpl', $template_vars);
@@ -81,7 +87,6 @@ class EbayFormItemsSpecificsTab extends EbayTab
                 } else {
                     Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_category_specific', $data, 'UPDATE', 'id_ebay_category_specific = '.(int) $specific_id);
                 }
-
             }
         }
 

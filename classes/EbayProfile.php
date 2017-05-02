@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
+ *  @copyright 2007-2017 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -55,6 +55,7 @@ class EbayProfile extends ObjectModel
 
     public function getFields()
     {
+        $fields = array();
         parent::validateFields();
         if (isset($this->id)) {
             $fields['id_ebay_profile'] = (int) ($this->id);
@@ -94,6 +95,18 @@ class EbayProfile extends ObjectModel
             );
         }
         return parent::__construct($id, $id_lang, $id_shop);
+    }
+
+    public static function getEbayProfileByUserSite($ebay_user, $site_name, $id_shop)
+    {
+        $site_id = EbayCountrySpec::getSiteIdBySiteName($site_name);
+        $sql = 'SELECT `id_ebay_profile` FROM `' . _DB_PREFIX_ . 'ebay_profile` WHERE `ebay_user_identifier` = "' . pSQL($ebay_user) . '" AND `ebay_site_id` = ' . (int)$site_id . ' AND `id_shop` = ' . (int)$id_shop . ';';
+        $result = Db::getInstance()->getRow($sql);
+        if ($result && isset($result['id_ebay_profile'])) {
+            return $result['id_ebay_profile'];
+        }
+
+        return false;
     }
 
     public function getReturnsPolicyConfiguration()
@@ -158,7 +171,6 @@ class EbayProfile extends ObjectModel
         foreach ($configurations as $configuration) {
             $this->configurations[$configuration['name']] = $configuration['value'];
         }
-
     }
 
     public function setConfiguration($name, $value, $html = false)
@@ -177,7 +189,6 @@ class EbayProfile extends ObjectModel
             } else {
                 $res = Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_configuration', $data, 'INSERT');
             }
-
         }
         if ($res) {
             $this->configurations[$name] = $value;
@@ -284,28 +295,25 @@ class EbayProfile extends ObjectModel
     public function setPicturesSettings()
     {
         // Default
-        if ($medium = ImageType::getByNameNType('thickbox', 'products')) {
-            $sizeMedium = (int) $medium['id_image_type'];
-        } elseif ($medium = ImageType::getByNameNType('thickbox_default', 'products')) {
-            $sizeMedium = (int) $medium['id_image_type'];
+        $conf_img_default= $this->getConfiguration('EBAY_PICTURE_SIZE_DEFAULT');
+        if (!empty($conf_img_default)) {
+            $sizeMedium = $conf_img_default;
         } else {
             $sizeMedium = 0;
         }
 
         // Small
-        if ($small = ImageType::getByNameNType('small', 'products')) {
-            $sizeSmall = (int) $small['id_image_type'];
-        } elseif ($small = ImageType::getByNameNType('small_default', 'products')) {
-            $sizeSmall = (int) $small['id_image_type'];
+        $conf_img_small= $this->getConfiguration('EBAY_PICTURE_SIZE_SMALL');
+        if (!empty($conf_img_small)) {
+            $sizeSmall = $conf_img_small;
         } else {
             $sizeSmall = 0;
         }
 
         // Large
-        if ($large = ImageType::getByNameNType('large', 'products')) {
-            $sizeBig = (int) $large['id_image_type'];
-        } elseif ($large = ImageType::getByNameNType('large_default', 'products')) {
-            $sizeBig = (int) $large['id_image_type'];
+        $conf_img_big= $this->getConfiguration('EBAY_PICTURE_SIZE_BIG');
+        if (!empty($conf_img_big)) {
+            $sizeBig = $conf_img_big;
         } else {
             $sizeBig = 0;
         }
@@ -340,7 +348,6 @@ class EbayProfile extends ObjectModel
         }
 
         return $is_all_set;
-
     }
 
     /**
@@ -363,6 +370,7 @@ class EbayProfile extends ObjectModel
     /**
      * Set token for this ebay_user_identifier
      *
+     * @param $token
      * @return null
      */
     public function setToken($token)
@@ -405,7 +413,6 @@ class EbayProfile extends ObjectModel
             } else {
                 return false;
             }
-
         } catch (Exception $e) {
             return false;
         }
@@ -429,6 +436,7 @@ class EbayProfile extends ObjectModel
     /**
      * Is the shop has changed, returns the first profile of the shop, returns the current profile otherwise
      *
+     * @param bool $check_current_shop
      * @return EbayProfile
      */
     public static function getCurrent($check_current_shop = true)
@@ -443,11 +451,9 @@ class EbayProfile extends ObjectModel
                 if (($current_profile_id_shop == $id_shop) || ($current_profile_id_shop == 0)) {
                     return new EbayProfile((int) $data[0]);
                 }
-
             } else {
                 return new EbayProfile((int) $data[0]);
             }
-
         }
 
         // if shop has changed we switch to the first shop profile
@@ -479,7 +485,6 @@ class EbayProfile extends ObjectModel
             if (!$is_shop_profile) {
                 return false;
             }
-
         }
 
         Configuration::updateValue('EBAY_CURRENT_PROFILE', $id_ebay_profile.'_'.$id_shop, false, 0, 0);

@@ -1,5 +1,5 @@
 {*
-* 2007-2014 PrestaShop
+* 2007-2017 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2016 PrestaShop SA
+*  @copyright 2007-2017 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -30,7 +30,7 @@
 		{l s='Reasons for theses listings not be synchronised anymore can be multiple, and are explained in the "Help" column.' mod='ebay'}
 	</p>
     
-    <form id="orphans-form-view" action="{$show_orphan_listings_url}" method="post" class="form">
+    <form id="orphans-form-view" action="{$show_orphan_listings_url|escape:'htmlall':'UTF-8'}" method="post" class="form">
         <p class="center">
             <input class="primary button" name="submitSave" type="submit" value="{l s='Load orphan listings' mod='ebay'}" />
     	</p>
@@ -85,14 +85,14 @@
         
 		<tbody>
 			<tr id="removeRow">
-				<td class="center" colspan="3">
+				<td class="center" colspan="10">
 					<img src="{$_path|escape:'htmlall':'UTF-8'}views/img/loading-small.gif" alt="" />
 				</td>
 			</tr>
 		</tbody>
         
 	</table>    
-    
+    </div>
     <script type="text/javascript">
     
     	var orphan_listings_ebay_l = {ldelim}

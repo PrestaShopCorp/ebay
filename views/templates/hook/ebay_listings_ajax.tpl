@@ -1,5 +1,5 @@
 {*
-* 2007-2016 PrestaShop
+* 2007-2017 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2016 PrestaShop SA
+*  @copyright 2007-2017 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -35,8 +35,8 @@
     			<tr class="row_hover{if $smarty.foreach.loop.index % 2} alt_row{/if}">
     				<td style="text-align:center">{$product.id_product|escape:'htmlall':'UTF-8'}</td>
     				<td style="text-align:center">{$product.quantity|escape:'htmlall':'UTF-8'}</td>
-    				<td><a href="{$product.link|escape:'urlencode':'UTF-8'}" target="_blank">{$product.prestashop_title|escape:'htmlall':'UTF-8'}</a></td>
-    				<td><a href="{$product.link_ebay|escape:'urlencode':'UTF-8'}"  target="_blank">{$product.ebay_title|escape:'htmlall':'UTF-8'} ({$product.reference_ebay|escape:'htmlall':'UTF-8'})</a></td>
+    				<td><a href="{$product.link|escape:'htmlall':'UTF-8'}" target="_blank">{$product.prestashop_title|escape:'htmlall':'UTF-8'}</a></td>
+    				<td><a href="{$product.link_ebay|escape:'htmlall':'UTF-8'}"  target="_blank">{$product.ebay_title|escape:'htmlall':'UTF-8'} ({$product.reference_ebay|escape:'htmlall':'UTF-8'})</a></td>
     			</tr>
     		{/foreach}
     </table>

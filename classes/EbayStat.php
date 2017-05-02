@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
+ *  @copyright 2007-2017 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -34,6 +34,11 @@ class EbayStat
     private $data;
     private $date_add;
 
+    /**
+     * EbayStat constructor.
+     * @param $stats_version
+     * @param EbayProfile $ebay_profile
+     */
     public function __construct($stats_version, $ebay_profile)
     {
         $ebay = Module::getInstanceByName('ebay');
@@ -67,6 +72,8 @@ class EbayStat
             'is_cloud' => defined('_PS_HOST_MODE_') ? true : false,
             'module_version' => $ebay->version,
             'ps_country' => Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')),
+            'business_policies' => EbayConfiguration::get($ebay_profile->id, 'EBAY_BUSINESS_POLICIES'),
+            'OutOfStock' => EbayConfiguration::get($ebay_profile->id, 'EBAY_OUT_OF_STOCK'),
         );
         $this->date_add = date('Y-m-d H:i:s');
     }
@@ -79,7 +86,6 @@ class EbayStat
         } else {
             return __PS_BASE_URI__;
         }
-
     }
 
     public function save()

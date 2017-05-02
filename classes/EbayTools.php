@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2017 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
@@ -31,8 +31,8 @@ class EbayTools
      * Get a value from $_POST / $_GET
      * if unavailable, take a default value
      *
-     * @param string $key Value key
-     * @param mixed $default_value (optional)
+     * @param string $key           Value key
+     * @param mixed  $default_value (optional)
      * @return mixed Value
      */
     public static function getValue($key, $default_value = false)
@@ -57,5 +57,105 @@ class EbayTools
         }
 
         return isset($_POST[$key]) ? true : (isset($_GET[$key]) ? true : false);
+    }
+
+    public static function phpCheckSyntax($fileName, $checkIncludes = false, $delete = false)
+    {
+        try {
+            self::checkSyntax($fileName, $checkIncludes);
+        } catch (Exception $e) {
+            if (true === $delete) {
+                # we copy the file before deleting it
+                @unlink($fileName.'.error');
+                @copy($fileName, $fileName.'.error');
+                @unlink($fileName);
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param      $fileName
+     * @param bool $checkIncludes
+     * @throws Exception
+     */
+    public static function checkSyntax($fileName, $checkIncludes = false)
+    {
+        // If it is not a file or we can't read it throw an exception
+        if (!is_file($fileName) || !is_readable($fileName)) {
+            throw new Exception("Cannot read file ".$fileName);
+        }
+
+        // Sort out the formatting of the filename
+        $fileName = realpath($fileName);
+
+        // Eval the code
+        $contentFile = file_get_contents($fileName);
+        $contentFile = '?>'.$contentFile;
+        ob_start();
+        $evalResult = @eval($contentFile);
+        ob_end_clean();
+
+        // If the error text above was matched, throw an exception containing the syntax error
+        if ($evalResult === false) {
+            $errors = error_get_last();
+            throw new Exception("Parse error: ".$errors['message'].' in '.$fileName.' on line '.$errors['line']);
+        }
+
+        // If we are going to check the files includes
+        if ($checkIncludes) {
+            foreach (self::getIncludes($fileName) as $include) {
+                // Check the syntax for each include
+                self::checkSyntax($include, $checkIncludes);
+            }
+        }
+    }
+
+    public static function getIncludes($fileName)
+    {
+        // NOTE that any file coming into this function has already passed the syntax check, so
+        // we can assume things like proper line terminations
+
+        $includes = array();
+        // Get the directory name of the file so we can prepend it to relative paths
+        $dir = dirname($fileName);
+
+        // Split the contents of $fileName about requires and includes
+        // We need to slice off the first element since that is the text up to the first include/require
+        $requireSplit = array_slice(preg_split('/require|include/i', Tools::file_get_contents($fileName)), 1);
+
+        // For each match
+        foreach ($requireSplit as $string) {
+            // Substring up to the end of the first line, i.e. the line that the require is on
+            $string = Tools::substr($string, 0, strpos($string, ";"));
+
+            // If the line contains a reference to a variable, then we cannot analyse it
+            // so skip this iteration
+            if (strpos($string, "$") !== false) {
+                continue;
+            }
+
+            // Split the string about single and double quotes
+            $quoteSplit = preg_split('/[\'"]/', $string);
+
+            // The value of the include is the second element of the array
+            // Putting this in an if statement enforces the presence of '' or "" somewhere in the include
+            // includes with any kind of run-time variable in have been excluded earlier
+            // this just leaves includes with constants in, which we can't do much about
+            if ($include = $quoteSplit[1]) {
+                // If the path is not absolute, add the dir and separator
+                // Then call realpath to chop out extra separators
+                if (strpos($include, ':') === false) {
+                    $include = realpath($dir.DIRECTORY_SEPARATOR.$include);
+                }
+
+                array_push($includes, $include);
+            }
+        }
+
+        return $includes;
     }
 }

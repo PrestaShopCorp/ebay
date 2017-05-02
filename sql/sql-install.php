@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
+ *  @copyright 2007-2017 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -36,6 +36,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_category` (
 		  `level` tinyint(1) NOT NULL,
 		  `is_multi_sku` tinyint(1),
 		  `name` varchar(255) NOT NULL,
+		  `k_type` tinyint(1),
 		  UNIQUE(`id_category_ref`, `id_country`),
 		  PRIMARY KEY  (`id_ebay_category`)
 	) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
@@ -66,6 +67,8 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_product` (
 		  `id_product_ref` varchar(32) NOT NULL,
 		  `date_add` datetime NOT NULL,
 		  `date_upd` datetime NOT NULL,
+		  `id_shipping_policies` varchar(255) NULL,
+		  
 		  UNIQUE(`id_product_ref`),
 		  PRIMARY KEY  (`id_ebay_product`),
 		  KEY `id_product` (`id_product`)
@@ -263,6 +266,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_order_order` (
 	`id_order` int(16) NOT NULL,
 	`id_shop` int(16) NOT NULL,
 	`id_ebay_profile` INT NULL,
+	`id_transaction` VARCHAR(125),
 	PRIMARY KEY  (`id_ebay_order_order`),
     UNIQUE KEY  (`id_order`, `id_shop`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
@@ -280,6 +284,18 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_log` (
 	`type` varchar(40) NOT NULL,
     `date_add` datetime NOT NULL,
 	PRIMARY KEY  (`id_ebay_log`)
+) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+
+$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_logs` (
+    `id_ebay_logs` INT(16) NOT NULL AUTO_INCREMENT,
+    `datetime` DATETIME NOT NULL,
+    `severity` TINYINT(1) NOT NULL DEFAULT 0,
+    `code` INT(11) NOT NULL DEFAULT 0,
+    `message` TEXT,
+    `context` TEXT,
+    `backtrace` TEXT,
+    `uid` TEXT,
+    PRIMARY KEY (`id_ebay_logs`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
 $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_stat` (
@@ -343,3 +359,32 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_order_log` (
     `date_update` datetime,
 	PRIMARY KEY  (`id_ebay_order_log`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+
+$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_business_policies` (
+    `id` INT(6)AUTO_INCREMENT PRIMARY KEY,
+    `type` VARCHAR(30) NOT NULL,
+    `name` VARCHAR(225) NOT NULL,
+    `id_bussines_Policie` VARCHAR(30),
+    `id_ebay_profile` int(16)
+)ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+
+$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_category_business_config` (
+    `id` INT(30)AUTO_INCREMENT PRIMARY KEY,
+    `id_category` int(11) NOT NULL,
+    `id_return` VARCHAR(30) ,
+    `id_payment` VARCHAR(30),
+    `id_ebay_profile` int(16)
+)ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+
+$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ebay_order_return_detail` (
+    `id` INT(30)AUTO_INCREMENT PRIMARY KEY,
+    `id_return` VARCHAR(125)NOT NULL,
+    `type` VARCHAR(125),
+    `date` datetime ,
+    `description` VARCHAR(255),
+    `status` VARCHAR(125),
+    `id_order` VARCHAR(125),
+    `id_ebay_order` VARCHAR(125),
+    `id_transaction` VARCHAR(125),
+    `id_item` VARCHAR(125)
+)ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';

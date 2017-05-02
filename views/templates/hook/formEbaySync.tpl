@@ -1,5 +1,5 @@
 {*
-* 2007-2016 PrestaShop
+* 2007-2017 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2016 PrestaShop SA
+*  @copyright 2007-2017 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -90,10 +90,8 @@
 		$("#ebay_sync_option_resync").attr("disabled", "true");
 		$("#ebay_sync_mode_1").attr("disabled", "true");
 		$("#ebay_sync_mode_2").attr("disabled", "true");
-		$("#button_ebay_sync1").attr("disabled", "true");
-		$("#button_ebay_sync1").css("background-color", "#D5D5D5");
-		$("#button_ebay_sync2").attr("disabled", "true");
-		$("#button_ebay_sync2").css("background-color", "#D5D5D5");
+		$("#button_ebay_sync1").attr("disabled", "true").css("background-color", "#D5D5D5");
+		$("#button_ebay_sync2").attr("disabled", "true").css("background-color", "#D5D5D5");
 		$("#resultSync").html("<img src=\"../modules/ebay/views/img/ajax-loader-small.gif\" border=\"0\" />");
 		eBaySyncProduct(option);
 	}
@@ -106,10 +104,8 @@
 		$("#ebay_sync_option_resync").removeAttr("disabled", "disabled");
 		$("#ebay_sync_mode_1").removeAttr("disabled", "disabled");
 		$("#ebay_sync_mode_2").removeAttr("disabled", "disabled");
-		$("#button_ebay_sync1").removeAttr("disabled", "disabled");
-		$("#button_ebay_sync1").css("background-color", "#FFFAC6");
-		$("#button_ebay_sync2").removeAttr("disabled", "disabled");
-		$("#button_ebay_sync2").css("background-color", "#FFFAC6");
+		$("#button_ebay_sync1").removeAttr("disabled", "disabled").css("background-color", "#FFFAC6");
+		$("#button_ebay_sync2").removeAttr("disabled", "disabled").css("background-color", "#FFFAC6");
 
 		// Launch the KB
 		getKb();
@@ -125,7 +121,7 @@
 			url: '{/literal}{$sync_products_url|escape:'urlencode'}{literal}' + counter,
 			success: function(data)
 			{
-				tab = data.split("|");
+				var tab = data.split("|");
 				$("#resultSync").html(tab[1]);
 				if (tab[0] != "OK")
 					eBaySyncProduct(option);
@@ -157,7 +153,6 @@
                 {$category_alerts|escape:'htmlall':'UTF-8'}
             </div>
         {/if}
-
 		<h4>{l s='You\'re now ready to list your products on eBay.' mod='ebay'}</h4>
 		<label style="width: 250px;">{l s='List all products on eBay' mod='ebay'} : </label><br /><br />
 		<div class="margin-form">

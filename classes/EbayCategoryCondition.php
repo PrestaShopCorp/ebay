@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2016 PrestaShop SA
+ * @copyright 2007-2017 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  * International Registered Trademark & Property of PrestaShop SA
  */
@@ -51,6 +51,18 @@ class EbayCategoryCondition
 
         foreach ($ebay_category_ids as $category_id) {
             $xml_data = $request->getCategoryFeatures($category_id);
+
+            if (isset($xml_data->Category->KTypeSupported)) {
+                $ktype_value = $xml_data->Category->KTypeSupported;
+                EbayCategory::setKtypeConfiguration($category_id, $ktype_value, $id_ebay_profile);
+                $ebay_profile = new EbayProfile($id_ebay_profile);
+                if (EbayCategory::getKtype($category_id, $ebay_profile->ebay_site_id) == 1) {
+                    $sql = 'INSERT INTO `'._DB_PREFIX_.'ebay_category_specific` (`id_category_ref`, `name`, `required`, `can_variation`, `selection_mode`, `ebay_site_id`)
+						VALUES ('.(int)$category_id.', \'K-type\', 1, 0, 0, '.(int)$ebay_profile->ebay_site_id.')
+						ON DUPLICATE KEY UPDATE `required` = 1, `can_variation` = 0, `selection_mode` = 0';
+                    Db::getInstance()->execute($sql);
+                }
+            }
 
             if (isset($xml_data->Category->ConditionEnabled)) {
                 $condition_enabled = $xml_data->Category->ConditionEnabled;

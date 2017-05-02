@@ -1,5 +1,5 @@
 {*
-* 2007-2016 PrestaShop
+* 2007-2017 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2016 PrestaShop SA
+*  @copyright 2007-2017 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -54,7 +54,7 @@
 	</table>
     {elseif isset($load_cat) && $load_cat == true}
         {l s='Loading of categories did not finish, please retry with button below.' mod='ebay'}<br/>
-        <a href="{$url_categories|escape:'urlencode'}"><input type="button" class="button" value="{l s='Load categories' mod='ebay'}"/></a>
+        <a href="{$url_categories|escape:'htmlall':'UTF-8'}"><input type="button" class="button" value="{l s='Load categories' mod='ebay'}"/></a>
     {/if}
 	<p {if isset($load_cat) && $load_cat == true}class="hidden importCatEbay"{/if}>
 		<b>{l s='Select a category' mod='ebay'}</b>
@@ -144,17 +144,24 @@
 	* {l s='In most eBay categories, you can list variations of your products together in one listing called a multi-variation listing, for example a red t-shirt size small, medium and large. In those few categories that don’t support multi-variation listings, a listing will be added for every variation of your product.' mod='ebay'}<br />
 	<a href="{l s='http://sellerupdate.ebay.fr/autumn2012/improvements-multi-variation-listings' mod='ebay'}" target="_blank">{l s='Click here for more informations on multi-variation listings' mod='ebay'}</a>
 </p><br /><br />
+
+<div {if isset($load_cat) && $load_cat == true}style="display:none"{/if} class="warning big tips h">{l s='Miss some categories ? You may need to upgrade category definitions :' mod='ebay'}
+	</br>{l s='- You can compare your category definitions with last available category definitions from eBay using the ' mod='ebay'}<a href="#comparaison" id='link_cat_support'>{l s='comparison tool' mod='ebay'}</a>
+	</br>{l s='- If needed, you can upgrade category definition using the ' mod='ebay'}<a id='link_cat_support_reload' href="#resynch">{l s='upgrade tool.' mod='ebay'}</a>
+	</br>{l s='New to category definition concept ? Please read ' mod='ebay'} <a class="kb-help" style ="display: inline-block;width: auto;height: 20px;background-image: none;" data-errorcode="{$help_Cat_upd.error_code}" data-module="ebay" data-lang="{$help_Cat_upd.lang}" module_version="{$help_Cat_upd.module_version}" prestashop_version="{$help_Cat_upd.ps_version}" href="" target="_blank">{l s='category definition & reloading article first.' mod='ebay'}</a>
+
+</div>
+
 <script type="text/javascript">
 		
 	var $selects = false;
-	var admin_path = '{$admin_path|escape:'htmlall':'UTF-8'}'
+	var admin_path = '{$admin_path|escape:'htmlall':'UTF-8'}';
 	var module_dir = '{$_module_dir_|escape:'htmlall':'UTF-8'}';
 	var ebay_token = '{$configs.EBAY_SECURITY_TOKEN|escape:'htmlall':'UTF-8'}';
 	var module_time = '{$date|escape:'htmlall':'UTF-8'}';
 	var module_path = '{$_path|escape:'htmlall':'UTF-8'}';
 	var id_lang = '{$id_lang|escape:'htmlall':'UTF-8'}';
 	var id_ebay_profile = '{$id_ebay_profile|escape:'htmlall':'UTF-8'}';
-	var id_shop = '{$id_shop|escape:'htmlall'}';
 	var categories_ebay_l = {ldelim}
 		'thank you for waiting': "{l s='Thank you for waiting while creating suggestions' mod='ebay'}",
 		'no category selected' : "{l s='No category selected' mod='ebay'}",
@@ -185,6 +192,19 @@
 		{if isset($load_cat) && $load_cat == true && isset($launch_load_cat) && $launch_load_cat == true}
 			loadCategoriesFromEbay();
 		{/if}
+
+		$('#link_cat_support').click(function(e){
+			e.preventDefault();
+			$('#advanced-settings-menu-link').click();
+			window.location.href = $(this).attr('href');
+		});
+		$('#link_cat_support_reload').click(function(e){
+			e.preventDefault();
+			$('#advanced-settings-menu-link').click();
+			window.location.href = $(this).attr('href');
+		});
+
 	});
 	//]]>
 </script>
+

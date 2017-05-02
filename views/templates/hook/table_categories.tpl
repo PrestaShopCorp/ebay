@@ -1,5 +1,5 @@
 {*
-* 2007-2016 PrestaShop
+* 2007-2017 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,23 +18,23 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2016 PrestaShop SA
+*  @copyright 2007-2017 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 {if $categoryList === false || $categoryList|count === 0}
 	<tr>
-		<td colspan="3" class="center">{$noCatFound|escape:'htmlall':'UTF-8'}</td>
+		<td colspan="7" class="center">{$noCatFound|escape:'htmlall':'UTF-8'}</td>
 	</tr>
 {else}
     {if $nbCategories > 20}
         <div id="cat-pagination" style="display:none">
-        	<p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nbCategories / 20)|round:"0") mod='ebay'}</p>
+        	<p id="textPagination">{l s='Page' mod='ebay'} <span>1</span> {l s='of %s' sprintf=(($nbCategories / 20)|ceil) mod='ebay'}</p>
         	<ul id="pagination" class="pagination">
         		<li class="prev"><</li>
-        		{assign var="nbcat" value=($nbCategories / 20)|round:"0"}
-        		{for $i=1 to $nbcat}
-        			<li{if $i == $p} class="current"{/if}>{$i}</li>
+        		{assign var="nb_pages" value=($nbCategories / 20)|ceil}
+        		{for $i=1 to $nb_pages}
+        			<li{if $i == $p} class="current"{/if}>{$i|escape:'htmlall':'UTF-8'}</li>
         		{/for}
         		<li class="next">></li>
         	</ul>
@@ -47,7 +47,7 @@
 			</td>
 			<td id="categoryPath{$c.id_category|escape:'htmlall':'UTF-8'}">
 				{if isset($categoryConfigList[$c.id_category]) && isset($categoryConfigList[$c.id_category].var)}
-					{$categoryConfigList[$c.id_category].var}
+					{$categoryConfigList[$c.id_category].var|ebayHtml}
 				{else}
 					<select name="category[{$c.id_category|escape:'htmlall':'UTF-8'}]" id="categoryLevel1-{$c.id_category|escape:'htmlall':'UTF-8'}" rel="{$c.id_category|escape:'htmlall':'UTF-8'}" style="font-size: 12px; width: 160px;" OnChange="changeCategoryMatch(1, {$c.id_category|escape:'htmlall':'UTF-8'});" class="ebay_select">
 						<option value="0">{$noCatSelected|escape:'htmlall':'UTF-8'}</option>
@@ -67,7 +67,7 @@
 				</select>
 				<input type="text" size="3" maxlength="3" name="percent[{$c.id_category|escape:'htmlall':'UTF-8'}][value]" id="percent{$c.id_category|escape:'htmlall':'UTF-8'}" rel="{$c.id_category|escape:'htmlall':'UTF-8'}" style="font-size: 12px;" value="{if isset($categoryConfigList[$c.id_category]) && isset($categoryConfigList[$c.id_category].var)}{$categoryConfigList[$c.id_category].percent.value|escape:'htmlall':'UTF-8'}{/if}" />
 				<select name="percent[{$c.id_category|escape:'htmlall':'UTF-8'}][type]" class="ebay_select">
-					<option value="currency"{if isset($categoryConfigList[$c.id_category].percent.type) && $categoryConfigList[$c.id_category].percent.type == ''} selected{/if}>{$currencySign|html_entity_decode:2:"UTF-8"}</option>
+					<option value="currency"{if isset($categoryConfigList[$c.id_category].percent.type) && $categoryConfigList[$c.id_category].percent.type == ''} selected{/if}>{$currencySign|escape:'htmlall':'UTF-8'}</option>
 					<option value="percent"{if isset($categoryConfigList[$c.id_category].percent.type) && $categoryConfigList[$c.id_category].percent.type == '%'} selected{/if}>%</option>
 				</select>
 			</td>

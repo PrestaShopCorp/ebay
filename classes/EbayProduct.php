@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
+ *  @copyright 2007-2017 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -41,6 +41,15 @@ class EbayProduct
         }
 
         return Db::getInstance()->getValue($query);
+    }
+
+    public static function deleteOldProductsWithoutProductRef()
+    {
+        $query = 'DELETE FROM `'._DB_PREFIX_.'ebay_product`
+                  WHERE `id_product_ref` = 0
+                  AND `date_upd` < DATE_SUB(NOW(), INTERVAL 1 HOUR)';
+
+        return Db::getInstance()->execute($query);
     }
 
     public static function getPercentOfCatalog($ebay_profile)
@@ -69,7 +78,6 @@ class EbayProduct
         } else {
             return '-';
         }
-
     }
 
     public static function getProductsIdFromTable($a)
@@ -81,14 +89,12 @@ class EbayProduct
     {
         $row = Db::getInstance()->getRow('SELECT id_product, id_attribute
 			FROM `'._DB_PREFIX_.'ebay_product`
-			WHERE `id_product_ref` = '.(int) $itemID);
-
+			WHERE `id_product_ref` = '. $itemID);
         if ((int) $row['id_product']) {
             return array('id_product' => (int) $row['id_product'], 'id_product_attribute' => (int) $row['id_attribute']);
         } else {
             return false;
         }
-
     }
 
     public static function getNbProducts($id_ebay_profile)
@@ -146,14 +152,36 @@ class EbayProduct
         return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_product', $to_insert, 'UPDATE', '`id_product_ref` = "'.pSQL($id_product_ref).'"');
     }
 
+    public static function updateByIdProduct($id_product, $datas, $id_ebay_profile, $id_attribute = 0)
+    {
+        $to_insert = array();
+        if (is_array($datas) && count($datas)) {
+            foreach ($datas as $key => $data) {
+                $to_insert[pSQL($key)] = $data;
+            }
+        }
+
+        //If eBay Product has been inserted then the configuration of eBay is OK
+        Configuration::updateValue('EBAY_CONFIGURATION_OK', true);
+
+        return Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_product', $to_insert, 'UPDATE', '`id_product` = "'.pSQL($id_product).'" AND `id_ebay_profile` = "'.(int) $id_ebay_profile.'" AND `id_attribute` = "'.(int) $id_attribute.'"');
+    }
+
     public static function deleteByIdProductRef($id_product_ref)
     {
         return Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_product`
 			WHERE `id_product_ref` = \''.pSQL($id_product_ref).'\'');
     }
 
+    public static function deleteByIdProduct($id_product, $id_ebay_profile, $id_attribute = 0)
+    {
+        return Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'ebay_product`
+			WHERE `id_product` = \''.pSQL($id_product).'\' AND `id_attribute` = \''.pSQL($id_attribute).'\' AND `id_ebay_profile` = \''.(int) $id_ebay_profile.'\'');
+    }
+
     public static function getProductsWithoutBlacklisted($id_lang, $id_ebay_profile, $no_blacklisted)
     {
+        $ebay_profile = new EbayProfile($id_ebay_profile);
         $sql = 'SELECT ep.`id_product`, ep.`id_attribute`, ep.`id_product_ref`,
 			p.`id_category_default`, p.`reference`, p.`ean13`, p.`upc`,
 			pl.`name`, m.`name` as manufacturer_name
@@ -161,14 +189,18 @@ class EbayProduct
 			LEFT JOIN `'._DB_PREFIX_.'ebay_product_configuration` epc ON (epc.`id_product` = ep.`id_product`)
 			LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.`id_product` = ep.`id_product`)
 			LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
-			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = '.(int) $id_lang.')
-			WHERE ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
+			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = '.(int) $id_lang.' ';
+        if (version_compare(_PS_VERSION_, '1.5', '>')) {
+            $sql .= 'AND id_shop = '.(int)$ebay_profile->id_shop;
+        }
+        $sql .= ') WHERE ep.`id_ebay_profile` = '.(int) $id_ebay_profile;
         if ($no_blacklisted) {
             $sql .= ' AND (epc.`blacklisted` = 0 OR epc.`blacklisted` IS NULL)';
         }
 
-        return Db::getInstance()->ExecuteS($sql);
+        $sql .= ' GROUP BY id_product, id_attribute, id_product_ref';
 
+        return Db::getInstance()->ExecuteS($sql);
     }
 
     public static function getEbayUrl($reference, $mode_dev = false)

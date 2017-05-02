@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -18,16 +18,19 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2017 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayTab
 {
+    /** @var Ebay $ebay */
     protected $ebay;
+    /** @var Smarty_Data $smarty */
     protected $smarty;
+    /** @var EbayProfile $ebay_profile */
     protected $ebay_profile;
     /** @var Context $context */
     protected $context;
@@ -45,15 +48,16 @@ class EbayTab
     protected function display($template, $template_vars)
     {
         $this->smarty->assign($template_vars);
+
         return $this->ebay->display(dirname(__FILE__).'/../../ebay.php', '/views/templates/hook/'.$template);
     }
 
     protected function _getUrl($extra_vars = array())
     {
         $url_vars = array(
-            'configure' => Tools::getValue('configure'),
-            'token' => Tools::getValue('token'),
-            'tab_module' => Tools::getValue('tab_module'),
+            'configure'   => Tools::getValue('configure'),
+            'token'       => Tools::getValue('token'),
+            'tab_module'  => Tools::getValue('tab_module'),
             'module_name' => Tools::getValue('module_name'),
         );
 

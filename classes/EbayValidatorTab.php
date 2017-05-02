@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,17 +19,16 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2016 PrestaShop SA
+ * @copyright 2007-2017 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  * International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayValidatorTab
 {
-
     public static function getShippingTabConfiguration($id_ebay_profile)
     {
-        $ebay = new Ebay();
+        $ebay              = new Ebay();
         $shipping_national = EbayShipping::getNationalShippings($id_ebay_profile);
         if (!is_array($shipping_national) || count($shipping_national) == 0) {
             return array(
@@ -65,11 +64,11 @@ class EbayValidatorTab
     {
         $configs_mandatory_profile = array('EBAY_PAYPAL_EMAIL', 'EBAY_SHOP_POSTALCODE');
         //$configs_mandatory = array('EBAY_API_USERNAME');
-        $ebay = new Ebay();
+        $ebay         = new Ebay();
         $ebay_profile = new EbayProfile($id_ebay_profile);
 
         $has_something_configured = false;
-        $return_message = null;
+        $return_message           = null;
         foreach ($configs_mandatory_profile as $config) {
             if (($ebay_profile->getConfiguration($config)) == null) {
                 if (!$return_message) {
@@ -79,11 +78,9 @@ class EbayValidatorTab
                         'message'      => $ebay->l('Your need to configure the field ', 'ebayvalidatortab').' '.$config,
                     );
                 }
-
             } else {
                 $has_something_configured = true;
             }
-
         }
 
         // if nothing is configured, we don't show a message
@@ -117,7 +114,9 @@ class EbayValidatorTab
 
     public static function getCategoryTabConfiguration($id_ebay_profile)
     {
-
+        return array(
+            'indicator' => 'success',
+        );
     }
 
     public static function getItemSpecificsTabConfiguration($id_ebay_profile)
@@ -149,7 +148,7 @@ class EbayValidatorTab
     public static function getTemplateTabConfiguration($id_ebay_profile)
     {
         $ebay_profile = new EbayProfile($id_ebay_profile);
-        $ebay = new Ebay();
+        $ebay         = new Ebay();
 
         if ($ebay_profile->getConfiguration('EBAY_PRODUCT_TEMPLATE_TITLE') == '') {
             return array(
@@ -170,16 +169,33 @@ class EbayValidatorTab
         return array(
             'indicator' => 'success',
         );
-
     }
 
     public static function getSynchronisationTabConfiguration($id_ebay_profile)
     {
-
+        return array(
+            'indicator' => 'success',
+        );
     }
 
     public static function getEbayListingTabConfiguration($id_ebay_profile)
     {
+        return array(
+            'indicator' => 'success',
+        );
+    }
 
+    public static function getEbayBusinessPoliciesTabConfiguration($id_ebay_profile)
+    {
+        if (EbayConfiguration::get($id_ebay_profile, 'EBAY_BUSINESS_POLICIES_CONFIG') == 0 && EbayConfiguration::get($id_ebay_profile, 'EBAY_BUSINESS_POLICIES') == 1) {
+            return array(
+                'indicator' => 'wrong',
+            );
+        }
+
+
+        return array(
+            'indicator' => 'success',
+        );
     }
 }

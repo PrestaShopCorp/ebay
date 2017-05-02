@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,14 +19,13 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
+ *  @copyright 2007-2017 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayOrderErrors extends ObjectModel
 {
-
     public $error;
     public $id_order_seller;
     public $date_add;
@@ -52,6 +51,7 @@ class EbayOrderErrors extends ObjectModel
 
     public static function install()
     {
+        $sql = array();
         // Create Category Table in Database
         $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.self::$definition['table'].'` (
 				  	`'.self::$definition['primary'].'` int(16) NOT NULL AUTO_INCREMENT,
@@ -66,17 +66,16 @@ class EbayOrderErrors extends ObjectModel
         foreach ($sql as $q) {
             Db::getInstance()->Execute($q);
         }
-
     }
 
     public static function uninstall()
     {
+        $sql= array();
         $sql[] = 'DROP TABLE IF EXISTS `'._DB_PREFIX_.self::$definition['table'].'`';
 
         foreach ($sql as $q) {
             Db::getInstance()->Execute($q);
         }
-
     }
 
     public static function truncate()
@@ -104,6 +103,5 @@ class EbayOrderErrors extends ObjectModel
         } else {
             return false;
         }
-
     }
 }

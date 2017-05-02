@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
+ *  @copyright 2007-2017 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -67,9 +67,9 @@ $sql = 'SELECT pa.`id_product_attribute`,
     LEFT JOIN `'._DB_PREFIX_.'ebay_product` ep
     ON ep.`id_product` = pa.`id_product`
     AND ep.`id_attribute` = pac.`id_product_attribute`
-    AND ep.`id_ebay_profile` = '.$id_ebay_profile.'
+    AND ep.`id_ebay_profile` = '.(int)$id_ebay_profile.'
 
-    WHERE pa.`id_product` = '.$id_product.$ebay->addSqlRestrictionOnLang('sa').'
+    WHERE pa.`id_product` = '.(int)$id_product.' '.$ebay->addSqlRestrictionOnLang('sa').'
 
     ORDER BY a.`position` ASC';
 
@@ -78,11 +78,8 @@ $res = Db::getInstance()->ExecuteS($sql);
 $final_res = array();
 foreach ($res as $row) {
     if (isset($final_res[$row['id_product_attribute']])) {
-
         $final_res[$row['id_product_attribute']]['name'] .= ' '.Tools::safeOutput($row['name']);
-
     } else {
-
         $row['name'] = Tools::safeOutput($row['name']);
         $row['stock'] = Tools::safeOutput($row['stock']);
         $row['id_product_ref'] = Tools::safeOutput($row['id_product_ref']);
@@ -92,6 +89,5 @@ foreach ($res as $row) {
 
         $final_res[$row['id_product_attribute']] = $row;
     }
-
 }
 die(Tools::jsonEncode($final_res));

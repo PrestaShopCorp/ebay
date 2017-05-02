@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2016 PrestaShop
+ * 2007-2017 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,14 +19,13 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2016 PrestaShop SA
+ *  @copyright 2007-2017 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
 class EbayKb extends ObjectModel
 {
-
     public $error_code;
     public $ps_version;
     public $language;
@@ -88,6 +87,7 @@ class EbayKb extends ObjectModel
 
     public function getFields()
     {
+        $fields = array();
         $fields['error_code'] = $this->error_code;
         $fields['language'] = $this->language;
         $fields['ps_version'] = $this->ps_version;
@@ -108,6 +108,7 @@ class EbayKb extends ObjectModel
 
     public static function install()
     {
+        $sql= array();
         // Create Category Table in Database
         $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.self::$definition['table'].'` (
 				  	`'.self::$definition['primary'].'` int(16) NOT NULL AUTO_INCREMENT,
@@ -125,18 +126,17 @@ class EbayKb extends ObjectModel
         foreach ($sql as $q) {
             Db::getInstance()->Execute($q);
         }
-
     }
 
     public static function uninstall()
     {
+        $sql= array();
         // Create Category Table in Database
         $sql[] = 'DROP TABLE IF EXISTS `'._DB_PREFIX_.self::$definition['table'].'`';
 
         foreach ($sql as $q) {
             Db::getInstance()->Execute($q);
         }
-
     }
 
     public function call()
@@ -149,11 +149,9 @@ class EbayKb extends ObjectModel
             } else {
                 return false;
             }
-
         } else {
             return false;
         }
-
     }
 
     public function build()
@@ -199,7 +197,6 @@ class EbayKb extends ObjectModel
                     } else {
                         return $this->link;
                     }
-
                 }
                 return false;
             } else {
@@ -208,7 +205,6 @@ class EbayKb extends ObjectModel
                 } else {
                     return $this->link;
                 }
-
             }
         } else {
             if ($this->call()) {
@@ -217,7 +213,6 @@ class EbayKb extends ObjectModel
                 } else {
                     return $this->link;
                 }
-
             }
             return false;
         }

@@ -1,5 +1,5 @@
 {*
-* 2007-2016 PrestaShop
+* 2007-2017 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2016 PrestaShop SA
+*  @copyright 2007-2017 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -63,7 +63,7 @@
 			<option value="{ldelim}SLOGAN{rdelim}">{ldelim}SLOGAN{rdelim}</option>
 			<option value="{ldelim}PRODUCT_NAME{rdelim}">{ldelim}PRODUCT_NAME{rdelim}</option>
 		</select>
-		<textarea style="width:100%" class="rte" cols="100" rows="50" name="ebay_product_template">{$ebay_product_template}</textarea><br />
+		<textarea style="width:100%" class="rte" cols="100" rows="50" name="ebay_product_template">{$ebay_product_template|ebayHtml}</textarea><br />
 		{if $is_one_dot_three}
 			<script type="text/javascript" src="{$base_uri|escape:'htmlall':'UTF-8'}js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 			<script type="text/javascript">
@@ -81,7 +81,7 @@
 						theme_advanced_statusbar_location : "bottom",
 						theme_advanced_resizing : false,
 						content_css : "{$base_uri|escape:'htmlall':'UTF-8'}themes/{$theme_name|escape:'htmlall':'UTF-8'}/css/global.css",
-						document_base_url : "{$base_uri|escape:'urlencode'}",
+						document_base_url : "{$base_uri|escape:'htmlall':'UTF-8'}",
 						width: "850",
 						height: "800",
 						font_size_style_values : "8pt, 10pt, 12pt, 14pt, 18pt, 24pt, 36pt",
@@ -101,11 +101,12 @@
 		{elseif $is_one_dot_five}
 			<script type="text/javascript">	
 				var iso = '{$iso|escape:'htmlall':'UTF-8'}';
-				var pathCSS = '{$theme_css_dir|escape:'urlencode'}';
+				var pathCSS = '{$theme_css_dir|escape:'htmlall':'UTF-8'}';
 				var ad = '{$ad|escape:'htmlall':'UTF-8'}';
 			</script>
 			<script type="text/javascript" src="{$base_uri|escape:'htmlall':'UTF-8'}js/tiny_mce/tiny_mce.js"></script>
 			<script type="text/javascript">
+				setTimeout(function() {
 			{literal}
 				if(tinyMCE.majorVersion == 4)
 				{
@@ -203,6 +204,7 @@
 			    });
 			}
 			{/literal}
+			},1000);
 			</script>
 		{else}
 			<script type="text/javascript">
@@ -275,7 +277,7 @@
 		{/if}
 	</fieldset>
 	<div id="buttonEbayShipping" style="margin-top:5px;">
-		<a href="{$action_url|escape:'urlencode'}&reset_template=1" class="button" onclick="return confirm('{l s='Are you sure?' mod='ebay'}');">{l s='Reset template' mod='ebay'}</a>
+		<a href="{$action_url|escape:'htmlall':'UTF-8'}&reset_template=1" class="button" onclick="return confirm('{l s='Are you sure?' mod='ebay'}');">{l s='Reset template' mod='ebay'}</a>
 		<a id="previewButton" class="button">{l s='Preview' mod='ebay'}</a>
 		<input class="primary button" name="submitSave" type="submit" id="save_ebay_shipping" value="{l s='Save and continue' mod='ebay'}"/>
 	</div>
